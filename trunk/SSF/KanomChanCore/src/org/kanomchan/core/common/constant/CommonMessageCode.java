@@ -1,7 +1,7 @@
 package org.kanomchan.core.common.constant;
 
 public enum CommonMessageCode implements MessageCode {
-	COM0000("Transaction Complete.");
+	COM0000("Transaction Complete."), COM4999("Exction");
 
 	private CommonMessageCode(String dec){
 		this.dec = dec;

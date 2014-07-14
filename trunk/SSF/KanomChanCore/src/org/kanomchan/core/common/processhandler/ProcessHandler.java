@@ -6,7 +6,16 @@ import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.kanomchan.core.common.constant.CommonConstant;
+import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.context.CurrentThread;
+import org.kanomchan.core.common.exception.BaseException;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.ProcessException;
+import org.kanomchan.core.common.exception.RollBackTechnicalException;
+import org.kanomchan.core.common.exception.TechnicalException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.annotation.Transactional;
 
 @Aspect
@@ -16,6 +25,13 @@ public class ProcessHandler {
 	 */
 	private static final Logger logger = Logger.getLogger(ProcessHandler.class);
 	
+	private TransactionHandler transactionHandler;
+	@Autowired
+	@Required
+	public void setTransactionHandler(TransactionHandler transactionHandler) {
+		this.transactionHandler = transactionHandler;
+	}
+	private MessageHandler messageHandler;
 	
 	public Object doAspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		logger.info("[StartService]\tcall:" +proceedingJoinPoint.getSignature().toShortString() );
@@ -30,8 +46,9 @@ public class ProcessHandler {
 			processContext.startProcess = true;
 			
 		}
+		;
 		if(processContext!=null&&processContext.txnStatus==null){
-			isTxnProcess = isTxnProcess(proceedingJoinPoint);
+			isTxnProcess = transactionHandler.isTxnProcess(proceedingJoinPoint);
 		}
 		Object returnValue = null;
 		long start = System.currentTimeMillis();
@@ -42,9 +59,41 @@ public class ProcessHandler {
 			
 			afterProcess( returnValue, processContext, isTxnProcess ,fristProcess );
 		} catch (Throwable e) {
-			
+			if(e instanceof TechnicalException){
+				TechnicalException te = (TechnicalException) e;
+				if(logger.isDebugEnabled())
+					logger.debug("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode(), te.getThrowable());
+				else
+					logger.error("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode());
+				
+			}else if(e instanceof ProcessException){
+				ProcessException se =  (ProcessException) e;
+				if(logger.isDebugEnabled())
+					logger.debug("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode(), se.getThrowable());
+				else
+					logger.error("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode());
+				
+			}else{
+				logger.error("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " :", e);
+			}
+			processContext = onException(e, processContext, isTxnProcess);
+			if (fristProcess&&ServiceResult.class.equals(targetInterfaceMethod.getReturnType())) {
+
+				ServiceResult<Object> serviceResult = new ServiceResult<Object>();
+
+				serviceResult.setStatus(CommonConstant.SERVICE_STATUS_FAIL);
+				processContext.status=CommonConstant.SERVICE_STATUS_FAIL;
+				if(e instanceof BaseException)
+					returnValue = messageHandler.addMessage(serviceResult, (BaseException)e);
+				else
+					returnValue = messageHandler.addMessage(serviceResult,new RollBackTechnicalException(CommonMessageCode.COM4999, e));
+			} else {
+				throw e;
+			}
 		}
-		
+		if(fristProcess){
+			processContext.startProcess = false;
+		}
 		long end = System.currentTimeMillis();
 		logger.info("[EndService  ]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + "\tTIME:\t" + (end - start));
 		return returnValue;
@@ -52,55 +101,40 @@ public class ProcessHandler {
 	}
 
 	
-	private void afterProcess(Object returnValue,ProcessContext processContext, boolean isTxnProcess,boolean fristProcess) {
-		// TODO Auto-generated method stub
-		
+	private ProcessContext onException(Throwable e,ProcessContext processContext, boolean isTxnProcess) {
+		if(isTxnProcess){
+			if(e instanceof NonRollBackException){
+				transactionHandler.commitTxn(processContext);
+//			}else if(e instanceof ){
+//				rollbackTxn(serviceContext);
+			}else{
+				transactionHandler.rollbackTxn(processContext);
+			}
+			processContext.txnStatus = (null);
+		}
+		return processContext;
+	}
+
+
+	private Object afterProcess(Object returnValue,ProcessContext processContext, boolean isTxnProcess,boolean fristProcess) {
+		if(isTxnProcess){
+			transactionHandler.commitTxn(processContext);
+			transactionHandler.unProxy(returnValue, fristProcess);
+		}
+			
+		if(returnValue!=null &&returnValue instanceof ServiceResult ){
+			
+			returnValue = messageHandler.addMessage((ServiceResult) returnValue);
+			
+		}
+		return returnValue;
 	}
 
 
 	private void beforeProcess(ProcessContext processContext,boolean isTxnProcess) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	private boolean isTxnProcess(ProceedingJoinPoint joinPoint){
-		
-		
-		//== STEP 1 : Check is Class declare @Transactional 
-		Class<?> targetInterface = joinPoint.getSignature().getDeclaringType();
-		if( targetInterface.isAnnotationPresent(Transactional.class) ){
-			return true;
+		if( isTxnProcess ){
+			transactionHandler.beginTxn(processContext);
 		}
-		
-		Class<? extends Object> targetImplClass = joinPoint.getTarget().getClass();
-		if( targetImplClass.isAnnotationPresent(Transactional.class) ){
-			return true;
-		}
-
-		//== STEP 2 : Check is Method declare @Transactional
-		MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
-		Method targetInterfaceMethod = methodSignature.getMethod();
-				
-		if( targetInterfaceMethod != null && targetInterfaceMethod.isAnnotationPresent(Transactional.class) ){
-			return true;
-		}
-
-		try {
-			Method targetImplMethod = targetImplClass.getMethod(targetInterfaceMethod.getName(), targetInterfaceMethod.getParameterTypes());
-			if( targetImplMethod != null && targetImplMethod.isAnnotationPresent(Transactional.class) ){
-				return true;
-			}
-		} 
-		catch (SecurityException e) {
-			e.printStackTrace();
-		} 
-		catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-		
-		//if targetClass and targetMethod have no @Transactional -> return false	
-		return false;
 	}
 	
 }
