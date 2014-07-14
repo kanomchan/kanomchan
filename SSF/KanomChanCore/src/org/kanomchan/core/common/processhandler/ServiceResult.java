@@ -1,14 +1,19 @@
 package org.kanomchan.core.common.processhandler;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 
-public class ServiceResult<T extends Object> {
+public class ServiceResult<T extends Object> implements Serializable {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 929748902731079814L;
 	private T result;
 	private String status;
 	private List<Message> messages;

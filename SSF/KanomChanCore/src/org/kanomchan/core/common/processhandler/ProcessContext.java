@@ -17,4 +17,6 @@ public class ProcessContext {
 	protected List<Message> messageList;
 	
 	protected boolean startProcess = false;
+
+	protected String status;
 }

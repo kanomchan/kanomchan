@@ -2,6 +2,7 @@ package org.kanomchan.core.common.exception;
 
 import java.util.List;
 
+import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.constant.MessageCode;
 
 public abstract class RollBackException extends Exception implements BaseException {
@@ -19,7 +20,7 @@ public abstract class RollBackException extends Exception implements BaseExcepti
 	}
 	
 	public RollBackException(MessageCode  messageCode) {
-		this(messageCode,null);
+		this(messageCode, null, null);
 	}
 	
 	public RollBackException(MessageCode  messageCode,List<String> para) {
@@ -29,6 +30,9 @@ public abstract class RollBackException extends Exception implements BaseExcepti
 		this.messageCode = messageCode;
 		this.para = para;
 		this.throwable = throwable;
+	}
+	public RollBackException(MessageCode  messageCode , Throwable throwable) {
+		this(messageCode, throwable, null);
 	}
 	@Override
 	public MessageCode getMessageCode() {
