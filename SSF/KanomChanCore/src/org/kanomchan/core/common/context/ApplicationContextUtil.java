@@ -9,7 +9,7 @@ public class ApplicationContextUtil implements ApplicationContextAware  {
 	@Override
 	public void setApplicationContext(ApplicationContext appContext)
 			throws BeansException {
-		this.appContext =appContext;
+		ApplicationContextUtil.appContext =appContext;
 	}
 	public static ApplicationContext getApplicationContext() {
 	    return appContext;
