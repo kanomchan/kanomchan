@@ -32,6 +32,11 @@ public class ProcessHandler {
 		this.transactionHandler = transactionHandler;
 	}
 	private MessageHandler messageHandler;
+	@Autowired
+	@Required
+	public void setMessageHandler(MessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
+	}
 	
 	public Object doAspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		logger.info("[StartService]\tcall:" +proceedingJoinPoint.getSignature().toShortString() );

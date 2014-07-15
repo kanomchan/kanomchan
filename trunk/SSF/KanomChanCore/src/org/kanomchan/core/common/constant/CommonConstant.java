@@ -6,6 +6,7 @@ public interface CommonConstant {
     public static final String FORCE_TO_NEXT_URL = "FORCE_TO_NEXT_URL";
     public static final String FORCE_TO_LOGGEDIN_WELCOME_PAGE = "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
     public static final String FORCE_TO_LOGIN_PAGE = "FORCE_TO_LOGIN_PAGE";
+	public static final String ACTIVE = "A";
     
     public static interface SESSION {
 	// public static final String USER_BEAN = "SESSION_USER_BEAN";
