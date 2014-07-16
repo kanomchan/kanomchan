@@ -1,6 +1,8 @@
 package org.kanomchan.core.common.web.struts.action;
 
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,8 @@ import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
+import org.kanomchan.core.common.bean.Button;
+import org.kanomchan.core.common.bean.Message;
 import org.springframework.beans.factory.BeanNameAware;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -29,6 +33,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected HttpServletResponse httpServletResponse;
 	protected Map<String, Object> session;
 	protected Map<String, Object> request;
+	protected List<Message> messageList;
+	protected List<Button> buttonList;
 	
 	protected String beanName;
 	
@@ -87,5 +93,42 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	public String end() throws Exception{
 		clearSessionValue();
 		return ActionSupport.SUCCESS;
+	}
+	
+	public List<Message> getMessageList() {
+		return messageList;
+	}
+	
+	public Message getMessage(){
+		return (messageList==null||messageList.size()<=0?null:messageList.get(messageList.size()-1));
+	}
+	
+	public List<Button> getButtonList() {
+		return buttonList;
+	}
+	public void setButtonList(List<Button> buttonList) {
+		this.buttonList = buttonList;
+	}
+
+	public void setLeftButton(Button nextButton) {
+		LinkedList<Button> buttonList=null;
+		if(this.buttonList == null){
+			buttonList = new LinkedList<Button>();
+		}else{
+			buttonList = new LinkedList<Button>(this.buttonList);
+		}
+		buttonList.addFirst(nextButton);
+		this.buttonList = buttonList;
+	}
+
+	public void setRightButton(Button backButton) {
+		LinkedList<Button> buttonList=null;
+		if(this.buttonList == null){
+			buttonList = new LinkedList<Button>();
+		}else{
+			buttonList = new LinkedList<Button>(this.buttonList);
+		}
+		buttonList.addLast(backButton);
+		this.buttonList = buttonList;
 	}
 }
