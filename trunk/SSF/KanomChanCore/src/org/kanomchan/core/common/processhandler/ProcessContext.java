@@ -22,7 +22,6 @@ public class ProcessContext {
 	protected String status;
 
 	public Locale getLocale() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
