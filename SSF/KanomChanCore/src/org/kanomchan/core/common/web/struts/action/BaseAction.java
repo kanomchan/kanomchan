@@ -1,20 +1,23 @@
 package org.kanomchan.core.common.web.struts.action;
 
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.PrincipalAware;
 import org.apache.struts2.interceptor.PrincipalProxy;
+import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
+import org.apache.struts2.interceptor.SessionAware;
 import org.springframework.beans.factory.BeanNameAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 
-public abstract class BaseAction extends ActionSupport implements ServletRequestAware,ServletResponseAware,PrincipalAware,BeanNameAware {
+public abstract class BaseAction extends ActionSupport implements RequestAware,SessionAware,ServletRequestAware,ServletResponseAware,PrincipalAware,BeanNameAware {
 
 
 	
@@ -24,6 +27,8 @@ public abstract class BaseAction extends ActionSupport implements ServletRequest
 	private static final long serialVersionUID = 2290712190657083231L;
 	protected HttpServletRequest httpServletRequest;
 	protected HttpServletResponse httpServletResponse;
+	protected Map<String, Object> session;
+	protected Map<String, Object> request;
 	
 	protected String beanName;
 	
@@ -36,7 +41,14 @@ public abstract class BaseAction extends ActionSupport implements ServletRequest
 	public void setServletRequest(HttpServletRequest arg0) {
 		httpServletRequest =arg0;
 	}
-	
+	@Override
+	public void setRequest(Map<String, Object> request) {
+		this.request = request;
+	}
+	@Override
+	public void setSession(Map<String, Object> arg0) {
+		this.session = arg0;
+	}
 	@Override
 	public void setServletResponse(HttpServletResponse arg0) {
 		httpServletResponse = arg0;
