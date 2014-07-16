@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.kanomchan.core.common.constant.MessageCode;
 
-public class DefaultMessage implements Message ,Serializable {
+public class MessageDefault implements Message ,Serializable {
 	/**
 	 * 
 	 */
@@ -21,7 +21,7 @@ public class DefaultMessage implements Message ,Serializable {
 	private String messageType;
 	private String solution;
 	private Map<String, String>  maps = new HashMap<String, String>();
-	public DefaultMessage() {
+	public MessageDefault() {
 		maps.put("SUCCESS", "alert-success");
 		maps.put("INFO", "alert-info");
 		maps.put("WARNING", "alert-warning");
