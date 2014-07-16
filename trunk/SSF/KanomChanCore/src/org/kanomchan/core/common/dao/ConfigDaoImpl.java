@@ -17,9 +17,9 @@ import org.kanomchan.core.common.bean.LabelDefault;
 import org.kanomchan.core.common.bean.Message;
 import org.springframework.jdbc.core.RowMapper;
 
-public class ConfigJdbcImpl extends JdbcCommonDaoImpl implements ConfigDao {
+public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
-	private static final Logger logger = Logger.getLogger(ConfigJdbcImpl.class);
+	private static final Logger logger = Logger.getLogger(ConfigDaoImpl.class);
 	
 	private static final String  SQL_QUERY_CONFIG = "select config_key, config_value from com_mst_config";
 	@Override
