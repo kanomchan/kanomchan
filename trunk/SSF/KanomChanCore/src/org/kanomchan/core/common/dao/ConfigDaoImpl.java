@@ -48,8 +48,8 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
     }
 
 	public static final String SQL_QUERY_MESSAGE = 
-			" SELECT CODE, LANGUAGE, DISPLAY_TEXT, 'DESC', " +
-			" TYPE, SOLUTION " +
+			" SELECT MESSAGE_CODE, MESSAGE_LANG, DISPLAY_TEXT, MESSAGE_DESC, " +
+			" MESSAGE_TYPE, SOLUTION " +
 			" FROM COM_M_MESSAGE ";
 	@Override
 	public Map<String, Message> getMessageMap() {
@@ -70,11 +70,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final class MessageMapper<T extends Message> implements RowMapper<Message> {
 	    public Message mapRow(ResultSet rs, int num)throws SQLException {
 	    	MessageDefault message = new MessageDefault(); 
-	    	message.setMessageCode(rs.getString("CODE"));
-	    	message.setMessageLang(rs.getString("LANGUAGE"));
+	    	message.setMessageCode(rs.getString("MESSAGE_CODE"));
+	    	message.setMessageLang(rs.getString("MESSAGE_LANG"));
 	    	message.setDisplayText(rs.getString("DISPLAY_TEXT"));
-	    	message.setMessageDesc(rs.getString("DESC"));
-	    	message.setMessageType(rs.getString("TYPE"));
+	    	message.setMessageDesc(rs.getString("MESSAGE_DESC"));
+	    	message.setMessageType(rs.getString("MESSAGE_TYPE"));
 	    	message.setSolution(rs.getString("SOLUTION"));
 	        return message;
 	    }

@@ -20,8 +20,14 @@ public class ProcessContext {
 	protected boolean startProcess = false;
 
 	protected String status;
+	
+	protected String lang;
 
 	public Locale getLocale() {
 		return null;
+	}
+
+	public void setLang(String langKey) {
+		lang = langKey;
 	}
 }
