@@ -21,7 +21,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final Logger logger = Logger.getLogger(ConfigDaoImpl.class);
 	
-	private static final String  SQL_QUERY_CONFIG = "select config_key, config_value from com_mst_config";
+	private static final String SQL_QUERY_CONFIG = "SELECT CONFIG_KEY, CONFIG_VALUE FROM COM_M_CONFIG";
 	@Override
 	public Map<String, String> getConfigMap() {
 		Map<String, String> configMap = new ConcurrentHashMap<String, String>();
@@ -41,16 +41,16 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final class ConfigMapper<T extends Config> implements RowMapper<Config> {
 	    public Config mapRow(ResultSet rs, int num)throws SQLException {
 	    	ConfigDefault configDefault = new ConfigDefault();
-	    	configDefault.setKey( rs.getString("config_key"));
-	    	configDefault.setValue( rs.getString("config_value"));
+	    	configDefault.setKey( rs.getString("CONFIG_KEY"));
+	    	configDefault.setValue( rs.getString("CONFIG_VALUE"));
 	        return configDefault;
 	    }
     }
 
 	public static final String SQL_QUERY_MESSAGE = 
-			" select message_code, message_lang, display_text, message_desc, " +
-			" message_type, solution " +
-			" from com_mst_message ";
+			" SELECT CODE, LANGUAGE, DISPLAY_TEXT, 'DESC', " +
+			" TYPE, SOLUTION " +
+			" FROM COM_M_MESSAGE ";
 	@Override
 	public Map<String, Message> getMessageMap() {
 		Map<String, Message> messageMap = new ConcurrentHashMap<String, Message>();
@@ -70,12 +70,12 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final class MessageMapper<T extends Message> implements RowMapper<Message> {
 	    public Message mapRow(ResultSet rs, int num)throws SQLException {
 	    	MessageDefault message = new MessageDefault(); 
-	    	message.setMessageCode(rs.getString("message_code"));
-	    	message.setMessageLang(rs.getString("message_lang"));
-	    	message.setDisplayText(rs.getString("display_text"));
-	    	message.setMessageDesc(rs.getString("message_desc"));
-	    	message.setMessageType(rs.getString("message_type"));
-	    	message.setSolution(rs.getString("solution"));
+	    	message.setMessageCode(rs.getString("CODE"));
+	    	message.setMessageLang(rs.getString("LANGUAGE"));
+	    	message.setDisplayText(rs.getString("DISPLAY_TEXT"));
+	    	message.setMessageDesc(rs.getString("DESC"));
+	    	message.setMessageType(rs.getString("TYPE"));
+	    	message.setSolution(rs.getString("SOLUTION"));
 	        return message;
 	    }
     }
@@ -84,10 +84,10 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final class LabelMapper<T extends Label> implements RowMapper<Label> {
 	    public Label mapRow(ResultSet rs, int num)throws SQLException {
 	    	LabelDefault label = new LabelDefault(); 
-	    	label.setLabel(rs.getString("label"));
-	    	label.setLanguage(rs.getString("language"));
-	    	label.setPage(rs.getString("page"));
-	    	label.setDisplayText(rs.getString("display_text"));
+	    	label.setLabel(rs.getString("LABEL"));
+	    	label.setLanguage(rs.getString("LANGUAGE"));
+	    	label.setPage(rs.getString("PAGE"));
+	    	label.setDisplayText(rs.getString("DISPLAY_TEXT"));
 	        return label;
 	    }
     }
@@ -99,11 +99,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 		
 		whereClause.append(" WHERE 1 = 1 ");
 		if( messageType != null && messageType.length() > 0 ){
-			whereClause.append(" AND MESSAGE_TYPE LIKE :messageType ");
+			whereClause.append(" AND TYPE LIKE :messageType ");
 			params.put("messageType", "%"+messageType+"%");
 		}
 		if( messageLang != null && messageLang.length() > 0 ){
-			whereClause.append(" AND MESSAGE_LANG = :messageLang ");
+			whereClause.append(" AND LANGUAGE = :messageLang ");
 			params.put("messageLang", messageLang);
 		}
 		return nativeQuery(SQL_QUERY_MESSAGE+whereClause.toString(), MESSAGE_MAPPER, params);
@@ -111,8 +111,8 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 
 	
 	public static final String SQL_QUERY_LABEL = 
-			" select label, page, display_text, language " +
-			" from com_mst_label ";
+			" SELECT LABEL, PAGE, DISPLAY_TEXT, LANGUAGE " +
+			" FROM COM_M_LABEL ";
 	
 	@Override
 	public List<Label> getLabelList() {
