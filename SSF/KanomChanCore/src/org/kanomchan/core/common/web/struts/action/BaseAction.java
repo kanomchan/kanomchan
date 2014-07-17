@@ -29,12 +29,16 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	 * 
 	 */
 	private static final long serialVersionUID = 2290712190657083231L;
+	
+	protected static final String MESSAGE = "message";
 	protected HttpServletRequest httpServletRequest;
 	protected HttpServletResponse httpServletResponse;
 	protected Map<String, Object> session;
 	protected Map<String, Object> request;
 	protected List<Message> messageList;
 	protected List<Button> buttonList;
+	protected Map<String, String> label;
+	
 	
 	protected String beanName;
 	
@@ -131,4 +135,17 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 		buttonList.addLast(backButton);
 		this.buttonList = buttonList;
 	}
+
+
+	public Map<String, String> getLabel() {
+		return label;
+	}
+
+
+	public void setLabel(Map<String, String> label) {
+		this.label = label;
+	}
+	
+	
+	
 }
