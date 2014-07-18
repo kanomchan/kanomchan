@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kanomchan.core.common.dao.ConfigDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 
 public class LabelServiceImpl implements LabelService  {
 
 	private ConfigDao configDao;
 	
-	
+	@Autowired
+	@Required
 	public void setConfigDao(ConfigDao configDao) {
 		this.configDao = configDao;
 	}
