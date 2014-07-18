@@ -2,6 +2,8 @@ package org.kanomchan.core.common.service;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.kanomchan.core.common.dao.ConfigDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -18,6 +20,7 @@ public class ConfigServiceImpl implements ConfigService {
 	private Map<String, String> config;
 	
 	@Override
+	@PostConstruct
 	public synchronized void initConfig(){
 		config = configDao.getConfigMap();
 	}

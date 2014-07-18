@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.web.struts.interceptor;
 
-public class ActionInterceptor {
+import org.apache.struts2.interceptor.ServletConfigInterceptor;
+
+public class ActionInterceptor extends ServletConfigInterceptor  {
 
 }

@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.web.struts.interceptor;
 
-public class NavigationInterceptor {
+import org.apache.struts2.interceptor.ServletConfigInterceptor;
+
+public class NavigationInterceptor extends ServletConfigInterceptor  {
 
 }
