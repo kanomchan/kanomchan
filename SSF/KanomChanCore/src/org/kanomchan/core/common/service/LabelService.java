@@ -4,6 +4,8 @@ import java.util.Map;
 
 public interface LabelService {
 
-	Map<String, String> getLabel(String string);
+	public Map<String, String> getLabel(String string);
+
+	public void refresh();
 
 }
