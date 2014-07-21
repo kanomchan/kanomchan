@@ -19,7 +19,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 
 
-public class HibernateBaseDaoImpl extends HibernateDaoSupport {
+public class HibernateBaseDaoImpl extends HibernateDaoSupport implements HibernateBaseDao {
 
 	public Logger log = Logger.getLogger(this.getClass());
 	
@@ -28,12 +28,14 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 	    setSessionFactory(factory);
 	}
 
-	protected long count(final String queryString, final Object... values) {
+	@Override
+	public long count(final String queryString, final Object... values) {
 		return ((Number) getHibernateTemplate().find(queryString, values)
 				.get(0)).longValue();
 	}
 	
-	protected void save(Object entity) throws RollBackTechnicalException{
+	@Override
+	public void save(Object entity) throws RollBackTechnicalException{
 		try {
 			getSession().save( entity ); 
 			if(logger.isDebugEnabled()) {
@@ -46,8 +48,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 			throw new RollBackTechnicalException(CommonMessageCode.COM4994, re);
 		}
 	}
-	
-	protected void save(EntityBean entity) throws RollBackTechnicalException{
+	@Override
+	public void save(EntityBean entity) throws RollBackTechnicalException{
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			entity.setRowStatus("A");
@@ -66,7 +68,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 		}
 	}
 	
-	protected void delete(EntityBean entiryBean) throws RollBackTechnicalException{
+	@Override
+	public void delete(EntityBean entiryBean) throws RollBackTechnicalException{
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			//entity = (Object)getSession().get(entity.getClass(), comUserId);\
@@ -86,7 +89,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T extends Object> T  update(T entity) throws RollBackTechnicalException {
+	@Override
+	public <T extends Object> T  update(T entity) throws RollBackTechnicalException {
 		try {
 			T result = (T) getSession().merge(entity);
 			if(logger.isDebugEnabled()) {
@@ -108,7 +112,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 	
 	
 	@SuppressWarnings("unchecked")
-	protected <T extends EntityBean> T  update(T entity) throws RollBackTechnicalException {
+	@Override
+	public <T extends EntityBean> T  update(T entity) throws RollBackTechnicalException {
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			entity.setUserUpdate(processContext.getUserName());
@@ -131,7 +136,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 		}
 	}
 	
-	protected int executeNativeSQL(String sql, Object... params) throws RollBackTechnicalException {
+	@Override
+	public int executeNativeSQL(String sql, Object... params) throws RollBackTechnicalException {
 		try {
 			SQLQuery query = getSession().createSQLQuery(sql);
 			for (int i = 0; i < params.length; i++) {
@@ -143,7 +149,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 		}
 	}
 	
-	protected int executeNativeSQL(final String sql) throws RollBackTechnicalException{
+	@Override
+	public int executeNativeSQL(final String sql) throws RollBackTechnicalException{
 		try {
 			SQLQuery query = getSession().createSQLQuery(sql);
 			return query.executeUpdate();
@@ -152,7 +159,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 		}
 	}
 	
-	protected <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz) throws RollBackTechnicalException {
+	@Override
+	public <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz) throws RollBackTechnicalException {
 		
 		
 		try{
@@ -165,7 +173,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 		}
 	}
 	
-	protected <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz,Object... params) throws RollBackTechnicalException {
+	@Override
+	public <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz,Object... params) throws RollBackTechnicalException {
 		try{
 			SQLQuery query = getSession().createSQLQuery(sql);
 			
@@ -217,7 +226,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 		}
 	}
 	
-	protected <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz,PagingBean pagingBean) throws RollBackTechnicalException {
+	@Override
+	public <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz,PagingBean pagingBean) throws RollBackTechnicalException {
 		
 		try{
 			SQLQuery query = getSession().createSQLQuery(sql);
@@ -238,7 +248,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport {
 			throw new RollBackTechnicalException(CommonMessageCode.COM4998,e);
 		}
 	}
-	protected <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz,PagingBean pagingBean, Object... params) throws RollBackTechnicalException {
+	@Override
+	public <T extends Object> List<T> nativeQuery(final String sql,Class<T> clazz,PagingBean pagingBean, Object... params) throws RollBackTechnicalException {
 		
 		try{
 			SQLQuery query = getSession().createSQLQuery(sql);
