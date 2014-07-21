@@ -33,7 +33,7 @@ import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
-public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBaseDaoImpl {
+public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBaseDaoImpl implements HibernateBaseEntiyDao<T> {
 	
 	
 	public Logger log = Logger.getLogger(this.getClass());
@@ -61,7 +61,8 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	 * @return the persistent instance, or null if not found
 	 */
 	@SuppressWarnings("unchecked")
-	protected T get(final Serializable id) {
+	@Override
+	public T get(final Serializable id) {
 		T o = (T) getHibernateTemplate().get(entityClass, id);
 		return o;
 	}
@@ -76,7 +77,8 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	 * @return a List containing the results of the query execution
 	 */
 	@SuppressWarnings("unchecked")
-	protected List<T> find(String queryString, Object... values)throws Exception {
+	@Override
+	public List<T> find(String queryString, Object... values)throws Exception {
 		return (List<T>) getHibernateTemplate().find(queryString, values);
 	}
 	
@@ -96,7 +98,8 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	 * @return List the result list
 	 */
 	@SuppressWarnings("unchecked")
-	protected List<T> find(final String queryString, final int firstResult,
+	@Override
+	public List<T> find(final String queryString, final int firstResult,
 			final int maxResults, final Object... values) {
 		return getHibernateTemplate().executeFind(new HibernateCallback<T>() {
 			public T doInHibernate(final Session session) {
@@ -126,7 +129,8 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	 * @return a single entity or null if 0 row found. Throws
 	 *         IncorrectResultSizeDataAccessException if more than 1 row found.
 	 */
-	protected T findUnique( String queryString,  Object... values) throws NonRollBackException, RollBackException {
+	@Override
+	public T findUnique( String queryString,  Object... values) throws NonRollBackException, RollBackException {
 		if(logger.isDebugEnabled()){
 			logger.debug("sql:" + queryString);
 			for (Object object : values) {
@@ -167,8 +171,9 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	 *            the values of the parameters
 	 * @return the count
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
-	protected T findExample(T example){
+	public T findExample(T example){
 		  T result = null;
 		  try {  
 		           Example ex = Example.create(example).ignoreCase().enableLike(MatchMode.ANYWHERE);  
@@ -179,8 +184,8 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 		     }  
 		  return result;
 		 }
-	
-	protected ServiceResult<List<T>> findExampleAndPaging(final PagingBean pagingBean ,final T example){
+	@Override
+	public ServiceResult<List<T>> findExampleAndPaging(final PagingBean pagingBean ,final T example){
 
 		@SuppressWarnings("unchecked")
 		List<T> list = getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
@@ -216,9 +221,9 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 		  return new ServiceResult<List<T>>(list,pagingBean);
 		 }
 	
-	
+	@Override
 	@SuppressWarnings("unchecked")
-	protected List<T> findByExample(T example){
+	public List<T> findByExample(T example){
 //		T result = null;
 //		try {  
 //			Example ex = Example.create(example).ignoreCase().enableLike(MatchMode.ANYWHERE);  
@@ -229,16 +234,16 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 //		}  
 		return getHibernateTemplate().findByExample(example);
 	}
-	
-	protected void saveOrUpdate(T entity){
+	@Override
+	public void saveOrUpdate(T entity){
 		getHibernateTemplate().saveOrUpdate(entity);
 	}
-	
-	protected void saveOrUpdateAll(Collection<T> entity){
+	@Override
+	public void saveOrUpdateAll(Collection<T> entity){
 		getHibernateTemplate().saveOrUpdateAll(entity);
 	}
 	
-//	protected void save(T entity) throws RollBackTechnicalException{
+//	public void save(T entity) throws RollBackTechnicalException{
 //		
 //	}
 	
@@ -262,8 +267,8 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 //		}
 //	}
 	
-	
-	protected List<T> findAll() throws NonRollBackException, RollBackException{
+	@Override
+	public List<T> findAll() throws NonRollBackException, RollBackException{
 		Criteria criteria = getSession().createCriteria(entityClass);
 		if(entityClass.isInstance(EntityBean.class)){
 			criteria.add(Restrictions.eq("rowStatus", "A"));
@@ -273,12 +278,13 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	}
 	
 	
-	
-	protected void deleteRow(Serializable id) throws RollBackTechnicalException{
+	@Override
+	public void deleteRow(Serializable id) throws RollBackTechnicalException{
 		getSession().delete(this.get(id));
 	}
 	
-	protected void delete(Serializable id) throws RollBackTechnicalException{
+	@Override
+	public void delete(Serializable id) throws RollBackTechnicalException{
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			//entity = (Object)getSession().get(entity.getClass(), comUserId);
