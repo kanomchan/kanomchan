@@ -190,7 +190,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 		@SuppressWarnings("unchecked")
 		List<T> list = getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
 			public List<T> doInHibernate(final Session session) {
-				example.setRowStatus("A");
+				example.setStatus("A");
 				final Example ex = Example.create(example).ignoreCase().enableLike(MatchMode.ANYWHERE);
 				final Criteria criteria = session.createCriteria(entityClass).add(Restrictions.disjunction().add(ex));
 				List<PagingBean.Order> orderL = pagingBean.getOrderList();
@@ -293,9 +293,9 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 			
 			if(object instanceof EntityBean){
 				EntityBean entiryBean = (EntityBean) object ;
-				entiryBean.setRowStatus("I");
-				entiryBean.setUserCreate(processContext.getUserName());
-				entiryBean.setTimeCreate(new Date());
+				entiryBean.setStatus("I");
+				entiryBean.setCreateUser(processContext.getUserName());
+				entiryBean.setCreateDate(new Date());
 				getSession().merge(entiryBean);
 			}else{
 				deleteRow(id);

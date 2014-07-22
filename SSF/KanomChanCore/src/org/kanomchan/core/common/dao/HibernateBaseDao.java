@@ -5,6 +5,7 @@ import java.util.List;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
+import org.springframework.jdbc.core.RowMapper;
 
 public interface HibernateBaseDao {
 
@@ -20,5 +21,7 @@ public interface HibernateBaseDao {
 	public <T extends Object> List<T> nativeQuery(String sql, Class<T> clazz, Object[] params)throws RollBackTechnicalException;
 	public <T extends Object> List<T> nativeQuery(String sql, Class<T> clazz) throws RollBackTechnicalException;
 	public <T extends Object> List<T> nativeQuery(String sql, Class<T> clazz, PagingBean pagingBean)throws RollBackTechnicalException;
+	public <T extends Object> T nativeQueryOneRow(String sql, Class<T> clazz, Object[] params)throws RollBackTechnicalException;
+	
 
 }

@@ -3,6 +3,7 @@ package org.kanomchan.core.common.dao;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
@@ -15,6 +16,7 @@ import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 
@@ -52,9 +54,9 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 	public void save(EntityBean entity) throws RollBackTechnicalException{
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
-			entity.setRowStatus("A");
-			entity.setUserCreate(processContext.getUserName());
-			entity.setTimeCreate(new Date());
+			entity.setStatus("A");
+			entity.setCreateUser(processContext.getUserName());
+			entity.setCreateDate(new Date());
 			
 			getSession().save( entity ); 
 			if(logger.isDebugEnabled()) {
@@ -73,9 +75,9 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			//entity = (Object)getSession().get(entity.getClass(), comUserId);\
-			entiryBean.setRowStatus("I");
-			entiryBean.setUserCreate(processContext.getUserName());
-			entiryBean.setTimeCreate(new Date());
+			entiryBean.setStatus("I");
+			entiryBean.setCreateUser(processContext.getUserName());
+			entiryBean.setCreateDate(new Date());
 			getSession().merge(entiryBean);
 			if(logger.isDebugEnabled()) {
 				//logger.debug(entity.getClass().getSimpleName() +" persist successful");
@@ -116,8 +118,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 	public <T extends EntityBean> T  update(T entity) throws RollBackTechnicalException {
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
-			entity.setUserUpdate(processContext.getUserName());
-			entity.setTimeUpdate(new Date());
+			entity.setUpdateUser(processContext.getUserName());
+			entity.setUpdateDate(new Date());
 			T result = (T) getSession().merge(entity);
 			if(logger.isDebugEnabled()) {
 				logger.debug(entity.getClass().getSimpleName()+" merge successful");
@@ -271,5 +273,33 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		catch( Exception e ){
 			throw new RollBackTechnicalException(CommonMessageCode.COM4998,e);
 		}
+	}
+	
+	@Override
+	public <T extends Object> T nativeQueryOneRow( String sql, Class<T> clazz ,Object... params) throws RollBackTechnicalException {
+		try{
+			SQLQuery query = getSession().createSQLQuery(sql);
+			T result = null;
+			for(int i=0; i<params.length;i++) {
+				query.setParameter(i, params[i]);
+			}
+			query.addEntity(clazz);
+			if (query != null && query.list().size() > 0){
+				result = (T) query.list().get(0);
+			}
+			
+			return result;
+		}
+		catch( Exception e ){
+			throw new RollBackTechnicalException(CommonMessageCode.COM4998,e);
+		}
+		
+		/*List<T> resultList = simpleJdbcTemplate.query(sql, clazz, params);
+		T result = null;
+		if (resultList != null && resultList.size() > 0){
+			result = resultList.get(0);
+		}
+		return result;*/
+//		return simpleJdbcTemplate.queryForObject(sql, rm, params);
 	}
 }

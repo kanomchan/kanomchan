@@ -4,25 +4,25 @@ import java.util.Date;
 
 public interface EntityBean {
 
-	public String getRowStatus();
+	public String getStatus();
 
-	public void setRowStatus(String rowStatus);
+	public void setStatus(String rowStatus);
 
-	public Date getTimeCreate();
+	public Date getCreateDate();
 
-	public void setTimeCreate(Date timeCreate);
+	public void setCreateDate(Date timeCreate);
 
-	public Date getTimeUpdate();
+	public Date getUpdateDate();
 
-	public void setTimeUpdate(Date timeUpdate);
+	public void setUpdateDate(Date timeUpdate);
 
-	public String getUserCreate();
+	public String getCreateUser();
 
-	public void setUserCreate(String userCreate);
+	public void setCreateUser(String userCreate);
 
-	public String getUserUpdate();
+	public String getUpdateUser();
 
-	public void setUserUpdate(String userUpdate);
+	public void setUpdateUser(String userUpdate);
 	
 
 }
