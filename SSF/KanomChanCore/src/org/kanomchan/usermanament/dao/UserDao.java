@@ -9,6 +9,6 @@ public interface UserDao {
 
 	public ServiceResult<UserBean> findUserByUsername(String username) throws NonRollBackException, RollBackException;
 
-	public UserBean addUser(UserBean comUser, Integer yourRole) throws RollBackException, NonRollBackException;
+	public UserBean addUserApplicant(UserBean comUser) throws RollBackException, NonRollBackException;
 
 }
