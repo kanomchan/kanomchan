@@ -7,20 +7,17 @@ import java.util.Map;
 import org.kanomchan.core.common.constant.MessageCode;
 
 public class MessageDefault implements Message ,Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3760566974597580046L;
-	/**
-	 * 
-	 */
+
+	private static final long serialVersionUID = 4185236553424677037L;
+
 	private String messageCode;
 	private String messageLang;
 	private String displayText;
 	private String messageDesc;
 	private String messageType;
 	private String solution;
-	private Map<String, String>  maps = new HashMap<String, String>();
+	private String[] para;
+ 	private static Map<String, String>  maps = new HashMap<String, String>();
 	public MessageDefault() {
 		maps.put("SUCCESS", "alert-success");
 		maps.put("INFO", "alert-info");
@@ -73,6 +70,16 @@ public class MessageDefault implements Message ,Serializable {
 	@Override
 	public String getMessageTypeCss() {
 		return messageType==null?"":maps.get(messageType.toUpperCase());
+	}
+
+	@Override
+	public void setPara(String... para) {
+		this.para = para;
+	}
+
+	@Override
+	public String[] getPara() {
+		return this.para;
 	}
 	
 }

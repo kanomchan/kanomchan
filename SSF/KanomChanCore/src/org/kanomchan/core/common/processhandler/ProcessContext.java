@@ -66,12 +66,13 @@ public class ProcessContext {
 		messageList.add(message );
 	}
 	
-	public void addMessage(String messageCode){
+	public void addMessage(String messageCode,String...param){
 		if(messageList == null){
 			messageList = new LinkedList<Message>();
 		}
 		MessageDefault message  = new MessageDefault();
 		message.setMessageCode(messageCode);
+		message.setPara(param);
 		messageList.add(message );
 	}
 	List<Message> getMessageList() {
