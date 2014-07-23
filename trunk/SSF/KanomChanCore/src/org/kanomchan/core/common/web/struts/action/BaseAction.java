@@ -17,6 +17,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.kanomchan.core.common.bean.Button;
 import org.kanomchan.core.common.bean.Message;
 import org.springframework.beans.factory.BeanNameAware;
+import org.kanomchan.core.common.bean.JSONResult;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -38,6 +39,7 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected List<Message> messageList;
 	protected List<Button> buttonList;
 	protected Map<String, String> label;
+	protected JSONResult<Object> results;
 	
 	
 	protected String beanName;
@@ -97,6 +99,10 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	public String end() throws Exception{
 		clearSessionValue();
 		return ActionSupport.SUCCESS;
+	}
+	
+	public JSONResult<Object> getResults() {
+		return results;
 	}
 	
 	public List<Message> getMessageList() {
