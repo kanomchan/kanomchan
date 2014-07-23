@@ -99,11 +99,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 		
 		whereClause.append(" WHERE 1 = 1 ");
 		if( messageType != null && messageType.length() > 0 ){
-			whereClause.append(" AND TYPE LIKE :messageType ");
+			whereClause.append(" AND MESSAGE_TYPE LIKE :messageType ");
 			params.put("messageType", "%"+messageType+"%");
 		}
 		if( messageLang != null && messageLang.length() > 0 ){
-			whereClause.append(" AND LANGUAGE = :messageLang ");
+			whereClause.append(" AND MESSAGE_LANG = :messageLang ");
 			params.put("messageLang", messageLang);
 		}
 		return nativeQuery(SQL_QUERY_MESSAGE+whereClause.toString(), MESSAGE_MAPPER, params);

@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.service;
 
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -14,6 +16,9 @@ import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
+
 public class MessageServiceImpl implements MessageService {
 
 	private ConfigDao configDao;
@@ -23,15 +28,7 @@ public class MessageServiceImpl implements MessageService {
 		this.configDao = configDao;
 	}
 	
-	@Override
-	public Message getMessage(String messageCode) {
-		ProcessContext processContext = CurrentThread.getProcessContext();
-		Locale locale = processContext.getLocale();
-		if(locale==null){
-			locale = CommonConstant.DEFAULT_LOCALE;
-		}
-		return getMessage(messageCode,locale);
-	}
+
 
 	@Override
 	public void load() {
@@ -43,6 +40,25 @@ public class MessageServiceImpl implements MessageService {
 		
 	}
 
+
+
+	@Override
+	public List<Message> getMessageList() {
+		return getMessageList( null, null );
+	}
+
+
+	@Override
+	public List<Message> getMessageList(String lang) {
+		return getMessageList(lang,null);
+	}
+	
+	@Override
+	public List<Message> getMessageList(String lang, String messageType) {
+		return configDao.getMessageList(messageType, lang);
+	}
+	
+	
 	@Override
 	public Message getMessage(String messageCode, Locale locale) {
 		if(locale == null){locale = CommonConstant.DEFAULT_LOCALE;}
@@ -64,28 +80,14 @@ public class MessageServiceImpl implements MessageService {
 		}
 		return message;
 	}
-
 	@Override
-	public List<Message> getMessageList() {
-		return getMessageList( null, null );
-	}
-
-	@Override
-	public List<Message> getMessageList(Locale locale) {
-		return getMessageList( null, locale );
-	}
-
-	@Override
-	public List<Message> getMessageList(String messageType) {
-		return getMessageList( messageType, null );
-	}
-
-	@Override
-	public List<Message> getMessageList(String messageType, Locale locale) {
-		if( locale == null ){
+	public Message getMessage(String messageCode) {
+		ProcessContext processContext = CurrentThread.getProcessContext();
+		Locale locale = processContext.getLocale();
+		if(locale==null){
 			locale = CommonConstant.DEFAULT_LOCALE;
 		}
-		return configDao.getMessageList(messageType, locale.getLanguage().toUpperCase());
+		return getMessage(messageCode,locale);
 	}
 
 	@Override
@@ -103,6 +105,27 @@ public class MessageServiceImpl implements MessageService {
 		return getMessage(messageCode.getCode(),lang);
 	}
 
+	
+	public String getMessageListToJson(){
+		
+//		Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.STATIC).create();
+		return"";
+	}
+
+
+
+	@Override
+	public Map<String, Message> getMessageMap(String lang) {
+		List<Message> list = getMessageList(lang);
+		HashMap<String, Message> map = new HashMap<String, Message>();
+		if(list!=null){
+			for (Message message : list) {
+				map.put(message.getMessageCode(), message);
+			}
+		}
+		
+		return map;
+	}
 
 
 }

@@ -2,6 +2,7 @@ package org.kanomchan.core.common.service;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.constant.MessageCode;
@@ -19,7 +20,7 @@ public interface MessageService {
 	
 
 	public List<Message> getMessageList();
-	public List<Message> getMessageList(Locale locale);
-	public List<Message> getMessageList(String messageType);
-	public List<Message> getMessageList(String messageType, Locale locale);
+	public List<Message> getMessageList(String lang);
+	public Map<String,Message> getMessageMap(String lang);
+	public List<Message> getMessageList(String lang,String messageType);
 }

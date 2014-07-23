@@ -8,6 +8,8 @@ public interface Message {
 	public String getMessageCode();
 	public void setMessageCode(String messageCode);
 	public void setMessageCode(MessageCode messageCode);
+	public void setPara(String...para);
+	public String[] getPara();
 	public String getMessageLang();
 	public String getDisplayText();
 	public String getMessageDesc();
