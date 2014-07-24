@@ -54,7 +54,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 	public void save(EntityBean entity) throws RollBackTechnicalException{
 		try {
 			ProcessContext processContext = CurrentThread.getProcessContext();
-			entity.setStatus("A");
+			if(entity.getStatus() == null ||  "".equals(entity.getStatus()))
+				entity.setStatus("A");
 			entity.setCreateUser(processContext.getUserName());
 			entity.setCreateDate(new Date());
 			
