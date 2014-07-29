@@ -27,24 +27,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.views.annotations.StrutsTag;
+import org.apache.struts2.views.annotations.StrutsTagAttribute;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
-@StrutsTag(name="divTag", tldBodyContent="JSP", tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.SetValueByStringTag", description="Assigns a value to a variable in a specified scope")
+@StrutsTag(name="div", tldBodyContent="JSP", tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.DivTag", description="Assigns a value to a variable in a specified scope")
 public class Div extends org.apache.struts2.components.Div {
 
-	 public Div(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
-	        super(stack, request, response);
-	    }
+	protected String displayKey;
+	
+	public Div(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
+	   super(stack, request, response);
+	}
 
     @Override
     public boolean start(Writer writer) {
-    	return false;
+    	return "5555".equals(displayKey);
     }
     
     @Override
     public boolean end(Writer writer, String body) {
-    	return false;
+    	return "5555".equals(displayKey);
     }
+    
+    
+    @StrutsTagAttribute(description="The value that is assigned to the variable named <i>name</i>")
+    public void setDisplayKey(String displayKey) {
+		this.displayKey = displayKey;
+	}
     
 }

@@ -22,14 +22,28 @@ public class DivTag extends org.apache.struts2.views.jsp.ui.DivTag {
     /**
 	 * 
 	 */
+	
+	protected String displayKey;
+	
 	private static final long serialVersionUID = -5321662025466435738L;
 
+	@Override
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new Div(stack, req, res);
     }
 
+    @Override
     protected void populateParams() {
         super.populateParams();
+        
+        Div set = (Div) component;
+        set.setDisplayKey(displayKey);
     }
+
+	public void setDisplayKey(String displayKey) {
+		this.displayKey = displayKey;
+	}
+    
+    
     
 }
