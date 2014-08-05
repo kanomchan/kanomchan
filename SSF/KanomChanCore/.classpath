@@ -47,7 +47,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-fileupload-1.3.1.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-io-2.2.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-convention-plugin-2.3.16.3.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-core-2.3.16.3.jar" sourcepath="C:/Users/Lenovo/.m2/repository/org/apache/struts/struts2-core/2.3.16.3/struts2-core-2.3.16.3-sources.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-core-2.3.16.3.jar" sourcepath="C:/Users/kwan/.m2/repository/org/apache/struts/struts2-core/2.3.16.3/struts2-core-2.3.16.3-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/xwork-core-2.3.16.3.jar" sourcepath="C:/Users/Lenovo/.m2/repository/org/apache/struts/xwork/xwork-core/2.3.16.3/xwork-core-2.3.16.3-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/hibernate3.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/antlr-2.7.6.jar"/>
@@ -58,5 +58,6 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/GSON/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ip2c/geoip-api-1.2.14.jar" sourcepath="C:/Users/kwan/.m2/repository/com/maxmind/geoip/geoip-api/1.2.14/geoip-api-1.2.14-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

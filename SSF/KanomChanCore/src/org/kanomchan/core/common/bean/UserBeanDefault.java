@@ -94,6 +94,7 @@ public class UserBeanDefault implements UserBean ,Serializable{
 	public void setRoleName(String userRoleName) {
 		this.roleName = userRoleName;
 	}
+
 	
 	
 
