@@ -44,6 +44,7 @@ import org.apache.struts2.views.velocity.components.TextFieldDirective;
 import org.apache.struts2.views.velocity.components.TokenDirective;
 import org.apache.struts2.views.velocity.components.URLDirective;
 import org.apache.struts2.views.velocity.components.UpDownSelectDirective;
+import org.kanomchan.core.common.web.struts.components.Div;
 import org.kanomchan.core.common.web.struts.components.SetValueByString;
 import org.kanomchan.core.common.web.struts.view.freemarker.tags.KanomChanModels;
 import org.kanomchan.core.common.web.struts.view.freemarker.tags.SetValueByStringModel;
@@ -62,7 +63,7 @@ public class KanomChanTagLibrary implements TagLibraryDirectiveProvider, TagLibr
 	public List<Class> getDirectiveClasses() {
 		Class[] directives = new Class[] {
 	            SetValueByString.class
-	            
+	            ,Div.class
 	        };
 	        return Arrays.asList(directives);
 	}

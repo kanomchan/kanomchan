@@ -5,12 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
+import org.kanomchan.core.common.bean.LocationBean;
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.bean.MessageDefault;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.bean.UserBeanDefault;
 import org.kanomchan.core.common.constant.MessageCode;
+import org.kanomchan.core.common.context.ApplicationContextUtil;
+import org.kanomchan.core.common.service.LocationService;
 import org.springframework.transaction.TransactionStatus;
+
+import com.maxmind.geoip.Location;
+import com.maxmind.geoip.LookupService;
 
 public class ProcessContext {
 	
@@ -30,6 +39,60 @@ public class ProcessContext {
 	protected String status;
 
 	protected Locale locale;
+	
+	protected Long zone;
+	protected Long country;
+	protected Long region;
+	protected Long province;
+	protected Long city;
+	protected Long county;
+	protected Long postal;
+	protected Long language;
+	protected Long station;
+	protected Long currency;
+	
+	public ProcessContext() {
+		// TODO Auto-generated constructor stub
+	}
+//	protected ProcessContext(Long zone,Long country,Long region,Long province,Long city,Long county,Long postal,Long station,Long currency) {
+//		
+//		this.zone = zone;
+//		this.country = country;
+//		this.region = region;
+//		this.province = province;
+//		this.city = city;
+//		this.county = county;
+//		this.postal = postal;
+//		this.station = station;
+//		this.currency = currency;
+//	}
+	protected void setLocationBean(LocationBean locationBean) {
+		this.lang = locationBean.getLang();
+		this.zone = locationBean.getZone();
+		this.country = locationBean.getCountry();
+		this.region = locationBean.getRegion();
+		this.province = locationBean.getProvince();
+		this.city = locationBean.getCity();
+		this.county = locationBean.getCounty();
+		this.postal = locationBean.getPostal();
+		this.station = locationBean.getStation();
+		this.language = locationBean.getLanguage();
+		this.currency = locationBean.getCurrency();
+	}
+	protected void setLocation(String lang,Long zone,Long country,Long region,Long province,Long city,Long county,Long postal,Long station,Long currency) {
+		this.lang = lang;
+		this.zone = zone;
+		this.country = country;
+		this.region = region;
+		this.province = province;
+		this.city = city;
+		this.county = county;
+		this.postal = postal;
+		this.station = station;
+		this.currency = currency;
+	}
+	
+	
 	
 	public UserBean getUserBean() {
 		if(userBean==null){
@@ -104,4 +167,34 @@ public class ProcessContext {
 			return "GUEST";
 		return userBean.getUserName();
 	}
+	
+	public Long getZone() {
+		return zone;
+	}
+	public Long getCountry() {
+		return country;
+	}
+	public Long getRegion() {
+		return region;
+	}
+	public Long getProvince() {
+		return province;
+	}
+	public Long getCity() {
+		return city;
+	}
+	public Long getCounty() {
+		return county;
+	}
+	public Long getPostal() {
+		return postal;
+	}
+	public Long getStation() {
+		return station;
+	}
+	public Long getCurrency() {
+		return currency;
+	}
+	
+	
 }
