@@ -11,14 +11,21 @@ import org.kanomchan.core.common.bean.LocationBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.processhandler.ServiceResult;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 
-public class LocationServiceImpl implements LocationService {
+public class LocationServiceImpl implements LocationService , ResourceLoaderAware{
 
 	private LookupService lookupService;
-
+	private ResourceLoader resourceLoader;
+	 
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
 
 	@Override
 	public ServiceResult<LocationBean> getLocation(String ipAddress) throws RollBackException,NonRollBackException {
@@ -35,7 +42,8 @@ public class LocationServiceImpl implements LocationService {
 	@PostConstruct
 	public void init() {
 		try {
-			lookupService = new LookupService("/GeoLiteCity.dat",LookupService.GEOIP_MEMORY_CACHE );
+			Resource res = resourceLoader.getResource("classpath:GeoLiteCity.dat");
+			lookupService = new LookupService(res.getFilename(),LookupService.GEOIP_MEMORY_CACHE );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,4 +51,5 @@ public class LocationServiceImpl implements LocationService {
 	public void destroy() {
 		lookupService.close();
 	}
+
 }
