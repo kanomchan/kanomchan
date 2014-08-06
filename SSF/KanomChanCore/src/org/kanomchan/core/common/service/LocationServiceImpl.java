@@ -32,7 +32,7 @@ public class LocationServiceImpl implements LocationService , ResourceLoaderAwar
 //		if(lookupService==null)
 //			init();
 		Location location = lookupService.getLocation(ipAddress);
-		if(location == null){
+		if(location == null&&lookupService!=null){
 			location = lookupService.getLocationV6(ipAddress);
 		}
 		LocationBean locationBean = new LocationBean();
