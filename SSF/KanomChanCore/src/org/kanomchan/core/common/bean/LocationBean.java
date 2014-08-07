@@ -80,6 +80,76 @@ public class LocationBean {
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
+	public void setLanguage(String nString) {
+		if (nString != null)
+			try {
+				this.language = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setCity(String nString) {
+		if (nString != null)
+			try {
+				this.city = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setCountry(String nString) {
+		if (nString != null)
+			try {
+				this.country = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setCounty(String nString) {
+		if (nString != null)
+			try {
+				this.county = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setCurrency(String nString) {
+		if (nString != null)
+			try {
+				this.currency = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setPostal(String nString) {
+		if (nString != null)
+			try {
+				this.postal = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setProvince(String nString) {
+		if (nString != null)
+			try {
+				this.province = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setRegion(String nString) {
+		if (nString != null)
+			try {
+				this.region = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setStation(String nString) {
+		if (nString != null)
+			try {
+				this.station = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
+	public void setZone(String nString) {
+		if (nString != null)
+			try {
+				this.zone = Long.parseLong(nString);
+			} catch (Exception e) {
+			}
+	}
 
 	
 	
