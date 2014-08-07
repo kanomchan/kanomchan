@@ -44,10 +44,15 @@ public class LocationServiceImpl implements LocationService {
 //		if(lookupService==null)
 //			init();
 		LocationBean locationBean = null;
-		Location location = lookupService.getLocation(ipAddress);
-		if(location != null&&lookupService!=null){
-			location = lookupService.getLocationV6(ipAddress);
-			locationDao.getLocation(location.countryCode, location.countryName, location.region, location.city, location.postalCode);
+		
+		if(lookupService!=null){
+			Location location = lookupService.getLocation(ipAddress);
+			if(location == null)
+				location = lookupService.getLocationV6(ipAddress);
+			if(location != null)
+				locationDao.getLocation(location.countryCode, location.countryName, location.region, location.city, location.postalCode);
+			else
+				locationBean = new LocationBean();
 		}else{
 			locationBean = new LocationBean();
 		}
