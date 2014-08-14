@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/asm-tree-3.3.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-beanutils-1.8.0.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-chain-1.2.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-collections-3.1.jar" sourcepath="C:/Users/Lenovo/.m2/repository/commons-collections/commons-collections/3.1/commons-collections-3.1-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-digester-2.0.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-lang3-3.1.jar"/>
