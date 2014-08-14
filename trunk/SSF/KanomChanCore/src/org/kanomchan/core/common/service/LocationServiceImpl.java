@@ -20,6 +20,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 
@@ -40,22 +42,23 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	@Transactional
+	@Cacheable(cacheName = "locationServiceImpl.getLocation")
 	public ServiceResult<LocationBean> getLocation(String ipAddress) throws RollBackException,NonRollBackException {
 //		if(lookupService==null)
 //			init();
 		LocationBean locationBean = null;
 		
-//		if(lookupService!=null){
-//			Location location = lookupService.getLocation(ipAddress);
-//			if(location == null)
-//				location = lookupService.getLocationV6(ipAddress);
-//			if(location != null)
-//				locationDao.getLocation(location.countryCode, location.countryName, location.region, location.city, location.postalCode);
-//			else
-//				locationBean = new LocationBean();
-//		}else{
+		if(lookupService!=null){
+			Location location = lookupService.getLocation(ipAddress);
+			if(location == null)
+				location = lookupService.getLocationV6(ipAddress);
+			if(location != null)
+				locationDao.getLocation(location.countryCode, location.countryName, location.region, location.city, location.postalCode);
+			else
+				locationBean = new LocationBean();
+		}else{
 			locationBean = new LocationBean();
-//		}
+		}
 		return new ServiceResult<LocationBean>(locationBean );
 	}
 
@@ -69,6 +72,12 @@ public class LocationServiceImpl implements LocationService {
 	}
 	public void destroy() {
 		lookupService.close();
+	}
+	
+	@Override
+	@TriggersRemove(cacheName="locationServiceImpl.getLocation", removeAll=true)
+	public void refresh() {
+		locationDao.refresh();
 	}
 
 }

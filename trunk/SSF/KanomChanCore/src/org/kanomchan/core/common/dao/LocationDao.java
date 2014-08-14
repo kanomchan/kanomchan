@@ -8,4 +8,6 @@ public interface LocationDao {
 
 	public LocationBean getLocation(String countryCode,String countryName,String region,String city,String postalCode )throws NonRollBackException,RollBackException;
 
+	public void refresh();
+
 }
