@@ -39,7 +39,7 @@ public class ProcessHandler {
 	}
 	
 	public Object doAspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-		logger.info("[StartService]\tcall:" +proceedingJoinPoint.getSignature().toShortString() );
+		logger.info("[Service Start]\tcall:" +proceedingJoinPoint.getSignature().toShortString() );
 		
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		MethodSignature methodSignature = (MethodSignature)proceedingJoinPoint.getSignature();
@@ -67,19 +67,19 @@ public class ProcessHandler {
 			if(e instanceof TechnicalException){
 				TechnicalException te = (TechnicalException) e;
 				if(logger.isDebugEnabled())
-					logger.debug("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode(), te.getThrowable());
+					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode(), te.getThrowable());
 				else
-					logger.error("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode());
+					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode());
 				
 			}else if(e instanceof ProcessException){
 				ProcessException se =  (ProcessException) e;
 				if(logger.isDebugEnabled())
-					logger.debug("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode(), se.getThrowable());
+					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode(), se.getThrowable());
 				else
-					logger.error("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode());
+					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode());
 				
 			}else{
-				logger.error("[ServiceError]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " :", e);
+				logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " :", e);
 			}
 			processContext = onException(e, processContext, isTxnProcess);
 			if (fristProcess&&ServiceResult.class.equals(targetInterfaceMethod.getReturnType())) {
@@ -100,7 +100,7 @@ public class ProcessHandler {
 			processContext.startProcess = false;
 		}
 		long end = System.currentTimeMillis();
-		logger.info("[EndService  ]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + "\tTIME:\t" + (end - start));
+		logger.info("[Service End  ]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + "\tTIME:\t" + (end - start));
 		return returnValue;
 		
 	}
