@@ -25,11 +25,11 @@ public class SessionInterceptor extends ServletConfigInterceptor  {
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
-//		Map<String, Object> session = ActionContext.getContext().getSession();
+		Map<String, Object> session = ActionContext.getContext().getSession();
 //		 
-//		if(session.get(CommonConstant.SESSION.USER_BEAN_KEY)==null){
-//			return "FORCE_TO_LOGIN_PAGE";
-//		}else{
+		if(session.get(CommonConstant.SESSION.USER_BEAN_KEY)==null){
+			return "FORCE_TO_LOGIN_PAGE";
+		}else{
 //			UserBean userBean = (UserBean) session.get(CommonConstant.SESSION.USER_BEAN_KEY);
 //			Set<String> privileges = userBean.getPrivileges();
 //			String methodStr = invocation.getProxy().getMethod();
@@ -38,7 +38,7 @@ public class SessionInterceptor extends ServletConfigInterceptor  {
 //				return "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
 //			}
 //			
-//		}
+		}
 		
 		
 			
