@@ -8,4 +8,6 @@ import org.kanomchan.core.common.processhandler.ServiceResult;
 public interface LocationService {
 
 	public ServiceResult<LocationBean> getLocation(String ipadd)throws RollBackException,NonRollBackException;
+
+	public void refresh();
 }
