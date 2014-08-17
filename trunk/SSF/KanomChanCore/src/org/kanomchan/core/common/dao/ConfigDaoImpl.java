@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.Config;
 import org.kanomchan.core.common.bean.ConfigDefault;
+import org.kanomchan.core.common.bean.DisplayField;
+import org.kanomchan.core.common.bean.DisplayFieldDefault;
 import org.kanomchan.core.common.bean.MessageDefault;
 import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.LabelDefault;
@@ -173,5 +175,43 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public void clearMessageCache() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static final String SQL_QUERY_DISPLAY_FIELD = 
+//			" ID_DISPLAY_FIELD ,ID_REGION ,ID_COUNTRY ,ID_ZONE ,ID_PROVINE ,ID_CITY ,MODULE ,PAGE ,FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
+			" ID_DISPLAY_FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
+			" FROM COM_M_DISPLAY_FIELD ";
+	private static final DisplayFieldMapper<DisplayField> DISPLAY_FIELD_MAPPER = new DisplayFieldMapper<DisplayField>();
+	public static final class DisplayFieldMapper<T extends DisplayField> implements RowMapper<DisplayField> {
+	    public DisplayField mapRow(ResultSet rs, int num)throws SQLException {
+	    	DisplayFieldDefault displayFiled = new DisplayFieldDefault(); 
+	    	displayFiled.setIdCountry(Long.parseLong(rs.getString("ID_COUNTRY")));
+	    	displayFiled.setPage(rs.getString("PAGE"));
+	    	displayFiled.setIsDisplay(rs.getString("DISPLAY_TEXT"));
+	        return displayFiled;
+	    }
+    }
+	@Override
+	public List<DisplayField> getDisplayFieldList() {                              
+		List<DisplayField> displayFieldList = nativeQuery(SQL_QUERY_DISPLAY_FIELD, DISPLAY_FIELD_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
+		return displayFieldList;
+	}
+
+	@Override
+	public DisplayField getDisplayField() {
+		String SQL_QUERY_DISPLAY_FIELD_WHERE = SQL_QUERY_DISPLAY_FIELD;
+		SQL_QUERY_DISPLAY_FIELD_WHERE += "WHERE ";
+		DisplayField displayField = nativeQuery(SQL_QUERY_DISPLAY_FIELD , DISPLAY_FIELD_MAPPER).get(0);
+		return displayField;
+	}
+
+
+	@Override
+	public DisplayField getDisplayFieldByMany(Long idZone, Long idCountry,
+			Long idProvince, String page, String feild) {
+		String SQL_QUERY_DISPLAY_FIELD_WHERE = SQL_QUERY_DISPLAY_FIELD;
+		SQL_QUERY_DISPLAY_FIELD_WHERE += "WHERE ID_ZONE = " + idZone + " AND ID_COUNTRY = " + idCountry;
+		DisplayField displayField = nativeQuery(SQL_QUERY_DISPLAY_FIELD , DISPLAY_FIELD_MAPPER).get(0);
+		return displayField;
 	}
 }
