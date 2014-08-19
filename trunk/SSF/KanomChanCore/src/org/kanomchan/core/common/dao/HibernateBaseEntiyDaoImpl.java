@@ -203,6 +203,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 			    		}
 					}
 				    
+			    	
 			    }
 				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 

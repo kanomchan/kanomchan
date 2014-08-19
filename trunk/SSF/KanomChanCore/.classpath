@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/javassist-3.11.0.GA.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/ognl-3.0.6.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/xstream-1.4.2.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aop-3.0.5.RELEASE.jar" sourcepath="C:/Users/kwan/.m2/repository/org/springframework/spring-aop/3.0.5.RELEASE/spring-aop-3.0.5.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aop-3.0.5.RELEASE.jar" sourcepath="C:/Users/B/.m2/repository/org/springframework/spring-aop/3.0.5.RELEASE/spring-aop-3.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-asm-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aspects-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-beans-3.0.5.RELEASE.jar"/>
@@ -26,7 +26,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-core-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-expression-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-jdbc-3.0.5.RELEASE.jar" sourcepath="C:/Users/kwan/.m2/repository/org/springframework/spring-jdbc/3.0.5.RELEASE/spring-jdbc-3.0.5.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-orm-3.0.5.RELEASE.jar" sourcepath="C:/Users/Lenovo/.m2/repository/org/springframework/spring-orm/3.0.5.RELEASE/spring-orm-3.0.5.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-orm-3.0.5.RELEASE.jar" sourcepath="C:/Users/B/.m2/repository/org/springframework/spring-orm/3.0.5.RELEASE/spring-orm-3.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-tx-3.0.5.RELEASE.jar" sourcepath="C:/Users/kwan/.m2/repository/org/springframework/spring-tx/3.0.5.RELEASE/spring-tx-3.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
@@ -48,7 +48,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/commons-io-2.2.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-convention-plugin-2.3.16.3.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-core-2.3.16.3.jar" sourcepath="C:/Users/_ZoXaD_/.m2/repository/org/apache/struts/struts2-core/2.3.16.3/struts2-core-2.3.16.3-sources.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/xwork-core-2.3.16.3.jar" sourcepath="C:/Users/kwan/.m2/repository/org/apache/struts/xwork/xwork-core/2.3.16.3/xwork-core-2.3.16.3-sources.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/xwork-core-2.3.16.3.jar" sourcepath="C:/Users/B/.m2/repository/org/apache/struts/xwork/xwork-core/2.3.16.3/xwork-core-2.3.16.3-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/hibernate3.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/commons-collections-3.1.jar"/>
