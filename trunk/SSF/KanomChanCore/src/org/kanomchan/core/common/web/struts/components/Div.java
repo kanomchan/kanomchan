@@ -22,8 +22,6 @@
 package org.kanomchan.core.common.web.struts.components;
 
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,22 +29,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.views.annotations.StrutsTag;
 import org.apache.struts2.views.annotations.StrutsTagAttribute;
-import org.kanomchan.core.common.bean.LocationBean;
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
-import org.kanomchan.core.common.processhandler.ServiceResult;
-import org.kanomchan.core.common.service.DisplayField;
 
 import com.opensymphony.xwork2.util.ValueStack;
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
 
 @StrutsTag(name="div", tldBodyContent="JSP", tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.DivTag", description="Assigns a value to a variable in a specified scope")
 public class Div extends org.apache.struts2.components.Div {
 	
 	protected String displayKey;
 	private boolean keyStatus;
-	private DisplayField displayFieldService;
+//	private DisplayField displayFieldService;
 	
 	public Div(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 	   super(stack, request, response);
@@ -73,10 +67,11 @@ public class Div extends org.apache.struts2.components.Div {
     	int pos = displayKey.indexOf("_");
     	String page = displayKey.substring(0,pos);
     	String field = displayKey.substring(pos);
-    	ServiceResult<DisplayField> displayField = displayFieldService.getDisplayFieldByMany(idZone, idCountry, idProvince, page, field);
+//    	ServiceResult<DisplayField> displayField = displayFieldService.getDisplayFieldByMany(idZone, idCountry, idProvince, page, field);
     	//SELECT * FROM com_m_display_field where id_country=1 AND page='' AND filed=''
     	// wrong try to get displayField.getIsDisplay
-    	return "Y".equals(displayField);
+//    	return "Y".equals(displayField);
+    	return false;
     }
     
     @StrutsTagAttribute(description="The value that is assigned to the variable named <i>name</i>")
