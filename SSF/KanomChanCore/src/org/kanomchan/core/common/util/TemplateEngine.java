@@ -16,8 +16,7 @@ import org.kanomchan.core.common.constant.CommonConstant;
 public class TemplateEngine {
 	
 	public TemplateEngine(Properties config){
-		Properties p = new Properties();		
-	    //p.setProperty("file.resource.loader.path", "/home/chayakon/Temp/mail");
+		Properties p = new Properties();
 	    p.setProperty("input.encoding", CommonConstant.TEMPLATE.INPUT_ENCODING);
 	    p.setProperty("output.encoding", CommonConstant.TEMPLATE.OUTPUT_ENCODING);
 	    p.putAll(config);	    
