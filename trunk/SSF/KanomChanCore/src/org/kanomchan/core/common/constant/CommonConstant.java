@@ -38,4 +38,11 @@ public interface CommonConstant {
 	public static final String CONTEXT_PATH = "CONTEXT_PATH";
 	public static final String USER_ID = "USER_ID";
     }
+    
+
+	
+    public static interface TEMPLATE {//Template engine
+	public static final String INPUT_ENCODING = "UTF-8";
+	public static final String OUTPUT_ENCODING = "UTF-8";
+    }
 }
