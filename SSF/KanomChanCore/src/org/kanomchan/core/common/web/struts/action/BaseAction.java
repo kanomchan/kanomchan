@@ -40,6 +40,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected List<Button> buttonList;
 	protected Map<String, String> label;
 	protected JSONResult<Object> results;
+	protected String nextUrl;
+	protected String backUrl;
 	
 	
 	protected String beanName;
@@ -150,6 +152,26 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 
 	public void setLabel(Map<String, String> label) {
 		this.label = label;
+	}
+
+
+	public String getNextUrl() {
+		return nextUrl;
+	}
+
+
+	public void setNextUrl(String nextUrl) {
+		this.nextUrl = nextUrl;
+	}
+
+
+	public String getBackUrl() {
+		return backUrl;
+	}
+
+
+	public void setBackUrl(String backUrl) {
+		this.backUrl = backUrl;
 	}
 	
 	
