@@ -64,11 +64,11 @@ public class LocationServiceImpl implements LocationService {
 
 	@PostConstruct
 	public void init() {
-		try {
-			lookupService = new LookupService(getClass().getResource("//GeoLiteCity.dat").getFile(),LookupService.GEOIP_MEMORY_CACHE );
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+////			lookupService = new LookupService(getClass().getResource("//GeoLiteCity.dat").getFile(),LookupService.GEOIP_MEMORY_CACHE );
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	public void destroy() {
 		lookupService.close();
