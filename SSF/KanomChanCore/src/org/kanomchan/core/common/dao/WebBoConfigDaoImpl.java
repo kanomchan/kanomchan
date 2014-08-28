@@ -12,6 +12,8 @@ import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.LabelDefault;
 import org.kanomchan.core.common.bean.WebBoConfig;
 import org.kanomchan.core.common.bean.WebBoConfigDefault;
+import org.kanomchan.core.common.bean.WebBoConfigGeography;
+import org.kanomchan.core.common.bean.WebBoConfigPageModule;
 import org.kanomchan.core.common.dao.ConfigDaoImpl.LabelMapper;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -89,11 +91,11 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	    public WebBoConfig mapRow(ResultSet rs, int num)throws SQLException {
 	    	WebBoConfigDefault webBoConfig = new WebBoConfigDefault(); 
 	    	webBoConfig.setIdWebBoConfig(rs.getLong("ID_WEB_BO_CONFIG"));
-	    	webBoConfig.setIdRegion(rs.getLong("ID_REGION"));
-	    	webBoConfig.setIdCountry(rs.getLong("ID_COUNTRY"));
-	    	webBoConfig.setIdZone(rs.getLong("ID_ZONE"));
-	    	webBoConfig.setIdProvince(rs.getLong("ID_PROVINCE"));
-	    	webBoConfig.setIdCity(rs.getLong("ID_CITY"));
+//	    	webBoConfig.setIdRegion(rs.getLong("ID_REGION"));
+//	    	webBoConfig.setIdCountry(rs.getLong("ID_COUNTRY"));
+//	    	webBoConfig.setIdZone(rs.getLong("ID_ZONE"));
+//	    	webBoConfig.setIdProvince(rs.getLong("ID_PROVINCE"));
+//	    	webBoConfig.setIdCity(rs.getLong("ID_CITY"));
 	    	webBoConfig.setIsDisplay(rs.getString("IS_DISPLAY"));
 	    	webBoConfig.setIsMandatory(rs.getString("IS_MANDATORY"));
 	    	webBoConfig.setIsMatch(rs.getString("IS_MATCH"));
@@ -114,20 +116,58 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	}
 
 	@Override
-	public Map<Object, List<WebBoConfig>> getWebBoConfigMap() {
-		Map<Object, List<WebBoConfig>> webBoConfigMap = new ConcurrentHashMap<Object, List<WebBoConfig>>();
-		List<WebBoConfig> webBoConfigList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG, WEB_BO_CONFIG_MAPPER);
-		
-		for (WebBoConfig webBoConfig : webBoConfigList) {
-			List<WebBoConfig> webBoConfigs = webBoConfigMap.get(webBoConfig.getDescription());//get string
-			if(webBoConfigs==null){
-				webBoConfigs = new ArrayList<WebBoConfig>();
-			}
-			webBoConfigs.add(webBoConfig);
-			webBoConfigMap.put(webBoConfig.getDescription(), webBoConfigs);//get string
-		}
-		return webBoConfigMap;
+	public List<WebBoConfigGeography> getGeographyList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	@Override
+	public List<WebBoConfigPageModule> getPageModuleList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<Object, List<Object>> getObjectMap() {
+		Map<String, Map<String, String>> messageStringMap = new ConcurrentHashMap<String, Map<String, String>>();
+
+		Map<String, List<Label>> messageMap   = getLabelMap();
+		Map<String, String> labelMapDefault = new ConcurrentHashMap<String, String>();
+		for (Label label : messageMap.get(Label.DEFAULT_LANG)) {
+			labelMapDefault.put(label.getPage()+"_"+label.getLabel(), label.getDisplayText());
+		}
+		Set<String> langSet = messageMap.keySet();
+		for (String lang : langSet) {
+			if(lang != Label.DEFAULT_LANG){
+				Map<String, String> labelMap = new ConcurrentHashMap<String, String>(labelMapDefault);
+				for (Label label : messageMap.get(lang)) {
+					labelMap.put(label.getPage()+"_"+label.getLabel(), label.getDisplayText());
+				}
+				messageStringMap.put(lang, labelMap );
+			}
+			
+		}
+		//return messageStringMap;
+		
+		
+		return null;
+	}
+
+//	@Override
+//	public Map<Object, List<WebBoConfig>> getWebBoConfigMap() {
+//		Map<Object, List<WebBoConfig>> webBoConfigMap = new ConcurrentHashMap<Object, List<WebBoConfig>>();
+//		List<WebBoConfig> webBoConfigList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG, WEB_BO_CONFIG_MAPPER);
+//		
+//		for (WebBoConfig webBoConfig : webBoConfigList) {
+//			List<WebBoConfig> webBoConfigs = webBoConfigMap.get(webBoConfig.getDescription());//get string
+//			if(webBoConfigs==null){
+//				webBoConfigs = new ArrayList<WebBoConfig>();
+//			}
+//			webBoConfigs.add(webBoConfig);
+//			webBoConfigMap.put(webBoConfig.getDescription(), webBoConfigs);//get string
+//		}
+//		return webBoConfigMap;
+//	}
 
 //	@Override
 //	public Map<Object, Object> getWebBoConfigObjectMap() {
@@ -152,61 +192,17 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 //		return displayMapDefault;
 //	}
 	
-	@Override
-	public Map<Object, Object> getDisplayObjectMap() {
-		Map<Object, List<WebBoConfig>> webBoConfigMap = getWebBoConfigMap();
-		Map<Object, Object> displayMapDefault = new ConcurrentHashMap<Object, Object>();
-		for (WebBoConfig webBoConfig : webBoConfigMap.get(WebBoConfig.class)) {
-			String key_value = webBoConfig.getIdRegion()+"_"+webBoConfig.getIdCountry()+"_"+webBoConfig.getIdZone()+"_"+webBoConfig.getIdProvince()+"_"+webBoConfig.getIdCity()+"_"+webBoConfig.getPage()+"_"+webBoConfig.getField();
-			displayMapDefault.put(key_value, webBoConfig.getIsDisplay());
-		}		
-		return displayMapDefault;
-	}
+//	@Override
+//	public Map<Object, Object> getDisplayObjectMap() {
+//		Map<Object, List<WebBoConfig>> webBoConfigMap = getWebBoConfigMap();
+//		Map<Object, Object> displayMapDefault = new ConcurrentHashMap<Object, Object>();
+//		for (WebBoConfig webBoConfig : webBoConfigMap.get(WebBoConfig.class)) {
+//			String key_value = webBoConfig.getIdRegion()+"_"+webBoConfig.getIdCountry()+"_"+webBoConfig.getIdZone()+"_"+webBoConfig.getIdProvince()+"_"+webBoConfig.getIdCity()+"_"+webBoConfig.getPage()+"_"+webBoConfig.getField();
+//			displayMapDefault.put(key_value, webBoConfig.getIsDisplay());
+//		}		
+//		return displayMapDefault;
+//	}
 
-	@Override
-	public Map<Object, Object> getMandatoryObjectMap() {
-		Map<Object, List<WebBoConfig>> webBoConfigMap = getWebBoConfigMap();
-		Map<Object, Object> mandatoryMapDefault = new ConcurrentHashMap<Object, Object>();
-		for (WebBoConfig webBoConfig : webBoConfigMap.get(WebBoConfig.class)) {
-			String key_value = webBoConfig.getIdRegion()+"_"+webBoConfig.getIdCountry()+"_"+webBoConfig.getIdZone()+"_"+webBoConfig.getIdProvince()+"_"+webBoConfig.getIdCity()+"_"+webBoConfig.getPage()+"_"+webBoConfig.getField();
-			mandatoryMapDefault.put(key_value, webBoConfig.getIsMandatory());
-		}
-		return mandatoryMapDefault;
-	}
-
-	@Override
-	public Map<Object, Object> getMatchObjectMap() {
-		Map<Object, List<WebBoConfig>> webBoConfigMap = getWebBoConfigMap();
-		Map<Object, Object> matchMapDefault = new ConcurrentHashMap<Object, Object>();
-		for (WebBoConfig webBoConfig : webBoConfigMap.get(WebBoConfig.class)) {
-			String key_value = webBoConfig.getIdRegion()+"_"+webBoConfig.getIdCountry()+"_"+webBoConfig.getIdZone()+"_"+webBoConfig.getIdProvince()+"_"+webBoConfig.getIdCity()+"_"+webBoConfig.getPage()+"_"+webBoConfig.getField();
-			matchMapDefault.put(key_value, webBoConfig.getIsMatch());
-		}
-		return matchMapDefault;
-	}
-
-	@Override
-	public Map<Object, Object> getWeightObjectMap() {
-		Map<Object, List<WebBoConfig>> webBoConfigMap = getWebBoConfigMap();
-		Map<Object, Object> weightMapDefault = new ConcurrentHashMap<Object, Object>();
-		for (WebBoConfig webBoConfig : webBoConfigMap.get(WebBoConfig.class)) {
-			String key_value = webBoConfig.getIdRegion()+"_"+webBoConfig.getIdCountry()+"_"+webBoConfig.getIdZone()+"_"+webBoConfig.getIdProvince()+"_"+webBoConfig.getIdCity()+"_"+webBoConfig.getPage()+"_"+webBoConfig.getField();
-			weightMapDefault.put(key_value, webBoConfig.getIsWeight());
-		}
-		return weightMapDefault;
-	}
-
-	@Override
-	public Map<Object, Object> getWeightPercentObjectMap() {
-		Map<Object, List<WebBoConfig>> webBoConfigMap = getWebBoConfigMap();
-		Map<Object, Object> weightPercentMapDefault = new ConcurrentHashMap<Object, Object>();
-		for (WebBoConfig webBoConfig : webBoConfigMap.get(WebBoConfig.class)) {
-			String key_value = webBoConfig.getIdRegion()+"_"+webBoConfig.getIdCountry()+"_"+webBoConfig.getIdZone()+"_"+webBoConfig.getIdProvince()+"_"+webBoConfig.getIdCity()+"_"+webBoConfig.getPage()+"_"+webBoConfig.getField();
-			weightPercentMapDefault.put(key_value, webBoConfig.getWeightPercent());
-		}
-		
-		return weightPercentMapDefault;
-	}
 
 	
 	
