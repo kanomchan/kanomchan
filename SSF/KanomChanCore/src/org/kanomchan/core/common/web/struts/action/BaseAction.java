@@ -42,6 +42,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected JSONResult<Object> results;
 	protected String nextUrl;
 	protected String backUrl;
+	protected String nextNamespace; 
+	protected String nextAction; 
 	
 	
 	protected String beanName;
@@ -175,5 +177,16 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	}
 	
 	
-	
+	public String getNextAction() {
+		return nextAction;
+	}
+	public void setNextAction(String nextAction) {
+		this.nextAction = nextAction;
+	}
+	public String getNextNamespace() {
+		return nextNamespace;
+	}
+	public void setNextNamespace(String nextNamespace) {
+		this.nextNamespace = nextNamespace;
+	}
 }
