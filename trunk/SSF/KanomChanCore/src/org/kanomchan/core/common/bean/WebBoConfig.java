@@ -7,29 +7,11 @@ public interface WebBoConfig {
 	public Long getIdWebBoConfig();
 	public void setIdWebBoConfig(Long idWebBoConfig);
 	
-	public Long getIdRegion();
-	public void setIdRegion(Long idRegion);
-	
-	public Long getIdCountry();
-	public void setIdCountry(Long idCountry);
-	
-	public Long getIdZone();
-	public void setIdZone(Long idZone);
-	
-	public Long getIdProvince();
-	public void setIdProvince(Long idProvince);
-	
-	public Long getIdCity();
-	public void setIdCity(Long idCity);
-	
-	public String getPage();
-	public void setPage(String page);
-	
-	public String getModule();
-	public void setModule(String module);
-	
-	public String getField();
-	public void setField(String field);
+	public Long getIdWebBoConfigGeography();
+	public void setIdWebBoConfigGeography(Long idWebBoConfigGeography);
+
+	public Long getIdWebBoConfigPageModule();
+	public void setIdWebBoConfigPageModule(Long idWebBoConfigPageModule);
 	
 	public String getIsDisplay();
 	public void setIsDisplay(String isDisplay);
