@@ -13,7 +13,9 @@ import org.kanomchan.core.common.bean.LabelDefault;
 import org.kanomchan.core.common.bean.WebBoConfig;
 import org.kanomchan.core.common.bean.WebBoConfigDefault;
 import org.kanomchan.core.common.bean.WebBoConfigGeography;
+import org.kanomchan.core.common.bean.WebBoConfigGeographyDefault;
 import org.kanomchan.core.common.bean.WebBoConfigPageModule;
+import org.kanomchan.core.common.bean.WebBoConfigPageModuleDefault;
 import org.kanomchan.core.common.dao.ConfigDaoImpl.LabelMapper;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -91,11 +93,8 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	    public WebBoConfig mapRow(ResultSet rs, int num)throws SQLException {
 	    	WebBoConfigDefault webBoConfig = new WebBoConfigDefault(); 
 	    	webBoConfig.setIdWebBoConfig(rs.getLong("ID_WEB_BO_CONFIG"));
-//	    	webBoConfig.setIdRegion(rs.getLong("ID_REGION"));
-//	    	webBoConfig.setIdCountry(rs.getLong("ID_COUNTRY"));
-//	    	webBoConfig.setIdZone(rs.getLong("ID_ZONE"));
-//	    	webBoConfig.setIdProvince(rs.getLong("ID_PROVINCE"));
-//	    	webBoConfig.setIdCity(rs.getLong("ID_CITY"));
+	    	webBoConfig.setIdWebBoConfigGeography(rs.getLong("ID_WEB_BO_CONFIG_GEOGRAPHY"));
+	    	webBoConfig.setIdWebBoConfigPageModule(rs.getLong("ID_WEB_BO_CONFIG_PAGE_MODULE"));
 	    	webBoConfig.setIsDisplay(rs.getString("IS_DISPLAY"));
 	    	webBoConfig.setIsMandatory(rs.getString("IS_MANDATORY"));
 	    	webBoConfig.setIsMatch(rs.getString("IS_MATCH"));
@@ -107,23 +106,56 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
     }
 	
 	public static final String SQL_QUERY_WEB_BO_CONFIG = 
-			" SELECT ID_WEB_BO_CONFIG, ID_REGION, ID_COUNTRY, ID_ZONE, ID_PROVINCE, ID_CITY, IS_DISPLAY, IS_MANDATORY, IS_MATCH, IS_WEIGHT, WEIGHT_PERCENT, DESCRIPTION " +
+			" SELECT ID_WEB_BO_CONFIG, ID_WEB_BO_CONFIG_GEOGRAPHY, ID_WEB_BO_CONFIG_PAGE_MODULE IS_DISPLAY, IS_MANDATORY, IS_MATCH, IS_WEIGHT, WEIGHT_PERCENT, DESCRIPTION " +
 			" FROM COM_M_WEB_BO_CONFIG ";
+	
 	@Override
 	public List<WebBoConfig> getWebBoConfigList() {
 		List<WebBoConfig> webBoConfigList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG, WEB_BO_CONFIG_MAPPER);
 		return webBoConfigList;
 	}
 
+	private static final WebBoConfigGeographyMapper<WebBoConfigGeography> WEB_BO_CONFIG_GEOGRAPHY_MAPPER = new WebBoConfigGeographyMapper<WebBoConfigGeography>();
+	public static final class WebBoConfigGeographyMapper<T extends WebBoConfigGeography> implements RowMapper<WebBoConfigGeography> {
+	    public WebBoConfigGeography mapRow(ResultSet rs, int num)throws SQLException {
+	    	WebBoConfigGeographyDefault webBoConfigGeography = new WebBoConfigGeographyDefault(); 
+	    	webBoConfigGeography.setIdWebBoConfigGeography(rs.getLong("ID_WEB_BO_CONFIG_GEOGRAPHY"));
+	    	webBoConfigGeography.setIdRegion(rs.getLong("ID_REGION"));
+	    	webBoConfigGeography.setIdCountry(rs.getLong("ID_COUNTRY"));
+	    	webBoConfigGeography.setIdZone(rs.getLong("ID_ZONE"));
+	    	webBoConfigGeography.setIdProvince(rs.getLong("ID_PROVINCE"));
+	    	webBoConfigGeography.setIdCity(rs.getLong("ID_CITY"));
+	        return webBoConfigGeography;
+	    }
+    }
+	
+	public static final String SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY = 
+			" SELECT ID_WEB_BO_CONFIG_GEOGRAPHY, ID_REGION, ID_COUNTRY, ID_ZONE, ID_PROVINCE, ID_CITY" +
+			" FROM COM_M_WEB_BO_CONFIG ";
 	@Override
 	public List<WebBoConfigGeography> getGeographyList() {
-		// TODO Auto-generated method stub
-		return null;
+		List<WebBoConfigGeography> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY, WEB_BO_CONFIG_GEOGRAPHY_MAPPER);
+		return webBoConfigGeographyList;
 	}
 
+	private static final WebBoConfigPageModuleMapper<WebBoConfigPageModule> WEB_BO_CONFIG_PAGE_MODULE_MAPPER = new WebBoConfigPageModuleMapper<WebBoConfigPageModule>();
+	public static final class WebBoConfigPageModuleMapper<T extends WebBoConfigPageModule> implements RowMapper<WebBoConfigPageModule> {
+	    public WebBoConfigPageModule mapRow(ResultSet rs, int num)throws SQLException {
+	    	WebBoConfigPageModuleDefault webBoConfig = new WebBoConfigPageModuleDefault(); 
+	    	webBoConfig.setIdWebBoConfigPageModule(rs.getLong("ID_WEB_BO_CONFIG_PAGE_MODULE"));
+	    	webBoConfig.setPage(rs.getString("PAGE"));
+	    	webBoConfig.setModule(rs.getString("MODULE"));
+	    	webBoConfig.setField(rs.getString("FIELD"));
+	        return webBoConfig;
+	    }
+    }
+	
+	public static final String SQL_QUERY_WEB_BO_CONFIG_PAGE_MODULE = 
+			" SELECT ID_WEB_BO_CONFIG_PAGE_MODULE, PAGE, MODULE, FIELD " +
+			" FROM COM_M_WEB_BO_CONFIG_PAGE_MODULE ";
 	@Override
 	public List<WebBoConfigPageModule> getPageModuleList() {
-		// TODO Auto-generated method stub
+		List<WebBoConfigPageModule> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_PAGE_MODULE, WEB_BO_CONFIG_PAGE_MODULE_MAPPER);
 		return null;
 	}
 
@@ -150,6 +182,26 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 		//return messageStringMap;
 		
 		
+		return null;
+	}
+
+	@Override
+	public Long getWebBoConfigGeography(Long idRegion, Long idCountry,
+			Long idZone, Long idProvince, Long idCity) {
+		//WebBoConfigGeography webBoConfigGeography = webbo 
+		return null;
+	}
+
+	@Override
+	public Long getWebBoConfigPageModule(String page, String field) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WebBoConfig getWebBoConfig(Long idWebBoConfigGeography,
+			Long idWebBoConfigPageModule) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

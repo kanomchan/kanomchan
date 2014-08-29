@@ -17,6 +17,12 @@ public interface WebBoConfigDao {
 	public List<WebBoConfigPageModule> getPageModuleList();
 	public List<WebBoConfig> getWebBoConfigList();
 	public Map<Object,List<Object>> getObjectMap();
+	
+	
+	public Long getWebBoConfigGeography(Long idRegion, Long idCountry, Long idZone, Long idProvince, Long idCity);
+	public Long getWebBoConfigPageModule(String page, String field);
+	public WebBoConfig getWebBoConfig(Long idWebBoConfigGeography, Long idWebBoConfigPageModule);
+	
 //	public Map<Object, Object> getWebBoConfigObjectMap();
 //	public Map<Object, Object> getDisplayObjectMap();
 //	public Map<Object, Object> getMandatoryObjectMap();
