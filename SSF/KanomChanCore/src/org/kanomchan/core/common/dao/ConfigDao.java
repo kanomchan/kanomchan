@@ -18,10 +18,6 @@ public interface ConfigDao {
 	public Map<String,List<Label>> getLabelMap();
 	public Map<String, Map<String, String>> getLabelStrMap();
 	
-	public List<DisplayField> getDisplayFieldList();
-	public DisplayField getDisplayField();
-	public DisplayField getDisplayFieldByMany(Long idZone, Long idCountry, Long idProvince, String page, String feild);
-	
 	public void clearConfigCache();
 	public void clearMessageCache();
 }

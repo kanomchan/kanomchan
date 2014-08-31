@@ -191,27 +191,5 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	        return displayFiled;
 	    }
     }
-	@Override
-	public List<DisplayField> getDisplayFieldList() {                              
-		List<DisplayField> displayFieldList = nativeQuery(SQL_QUERY_DISPLAY_FIELD, DISPLAY_FIELD_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
-		return displayFieldList;
-	}
 
-	@Override
-	public DisplayField getDisplayField() {
-		String SQL_QUERY_DISPLAY_FIELD_WHERE = SQL_QUERY_DISPLAY_FIELD;
-		SQL_QUERY_DISPLAY_FIELD_WHERE += "WHERE ";
-		DisplayField displayField = nativeQuery(SQL_QUERY_DISPLAY_FIELD , DISPLAY_FIELD_MAPPER).get(0);
-		return displayField;
-	}
-
-
-	@Override
-	public DisplayField getDisplayFieldByMany(Long idZone, Long idCountry,
-			Long idProvince, String page, String feild) {
-		String SQL_QUERY_DISPLAY_FIELD_WHERE = SQL_QUERY_DISPLAY_FIELD;
-		SQL_QUERY_DISPLAY_FIELD_WHERE += "WHERE ID_ZONE = " + idZone + " AND ID_COUNTRY = " + idCountry;
-		DisplayField displayField = nativeQuery(SQL_QUERY_DISPLAY_FIELD , DISPLAY_FIELD_MAPPER).get(0);
-		return displayField;
-	}
 }

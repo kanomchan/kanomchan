@@ -88,6 +88,9 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 		return messageStringMap;
 	}
 	
+	
+	
+	
 	private static final WebBoConfigMapper<WebBoConfig> WEB_BO_CONFIG_MAPPER = new WebBoConfigMapper<WebBoConfig>();
 	public static final class WebBoConfigMapper<T extends WebBoConfig> implements RowMapper<WebBoConfig> {
 	    public WebBoConfig mapRow(ResultSet rs, int num)throws SQLException {
@@ -156,9 +159,24 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	@Override
 	public List<WebBoConfigPageModule> getPageModuleList() {
 		List<WebBoConfigPageModule> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_PAGE_MODULE, WEB_BO_CONFIG_PAGE_MODULE_MAPPER);
-		return null;
+		return webBoConfigGeographyList;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public Map<Object, List<Object>> getObjectMap() {
 		Map<String, Map<String, String>> messageStringMap = new ConcurrentHashMap<String, Map<String, String>>();
@@ -186,14 +204,14 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	}
 
 	@Override
-	public Long getWebBoConfigGeography(Long idRegion, Long idCountry,
+	public WebBoConfigGeography getWebBoConfigGeography(Long idRegion, Long idCountry,
 			Long idZone, Long idProvince, Long idCity) {
 		//WebBoConfigGeography webBoConfigGeography = webbo 
 		return null;
 	}
 
 	@Override
-	public Long getWebBoConfigPageModule(String page, String field) {
+	public WebBoConfigPageModule getWebBoConfigPageModule(String page, String field) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -203,6 +221,34 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 			Long idWebBoConfigPageModule) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Map<Long, Long> getLongMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<Object, Object> objectMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyMap() {
+		Map<Long, List<WebBoConfigGeography>> messageMap = new ConcurrentHashMap<Long, List<WebBoConfigGeography>>();
+		List<WebBoConfigGeography> webBoConfigGeographies = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY, WEB_BO_CONFIG_GEOGRAPHY_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
+		
+		for (WebBoConfigGeography webBoConfigGeography : webBoConfigGeographies) {
+			List<WebBoConfigGeography> webBoConfigGeographieList = messageMap.get(webBoConfigGeography.getIdRegion());
+			if(webBoConfigGeographieList==null){
+				webBoConfigGeographieList = new ArrayList<WebBoConfigGeography>();
+			}
+			webBoConfigGeographieList.add(webBoConfigGeography);
+			messageMap.put(webBoConfigGeography.getIdRegion(), webBoConfigGeographieList);
+		}
+		return messageMap;
 	}
 
 //	@Override
