@@ -32,7 +32,6 @@ public class TemplateEngine {
 	}
 	
 	public String render(String templateName , Map<String,Object> values){
-		
 		Context context = convertToContext(values);
 		Template template = Velocity.getTemplate(templateName);
 		StringWriter sw = new StringWriter();
