@@ -144,7 +144,7 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		try {
 			SQLQuery query = getSession().createSQLQuery(sql);
 			for (int i = 0; i < params.length; i++) {
-				query.setParameter(i + 1, params[i]);
+				query.setParameter(i, params[i]);
 			}
 			return query.executeUpdate();
 		} catch (Exception e) {
