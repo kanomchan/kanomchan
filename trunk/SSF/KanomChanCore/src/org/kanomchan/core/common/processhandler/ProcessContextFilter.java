@@ -72,7 +72,7 @@ public class ProcessContextFilter  implements Filter  {
 				if(serviceResult.isSuccess()){
 					processContext.setLocationBean(serviceResult.getResult());
 				}else{
-					processContext.setLocation("TH",0L,0L,0L,0L,0L,0L,0L,0L,0L);
+					processContext.setLocation("THA",0L,0L,0L,0L,0L,0L,0L,0L,0L);
 				}
 				CurrentThread.setProcessContext(processContext);
 			} catch (RollBackException | NonRollBackException e) {
