@@ -1,9 +1,14 @@
 package org.kanomchan.core.common.dao;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.Column;
+import javax.persistence.Table;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
@@ -302,5 +307,37 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		}
 		return result;*/
 //		return simpleJdbcTemplate.queryForObject(sql, rm, params);
+		
+		
+		
+	}
+	
+	@Override
+	public <T extends Object> T updateOnlyNotNullBasic(T obj) throws RollBackTechnicalException{
+		Class<? extends Object> vlass = obj.getClass();
+		Table t = vlass.getAnnotation(Table.class);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(" UPDATE ");
+		sb.append(t.name());
+		sb.append(" set ");
+		LinkedList<Object> para = new LinkedList<Object>();
+		Method[] arrmet = obj.getClass().getMethods();
+		for (Method method : arrmet) {
+			
+			Column column = method.getAnnotation(Column.class);
+			sb.append(column.name());
+			sb.append(" = ?");
+			try {
+				para .add(method.invoke(obj));
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		sb.append(" WHERE `ID_PROFILE` = 'ID_PROFILE'; ");
+		executeNativeSQL(sb.toString(),para.toArray());
+		return obj;
 	}
 }

@@ -22,6 +22,7 @@ public interface HibernateBaseDao {
 	public <T extends Object> List<T> nativeQuery(String sql, Class<T> clazz) throws RollBackTechnicalException;
 	public <T extends Object> List<T> nativeQuery(String sql, Class<T> clazz, PagingBean pagingBean)throws RollBackTechnicalException;
 	public <T extends Object> T nativeQueryOneRow(String sql, Class<T> clazz, Object[] params)throws RollBackTechnicalException;
+	public <T extends Object> T updateOnlyNotNullBasic(T obj) throws RollBackTechnicalException;
 	
 
 }
