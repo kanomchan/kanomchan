@@ -1,7 +1,7 @@
 package org.kanomchan.core.common.bean;
 
 public interface Label {
-	public static String DEFAULT_LANG = "EN";
+	public static String DEFAULT_LANG = "ENG";
 
 	public String getLanguage();
 	public void setLanguage(String language);
