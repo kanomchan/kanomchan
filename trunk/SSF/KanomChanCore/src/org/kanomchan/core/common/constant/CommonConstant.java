@@ -10,7 +10,7 @@ public interface CommonConstant {
     public static final String FORCE_TO_LOGIN_PAGE = "FORCE_TO_LOGIN_PAGE";
 	public static final String ACTIVE = "A";
     public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-    public static final String DEFAULT_LANG_KEY = "EN";
+    public static final String DEFAULT_LANG_KEY = "ENG";
     public static final String DEFAULT_LANG_CONFIG = "DEFAULT_LANG_CONFIG";
     
     public static interface SESSION {
