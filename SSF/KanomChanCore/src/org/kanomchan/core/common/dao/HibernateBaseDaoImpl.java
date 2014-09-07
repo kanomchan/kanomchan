@@ -2,12 +2,16 @@ package org.kanomchan.core.common.dao;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.apache.log4j.Logger;
@@ -21,8 +25,9 @@ import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import com.google.common.base.Joiner;
 
 
 
@@ -320,23 +325,56 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		StringBuilder sb = new StringBuilder();
 		sb.append(" UPDATE ");
 		sb.append(t.name());
-		sb.append(" set ");
+		sb.append(" SET ");
 		LinkedList<Object> para = new LinkedList<Object>();
 		Method[] arrmet = obj.getClass().getMethods();
+		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> pkName = new ArrayList<String>();
 		for (Method method : arrmet) {
-			
-			Column column = method.getAnnotation(Column.class);
-			sb.append(column.name());
-			sb.append(" = ?");
 			try {
-				para .add(method.invoke(obj));
-			} catch (IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				// TODO Auto-generated catch block
+				Column column = method.getAnnotation(Column.class);
+				Id id = method.getAnnotation(Id.class);
+				JoinColumn joinColumn = method.getAnnotation(JoinColumn.class);
+				AttributeOverrides attributeOverrides = method.getAnnotation(AttributeOverrides.class);
+				if(column != null && id == null){
+					Object value = method.invoke(obj);
+					if(value != null){
+						para.add(value);
+						list.add(column.name() + " = ? ");
+					}
+				}
+				if(joinColumn != null){
+					Object value = method.invoke(obj);
+					if(value != null){
+						list.add(joinColumn.name() + " = ? ");
+						para.add(value);
+					}
+				}
+				if(id != null){
+					Object value = method.invoke(obj);
+					if(value != null){
+						pkName.add(column.name() + " = ? ");
+						para.add(value);
+					}
+				}
+				if(attributeOverrides != null){
+					Object value = method.invoke(obj);
+					if(value != null){
+						for (AttributeOverride attributeOverride : attributeOverrides.value()) {
+							pkName.add(attributeOverride.column().name() + " = ? ");
+						}
+						para.add(value);
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
-		sb.append(" WHERE `ID_PROFILE` = 'ID_PROFILE'; ");
+		
+		sb.append(" ");
+		sb.append(Joiner.on(", ").skipNulls().join(list));
+		sb.append(" WHERE ");
+		sb.append(Joiner.on("AND ").skipNulls().join(pkName));
 		executeNativeSQL(sb.toString(),para.toArray());
 		return obj;
 	}
