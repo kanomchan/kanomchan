@@ -381,8 +381,9 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 			sb.append(Joiner.on("AND ").skipNulls().join(pkName));
 			for (Long id : pkId) 
 				para.add(id);
+			executeNativeSQL(sb.toString(),para.toArray());
 		}
-		executeNativeSQL(sb.toString(),para.toArray());
+		
 		return entity;
 	}
 	
@@ -447,8 +448,9 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 			sb.append(Joiner.on("AND ").skipNulls().join(pkName));
 			for (Long id : pkId) 
 				para.add(id);
+			executeNativeSQL(sb.toString(),para.toArray());
 		}
-		executeNativeSQL(sb.toString(),para.toArray());
+		
 		return obj;
 	}
 }
