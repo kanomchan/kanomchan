@@ -318,6 +318,75 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 	}
 	
 	@Override
+	public <T extends EntityBean> T updateOnlyNotNullBasic(T entity) throws RollBackTechnicalException{
+		ProcessContext processContext = CurrentThread.getProcessContext();
+		entity.setUpdateUser(processContext.getUserName());
+		entity.setUpdateDate(new Date());
+		Class<? extends EntityBean> vlass = entity.getClass();
+		Table t = vlass.getAnnotation(Table.class);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(" UPDATE ");
+		sb.append(t.name());
+		sb.append(" SET ");
+		LinkedList<Object> para = new LinkedList<Object>();
+		Method[] arrmet = entity.getClass().getMethods();
+		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> pkName = new ArrayList<String>();
+		ArrayList<Long> pkId = new ArrayList<Long>();
+		for (Method method : arrmet) {
+			try {
+				Column column = method.getAnnotation(Column.class);
+				Id id = method.getAnnotation(Id.class);
+				JoinColumn joinColumn = method.getAnnotation(JoinColumn.class);
+				AttributeOverrides attributeOverrides = method.getAnnotation(AttributeOverrides.class);
+				if(column != null && id == null){
+					Object value = method.invoke(entity);
+					if(value != null){
+						para.add(value);
+						list.add(column.name() + " = ? ");
+					}
+				}
+				if(joinColumn != null){
+					Object value = method.invoke(entity);
+					if(value != null){
+						list.add(joinColumn.name() + " = ? ");
+						para.add(value);
+					}
+				}
+				if(id != null){
+					Object value = method.invoke(entity);
+					if(value != null){
+						pkName.add(column.name() + " = ? ");
+						pkId.add((Long) value);
+					}
+				}
+				if(attributeOverrides != null){
+					Object value = method.invoke(entity);
+					if(value != null){
+						for (AttributeOverride attributeOverride : attributeOverrides.value()) 
+							pkName.add(attributeOverride.column().name() + " = ? ");
+						pkId.add((Long) value);
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		sb.append(" ");
+		sb.append(Joiner.on(", ").skipNulls().join(list));
+		if(pkName.size() != 0){
+			sb.append(" WHERE ");
+			sb.append(Joiner.on("AND ").skipNulls().join(pkName));
+			for (Long id : pkId) 
+				para.add(id);
+		}
+		executeNativeSQL(sb.toString(),para.toArray());
+		return entity;
+	}
+	
+	@Override
 	public <T extends Object> T updateOnlyNotNullBasic(T obj) throws RollBackTechnicalException{
 		Class<? extends Object> vlass = obj.getClass();
 		Table t = vlass.getAnnotation(Table.class);
@@ -330,6 +399,7 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		Method[] arrmet = obj.getClass().getMethods();
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<String> pkName = new ArrayList<String>();
+		ArrayList<Long> pkId = new ArrayList<Long>();
 		for (Method method : arrmet) {
 			try {
 				Column column = method.getAnnotation(Column.class);
@@ -354,16 +424,15 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 					Object value = method.invoke(obj);
 					if(value != null){
 						pkName.add(column.name() + " = ? ");
-						para.add(value);
+						pkId.add((Long) value);
 					}
 				}
 				if(attributeOverrides != null){
 					Object value = method.invoke(obj);
 					if(value != null){
-						for (AttributeOverride attributeOverride : attributeOverrides.value()) {
+						for (AttributeOverride attributeOverride : attributeOverrides.value()) 
 							pkName.add(attributeOverride.column().name() + " = ? ");
-						}
-						para.add(value);
+						pkId.add((Long) value);
 					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -373,8 +442,12 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		
 		sb.append(" ");
 		sb.append(Joiner.on(", ").skipNulls().join(list));
-		sb.append(" WHERE ");
-		sb.append(Joiner.on("AND ").skipNulls().join(pkName));
+		if(pkName.size() != 0){
+			sb.append(" WHERE ");
+			sb.append(Joiner.on("AND ").skipNulls().join(pkName));
+			for (Long id : pkId) 
+				para.add(id);
+		}
 		executeNativeSQL(sb.toString(),para.toArray());
 		return obj;
 	}
