@@ -1,5 +1,5 @@
 
-package org.kanomchan.core.common.web.struts.view.jsp;
+package org.kanomchan.core.common.web.struts.view.jsp.ui;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

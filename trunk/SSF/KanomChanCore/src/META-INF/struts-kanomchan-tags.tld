@@ -13,7 +13,7 @@
   <tag>
     <description><![CDATA[Renders an input form]]></description>
     <name>paging</name>
-    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.PagingTag</tag-class>
+    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.ui.PagingTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
       <description><![CDATA[The accepted charsets for this form. The values may be comma or blank delimited.]]></description>
@@ -390,7 +390,7 @@
    <tag>
     <description><![CDATA[Render an HTML div]]></description>
     <name>div</name>
-    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.DivTag</tag-class>
+    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.ui.DivTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
       <description><![CDATA[Set the html display-key attribute on rendered html element]]></description>

@@ -1,5 +1,5 @@
 
-package org.kanomchan.core.common.web.struts.view.jsp;
+package org.kanomchan.core.common.web.struts.view.jsp.ui;
 
 import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
