@@ -26,7 +26,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-core-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-expression-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-jdbc-3.0.5.RELEASE.jar" sourcepath="C:/Users/kwan/.m2/repository/org/springframework/spring-jdbc/3.0.5.RELEASE/spring-jdbc-3.0.5.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-orm-3.0.5.RELEASE.jar" sourcepath="C:/Users/Lenovo/.m2/repository/org/springframework/spring-orm/3.0.5.RELEASE/spring-orm-3.0.5.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-orm-3.0.5.RELEASE.jar" sourcepath="C:/Users/B/.m2/repository/org/springframework/spring-orm/3.0.5.RELEASE/spring-orm-3.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-tx-3.0.5.RELEASE.jar" sourcepath="C:/Users/kwan/.m2/repository/org/springframework/spring-tx/3.0.5.RELEASE/spring-tx-3.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
