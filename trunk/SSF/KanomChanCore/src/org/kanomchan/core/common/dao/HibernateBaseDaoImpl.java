@@ -373,12 +373,10 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 				e.printStackTrace();
 			}
 		}
-		
-		sb.append(" ");
-		sb.append(Joiner.on(", ").skipNulls().join(list));
+		sb.append(Joiner.on(" , ").skipNulls().join(list));
 		if(pkName.size() != 0){
 			sb.append(" WHERE ");
-			sb.append(Joiner.on("AND ").skipNulls().join(pkName));
+			sb.append(Joiner.on(" AND ").skipNulls().join(pkName));
 			for (Long id : pkId) 
 				para.add(id);
 			executeNativeSQL(sb.toString(),para.toArray());
@@ -440,12 +438,10 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 				e.printStackTrace();
 			}
 		}
-		
-		sb.append(" ");
-		sb.append(Joiner.on(", ").skipNulls().join(list));
+		sb.append(Joiner.on(" , ").skipNulls().join(list));
 		if(pkName.size() != 0){
 			sb.append(" WHERE ");
-			sb.append(Joiner.on("AND ").skipNulls().join(pkName));
+			sb.append(Joiner.on(" AND ").skipNulls().join(pkName));
 			for (Long id : pkId) 
 				para.add(id);
 			executeNativeSQL(sb.toString(),para.toArray());
