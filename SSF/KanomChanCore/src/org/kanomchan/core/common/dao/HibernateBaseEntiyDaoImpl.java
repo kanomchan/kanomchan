@@ -205,16 +205,19 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 				    
 			    	
 			    }
-				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
-				criteria.setFirstResult((int) pagingBean.getOffsetBegin());
-				criteria.setMaxResults(pagingBean.getRowsPerPage());
-				List list = criteria.list();
-				
+			    
 			    criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			    criteria.setProjection(Projections.rowCount());
 			    
 			    pagingBean.setTotalRows((Long)criteria.uniqueResult());
+			    
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+				criteria.setProjection(null);
+				criteria.setFirstResult((int) pagingBean.getOffsetBegin());
+				criteria.setMaxResults(pagingBean.getRowsPerPage());
+				List list = criteria.list();
+				
+			    
 
 				return list;
 			}
@@ -243,16 +246,16 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 				    
 			    	
 			    }
-				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
-				criteria.setFirstResult((int) pagingBean.getOffsetBegin());
-				criteria.setMaxResults(pagingBean.getRowsPerPage());
-				List list = criteria.list();
-				
 			    criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			    criteria.setProjection(Projections.rowCount());
 			    
 			    pagingBean.setTotalRows((Long)criteria.uniqueResult());
+			    
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+				criteria.setProjection(null);
+				criteria.setFirstResult((int) pagingBean.getOffsetBegin());
+				criteria.setMaxResults(pagingBean.getRowsPerPage());
+				List list = criteria.list();
 
 				return list;
 			}
