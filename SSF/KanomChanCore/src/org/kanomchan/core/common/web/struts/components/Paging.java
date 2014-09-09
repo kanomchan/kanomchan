@@ -19,4 +19,12 @@ public class Paging extends Form {
 		super(stack, request, response);
 	}
 
+	@Override
+	protected void evaluateExtraParams() {
+		super.evaluateExtraParams();
+		
+//		if (size != null) {
+//            addParameter("size", findString(size));
+//        }
+	}
 }
