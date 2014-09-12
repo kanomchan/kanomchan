@@ -81,7 +81,7 @@
 		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');$('#formId').submit();"><@s.property value="%{#count}"/></a></li>
 						</@s.else>
 						<@s.if test="%{#count > 6 && ${parameters.pageCount} > 9}">
-							<li><a>...</a></li>
+							<li><a class="paging-hidden">...</a></li>
 							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount-1}"/>');$('#formId').submit();"><@s.property value="${parameters.pageCount-1}"/></a></li>
 							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount}"/>');$('#formId').submit();"><@s.property value="${parameters.pageCount}"/></a></li>
 							<@s.set var="breakLoop" value="%{true}" />
@@ -94,7 +94,7 @@
 		  				<@s.if test="%{#count == 1}">
 		  					<li><a href="#" onclick="$('#currentPage').val('1');$('#formId').submit();">1</a></li>
 							<li><a href="#" onclick="$('#currentPage').val('2');$('#formId').submit();">2</a></li>
-							<li><a>...</a></li>
+							<li><a class="paging-hidden">...</a></li>
 		  				</@s.if>
 		  				<@s.if test="%{${parameters.currentPage} == #count}">
 		  					<li><span><@s.property value="${parameters.currentPage}"/></span></li>
@@ -113,7 +113,7 @@
 		  				<@s.if test="%{#count == 1}">
 		  					<li><a href="#" onclick="$('#currentPage').val('1');$('#formId').submit();">1</a></li>
 							<li><a href="#" onclick="$('#currentPage').val('2');$('#formId').submit();">2</a></li>
-							<li><a>...</a></li>
+							<li><a class="paging-hidden">...</a></li>
 		  				</@s.if>
 		  				<@s.if test="%{${parameters.currentPage} == #count}">
 		  					<li><span><@s.property value="${parameters.currentPage}"/></span></li>
@@ -122,7 +122,7 @@
 		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');$('#formId').submit();"><@s.property value="%{#count}"/></a></li>
 						</@s.elseif>
 						<@s.if test="%{#count == ${parameters.pageCount}}">
-							<li><a>...</a></li>
+							<li><a class="paging-hidden">...</a></li>
 							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount-1}"/>');$('#formId').submit();"><@s.property value="${parameters.pageCount-1}"/></a></li>
 							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount}"/>');$('#formId').submit();"><@s.property value="${parameters.pageCount}"/></a></li>
 							<@s.set var="breakLoop" value="%{true}" />
