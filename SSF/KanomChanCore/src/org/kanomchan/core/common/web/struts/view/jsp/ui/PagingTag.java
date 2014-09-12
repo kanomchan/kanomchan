@@ -5,12 +5,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.components.Component;
-import org.apache.struts2.components.Form;
 //import org.apache.struts2.components.Set;
-import org.apache.struts2.views.jsp.ContextBeanTag;
-import org.apache.struts2.views.jsp.ui.FormTag;
+import org.apache.struts2.views.jsp.ui.AbstractClosingTag;
+import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.web.struts.components.Paging;
-import org.kanomchan.core.common.web.struts.components.SetValueByString;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
@@ -18,12 +16,24 @@ import com.opensymphony.xwork2.util.ValueStack;
 /**
  * @see Set
  */
-public class PagingTag extends FormTag {
+public class PagingTag extends AbstractClosingTag {
 
     private static final long serialVersionUID = -5074213926790716974L;
 
-//    protected String scope;
-//    protected String value;
+    protected String action;
+    protected String target;
+    protected String enctype;
+    protected String method;
+    protected String namespace;
+    protected String validate;
+    protected String onsubmit;
+    protected String onreset;
+    protected String portletMode;
+    protected String windowState;
+    protected String acceptcharset;
+    protected String focusElement;
+    protected boolean includeContext = true;
+    protected String pagingBean;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return  new Paging(stack, req, res);
@@ -31,21 +41,77 @@ public class PagingTag extends FormTag {
 
     protected void populateParams() {
         super.populateParams();
-
-        Paging set = (Paging) component;
-//        set.setScope(scope);
-//        set.setValue(value);
+        Paging paging = (Paging) component;
+        paging.setAction(action);
+        paging.setTarget(target);
+        paging.setEnctype(enctype);
+        paging.setMethod(method);
+        paging.setNamespace(namespace);
+        paging.setValidate(validate);
+        paging.setOnreset(onreset);
+        paging.setOnsubmit(onsubmit);
+        paging.setPortletMode(portletMode);
+        paging.setWindowState(windowState);
+        paging.setAcceptcharset(acceptcharset);
+        paging.setFocusElement(focusElement);
+        paging.setIncludeContext(includeContext);
+        paging.setPagingBean(pagingBean);
     }
 
-//    public void setName(String name) {
-//       setVar(name);
-//    }
-//
-//    public void setScope(String scope) {
-//        this.scope = scope;
-//    }
-//
-//    public void setValue(String value) {
-//        this.value = value;
-//    }
+    
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public void setEnctype(String enctype) {
+        this.enctype = enctype;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
+    public void setValidate(String validate) {
+        this.validate = validate;
+    }
+
+    public void setOnsubmit(String onsubmit) {
+        this.onsubmit = onsubmit;
+    }
+
+    public void setOnreset(String onreset) {
+        this.onreset = onreset;
+    }
+
+    public void setPortletMode(String portletMode) {
+        this.portletMode = portletMode;
+    }
+
+    public void setWindowState(String windowState) {
+        this.windowState = windowState;
+    }
+
+    public void setAcceptcharset(String acceptcharset) {
+        this.acceptcharset = acceptcharset;
+    }
+
+    public void setFocusElement(String focusElement) {
+        this.focusElement = focusElement;
+    }
+
+    public void setIncludeContext(boolean includeContext) {
+        this.includeContext = includeContext;
+    }
+    
+    public void setPagingBean(String pagingBean) {
+		this.pagingBean = pagingBean;
+	}
 }
