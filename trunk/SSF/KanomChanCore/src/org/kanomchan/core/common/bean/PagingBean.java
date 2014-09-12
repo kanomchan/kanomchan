@@ -45,7 +45,7 @@ public class PagingBean implements Serializable {
 
 	}
 	
-	private static final int DEFAULT_ROWS_PER_PAGE = 9;
+	private static final int DEFAULT_ROWS_PER_PAGE = 10;
 	
 	public static final String ORDER_DESC = "DESC";
 	public static final String ORDER_ASC = "ASC";
