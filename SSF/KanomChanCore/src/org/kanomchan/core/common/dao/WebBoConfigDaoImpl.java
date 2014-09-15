@@ -37,7 +37,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	
 	public static final String SQL_QUERY_LABEL = 
 			" SELECT LABEL, PAGE, DISPLAY_TEXT, LANGUAGE " +
-			" FROM COM_M_LABEL ";
+			" FROM SYS_M_LABEL ";
 	
 	@Override
 	public List<Label> getLabelList() {
