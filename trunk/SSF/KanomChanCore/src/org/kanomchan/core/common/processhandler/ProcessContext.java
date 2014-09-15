@@ -195,6 +195,21 @@ public class ProcessContext {
 	public Long getCurrency() {
 		return currency;
 	}
+	public Long getUserId() {
+
+		Long l = null ;
+		
+		if(userBean ==null)
+			return null;
+		if(userBean.getUserId() ==null ||"".equals(userBean.getUserId()))
+			return null;
+		try{
+			l = Long.parseLong(userBean.getUserId());
+		}catch(Exception e){
+			
+		}
+		return l;
+	}
 	
 	
 }
