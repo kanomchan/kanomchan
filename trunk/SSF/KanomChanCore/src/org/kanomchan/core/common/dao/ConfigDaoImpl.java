@@ -23,7 +23,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final Logger logger = Logger.getLogger(ConfigDaoImpl.class);
 	
-	private static final String SQL_QUERY_CONFIG = "SELECT CONFIG_KEY, CONFIG_VALUE FROM COM_M_CONFIG";
+	private static final String SQL_QUERY_CONFIG = "SELECT CONFIG_KEY, CONFIG_VALUE FROM SYS_M_CONFIG";
 	@Override
 	public Map<String, String> getConfigMap() {
 		Map<String, String> configMap = new ConcurrentHashMap<String, String>();
@@ -52,7 +52,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final String SQL_QUERY_MESSAGE = 
 			" SELECT MESSAGE_CODE, MESSAGE_LANG, DISPLAY_TEXT, MESSAGE_DESC, " +
 			" MESSAGE_TYPE, SOLUTION " +
-			" FROM COM_M_MESSAGE ";
+			" FROM SYS_M_MESSAGE ";
 	@Override
 	public Map<String, Message> getMessageMap() {
 		Map<String, Message> messageMap = new ConcurrentHashMap<String, Message>();
@@ -114,7 +114,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	public static final String SQL_QUERY_LABEL = 
 			" SELECT LABEL, PAGE, DISPLAY_TEXT, LANGUAGE " +
-			" FROM COM_M_LABEL ";
+			" FROM SYS_M_LABEL ";
 	
 	@Override
 	public List<Label> getLabelList() {
