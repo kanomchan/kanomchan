@@ -27,9 +27,9 @@
 				Show 
 				<select 
 					class="form-control field-xs inline" 
-					id="rowsPerPage_${parameters.id}" 
+					id="rowsPerPage_Bottom_${parameters.id}" 
 					name="rowsPerPage" 
-					onchange="rowsPerPage_${parameters.id}_select()">
+					onchange="rowsPerPage_Bottom_${parameters.id}_select()">
 					<option value="10"
 						<#if parameters.rowsPerPage == 10>
 							selected="selected"
@@ -52,9 +52,9 @@
 					>100</option>
 				</select>
 				<script>
-					function rowsPerPage_${parameters.id}_select(){
+					function rowsPerPage_Bottom_${parameters.id}_select(){
 						$('#currentPage').val('1');
-						$('#rowsPerPage_value_${parameters.id}').val($('#rowsPerPage_${parameters.id}').val());
+						$('#rowsPerPage').val($('#rowsPerPage_Bottom_${parameters.id}').val());
 						$('#${parameters.id}').submit();
 					}
 				</script>
@@ -146,8 +146,6 @@
 				<#else>
 					<li><a href="#" onclick="$('#currentPage').val('${parameters.nextPage?html}');$('#${parameters.id}').submit();">&raquo;</a></li>
 			</#if>
-			<@s.hidden id="currentPage" name="pagingBean.currentPage"></@s.hidden>
-			<@s.hidden id="rowsPerPage_value_${parameters.id}" name="pagingBean.rowsPerPage"></@s.hidden>
 			</ul>
 		</div>
 	</div>
