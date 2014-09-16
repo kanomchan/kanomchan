@@ -13,11 +13,14 @@ public interface WebBoConfigDao {
 	public Map<String,List<Label>> getLabelMap();
 	public Map<String, Map<String, String>> getLabelStrMap();
 	
-	public List<WebBoConfigGeography> getGeographyList();
-	public List<WebBoConfigPageModule> getPageModuleList();
+	public boolean getWebBoConfigDefault();
+	
+	public List<WebBoConfigGeography> getWebBoConfigGeographyList();
+	public List<WebBoConfigPageModule> getWebBoConfigPageModuleList();
 	public List<WebBoConfig> getWebBoConfigList();
 	
 	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyMap();
+	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyRegionMap();
 	
 	public Map<Long, Long> getLongMap();
 	public Map<Object, Object> objectMap();
