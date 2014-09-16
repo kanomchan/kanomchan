@@ -1,9 +1,11 @@
 package org.kanomchan.core.common.processhandler;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,8 @@ public class ProcessContext {
 	protected String status;
 
 	protected Locale locale;
+	
+	protected Map<String, String> contextMapString = new HashMap<String, String>();
 	
 	protected Long zone;
 	protected Long country;
@@ -209,6 +213,12 @@ public class ProcessContext {
 			
 		}
 		return l;
+	}
+	public String getString(String key) {
+		return contextMapString.get(key);
+	}
+	public void setString(String key,String value) {
+		contextMapString.put(key, value);
 	}
 	
 	
