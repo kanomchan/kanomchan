@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.kanomchan.core.common.bean.LocationBean;
+import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.context.ApplicationContextUtil;
 import org.kanomchan.core.common.dao.LocationDao;
 import org.kanomchan.core.common.exception.NonRollBackException;
@@ -53,7 +54,7 @@ public class LocationServiceImpl implements LocationService {
 			if(location == null)
 				location = lookupService.getLocationV6(ipAddress);
 			if(location != null)
-				locationDao.getLocation(location.countryCode, location.countryName, location.region, location.city, location.postalCode);
+				locationBean = locationDao.getLocation(location.countryCode, location.countryName, location.region, location.city, location.postalCode);
 			else
 				locationBean = new LocationBean();
 		}else{
@@ -62,6 +63,13 @@ public class LocationServiceImpl implements LocationService {
 		return new ServiceResult<LocationBean>(locationBean );
 	}
 
+	
+	public ServiceResult<LocationBean> getLocation(UserBean userBean)throws RollBackException,NonRollBackException {
+		LocationBean locationBean = null;
+		locationBean = new LocationBean();
+		locationBean = locationDao.getLocation( userBean.getUserId());
+		return new ServiceResult<LocationBean>(locationBean );
+	}
 	@PostConstruct
 	public void init() {
 //		try {
@@ -78,6 +86,12 @@ public class LocationServiceImpl implements LocationService {
 	@TriggersRemove(cacheName="locationServiceImpl.getLocation", removeAll=true)
 	public void refresh() {
 		locationDao.refresh();
+	}
+
+	@Override
+	public ServiceResult<LocationBean> getLocationByUserBean(UserBean userBean)
+			throws RollBackException, NonRollBackException {
+		return new ServiceResult<LocationBean>(locationDao.getLocation(userBean.getUserId()));
 	}
 
 }

@@ -10,4 +10,6 @@ public interface LocationDao {
 
 	public void refresh();
 
+	public LocationBean getLocation(String userId)throws NonRollBackException,RollBackException;
+
 }
