@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.kanomchan.core.common.bean.*;
@@ -8,6 +9,8 @@ import org.kanomchan.core.common.dao.WebBoConfigDao;
 import org.kanomchan.core.common.processhandler.ProcessContext;
 
 public class WebBoConfigServiceImpl implements WebBoConfigService {
+	
+	
 	
 	private WebBoConfigDao webBoConfigDao;
 	public Map<Long, Object> WebBoConfigGeography;
@@ -42,6 +45,5 @@ public class WebBoConfigServiceImpl implements WebBoConfigService {
 		return webBoConfig.getIsDisplay().equals("Y");
 //		return false;
 	}
-
 
 }
