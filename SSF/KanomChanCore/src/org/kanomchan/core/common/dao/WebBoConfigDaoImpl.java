@@ -110,7 +110,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	
 	public static final String SQL_QUERY_WEB_BO_CONFIG = 
 			" SELECT ID_WEB_BO_CONFIG, ID_WEB_BO_CONFIG_GEOGRAPHY, ID_WEB_BO_CONFIG_PAGE_MODULE IS_DISPLAY, IS_MANDATORY, IS_MATCH, IS_WEIGHT, WEIGHT_PERCENT, DESCRIPTION " +
-			" FROM COM_M_WEB_BO_CONFIG ";
+			" FROM JOB_N_WEB_BO_CONFIG ";
 	
 	@Override
 	public List<WebBoConfig> getWebBoConfigList() {
@@ -134,7 +134,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	
 	public static final String SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY = 
 			" SELECT ID_WEB_BO_CONFIG_GEOGRAPHY, ID_REGION, ID_COUNTRY, ID_ZONE, ID_PROVINCE, ID_CITY" +
-			" FROM COM_M_WEB_BO_CONFIG ";
+			" FROM JOB_N_WEB_BO_CONFIG ";
 	@Override
 	public List<WebBoConfigGeography> getGeographyList() {
 		List<WebBoConfigGeography> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY, WEB_BO_CONFIG_GEOGRAPHY_MAPPER);
@@ -155,7 +155,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	
 	public static final String SQL_QUERY_WEB_BO_CONFIG_PAGE_MODULE = 
 			" SELECT ID_WEB_BO_CONFIG_PAGE_MODULE, PAGE, MODULE, FIELD " +
-			" FROM COM_M_WEB_BO_CONFIG_PAGE_MODULE ";
+			" FROM JOB_N_WEB_BO_CONFIG_PAGE_MODULE ";
 	@Override
 	public List<WebBoConfigPageModule> getPageModuleList() {
 		List<WebBoConfigPageModule> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_PAGE_MODULE, WEB_BO_CONFIG_PAGE_MODULE_MAPPER);

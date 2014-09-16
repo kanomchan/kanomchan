@@ -180,7 +180,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final String SQL_QUERY_DISPLAY_FIELD = 
 //			" ID_DISPLAY_FIELD ,ID_REGION ,ID_COUNTRY ,ID_ZONE ,ID_PROVINE ,ID_CITY ,MODULE ,PAGE ,FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
 			" ID_DISPLAY_FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
-			" FROM COM_M_DISPLAY_FIELD ";
+			" FROM JOB_N_DISPLAY_FIELD ";
 	private static final DisplayFieldMapper<DisplayField> DISPLAY_FIELD_MAPPER = new DisplayFieldMapper<DisplayField>();
 	public static final class DisplayFieldMapper<T extends DisplayField> implements RowMapper<DisplayField> {
 	    public DisplayField mapRow(ResultSet rs, int num)throws SQLException {
