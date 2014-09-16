@@ -136,7 +136,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 			" SELECT ID_WEB_BO_CONFIG_GEOGRAPHY, ID_REGION, ID_COUNTRY, ID_ZONE, ID_PROVINCE, ID_CITY" +
 			" FROM JOB_N_WEB_BO_CONFIG ";
 	@Override
-	public List<WebBoConfigGeography> getGeographyList() {
+	public List<WebBoConfigGeography> getWebBoConfigGeographyList() {
 		List<WebBoConfigGeography> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY, WEB_BO_CONFIG_GEOGRAPHY_MAPPER);
 		return webBoConfigGeographyList;
 	}
@@ -157,7 +157,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 			" SELECT ID_WEB_BO_CONFIG_PAGE_MODULE, PAGE, MODULE, FIELD " +
 			" FROM JOB_N_WEB_BO_CONFIG_PAGE_MODULE ";
 	@Override
-	public List<WebBoConfigPageModule> getPageModuleList() {
+	public List<WebBoConfigPageModule> getWebBoConfigPageModuleList() {
 		List<WebBoConfigPageModule> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_PAGE_MODULE, WEB_BO_CONFIG_PAGE_MODULE_MAPPER);
 		return webBoConfigGeographyList;
 	}
@@ -206,7 +206,6 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	@Override
 	public WebBoConfigGeography getWebBoConfigGeography(Long idRegion, Long idCountry,
 			Long idZone, Long idProvince, Long idCity) {
-		//WebBoConfigGeography webBoConfigGeography = webbo 
 		return null;
 	}
 
@@ -237,19 +236,50 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 
 	@Override
 	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyMap() {
-		Map<Long, List<WebBoConfigGeography>> messageMap = new ConcurrentHashMap<Long, List<WebBoConfigGeography>>();
-		List<WebBoConfigGeography> webBoConfigGeographies = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY, WEB_BO_CONFIG_GEOGRAPHY_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
 		
-		for (WebBoConfigGeography webBoConfigGeography : webBoConfigGeographies) {
-			List<WebBoConfigGeography> webBoConfigGeographieList = messageMap.get(webBoConfigGeography.getIdRegion());
-			if(webBoConfigGeographieList==null){
-				webBoConfigGeographieList = new ArrayList<WebBoConfigGeography>();
+		Map<Long, List<WebBoConfigGeography>> messageMap = new ConcurrentHashMap<Long, List<WebBoConfigGeography>>();
+		List<WebBoConfigGeography> webBoConfigGeographieList = getWebBoConfigGeographyList();
+		
+		for (WebBoConfigGeography webBoConfigGeography : webBoConfigGeographieList) {
+			List<WebBoConfigGeography> webBoConfigGeographies = messageMap.get(webBoConfigGeography.getIdRegion());
+			if(webBoConfigGeographies==null){
+				webBoConfigGeographies = new ArrayList<WebBoConfigGeography>();
 			}
-			webBoConfigGeographieList.add(webBoConfigGeography);
-			messageMap.put(webBoConfigGeography.getIdRegion(), webBoConfigGeographieList);
+			webBoConfigGeographies.add(webBoConfigGeography);
+			messageMap.put(webBoConfigGeography.getIdRegion(), webBoConfigGeographies);
 		}
 		return messageMap;
 	}
+
+	@Override
+	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyRegionMap() {
+		
+		Map<Long, List<WebBoConfigGeography>> messageMap = new ConcurrentHashMap<Long, List<WebBoConfigGeography>>();
+		List<WebBoConfigGeography> webBoConfigGeographieList = getWebBoConfigGeographyList();
+		
+		for (WebBoConfigGeography webBoConfigGeography : webBoConfigGeographieList) {
+			List<WebBoConfigGeography> webBoConfigGeographies = messageMap.get(webBoConfigGeography.getIdRegion());
+			if(webBoConfigGeographies==null){
+				webBoConfigGeographies = new ArrayList<WebBoConfigGeography>();
+			}
+			webBoConfigGeographies.add(webBoConfigGeography);
+			messageMap.put(webBoConfigGeography.getIdRegion(), webBoConfigGeographies);
+		}
+		return messageMap;
+	}
+
+	public List<WebBoConfig> webBoConfigList;
+	public List<WebBoConfigGeography> webBoConfigGeographyList;
+	public List<WebBoConfigPageModule> webBoConfigPageModuleList;
+	
+	@Override
+	public boolean getWebBoConfigDefault() {
+		webBoConfigList = getWebBoConfigList();
+		webBoConfigGeographyList = getWebBoConfigGeographyList();
+		webBoConfigPageModuleList = getWebBoConfigPageModuleList();
+		return false;
+	}
+
 
 //	@Override
 //	public Map<Object, List<WebBoConfig>> getWebBoConfigMap() {
