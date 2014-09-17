@@ -21,11 +21,6 @@ import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.service.LocationService;
 
-import com.maxmind.geoip.Location;
-import com.maxmind.geoip.LookupService;
-import com.maxmind.geoip.regionName;
-import com.maxmind.geoip.timeZone;
-
 public class ProcessContextFilter  implements Filter  {
 
 
@@ -44,6 +39,9 @@ public class ProcessContextFilter  implements Filter  {
 //			Locale locale = (Locale) httpSession.getAttribute(CommonConstant.SESSION.LOCALE_KEY);
 			processContext.userBean = (userBean);
 //			serviceContext.setLocale(locale);
+			
+			String corpId = (String) httpSession.getAttribute("SESSION_CORP_ID_KEY");
+			processContext.setString("SESSION_CORP_ID_KEY", corpId);
 			CurrentThread.setProcessContext(processContext);
 			getPOS(request);
 		}
