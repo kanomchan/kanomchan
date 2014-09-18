@@ -19,6 +19,8 @@ import org.kanomchan.core.common.bean.LabelDefault;
 import org.kanomchan.core.common.bean.Message;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+
 public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final Logger logger = Logger.getLogger(ConfigDaoImpl.class);
@@ -54,6 +56,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 			" MESSAGE_TYPE, SOLUTION " +
 			" FROM SYS_M_MESSAGE ";
 	@Override
+	@Cacheable(cacheName = "getMessageMap")
 	public Map<String, Message> getMessageMap() {
 		Map<String, Message> messageMap = new ConcurrentHashMap<String, Message>();
 		
