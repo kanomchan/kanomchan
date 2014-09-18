@@ -43,7 +43,8 @@ public class SessionInterceptor extends ServletConfigInterceptor  {
 //		 
 		if(session.get(CommonConstant.SESSION.USER_BEAN_KEY)==null){
 			HttpServletRequest request = ServletActionContext.getRequest();
-			String url = request.getRequestURL().toString();
+			
+			String url = request.getRequestURL().toString()+"?"+request.getQueryString();
 			boolean f = true;
 			for (String iterable_element :  bypass) {
 				f = url.indexOf(iterable_element) == -1;
