@@ -43,6 +43,7 @@ public class ProcessContextFilter  implements Filter  {
 			String corpId = (String) httpSession.getAttribute("SESSION_CORP_ID_KEY");
 			processContext.setString("SESSION_CORP_ID_KEY", corpId);
 			CurrentThread.setProcessContext(processContext);
+			getSession(httpSession,request);
 			getPOS(request);
 		}
 		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
@@ -52,7 +53,29 @@ public class ProcessContextFilter  implements Filter  {
 		CurrentThread.remove();
 	}
 
-	
+	private void getSession(HttpSession httpSession,ServletRequest request){
+		ProcessContext processContext = CurrentThread.getProcessContext();
+		if(httpSession.getAttribute(CommonConstant.SESSION.LOCATION_BEAN_KEY)!=null){
+			LocationBean lb = (LocationBean) httpSession.getAttribute(CommonConstant.SESSION.LOCATION_BEAN_KEY);
+			processContext.setLocationBean(lb);
+		}else if(httpSession.getAttribute(CommonConstant.SESSION.USER_BEAN_KEY)!=null){
+			Long region =(Long) httpSession.getAttribute("SESSION_REGION_ID_KEY");
+			Long country =(Long) httpSession.getAttribute("SESSION_COUNTRY_ID_KEY");
+			Long county =(Long) httpSession.getAttribute("SESSION_COUNTY_ID_KEY");
+			Long station =(Long) httpSession.getAttribute("SESSION_STATION_ID_KEY");
+			Long postal =(Long) httpSession.getAttribute("SESSION_POSTAL_KEY");
+			String lang =(String) httpSession.getAttribute("SESSION_LANG_CODE_KEY");
+			Long city =(Long) httpSession.getAttribute("SESSION_CITY_ID_KEY");
+			Long currency =(Long) httpSession.getAttribute("SESSION_CURRENCY_ID_KEY");
+			Long zone =(Long) httpSession.getAttribute("SESSION_ZONE_ID_KEY");
+			Long province =(Long) httpSession.getAttribute("SESSION_PROVINCE_ID_KEY");
+			processContext.setLocation(lang, zone, country, region, province, city, county, postal, station, currency);
+		}
+		else{
+			getPOS(request);
+		}
+		
+	}
 	
 	private void getPOS(ServletRequest request){
 		
