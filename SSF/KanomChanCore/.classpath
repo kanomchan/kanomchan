@@ -61,5 +61,6 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ip2c/geoip-api-1.2.14.jar" sourcepath="C:/Users/kwan/.m2/repository/com/maxmind/geoip/geoip-api/1.2.14/geoip-api-1.2.14-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/template/velocity-1.7.jar" sourcepath="C:/Users/Lenovo/.m2/repository/org/apache/velocity/velocity/1.7/velocity-1.7-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ehcache/ehcache-spring-annotations/ehcache-spring-annotations-1.2.0.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-jquery-plugin-3.7.1/struts2-jquery-plugin-3.7.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
