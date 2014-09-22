@@ -33,6 +33,8 @@ public class SelectCountry extends ListUIBean {
 
     public void evaluateExtraParams() {
         super.evaluateExtraParams();
+        
+        addParameter("listTitle", "desc.CODE3");
 
         if (emptyOption != null) {
             addParameter("emptyOption", findValue(emptyOption, Boolean.class));
