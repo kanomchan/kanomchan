@@ -40,7 +40,7 @@ public class ProcessContextFilter  implements Filter  {
 			processContext.userBean = (userBean);
 //			serviceContext.setLocale(locale);
 			
-			String corpId = (String) httpSession.getAttribute("SESSION_CORP_ID_KEY");
+			String corpId = String.valueOf(httpSession.getAttribute("SESSION_CORP_ID_KEY"));
 			processContext.setString("SESSION_CORP_ID_KEY", corpId);
 			CurrentThread.setProcessContext(processContext);
 			getSession(httpSession,request);
