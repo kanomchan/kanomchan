@@ -21,6 +21,12 @@
  */
 -->
 <#setting number_format="#.#####">
+<style>
+	<#include "css/select2.css">
+</style>
+<style>
+	<#include "css/selectCountry.min.css">
+</style>
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
 <#if parameters.get("size")??>
@@ -118,11 +124,7 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 
 </select>
-<style>
-	<#include "css/bootstrap-select.min.css">
-	<#include "css/select2.min.css">
-	<#include "css/selectCountry.min.css">
-</style>
+
 
 <script>
 	<#include "js/bootstrap-select.min.js">
