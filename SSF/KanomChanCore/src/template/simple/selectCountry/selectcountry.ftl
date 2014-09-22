@@ -132,9 +132,6 @@
 	function format(state) {
     	if (!state.element[0].title) return state.text;
     	return "<img class='sprite sprite-" + state.element[0].title.toLowerCase() + "'/>&nbsp;&nbsp;" + state.text;
-    	//return "<span class='flags flags-" + state.element[0].title.toLowerCase() + "' />&nbsp;&nbsp;" + state.text;
-    	
-        //return "<img class='flags' src='" + "${base}/struts/simple/selectCountry/flags/" + state.element[0].title.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
     }
         
     $("#${parameters.id}").select2({
