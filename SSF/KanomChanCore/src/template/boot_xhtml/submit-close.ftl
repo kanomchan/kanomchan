@@ -21,5 +21,4 @@
  */
 -->
 <#include "/${parameters.templateDir}/simple/submit-close.ftl" />
-</div><#t/>
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlfooter.ftl" />
