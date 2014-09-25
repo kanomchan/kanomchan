@@ -20,7 +20,4 @@
  * under the License.
  */
 -->
-<table class="${parameters.cssClass?default('wwFormTable')?html}"<#rt/>
-<#if parameters.cssStyle??> style="${parameters.cssStyle?html}"<#rt/>
-</#if>
->
+<div class="form-horizontal">

@@ -20,9 +20,10 @@
  * under the License.
  */
 -->
+<#-- 
 ${parameters.after?if_exists}<#t/>
-    </td><#lt/>
-</tr>
+    </div><#lt/>
+</div>
 <#if parameters.errorposition?default("top") == 'bottom'>
 <#assign hasFieldErrors = parameters.name?? && fieldErrors?? && fieldErrors[parameters.name]??/>
 <#if hasFieldErrors>
@@ -35,4 +36,6 @@ ${parameters.after?if_exists}<#t/>
 </#list>
 </#if>
 </#if>
-
+-->
+</div>
+</div>

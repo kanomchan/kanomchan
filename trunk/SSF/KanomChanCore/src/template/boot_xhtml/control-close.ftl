@@ -20,4 +20,4 @@
  * under the License.
  */
 -->
-</table>
+</div>
