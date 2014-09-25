@@ -24,6 +24,7 @@
 	Only show message if errors are available.
 	This will be done if ActionSupport is used.
 -->
+<#--
 <#assign hasFieldErrors = parameters.name?? && fieldErrors?? && fieldErrors[parameters.name]??/>
 <#if parameters.errorposition?default("top") == 'top'>
 <#if hasFieldErrors>
@@ -36,10 +37,12 @@
 </#list>
 </#if>
 </#if>
+-->
 <#--
 	if the label position is top,
 	then give the label it's own row in the table
 -->
+<#--
 <tr>
 <#if parameters.labelposition?default("") == 'top'>
     <td align="left" valign="top" colspan="2"><#rt/>
@@ -69,8 +72,11 @@ ${parameters.labelseparator?default(":")?html}<#t/>
 </label><#t/>
 </#if>
     </td><#lt/>
+-->
 <#-- add the extra row -->
+<#--
 <#if parameters.labelposition?default("") == 'top'>
 </tr>
 <tr>
 </#if>
+-->
