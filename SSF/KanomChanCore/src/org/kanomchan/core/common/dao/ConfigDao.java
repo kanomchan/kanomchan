@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kanomchan.core.common.bean.DisplayField;
+import org.kanomchan.core.common.bean.FieldValidator;
 import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.Message;
 
@@ -20,4 +21,10 @@ public interface ConfigDao {
 	
 	public void clearConfigCache();
 	public void clearMessageCache();
+
+
+	public Map<String, Map<String, List<FieldValidator>>> getPageFieldValidators();
+
+
+	public Map<String, List<FieldValidator>> getPageValidators();
 }

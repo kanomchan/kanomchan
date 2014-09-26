@@ -20,9 +20,10 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.kanomchan.core.common.bean.JSONResult;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.interceptor.ValidationWorkflowAware;
 
 
-public abstract class BaseAction extends ActionSupport implements RequestAware,SessionAware,ServletRequestAware,ServletResponseAware,PrincipalAware,BeanNameAware {
+public abstract class BaseAction extends ActionSupport implements RequestAware,SessionAware,ServletRequestAware,ServletResponseAware,PrincipalAware,BeanNameAware,ValidationWorkflowAware {
 
 
 	
@@ -43,7 +44,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected String nextUrl;
 	protected String backUrl;
 	protected String nextNamespace; 
-	protected String nextAction; 
+	protected String nextAction;
+	protected String inputResultName;
 	
 	
 	protected String beanName;
@@ -189,4 +191,17 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	public void setNextNamespace(String nextNamespace) {
 		this.nextNamespace = nextNamespace;
 	}
+
+
+	public String getInputResultName() {
+		return inputResultName;
+	}
+
+
+	public void setInputResultName(String inputResultName) {
+		this.inputResultName = inputResultName;
+	}
+	
+	
+	
 }
