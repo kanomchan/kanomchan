@@ -3,16 +3,21 @@ package org.kanomchan.core.common.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.Config;
 import org.kanomchan.core.common.bean.ConfigDefault;
 import org.kanomchan.core.common.bean.DisplayField;
 import org.kanomchan.core.common.bean.DisplayFieldDefault;
+import org.kanomchan.core.common.bean.FieldValidator;
+import org.kanomchan.core.common.bean.FieldValidatorDefault;
 import org.kanomchan.core.common.bean.MessageDefault;
 import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.LabelDefault;
@@ -194,5 +199,60 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	        return displayFiled;
 	    }
     }
+	
+	public static final String SQL_QUERY_PAGE_FIELD_VALIDATORS = 
+			" SELECT LABEL, PAGE, DISPLAY_TEXT, LANGUAGE " +
+			" FROM SYS_M_LABEL ";
+	
+	
+	private static final FieldValidatorMapper<FieldValidator> DISPLAY_FIELD_VALIDATOR = new FieldValidatorMapper<FieldValidator>();
+	public static final class FieldValidatorMapper<T extends FieldValidator> implements RowMapper<FieldValidator> {
+	    public FieldValidator mapRow(ResultSet rs, int num)throws SQLException {
+	    	FieldValidatorDefault displayFiled = new FieldValidatorDefault();
+	    	displayFiled.setPage(rs.getString("PAGE"));
+	    	displayFiled.setField(rs.getString("FIELD"));
+	    	displayFiled.setType(rs.getString("TYPE"));
+	    	displayFiled.setParameter(rs.getString("PARAMETER"));
+	    	displayFiled.setMessage(rs.getString("MESSAGE"));
+	    	displayFiled.setMessageParameter(rs.getString("MESSAGE_PARAMETER"));
+	        return displayFiled;
+	    }
+    }
+	@Override
+	public Map<String, Map<String, List<FieldValidator>>> getPageFieldValidators() {
+		Map<String, Map<String, List<FieldValidator>>> page = new ConcurrentHashMap<String, Map<String, List<FieldValidator>>>();
+		List<FieldValidator> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
+		
+		for (FieldValidator fieldValidator : fieldValidatorsqu) {
+			Map<String, List<FieldValidator>> field = page.get(fieldValidator.getPage());
+			if(field == null){
+				field = new ConcurrentHashMap<String, List<FieldValidator>>();
+				page.put(fieldValidator.getPage(), field);
+			}
+			List<FieldValidator> fieldValidators = field.get(fieldValidator.getField());
+			if(fieldValidators==null){
+				fieldValidators = new LinkedList<FieldValidator>();
+				field.put(fieldValidator.getField(), fieldValidators);
+			}
+			fieldValidators.add(fieldValidator);
+		}
+		return page;
+	}
+	
+	@Override
+	public Map<String, List<FieldValidator>> getPageValidators() {
+		Map<String, List<FieldValidator>> page = new ConcurrentHashMap<String,  List<FieldValidator>>();
+		List<FieldValidator> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
+		
+		for (FieldValidator fieldValidator : fieldValidatorsqu) {
+			List<FieldValidator> fieldValidators = page.get(fieldValidator.getPage());
+			if(fieldValidators==null){
+				fieldValidators = new LinkedList<FieldValidator>();
+				page.put(fieldValidator.getField(), fieldValidators);
+			}
+			fieldValidators.add(fieldValidator);
+		}
+		return page;
+	}
 
 }
