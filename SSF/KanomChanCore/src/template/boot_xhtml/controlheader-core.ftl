@@ -72,27 +72,22 @@
 			</#if>
 			<#if parameters.labelposition?default("left") == 'left'>
 				<#if hasFieldErrors>
-			    class="control-label col-md-4 errorLabel"<#t/>
+			    class="control-label col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else> ${12-parameters.title?default("8")?number}</#if> errorLabel"<#t/>
 				<#else>
-			    class="control-label col-md-4"<#t/>
+			    class="control-label col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else>${12-parameters.title?default("8")?number}</#if>"<#t/>
 				</#if>
 			</#if>
-			
-			
 		    <#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if>
-			
 			><#if parameters.required?default(false) && parameters.requiredPosition?default("right") != 'right'>
-        		<span class="required">*</span><#t/>
+        		<span class="required">*</span>
 			</#if> 
 			<@s.property value="parameters.label" /> 
 			<#if parameters.required?default(false) && parameters.requiredPosition?default("right") == 'right'>
-		        <span class="required">*</span><#t/>
+		        <span class="required">*</span>
 			</#if>
 			${parameters.labelseparator?default("")?html}</label>
-			
-			
 			<#if parameters.labelposition?default("left") == 'top'>
 				</div>
 				<div class="row">
