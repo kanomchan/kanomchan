@@ -37,6 +37,10 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public void refreshConfig(){
 		config = configDao.getConfigMap();
+		config = configDao.getConfigMap();
+		pageFieldValidators = configDao.getPageFieldValidators();
+		pageValidators = configDao.getPageValidators();
+		actionInputResult = configDao.getActionInputResult();
 	}
 	
 	@Override
@@ -55,7 +59,9 @@ public class ConfigServiceImpl implements ConfigService {
 
 	@Override
 	public String getInputResultName(String namespace, String name) {
-		return actionInputResult.get((namespace==null?"":namespace)+(name==null?"":name));
+		return actionInputResult.get((namespace==null?"":namespace)+"/"+(name==null?"":name));
 	}
+	
+	
 
 }
