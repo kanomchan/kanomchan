@@ -21,11 +21,5 @@
  */
 -->
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlheader.ftl" />
-<#if parameters.label??>
-	<div class="col-md-4">
-		<#include "/${parameters.templateDir}/simple/text.ftl" />
-	</div>
-	<#else>
-		<#include "/${parameters.templateDir}/simple/text.ftl" />
-</#if>
+<#include "/${parameters.templateDir}/simple/text.ftl" />
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlfooter.ftl" />

@@ -20,8 +20,10 @@
  * under the License.
  */
 -->
-
-</div>
+	<#if parameters.label??>
+		</div>
+	</#if>
+	</div>
 	<#if parameters.errorposition?default("top") == 'bottom'>
 	<#if hasFieldErrors>
 	<#list fieldErrors[parameters.name] as error>
@@ -56,3 +58,4 @@
 	</#if>
 	</#if>
 </div>
+
