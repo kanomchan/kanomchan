@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.components.Form;
 import org.apache.struts2.views.annotations.StrutsTag;
-import org.apache.struts2.views.annotations.StrutsTagAttribute;
 import org.kanomchan.core.common.bean.PagingBean;
 
 import com.opensymphony.xwork2.util.ValueStack;
