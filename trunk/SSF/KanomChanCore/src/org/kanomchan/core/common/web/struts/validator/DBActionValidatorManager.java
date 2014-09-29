@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
 import org.kanomchan.core.common.context.ApplicationContextUtil;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
@@ -115,7 +117,10 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         Set<String> shortcircuitedFields = null;
         if(object instanceof BaseAction){
         	BaseAction baseAction = (BaseAction) object;
-        	baseAction.setInputResultName("loginPage");
+        	ConfigService configService= ApplicationContextUtil.getBean(ConfigService.class);
+        	ActionMapping actionMapping = ServletActionContext.getActionMapping();
+        	if(actionMapping!=null)
+        	baseAction.setInputResultName(configService.getInputResultName(actionMapping.getNamespace(),actionMapping.getName()));
         }
 
         for (final Validator validator : validators) {
@@ -282,15 +287,15 @@ public class DBActionValidatorManager implements ActionValidatorManager {
     }
     
     private List<ValidatorConfig> buildClassValidatorConfigs(Class aClass, boolean checkFile) {
-        String fileName = aClass.getName().replace('.', '/') ;
+//        String fileName = aClass.getName().replace('.', '/') ;
 
-        return loadConfig(fileName);
+        return loadConfig(aClass.getName());
     }
     
     private List<ValidatorConfig> buildAliasValidatorConfigs(Class aClass, String context, boolean checkFile) {
-        String fileName = aClass.getName().replace('.', '/') + "-" + context;
+//        String fileName = aClass.getName().replace('.', '/') + "-" + context;
 
-        return loadConfig(fileName);
+        return loadConfig(aClass.getName()+ "-" + context);
     }
     
     private List<ValidatorConfig> loadConfig(String name){
@@ -298,35 +303,39 @@ public class DBActionValidatorManager implements ActionValidatorManager {
     	Gson gson = gsonBuilder.create(); 
     	List<ValidatorConfig> validatorCfgs = new ArrayList<ValidatorConfig>();
     	ConfigService configService= ApplicationContextUtil.getBean(ConfigService.class);
-    	for (org.kanomchan.core.common.bean.FieldValidator fieldValidatorBean : configService.getPageValidators(name)) {
-    		
-    		String validatorType = fieldValidatorBean.getType();
-    		
-    		Type typeOfSrc = new TypeToken<Map<String, Object>>(){}.getType();
-    		Map<String, Object> extraParams = gson.fromJson(fieldValidatorBean.getParameter(), typeOfSrc);
-            extraParams.put("fieldName", fieldValidatorBean.getField());
-    		// ensure that the type is valid...
-            try {
-            	validatorFactory.lookupRegisteredValidatorType(validatorType);
-            } catch (IllegalArgumentException ex) {
-                throw new ConfigurationException("Invalid validation type: " + validatorType, fieldValidatorBean);
-            }
-            
-            ValidatorConfig.Builder vCfg = new ValidatorConfig.Builder(validatorType)
-            .addParams(extraParams);
-//            .location(DomHelper.getLocationObject(validatorElement))
-//            .shortCircuit(Boolean.valueOf(validatorElement.getAttribute("short-circuit")).booleanValue());
-            
-            vCfg.defaultMessage(fieldValidatorBean.getMessage());
-            
-            
-    		
-    		typeOfSrc = new TypeToken<String[]>(){}.getType();
-    		String[] bodyMap = gson.fromJson(fieldValidatorBean.getMessageParameter(), typeOfSrc);
-            
-            vCfg.messageParams(bodyMap);
-    		
-		}
+    	List<org.kanomchan.core.common.bean.FieldValidator> s = configService.getPageValidators(name);
+    	if(s!=null){
+        	for (org.kanomchan.core.common.bean.FieldValidator fieldValidatorBean : s) {
+        		
+        		String validatorType = fieldValidatorBean.getType();
+        		
+        		Type typeOfSrc = new TypeToken<Map<String, Object>>(){}.getType();
+        		Map<String, Object> extraParams = gson.fromJson(fieldValidatorBean.getParameter(), typeOfSrc);
+                extraParams.put("fieldName", fieldValidatorBean.getField());
+        		// ensure that the type is valid...
+                try {
+                	validatorFactory.lookupRegisteredValidatorType(validatorType);
+                } catch (IllegalArgumentException ex) {
+                    throw new ConfigurationException("Invalid validation type: " + validatorType, fieldValidatorBean);
+                }
+                
+                ValidatorConfig.Builder vCfg = new ValidatorConfig.Builder(validatorType)
+                .addParams(extraParams);
+//                .location(DomHelper.getLocationObject(validatorElement))
+//                .shortCircuit(Boolean.valueOf(validatorElement.getAttribute("short-circuit")).booleanValue());
+                
+                vCfg.defaultMessage(fieldValidatorBean.getMessage());
+                
+                
+        		
+        		typeOfSrc = new TypeToken<String[]>(){}.getType();
+        		String[] bodyMap = gson.fromJson(fieldValidatorBean.getMessageParameter(), typeOfSrc);
+                
+                vCfg.messageParams(bodyMap);
+        		
+    		}
+    	}
+
     	
     	return validatorCfgs;
     };

@@ -23,6 +23,7 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	private Map<String, Map<String, List<FieldValidator>>> pageFieldValidators;
 	private Map<String, List<FieldValidator>> pageValidators;
+	private Map<String, String> actionInputResult;
 	
 	@Override
 	@PostConstruct
@@ -30,6 +31,7 @@ public class ConfigServiceImpl implements ConfigService {
 		config = configDao.getConfigMap();
 		pageFieldValidators = configDao.getPageFieldValidators();
 		pageValidators = configDao.getPageValidators();
+		actionInputResult = configDao.getActionInputResult();
 	}
 	
 	@Override
@@ -49,6 +51,11 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public List<FieldValidator> getPageValidators(String page) {
 		return pageValidators.get(page);
+	}
+
+	@Override
+	public String getInputResultName(String namespace, String name) {
+		return actionInputResult.get((namespace==null?"":namespace)+(name==null?"":name));
 	}
 
 }

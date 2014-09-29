@@ -27,4 +27,7 @@ public interface ConfigDao {
 
 
 	public Map<String, List<FieldValidator>> getPageValidators();
+
+
+	public Map<String, String> getActionInputResult();
 }
