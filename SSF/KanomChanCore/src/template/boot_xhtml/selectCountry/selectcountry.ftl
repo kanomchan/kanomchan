@@ -22,7 +22,6 @@
 -->
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlheader.ftl" />
 <#if parameters.label??>
-	<label class="control-label col-md-4" for="${parameters.id}"><@s.property value="parameters.label" /></label>
 	<div class="col-md-4">
 		<#include "/${parameters.templateDir}/simple/selectCountry/selectcountry.ftl" />
 	</div>
