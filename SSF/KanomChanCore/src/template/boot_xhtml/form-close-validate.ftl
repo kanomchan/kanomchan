@@ -57,7 +57,6 @@ END SNIPPET: supported-validators
             return field.value;
         }
         form = document.getElementById("${parameters.id}");
-        clearErrorMessages(form);
         clearErrorLabels(form);
 
         var errors = false;
