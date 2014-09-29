@@ -22,6 +22,7 @@ public class SelectCountry extends ListUIBean {
     protected String headerValue;
     protected String multiple;
     protected String size;
+    protected String label;
 
     public SelectCountry(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -52,6 +53,9 @@ public class SelectCountry extends ListUIBean {
             addParameter("headerKey", findString(headerKey));
             addParameter("headerValue", findString(headerValue));
         }
+        
+        if(label != null)
+        	addParameter("label", findString(label));
     }
 
     @StrutsTagAttribute(description="Whether or not to add an empty (--) option after the header option", type="Boolean", defaultValue="false")
@@ -79,5 +83,9 @@ public class SelectCountry extends ListUIBean {
     @StrutsTagAttribute(description="Size of the element box (# of elements to show)", type="Integer")
     public void setSize(String size) {
         this.size = size;
+    }
+    
+    public void setLabel(String label) {
+    	this.label = label;
     }
 }
