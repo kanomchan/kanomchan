@@ -17,4 +17,6 @@ public interface ConfigService {
 	public void initConfig();
 
 	public List<FieldValidator> getPageValidators(String page);
+
+	public String getInputResultName(String namespace, String name);
 }

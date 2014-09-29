@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
+import org.kanomchan.core.common.bean.ActionBean;
 import org.kanomchan.core.common.bean.Config;
 import org.kanomchan.core.common.bean.ConfigDefault;
 import org.kanomchan.core.common.bean.DisplayField;
@@ -201,8 +202,8 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
     }
 	
 	public static final String SQL_QUERY_PAGE_FIELD_VALIDATORS = 
-			" SELECT LABEL, PAGE, DISPLAY_TEXT, LANGUAGE " +
-			" FROM SYS_M_LABEL ";
+			" SELECT * " +
+			" FROM SYS_M_FIELD_VALIDATOR ";
 	
 	
 	private static final FieldValidatorMapper<FieldValidator> DISPLAY_FIELD_VALIDATOR = new FieldValidatorMapper<FieldValidator>();
@@ -255,4 +256,30 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 		return page;
 	}
 
+	@Override
+	public Map<String, String> getActionInputResult() {
+		Map<String, String> actionInputResult = new ConcurrentHashMap<String, String>();
+		List<ActionBean> actionBeans = nativeQuery(SQL_QUERY_ACTION_INPUT_RESULT,ACTION_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
+		
+		for (ActionBean actionBean : actionBeans) {
+			if(actionBean.getInputResultName()!=null&&(actionBean.getActionName()!=null||actionBean.getNameSpace()!=null))
+			actionInputResult.put(actionBean.getNameSpace()+"/"+actionBean.getActionName(), actionBean.getInputResultName());
+		}
+		return actionInputResult;
+	}
+	public static final String SQL_QUERY_ACTION_INPUT_RESULT = "SELECT * FROM SYS_M_ACTION ";
+	
+	private static final ActionMapper<ActionBean> ACTION_MAPPER = new ActionMapper<ActionBean>();
+	public static final class ActionMapper<T extends ActionBean> implements RowMapper<ActionBean> {
+	    public ActionBean mapRow(ResultSet rs, int num)throws SQLException {
+	    	ActionBean displayFiled = new ActionBean();
+	    	displayFiled.setActionName(rs.getString("ACTION_NAME"));
+	    	displayFiled.setNameSpace(rs.getString("NAME_SPACE"));
+	    	displayFiled.setInputResultName(rs.getString("INPUT_RESULT_NAME"));
+//	    	displayFiled.setParameter(rs.getString("PARAMETER"));
+//	    	displayFiled.setMessage(rs.getString("MESSAGE"));
+//	    	displayFiled.setMessageParameter(rs.getString("MESSAGE_PARAMETER"));
+	        return displayFiled;
+	    }
+    }
 }
