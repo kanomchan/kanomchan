@@ -21,4 +21,6 @@
  */
 -->
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlheader-core.ftl" />
-	    <#t/>
+<#if parameters.label??>
+	<div class="${parameters.title?default("col-md-4")}">
+</#if>

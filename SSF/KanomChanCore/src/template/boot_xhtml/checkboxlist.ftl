@@ -21,5 +21,7 @@
  */
 -->
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlheader.ftl" />
-<#include "/${parameters.templateDir}/simple/checkboxlist.ftl" />
+<div class="checkbox">
+	<#include "/${parameters.templateDir}/simple/checkboxlist.ftl" />
+</div>
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlfooter.ftl" /><#nt/>
