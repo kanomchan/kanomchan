@@ -24,59 +24,58 @@
 	Only show message if errors are available.
 	This will be done if ActionSupport is used.
 -->
-<#--
-<#assign hasFieldErrors = parameters.name?? && fieldErrors?? && fieldErrors[parameters.name]??/>
-<#if parameters.errorposition?default("top") == 'top'>
-<#if hasFieldErrors>
-<#list fieldErrors[parameters.name] as error>
-<tr errorFor="${parameters.id}">
-    <td align="center" valign="top" colspan="2"><#rt/>
-        <span class="errorMessage">${error?html}</span><#t/>
-    </td><#lt/>
-</tr>
-</#list>
-</#if>
-</#if>
--->
-<#--
-	if the label position is top,
-	then give the label it's own row in the table
--->
-<#--
-<tr>
-<#if parameters.labelposition?default("") == 'top'>
-    <td align="left" valign="top" colspan="2"><#rt/>
-<#else>
-    <td class="tdLabel"><#rt/>
-</#if>
-<#if parameters.label??>
-    <label <#t/>
-<#if parameters.id??>
-        for="${parameters.id?html}" <#t/>
-</#if>
-<#if hasFieldErrors>
-        class="errorLabel"<#t/>
-<#else>
-        class="label"<#t/>
-</#if>
-    ><#t/>
-<#if parameters.required?default(false) && parameters.requiredPosition?default("right") != 'right'>
-        <span class="required">*</span><#t/>
-</#if>
-${parameters.label?html}<#t/>
-<#if parameters.required?default(false) && parameters.requiredPosition?default("right") == 'right'>
- <span class="required">*</span><#t/>
-</#if>
-${parameters.labelseparator?default(":")?html}<#t/>
-<#include "/${parameters.templateDir}/${parameters.expandTheme}/tooltip.ftl" />
-</label><#t/>
-</#if>
-    </td><#lt/>
--->
-<#-- add the extra row -->
-<#--
-<#if parameters.labelposition?default("") == 'top'>
-</tr>
-<tr>
-</#if>
--->
+<div class="form-group">
+	<#assign hasFieldErrors = parameters.name?? && fieldErrors?? && fieldErrors[parameters.name]??/>
+	<#if parameters.errorposition?default("top") == 'top'>
+	<#if hasFieldErrors>
+	<#list fieldErrors[parameters.name] as error>
+		<#if parameters.label??>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="alert alert-danger" role="alert">MESSAGE_9999 : ERROR</div>
+				</div>
+			</div>
+			<#else>
+				<div class="alert alert-danger" role="alert">MESSAGE_9999 : ERROR</div>
+		</#if>
+	</#list>
+	</#if>
+	</#if>
+	<div class="row">
+		<#if parameters.label??>
+			<label
+			<#if parameters.labelposition?default("left") == 'top'>
+				<#if hasFieldErrors>
+			    class="col-md-12 errorLabel"<#t/>
+				<#else>
+			    class="col-md-12"<#t/>
+				</#if>
+			</#if>
+			<#if parameters.labelposition?default("left") == 'left'>
+				<#if hasFieldErrors>
+			    class="control-label col-md-4 errorLabel"<#t/>
+				<#else>
+			    class="control-label col-md-4"<#t/>
+				</#if>
+			</#if>
+			
+			
+		    <#if parameters.id??>
+		   		for="${parameters.id}"
+			</#if>
+			
+			><#if parameters.required?default(false) && parameters.requiredPosition?default("right") != 'right'>
+        		<span class="required">*</span><#t/>
+			</#if> 
+			<@s.property value="parameters.label" /> 
+			<#if parameters.required?default(false) && parameters.requiredPosition?default("right") == 'right'>
+		        <span class="required">*</span><#t/>
+			</#if>
+			${parameters.labelseparator?default("")?html}</label>
+			
+			
+			<#if parameters.labelposition?default("left") == 'top'>
+				</div>
+				<div class="row">
+			</#if>
+		</#if>
