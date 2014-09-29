@@ -20,20 +20,39 @@
  * under the License.
  */
 -->
+
+</div>
 	<#if parameters.errorposition?default("top") == 'bottom'>
 	<#if hasFieldErrors>
 	<#list fieldErrors[parameters.name] as error>
 		<#if parameters.label??>
-			<div class="row">
+			<div class="row" <#if parameters.id??>
+		   		for="${parameters.id}"
+			</#if> >
 				<div class="col-md-offset-4 col-md-4">
 					<div class="alert alert-danger" role="alert">${error?html}</div>
 				</div>
 			</div>
 			<#else>
-				<div class="alert alert-danger" role="alert">${error?html}</div>
+				<div class="alert alert-danger" role="alert" <#if parameters.id??>
+		   		for="${parameters.id}"
+			</#if> >${error?html}</div>
 		</#if>
 	</#list>
+	<#else>
+		<#if parameters.label??>
+			<div class="row" <#if parameters.id??>
+		   		for="${parameters.id}"
+			</#if> >
+				<div style="display:none" class="col-md-offset-4 col-md-4">
+					<div class="alert alert-danger" role="alert"></div>
+				</div>
+			</div>
+			<#else>
+				<div style="display:none" class="alert alert-danger" role="alert" <#if parameters.id??>
+		   		for="${parameters.id}"
+			</#if> ></div>
+		</#if>
 	</#if>
 	</#if>
-</div>
 </div>
