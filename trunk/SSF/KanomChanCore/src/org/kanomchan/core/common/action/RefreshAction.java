@@ -1,9 +1,19 @@
 package org.kanomchan.core.common.action;
 
+import org.kanomchan.core.common.service.RefreshService;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 
 public class RefreshAction extends BaseAction {
 
+	private RefreshService  refreshService;
+	
+	@Autowired
+	@Required
+	public void setRefreshService(RefreshService refreshService) {
+		this.refreshService = refreshService;
+	}
 	/**
 	 * 
 	 */
@@ -11,8 +21,9 @@ public class RefreshAction extends BaseAction {
 
 	@Override
 	public String init() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		refreshService.refreshAll();
+		return "json";
 	}
 
 }
