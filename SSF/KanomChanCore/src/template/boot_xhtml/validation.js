@@ -10,11 +10,11 @@ function clearErrorLabelsXHTML(form) {
         var errorChild = rowError.children();
         errorChild.hide();
         $(field).closest('.form-group').removeClass('has-error').addClass('has-success');
-        if(errorChild.prop("role") == "alert"){
+        if(errorChild.prop("role") == "alert")
         	errorChild.text("");
-        }else{
+        else
         	errorChild.children().text("");
-        }
+        
     }
 
 }
@@ -32,11 +32,11 @@ function addErrorXHTML(e, errorText) {
         var errorChild = rowError.children();
         errorChild.slideDown();
         $(field).closest('.form-group').removeClass('has-success').addClass('has-error');
-        if(errorChild.prop("role") == "alert"){
+        if(errorChild.prop("role") == "alert")
         	errorChild.text(errorText);
-        }else{
+        else
         	errorChild.children().text(errorText);
-        }
+        
     } catch (err) {
         alert(err);
     }
