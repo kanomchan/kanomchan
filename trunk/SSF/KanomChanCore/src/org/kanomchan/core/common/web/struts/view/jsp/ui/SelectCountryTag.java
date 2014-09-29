@@ -20,6 +20,7 @@ public class SelectCountryTag extends AbstractRequiredListTag {
     protected String headerValue;
     protected String multiple;
     protected String size;
+    protected String label;
 	
 	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new SelectCountry(stack, req, res);
@@ -34,6 +35,7 @@ public class SelectCountryTag extends AbstractRequiredListTag {
         selectCountry.setHeaderValue(headerValue);
         selectCountry.setMultiple(multiple);
         selectCountry.setSize(size);
+        selectCountry.setLabel(label);
     }
 	
 	public void setEmptyOption(String emptyOption) {
@@ -54,5 +56,9 @@ public class SelectCountryTag extends AbstractRequiredListTag {
 
     public void setSize(String size) {
         this.size = size;
+    }
+    
+    public void setLabel(String label) {
+    	this.label = label;
     }
 }
