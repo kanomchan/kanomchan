@@ -21,7 +21,7 @@
  */
 -->
 <#if parameters.validate?default(false) == true>
-	<script type="text/javascript" src="${base}/struts/xhtml/validation.js"></script>
+	<script type="text/javascript" src="${base}/struts/boot_xhtml/validation.js"></script>
 	<script type="text/javascript" src="${base}/struts/utils.js"></script>
 	<#if parameters.onsubmit??>
 		${tag.addParameter('onsubmit', "${parameters.onsubmit}; return validateForm_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}();")}
