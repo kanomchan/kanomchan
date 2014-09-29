@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
@@ -59,23 +60,29 @@ public class DBActionValidatorManager implements ActionValidatorManager {
     }
 	@Override
 	public List<Validator> getValidators(Class clazz, String context, String method) {
-		final String validatorKey = buildValidatorKey(clazz, context);
+		
+		ActionMapping actionMapping = ServletActionContext.getActionMapping();
+		
+		final String validatorKey = actionMapping.getNamespace()+"/"+context;
 		
 		ValueStack stack = ActionContext.getContext().getValueStack();
 		
-        if (validatorCache.containsKey(validatorKey)) {
-            if (reloadingConfigs) {
-                validatorCache.put(validatorKey, buildValidatorConfigs(clazz, context, true, null));
-            }
-        } else {
-            validatorCache.put(validatorKey, buildValidatorConfigs(clazz, context, false, null));
-        }
-		
 		ConfigService configService = ApplicationContextUtil.getBean(ConfigService.class);
+		
+//        if (validatorCache.containsKey(validatorKey)) {
+//            if (reloadingConfigs) {
+//                validatorCache.put(validatorKey, loadConfig(validatorKey));
+//            }
+//        } else {
+//            validatorCache.put(validatorKey, loadConfig(validatorKey));
+//        }
+		
+//		ConfigService configService = ApplicationContextUtil.getBean(ConfigService.class);
 		
 		
 		// get the set of validator configs
-        List<ValidatorConfig> cfgs = validatorCache.get(validatorKey);
+//        List<ValidatorConfig> cfgs = validatorCache.get(validatorKey);
+        List<ValidatorConfig> cfgs = loadConfig(validatorKey);
 
         // create clean instances of the validators for the caller's use
         ArrayList<Validator> validators = new ArrayList<Validator>(cfgs.size());
@@ -113,14 +120,22 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 	}
 
 	public void validate(Object object, String context, ValidatorContext validatorContext, String method) throws ValidationException {
-        List<Validator> validators = getValidators(object.getClass(), context, method);
+        List<Validator> validators = new ArrayList<Validator>();
         Set<String> shortcircuitedFields = null;
         if(object instanceof BaseAction){
         	BaseAction baseAction = (BaseAction) object;
         	ConfigService configService= ApplicationContextUtil.getBean(ConfigService.class);
         	ActionMapping actionMapping = ServletActionContext.getActionMapping();
-        	if(actionMapping!=null)
-        	baseAction.setInputResultName(configService.getInputResultName(actionMapping.getNamespace(),actionMapping.getName()));
+        	if(actionMapping!=null){
+        		String inputResultName = configService.getInputResultName(actionMapping.getNamespace(),actionMapping.getName());
+        		if(inputResultName!=null){
+        			baseAction.setInputResultName(inputResultName);
+            		validators = getValidators(object.getClass(), context, method);
+        		}
+        		
+        	}
+        	
+        	
         }
 
         for (final Validator validator : validators) {
@@ -241,62 +256,62 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         return sb.toString();
     }
 
-    private List<ValidatorConfig> buildValidatorConfigs(Class clazz, String context, boolean checkFile, Set<String> checked) {
-        List<ValidatorConfig> validatorConfigs = new ArrayList<ValidatorConfig>();
-
-        if (checked == null) {
-            checked = new TreeSet<String>();
-        } else if (checked.contains(clazz.getName())) {
-            return validatorConfigs;
-        }
-
-        if (clazz.isInterface()) {
-            for (Class anInterface : clazz.getInterfaces()) {
-                validatorConfigs.addAll(buildValidatorConfigs(anInterface, context, checkFile, checked));
-             }
-        } else {
-            if (!clazz.equals(Object.class)) {
-                validatorConfigs.addAll(buildValidatorConfigs(clazz.getSuperclass(), context, checkFile, checked));
-            }
-        }
-
-        // look for validators for implemented interfaces
-        for (Class anInterface1 : clazz.getInterfaces()) {
-            if (checked.contains(anInterface1.getName())) {
-                continue;
-            }
-
-            validatorConfigs.addAll(buildClassValidatorConfigs(anInterface1, checkFile));
-
-            if (context != null) {
-                validatorConfigs.addAll(buildAliasValidatorConfigs(anInterface1, context, checkFile));
-            }
-
-            checked.add(anInterface1.getName());
-        }
-
-        validatorConfigs.addAll(buildClassValidatorConfigs(clazz, checkFile));
-
-        if (context != null) {
-            validatorConfigs.addAll(buildAliasValidatorConfigs(clazz, context, checkFile));
-        }
-
-        checked.add(clazz.getName());
-
-        return validatorConfigs;
-    }
-    
-    private List<ValidatorConfig> buildClassValidatorConfigs(Class aClass, boolean checkFile) {
-//        String fileName = aClass.getName().replace('.', '/') ;
-
-        return loadConfig(aClass.getName());
-    }
-    
-    private List<ValidatorConfig> buildAliasValidatorConfigs(Class aClass, String context, boolean checkFile) {
-//        String fileName = aClass.getName().replace('.', '/') + "-" + context;
-
-        return loadConfig(aClass.getName()+ "-" + context);
-    }
+//    private List<ValidatorConfig> buildValidatorConfigs(Class clazz, String context, boolean checkFile, Set<String> checked) {
+//        List<ValidatorConfig> validatorConfigs = new ArrayList<ValidatorConfig>();
+//
+//        if (checked == null) {
+//            checked = new TreeSet<String>();
+//        } else if (checked.contains(clazz.getName())) {
+//            return validatorConfigs;
+//        }
+//
+//        if (clazz.isInterface()) {
+//            for (Class anInterface : clazz.getInterfaces()) {
+//                validatorConfigs.addAll(buildValidatorConfigs(anInterface, context, checkFile, checked));
+//             }
+//        } else {
+//            if (!clazz.equals(Object.class)) {
+//                validatorConfigs.addAll(buildValidatorConfigs(clazz.getSuperclass(), context, checkFile, checked));
+//            }
+//        }
+//
+//        // look for validators for implemented interfaces
+//        for (Class anInterface1 : clazz.getInterfaces()) {
+//            if (checked.contains(anInterface1.getName())) {
+//                continue;
+//            }
+//
+//            validatorConfigs.addAll(buildClassValidatorConfigs(anInterface1, checkFile));
+//
+//            if (context != null) {
+//                validatorConfigs.addAll(buildAliasValidatorConfigs(anInterface1, context, checkFile));
+//            }
+//
+//            checked.add(anInterface1.getName());
+//        }
+//
+//        validatorConfigs.addAll(buildClassValidatorConfigs(clazz, checkFile));
+//
+//        if (context != null) {
+//            validatorConfigs.addAll(buildAliasValidatorConfigs(clazz, context, checkFile));
+//        }
+//
+//        checked.add(clazz.getName());
+//
+//        return validatorConfigs;
+//    }
+//    
+//    private List<ValidatorConfig> buildClassValidatorConfigs(Class aClass, boolean checkFile) {
+////        String fileName = aClass.getName().replace('.', '/') ;
+//
+//        return loadConfig(aClass.getName());
+//    }
+//    
+//    private List<ValidatorConfig> buildAliasValidatorConfigs(Class aClass, String context, boolean checkFile) {
+////        String fileName = aClass.getName().replace('.', '/') + "-" + context;
+//
+//        return loadConfig(aClass.getName()+ "-" + context);
+//    }
     
     private List<ValidatorConfig> loadConfig(String name){
     	GsonBuilder gsonBuilder = new GsonBuilder();
@@ -308,9 +323,11 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         	for (org.kanomchan.core.common.bean.FieldValidator fieldValidatorBean : s) {
         		
         		String validatorType = fieldValidatorBean.getType();
-        		
+        		Map<String, Object> extraParams = new ConcurrentHashMap<String, Object>();
         		Type typeOfSrc = new TypeToken<Map<String, Object>>(){}.getType();
-        		Map<String, Object> extraParams = gson.fromJson(fieldValidatorBean.getParameter(), typeOfSrc);
+        		Map<String, Object> out = gson.fromJson(fieldValidatorBean.getParameter(), typeOfSrc);
+        		if(out!=null)
+        			extraParams.putAll(out);
                 extraParams.put("fieldName", fieldValidatorBean.getField());
         		// ensure that the type is valid...
                 try {
@@ -332,7 +349,7 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         		String[] bodyMap = gson.fromJson(fieldValidatorBean.getMessageParameter(), typeOfSrc);
                 
                 vCfg.messageParams(bodyMap);
-        		
+                validatorCfgs.add(vCfg.build());
     		}
     	}
 
