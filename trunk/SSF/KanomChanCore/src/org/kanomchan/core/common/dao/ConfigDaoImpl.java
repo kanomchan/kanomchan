@@ -249,7 +249,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 			List<FieldValidator> fieldValidators = page.get(fieldValidator.getPage());
 			if(fieldValidators==null){
 				fieldValidators = new LinkedList<FieldValidator>();
-				page.put(fieldValidator.getField(), fieldValidators);
+				page.put(fieldValidator.getPage(), fieldValidators);
 			}
 			fieldValidators.add(fieldValidator);
 		}
