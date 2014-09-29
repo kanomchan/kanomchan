@@ -20,22 +20,20 @@
  * under the License.
  */
 -->
-<#-- 
-${parameters.after?if_exists}<#t/>
-    </div><#lt/>
-</div>
-<#if parameters.errorposition?default("top") == 'bottom'>
-<#assign hasFieldErrors = parameters.name?? && fieldErrors?? && fieldErrors[parameters.name]??/>
-<#if hasFieldErrors>
-<#list fieldErrors[parameters.name] as error>
-<tr errorFor="${parameters.id}">
-    <td align="center" valign="top" colspan="2"><#rt/>
-        <span class="errorMessage">${error?html}</span><#t/>
-    </td><#lt/>
-</tr>
-</#list>
-</#if>
-</#if>
--->
+	<#if parameters.errorposition?default("top") == 'bottom'>
+	<#if hasFieldErrors>
+	<#list fieldErrors[parameters.name] as error>
+		<#if parameters.label??>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="alert alert-danger" role="alert">${error?html}</div>
+				</div>
+			</div>
+			<#else>
+				<div class="alert alert-danger" role="alert">${error?html}</div>
+		</#if>
+	</#list>
+	</#if>
+	</#if>
 </div>
 </div>

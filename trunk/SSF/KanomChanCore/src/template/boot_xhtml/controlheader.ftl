@@ -21,6 +21,4 @@
  */
 -->
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlheader-core.ftl" />
-	<div class="form-group">
-	    <div class="row">
 	    <#t/>
