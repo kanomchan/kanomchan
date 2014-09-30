@@ -47,6 +47,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected String nextAction;
 	protected String inputResultName;
 	
+	protected String expression;
+	
 	
 	protected String beanName;
 	
@@ -201,6 +203,18 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	public void setInputResultName(String inputResultName) {
 		this.inputResultName = inputResultName;
 	}
+
+
+	public String getExpression() {
+		return expression;
+	}
+
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+	
+	
 	
 	
 	
