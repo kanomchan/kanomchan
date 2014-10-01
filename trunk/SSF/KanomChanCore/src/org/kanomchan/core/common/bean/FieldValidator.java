@@ -8,5 +8,6 @@ public interface FieldValidator  {
 	public String getParameter();
 	public String getMessage();
 	public String getMessageParameter();
+	public String getMessageKey();
 
 }

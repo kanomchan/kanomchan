@@ -62,16 +62,16 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public Message getMessage(String messageCode, Locale locale) {
 		if(locale == null){locale = CommonConstant.DEFAULT_LOCALE;}
-		return getMessage(messageCode, locale.getLanguage().toUpperCase());
+		return getMessage(messageCode, locale.getISO3Language().toUpperCase());
 	}
 
 	@Override
 	public Message getMessage(String messageCode, String lang) {
-		if(lang == null){lang = CommonConstant.DEFAULT_LOCALE.getLanguage().toUpperCase();}
+		if(lang == null){lang = CommonConstant.DEFAULT_LOCALE.getISO3Language().toUpperCase();}
 		Map<String,Message> messageMap = configDao.getMessageMap();	
 		Message message = messageMap.get(messageCode+"_"+lang);
 		if(message == null){
-			message = messageMap.get(messageCode+"_EN");
+			message = messageMap.get(messageCode+"_"+CommonConstant.DEFAULT_LOCALE.getISO3Language().toUpperCase());
 			if(message == null){
 				MessageDefault message2  = new MessageDefault();
 				message2.setMessageCode(messageCode);
