@@ -67,22 +67,22 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 		
 		ValueStack stack = ActionContext.getContext().getValueStack();
 		
-		ConfigService configService = ApplicationContextUtil.getBean(ConfigService.class);
+//		ConfigService configService = ApplicationContextUtil.getBean(ConfigService.class);
 		
-//        if (validatorCache.containsKey(validatorKey)) {
-//            if (reloadingConfigs) {
-//                validatorCache.put(validatorKey, loadConfig(validatorKey));
-//            }
-//        } else {
-//            validatorCache.put(validatorKey, loadConfig(validatorKey));
-//        }
+        if (validatorCache.containsKey(validatorKey)) {
+            if (reloadingConfigs) {
+                validatorCache.put(validatorKey, loadConfig(validatorKey));
+            }
+        } else {
+            validatorCache.put(validatorKey, loadConfig(validatorKey));
+        }
 		
 //		ConfigService configService = ApplicationContextUtil.getBean(ConfigService.class);
 		
 		
 		// get the set of validator configs
-//        List<ValidatorConfig> cfgs = validatorCache.get(validatorKey);
-        List<ValidatorConfig> cfgs = loadConfig(validatorKey);
+        List<ValidatorConfig> cfgs = validatorCache.get(validatorKey);
+//        List<ValidatorConfig> cfgs = loadConfig(validatorKey);
 
         // create clean instances of the validators for the caller's use
         ArrayList<Validator> validators = new ArrayList<Validator>(cfgs.size());
