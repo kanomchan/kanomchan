@@ -24,6 +24,8 @@ public class MultiSelect extends ListUIBean {
     protected String size;
 
     protected String beanName;
+    protected String color;
+    protected String fontColor;
     protected String placeholder;
 
     public MultiSelect(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
@@ -57,6 +59,12 @@ public class MultiSelect extends ListUIBean {
         if (beanName != null) {
         	addParameter("beanName", findString(beanName));
         }
+        if (color != null) {
+        	addParameter("color", findString(color));
+        }
+        if (fontColor != null) {
+        	addParameter("fontColor", findString(fontColor));
+        }
         if (placeholder != null) {
         	addParameter("placeholder", findString(placeholder));
         }
@@ -72,6 +80,18 @@ public class MultiSelect extends ListUIBean {
 	}
     public void setPlaceholder(String placeholder) {
 		this.placeholder = placeholder;
+	}
+    public String getColor() {
+		return color;
+	}
+    public void setColor(String color) {
+		this.color = color;
+	}
+    public String getFontColor() {
+		return fontColor;
+	}
+    public void setFontColor(String fontColor) {
+		this.fontColor = fontColor;
 	}
     public String getBeanName() {
 		return beanName;
