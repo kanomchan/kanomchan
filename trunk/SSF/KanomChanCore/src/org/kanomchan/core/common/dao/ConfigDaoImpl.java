@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.ActionBean;
@@ -17,12 +15,12 @@ import org.kanomchan.core.common.bean.Config;
 import org.kanomchan.core.common.bean.ConfigDefault;
 import org.kanomchan.core.common.bean.DisplayField;
 import org.kanomchan.core.common.bean.DisplayFieldDefault;
-import org.kanomchan.core.common.bean.FieldValidator;
+import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.bean.FieldValidatorDefault;
-import org.kanomchan.core.common.bean.MessageDefault;
 import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.LabelDefault;
 import org.kanomchan.core.common.bean.Message;
+import org.kanomchan.core.common.bean.MessageDefault;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.googlecode.ehcache.annotations.Cacheable;
@@ -206,9 +204,9 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 			" FROM SYS_M_FIELD_VALIDATOR ";
 	
 	
-	private static final FieldValidatorMapper<FieldValidator> DISPLAY_FIELD_VALIDATOR = new FieldValidatorMapper<FieldValidator>();
-	public static final class FieldValidatorMapper<T extends FieldValidator> implements RowMapper<FieldValidator> {
-	    public FieldValidator mapRow(ResultSet rs, int num)throws SQLException {
+	private static final FieldValidatorBeanMapper<FieldValidatorBean> DISPLAY_FIELD_VALIDATOR = new FieldValidatorBeanMapper<FieldValidatorBean>();
+	public static final class FieldValidatorBeanMapper<T extends FieldValidatorBean> implements RowMapper<FieldValidatorBean> {
+	    public FieldValidatorBean mapRow(ResultSet rs, int num)throws SQLException {
 	    	FieldValidatorDefault displayFiled = new FieldValidatorDefault();
 	    	displayFiled.setPage(rs.getString("PAGE"));
 	    	displayFiled.setField(rs.getString("FIELD"));
@@ -221,19 +219,19 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	    }
     }
 	@Override
-	public Map<String, Map<String, List<FieldValidator>>> getPageFieldValidators() {
-		Map<String, Map<String, List<FieldValidator>>> page = new ConcurrentHashMap<String, Map<String, List<FieldValidator>>>();
-		List<FieldValidator> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
+	public Map<String, Map<String, List<FieldValidatorBean>>> getPageFieldValidators() {
+		Map<String, Map<String, List<FieldValidatorBean>>> page = new ConcurrentHashMap<String, Map<String, List<FieldValidatorBean>>>();
+		List<FieldValidatorBean> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
 		
-		for (FieldValidator fieldValidator : fieldValidatorsqu) {
-			Map<String, List<FieldValidator>> field = page.get(fieldValidator.getPage());
+		for (FieldValidatorBean fieldValidator : fieldValidatorsqu) {
+			Map<String, List<FieldValidatorBean>> field = page.get(fieldValidator.getPage());
 			if(field == null){
-				field = new ConcurrentHashMap<String, List<FieldValidator>>();
+				field = new ConcurrentHashMap<String, List<FieldValidatorBean>>();
 				page.put(fieldValidator.getPage(), field);
 			}
-			List<FieldValidator> fieldValidators = field.get(fieldValidator.getField());
+			List<FieldValidatorBean> fieldValidators = field.get(fieldValidator.getField());
 			if(fieldValidators==null){
-				fieldValidators = new LinkedList<FieldValidator>();
+				fieldValidators = new LinkedList<FieldValidatorBean>();
 				field.put(fieldValidator.getField(), fieldValidators);
 			}
 			fieldValidators.add(fieldValidator);
@@ -242,14 +240,14 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	}
 	
 	@Override
-	public Map<String, List<FieldValidator>> getPageValidators() {
-		Map<String, List<FieldValidator>> page = new ConcurrentHashMap<String,  List<FieldValidator>>();
-		List<FieldValidator> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
+	public Map<String, List<FieldValidatorBean>> getPageValidators() {
+		Map<String, List<FieldValidatorBean>> page = new ConcurrentHashMap<String,  List<FieldValidatorBean>>();
+		List<FieldValidatorBean> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
 		
-		for (FieldValidator fieldValidator : fieldValidatorsqu) {
-			List<FieldValidator> fieldValidators = page.get(fieldValidator.getPage());
+		for (FieldValidatorBean fieldValidator : fieldValidatorsqu) {
+			List<FieldValidatorBean> fieldValidators = page.get(fieldValidator.getPage());
 			if(fieldValidators==null){
-				fieldValidators = new LinkedList<FieldValidator>();
+				fieldValidators = new LinkedList<FieldValidatorBean>();
 				page.put(fieldValidator.getPage(), fieldValidators);
 			}
 			fieldValidators.add(fieldValidator);

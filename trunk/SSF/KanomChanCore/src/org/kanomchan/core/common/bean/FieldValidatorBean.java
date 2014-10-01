@@ -1,6 +1,6 @@
 package org.kanomchan.core.common.bean;
 
-public interface FieldValidator  {
+public interface FieldValidatorBean  {
 	
 	public String getPage();
 	public String getField();
