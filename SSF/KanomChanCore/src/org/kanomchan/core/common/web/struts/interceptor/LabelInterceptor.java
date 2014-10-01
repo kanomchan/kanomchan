@@ -29,8 +29,8 @@ public class LabelInterceptor extends ServletConfigInterceptor {
 		if(action instanceof BaseAction){
 			BaseAction baseAction = (BaseAction) action;
 			ActionContext context = invocation.getInvocationContext();
-			Map<String, Object> sessions = context.getSession();
-			Map<String, String> label = labelService.getLabel(sessions.get(CommonConstant.SESSION.LANG_KEY)+"");
+//			Map<String, Object> sessions = context.getSession();
+			Map<String, String> label = labelService.getLabel(context.getLocale().getISO3Language().toUpperCase());
 			baseAction.setLabel(label);
 		}
 		String s = invocation.invoke();
