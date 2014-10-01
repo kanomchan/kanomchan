@@ -15,7 +15,17 @@ public class MultiSelectTag extends AbstractRequiredListTag {
 	 * 
 	 */
 	private static final long serialVersionUID = 6935066783816732675L;
-
+	
+    protected String emptyOption;
+    protected String headerKey;
+    protected String headerValue;
+    protected String list;
+    protected String listKey;
+    protected String listValue;
+    protected String size;
+    protected String multiple;
+    protected String beanName;
+    protected String placeholder;
 	
 	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new MultiSelect(stack, req, res);
@@ -25,5 +35,55 @@ public class MultiSelectTag extends AbstractRequiredListTag {
         super.populateParams();
 
         MultiSelect multiSelect = ((MultiSelect) component);
+        multiSelect.setBeanName(beanName);
+        multiSelect.setPlaceholder(placeholder);
+    	multiSelect.setEmptyOption(emptyOption);
+    	multiSelect.setHeaderKey(headerKey);
+    	multiSelect.setHeaderValue(headerValue);
+    	multiSelect.setList(list);
+    	multiSelect.setListKey(listKey);
+    	multiSelect.setListValue(listValue);
+    	multiSelect.setSize(size);
+    	multiSelect.setMultiple(multiple);
     }
+	
+	public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
+	public void setPlaceholder(String placeholder) {
+		this.placeholder = placeholder;
+	}
+	public void setEmptyOption(String emptyOption) {
+		this.emptyOption = emptyOption;
+    }
+
+    public void setHeaderKey(String headerKey) {
+    	this.headerKey = headerKey;
+    }
+
+    public void setHeaderValue(String headerValue) {
+    	this.headerValue = headerValue;
+    }
+
+    public void setList(String list) {
+    	this.list = list;
+    }
+
+    public void setListKey(String listKey) {
+    	this.listKey = listKey;
+    }
+
+    public void setListValue(String listValue) {
+    	this.listValue = listValue;
+    }
+
+    public void setSize(String size) {
+    	this.size = size;
+    }
+
+    public void setMultiple(String multiple) {
+    	this.multiple = multiple;
+    }
+
+	
 }
