@@ -342,28 +342,37 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 				AttributeOverrides attributeOverrides = method.getAnnotation(AttributeOverrides.class);
 				if(column != null && id == null){
 					Object value = method.invoke(entity);
-					if(value != null){
+					if(value != null && !value.toString().equals("0")){
 						para.add(value);
 						list.add(column.name() + " = ? ");
 					}
 				}
 				if(joinColumn != null){
-					Object value = method.invoke(entity);
-					if(value != null){
-						list.add(joinColumn.name() + " = ? ");
-						para.add(value);
+					Object jColumn = method.invoke(entity);
+					if(jColumn != null){
+						Method[] jMethods = jColumn.getClass().getMethods();
+						for (Method jMethod : jMethods) {
+							Id jId = jMethod.getAnnotation(Id.class);
+							if(jId != null){
+								Object jValue = jMethod.invoke(jColumn);
+								if(jValue != null && !jValue.toString().equals("0")){
+									pkName.add(joinColumn.name() + " = ? ");
+									pkId.add((Long) jValue);
+								}
+							}
+						}
 					}
 				}
 				if(id != null){
 					Object value = method.invoke(entity);
-					if(value != null){
+					if(value != null && !value.toString().equals("0")){
 						pkName.add(column.name() + " = ? ");
 						pkId.add((Long) value);
 					}
 				}
 				if(attributeOverrides != null){
 					Object value = method.invoke(entity);
-					if(value != null){
+					if(value != null && !value.toString().equals("0")){
 						for (AttributeOverride attributeOverride : attributeOverrides.value()) 
 							pkName.add(attributeOverride.column().name() + " = ? ");
 						pkId.add((Long) value);
