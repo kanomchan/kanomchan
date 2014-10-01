@@ -152,14 +152,16 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="inline">
-				Showing ${(parameters.currentPage * parameters.rowsPerPage - parameters.rowsPerPage + 1)} to 
-				<@s.if test="%{${parameters.currentPage} == ${parameters.pageCount}}">
-					${parameters.totalRows}
-				</@s.if>
-				<@s.else>
-					${parameters.currentPage * parameters.rowsPerPage}
-				</@s.else>
-					 from Total ${parameters.totalRows} rows
+				<p>
+					Showing ${(parameters.currentPage * parameters.rowsPerPage - parameters.rowsPerPage + 1)} to 
+					<@s.if test="%{${parameters.currentPage} == ${parameters.pageCount}}">
+						${parameters.totalRows}
+					</@s.if>
+					<@s.else>
+						${parameters.currentPage * parameters.rowsPerPage}
+					</@s.else>
+						 from Total ${parameters.totalRows} rows
+				</p>
 			</div>
 		</div>
 	</div>
