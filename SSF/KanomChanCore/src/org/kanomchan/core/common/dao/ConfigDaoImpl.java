@@ -215,6 +215,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	    	displayFiled.setType(rs.getString("TYPE"));
 	    	displayFiled.setParameter(rs.getString("PARAMETER"));
 	    	displayFiled.setMessage(rs.getString("MESSAGE"));
+	    	displayFiled.setMessageKey(rs.getString("MESSAGE_KEY"));
 	    	displayFiled.setMessageParameter(rs.getString("MESSAGE_PARAMETER"));
 	        return displayFiled;
 	    }
