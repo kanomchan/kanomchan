@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
+import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.context.ApplicationContextUtil;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
@@ -24,7 +25,6 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.XWorkConstants;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.inject.Inject;
-import com.opensymphony.xwork2.util.DomHelper;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
@@ -37,7 +37,6 @@ import com.opensymphony.xwork2.validator.Validator;
 import com.opensymphony.xwork2.validator.ValidatorConfig;
 import com.opensymphony.xwork2.validator.ValidatorContext;
 import com.opensymphony.xwork2.validator.ValidatorFactory;
-import com.opensymphony.xwork2.validator.validators.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.validators.VisitorFieldValidator;
 
 public class DBActionValidatorManager implements ActionValidatorManager {
@@ -318,9 +317,9 @@ public class DBActionValidatorManager implements ActionValidatorManager {
     	Gson gson = gsonBuilder.create(); 
     	List<ValidatorConfig> validatorCfgs = new ArrayList<ValidatorConfig>();
     	ConfigService configService= ApplicationContextUtil.getBean(ConfigService.class);
-    	List<org.kanomchan.core.common.bean.FieldValidator> s = configService.getPageValidators(name);
+    	List<FieldValidatorBean> s = configService.getPageValidators(name);
     	if(s!=null){
-        	for (org.kanomchan.core.common.bean.FieldValidator fieldValidatorBean : s) {
+        	for (FieldValidatorBean  fieldValidatorBean : s) {
         		
         		String validatorType = fieldValidatorBean.getType();
         		Map<String, Object> extraParams = new ConcurrentHashMap<String, Object>();
