@@ -7,7 +7,9 @@ public class FieldValidatorDefault implements FieldValidator {
 	private String type;
 	private String parameter;
 	private String message;
+	private String messageKey;
 	private String messageParameter;
+	
 	
 	public String getPage() {
 		return page;
@@ -45,5 +47,13 @@ public class FieldValidatorDefault implements FieldValidator {
 	public void setMessageParameter(String messageParameter) {
 		this.messageParameter = messageParameter;
 	}
+	public String getMessageKey() {
+		return messageKey;
+	}
+	public void setMessageKey(String messageKey) {
+		this.messageKey = messageKey;
+	}
+	
+	
 	
 }

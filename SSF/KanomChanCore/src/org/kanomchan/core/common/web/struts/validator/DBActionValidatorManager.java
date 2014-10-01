@@ -342,6 +342,7 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 //                .shortCircuit(Boolean.valueOf(validatorElement.getAttribute("short-circuit")).booleanValue());
                 
                 vCfg.defaultMessage(fieldValidatorBean.getMessage());
+                vCfg.messageKey(fieldValidatorBean.getMessageKey());
                 
                 
         		
