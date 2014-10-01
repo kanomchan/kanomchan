@@ -27,7 +27,32 @@
 <style>
 	<#include "css/multiSelect.css">
 </style>
-
+<#if parameters.color?? || parameters.fontColor??>
+	<#if parameters.id??>
+		<style>
+			.${parameters.id} .select2-container-multi .select2-choices .select2-search-choice {
+				background: ${parameters.color?default("#3ECC4F")?html} !important;
+				color: ${parameters.fontColor?default("#EEE")?html} !important;
+				border-radius: 5px !important;
+			}
+		
+		</style>
+		<#elseif parameters.name??>
+		<style>
+			.${parameters.name} .select2-container-multi .select2-choices .select2-search-choice {
+				background: ${parameters.color?default("#3ECC4F")?html} !important;
+				color: ${parameters.fontColor?default("#EEE")?html} !important;
+				border-radius: 5px !important;
+			}
+		
+		</style>
+	</#if>
+</#if>
+<#if parameters.id??>
+<span class="${parameters.id}">
+<#elseif parameters.name??>
+<span class="${parameters.name}">
+</#if>
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
 <#if parameters.get("size")??>
@@ -128,6 +153,7 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 
 </select>
+<span>
 <script>
 	<#include "js/select2.min.js"> 
 </script>

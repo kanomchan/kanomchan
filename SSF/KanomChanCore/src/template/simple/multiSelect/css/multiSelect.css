@@ -1696,3 +1696,14 @@
     height: 11px;
     background-position: -369px -278px;
 }
+.select2-container-multi .select2-choices .select2-search-choice {
+	background: #3ECC4F !important;
+	color: #EEE" !important;
+	border-radius: 5px !important;
+}
+.select2-search-choice-close {
+	top: 0.300em !important;
+	background-color: #eee !important;
+	border-radius: 3px !important;
+	border: 0px solid !important;
+}
