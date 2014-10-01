@@ -1,6 +1,6 @@
 package org.kanomchan.core.common.bean;
 
-public class FieldValidatorDefault implements FieldValidator {
+public class FieldValidatorDefault implements FieldValidatorBean {
 	
 	private String page;
 	private String field;

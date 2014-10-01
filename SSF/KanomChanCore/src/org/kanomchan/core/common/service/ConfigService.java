@@ -3,7 +3,7 @@ package org.kanomchan.core.common.service;
 import java.util.List;
 import java.util.Map;
 
-import org.kanomchan.core.common.bean.FieldValidator;
+import org.kanomchan.core.common.bean.FieldValidatorBean;
 
 
 public interface ConfigService {
@@ -12,11 +12,11 @@ public interface ConfigService {
 
 	public void refreshConfig();
 	
-	public Map<String, List<FieldValidator>> getFieldValidators(String page);
+	public Map<String, List<FieldValidatorBean>> getFieldValidators(String page);
 
 	public void initConfig();
 
-	public List<FieldValidator> getPageValidators(String page);
+	public List<FieldValidatorBean> getPageValidators(String page);
 
 	public String getInputResultName(String namespace, String name);
 }

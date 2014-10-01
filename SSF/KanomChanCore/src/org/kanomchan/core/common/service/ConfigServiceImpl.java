@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.kanomchan.core.common.bean.FieldValidator;
+import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.dao.ConfigDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -21,15 +21,15 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	private Map<String, String> config;
 	
-	private Map<String, Map<String, List<FieldValidator>>> pageFieldValidators;
-	private Map<String, List<FieldValidator>> pageValidators;
+	private Map<String, Map<String, List<FieldValidatorBean>>> pageFieldValidatorBeans;
+	private Map<String, List<FieldValidatorBean>> pageValidators;
 	private Map<String, String> actionInputResult;
 	
 	@Override
 	@PostConstruct
 	public synchronized void initConfig(){
 		config = configDao.getConfigMap();
-		pageFieldValidators = configDao.getPageFieldValidators();
+		pageFieldValidatorBeans = configDao.getPageFieldValidators();
 		pageValidators = configDao.getPageValidators();
 		actionInputResult = configDao.getActionInputResult();
 	}
@@ -38,7 +38,7 @@ public class ConfigServiceImpl implements ConfigService {
 	public void refreshConfig(){
 		config = configDao.getConfigMap();
 		config = configDao.getConfigMap();
-		pageFieldValidators = configDao.getPageFieldValidators();
+		pageFieldValidatorBeans = configDao.getPageFieldValidators();
 		pageValidators = configDao.getPageValidators();
 		actionInputResult = configDao.getActionInputResult();
 	}
@@ -49,11 +49,11 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	@Override
-	public Map<String, List<FieldValidator>> getFieldValidators(String page) {
-		return pageFieldValidators.get(page);
+	public Map<String, List<FieldValidatorBean>> getFieldValidators(String page) {
+		return pageFieldValidatorBeans.get(page);
 	}
 	@Override
-	public List<FieldValidator> getPageValidators(String page) {
+	public List<FieldValidatorBean> getPageValidators(String page) {
 		return pageValidators.get(page);
 	}
 
