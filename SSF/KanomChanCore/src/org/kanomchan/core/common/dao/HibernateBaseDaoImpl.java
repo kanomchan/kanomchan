@@ -356,8 +356,11 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 							if(jId != null){
 								Object jValue = jMethod.invoke(jColumn);
 								if(jValue != null && !jValue.toString().equals("0")){
-									pkName.add(joinColumn.name() + " = ? ");
-									pkId.add((Long) jValue);
+									list.add(joinColumn.name() + " = ? ");
+									para.add(jValue);
+									
+//									pkName.add(joinColumn.name() + " = ? ");
+//									pkId.add((Long) jValue);
 								}
 							}
 						}
@@ -386,7 +389,7 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		if(pkName.size() != 0){
 			sb.append(" WHERE ");
 			sb.append(Joiner.on(" AND ").skipNulls().join(pkName));
-			for (Long id : pkId) 
+			for (Long id : pkId)
 				para.add(id);
 			executeNativeSQL(sb.toString(),para.toArray());
 		}
