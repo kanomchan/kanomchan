@@ -54,21 +54,25 @@ import javax.servlet.http.HttpServletResponse;
 
  */
 @StrutsTag(
-    name="textfield",
-    tldTagClass="org.apache.struts2.views.jsp.ui.TextFieldTag",
+    name="textfieldfromto",
+    tldTagClass="org.apache.struts2.views.jsp.ui.TextFieldFromToTag",
     description="Render an HTML input field of type text",
     allowDynamicAttributes=true)
 public class TextFieldFromTo extends UIBean {
     /**
      * The name of the default template for the TextFieldTag
      */
-    final public static String TEMPLATE = "text";
+    final public static String TEMPLATE = "textfromto";
 
 
     protected String maxlength;
     protected String readonly;
     protected String size;
     protected String type;
+    protected String idSecond;
+    protected String nameSecond;
+    protected String firstLabel;
+    protected String secondLabel;
 
     public TextFieldFromTo(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -95,6 +99,22 @@ public class TextFieldFromTo extends UIBean {
 
         if (type != null) {
             addParameter("type", findString(type));
+        }
+        
+        if (idSecond != null){
+        	addParameter("idSecond", findString(idSecond));
+        }
+        
+        if (nameSecond != null){
+        	addParameter("nameSecond", findString(nameSecond));
+        }
+        
+        if (firstLabel != null){
+        	addParameter("firstLabel", findString(firstLabel));
+        }
+        
+        if (secondLabel != null){
+        	addParameter("secondLabel", findString(secondLabel));
         }
 
     }
@@ -123,4 +143,36 @@ public class TextFieldFromTo extends UIBean {
     public void setType(String type) {
         this.type = type;
     }
+    
+    public void setIdSecond(String idSecond) {
+		this.idSecond = idSecond;
+	}
+    
+    public String getIdSecond() {
+		return idSecond;
+	}
+    
+    public void setNameSecond(String nameSecond) {
+		this.nameSecond = nameSecond;
+	}
+    
+    public String getNameSecond() {
+		return nameSecond;
+	}
+    
+    public void setFirstLabel(String firstLabel) {
+		this.firstLabel = firstLabel;
+	}
+    
+    public String getFirstLabel() {
+		return firstLabel;
+	}
+    
+    public void setSecondLabel(String secondLabel) {
+		this.secondLabel = secondLabel;
+	}
+    
+    public String getSecondLabel() {
+		return secondLabel;
+	}
 }
