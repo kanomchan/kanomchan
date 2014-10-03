@@ -26,6 +26,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.components.Component;
 import org.apache.struts2.components.TextField;
 import org.apache.struts2.views.jsp.ui.AbstractUITag;
+import org.kanomchan.core.common.web.struts.components.TextFieldFromTo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,19 +42,27 @@ public class TextFieldFromToTag extends AbstractUITag {
     protected String readonly;
     protected String size;
     protected String type;
+    protected String idSecond;
+    protected String nameSecond;
+    protected String firstLabel;
+    protected String secondLabel;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
-        return new TextField(stack, req, res);
+        return new TextFieldFromTo(stack, req, res);
     }
 
     protected void populateParams() {
         super.populateParams();
 
-        TextField textField = ((TextField) component);
-        textField.setMaxlength(maxlength);
-        textField.setReadonly(readonly);
-        textField.setSize(size);
-        textField.setType(type);
+        TextFieldFromTo textFieldFromTo = ((TextFieldFromTo) component);
+        textFieldFromTo.setMaxlength(maxlength);
+        textFieldFromTo.setReadonly(readonly);
+        textFieldFromTo.setSize(size);
+        textFieldFromTo.setType(type);
+        textFieldFromTo.setIdSecond(idSecond);
+        textFieldFromTo.setNameSecond(nameSecond);
+        textFieldFromTo.setFirstLabel(firstLabel);
+        textFieldFromTo.setSecondLabel(secondLabel);
     }
 
     /**
@@ -78,4 +87,36 @@ public class TextFieldFromToTag extends AbstractUITag {
     public void setType(String type) {
         this.type = type;
     }
+    
+    public void setIdSecond(String idSecond) {
+		this.idSecond = idSecond;
+	}
+    
+    public String getIdSecond() {
+		return idSecond;
+	}
+    
+    public void setNameSecond(String nameSecond) {
+		this.nameSecond = nameSecond;
+	}
+    
+    public String getNameSecond() {
+		return nameSecond;
+	}
+    
+    public void setFirstLabel(String firstLabel) {
+		this.firstLabel = firstLabel;
+	}
+    
+    public String getFirstLabel() {
+		return firstLabel;
+	}
+    
+    public void setSecondLabel(String secondLabel) {
+		this.secondLabel = secondLabel;
+	}
+    
+    public String getSecondLabel() {
+		return secondLabel;
+	}
 }
