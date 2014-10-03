@@ -65,6 +65,12 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+      <description><![CDATA[HTML id Second attribute]]></description>
+      <name>idSecond</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
       <description><![CDATA[Use JavaScript to generate tooltips]]></description>
       <name>javascriptTooltip</name>
       <required>false</required>
@@ -79,6 +85,18 @@
     <attribute>
       <description><![CDATA[Label expression used for rendering an element specific label]]></description>
       <name>label</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[first Label expression used for rendering an element specific label]]></description>
+      <name>firstLabel</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[second Label expression used for rendering an element specific label]]></description>
+      <name>secondLabel</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -109,6 +127,12 @@
     <attribute>
       <description><![CDATA[The name to set for element]]></description>
       <name>name</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[The name second to set for element]]></description>
+      <name>nameSecond</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
