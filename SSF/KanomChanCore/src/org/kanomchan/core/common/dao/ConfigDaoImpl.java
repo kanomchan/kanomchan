@@ -231,12 +231,15 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 				field = new ConcurrentHashMap<String, List<FieldValidatorBean>>();
 				page.put(fieldValidator.getPage(), field);
 			}
-			List<FieldValidatorBean> fieldValidators = field.get(fieldValidator.getField());
-			if(fieldValidators==null){
-				fieldValidators = new LinkedList<FieldValidatorBean>();
-				field.put(fieldValidator.getField(), fieldValidators);
+			if(fieldValidator.getField() != null){
+				List<FieldValidatorBean> fieldValidators = field.get(fieldValidator.getField());
+				if(fieldValidators==null){
+					fieldValidators = new LinkedList<FieldValidatorBean>();
+					field.put(fieldValidator.getField(), fieldValidators);
+				}
+				fieldValidators.add(fieldValidator);
 			}
-			fieldValidators.add(fieldValidator);
+			
 		}
 		return page;
 	}
