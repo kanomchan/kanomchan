@@ -29,7 +29,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final Logger logger = Logger.getLogger(ConfigDaoImpl.class);
 	
-	private static final String SQL_QUERY_CONFIG = "SELECT CONFIG_KEY, CONFIG_VALUE FROM SYS_M_CONFIG";
+	private static final String SQL_QUERY_CONFIG = "SELECT CONFIG_KEY, CONFIG_VALUE FROM SYS_M_CONFIG WHERE STATUS = 'A' ";
 	@Override
 	public Map<String, String> getConfigMap() {
 		Map<String, String> configMap = new ConcurrentHashMap<String, String>();
@@ -58,7 +58,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final String SQL_QUERY_MESSAGE = 
 			" SELECT MESSAGE_CODE, MESSAGE_LANG, DISPLAY_TEXT, MESSAGE_DESC, " +
 			" MESSAGE_TYPE, SOLUTION " +
-			" FROM SYS_M_MESSAGE ";
+			" FROM SYS_M_MESSAGE WHERE STATUS = 'A' ";
 	@Override
 	@Cacheable(cacheName = "getMessageMap")
 	public Map<String, Message> getMessageMap() {
@@ -121,7 +121,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	public static final String SQL_QUERY_LABEL = 
 			" SELECT LABEL, PAGE, DISPLAY_TEXT, LANGUAGE " +
-			" FROM SYS_M_LABEL ";
+			" FROM SYS_M_LABEL  WHERE STATUS = 'A' ";
 	
 	@Override
 	public List<Label> getLabelList() {
@@ -187,7 +187,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final String SQL_QUERY_DISPLAY_FIELD = 
 //			" ID_DISPLAY_FIELD ,ID_REGION ,ID_COUNTRY ,ID_ZONE ,ID_PROVINE ,ID_CITY ,MODULE ,PAGE ,FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
 			" ID_DISPLAY_FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
-			" FROM JOB_N_DISPLAY_FIELD ";
+			" FROM JOB_N_DISPLAY_FIELD  WHERE STATUS = 'A' ";
 	private static final DisplayFieldMapper<DisplayField> DISPLAY_FIELD_MAPPER = new DisplayFieldMapper<DisplayField>();
 	public static final class DisplayFieldMapper<T extends DisplayField> implements RowMapper<DisplayField> {
 	    public DisplayField mapRow(ResultSet rs, int num)throws SQLException {
@@ -201,7 +201,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	public static final String SQL_QUERY_PAGE_FIELD_VALIDATORS = 
 			" SELECT * " +
-			" FROM SYS_M_FIELD_VALIDATOR ";
+			" FROM SYS_M_FIELD_VALIDATOR  WHERE STATUS = 'A' ";
 	
 	
 	private static final FieldValidatorBeanMapper<FieldValidatorBean> DISPLAY_FIELD_VALIDATOR = new FieldValidatorBeanMapper<FieldValidatorBean>();
@@ -266,7 +266,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 		}
 		return actionInputResult;
 	}
-	public static final String SQL_QUERY_ACTION_INPUT_RESULT = "SELECT * FROM SYS_M_ACTION ";
+	public static final String SQL_QUERY_ACTION_INPUT_RESULT = "SELECT * FROM SYS_M_ACTION  WHERE STATUS = 'A' ";
 	
 	private static final ActionMapper<ActionBean> ACTION_MAPPER = new ActionMapper<ActionBean>();
 	public static final class ActionMapper<T extends ActionBean> implements RowMapper<ActionBean> {
