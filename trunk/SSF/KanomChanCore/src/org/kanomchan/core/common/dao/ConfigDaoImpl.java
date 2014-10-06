@@ -106,7 +106,6 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 		StringBuilder whereClause = new StringBuilder();
 		Map<String,Object> params = new ConcurrentHashMap<String, Object>();
 		
-		whereClause.append(" AND 1 = 1 ");
 		if( messageType != null && messageType.length() > 0 ){
 			whereClause.append(" AND MESSAGE_TYPE LIKE :messageType ");
 			params.put("messageType", "%"+messageType+"%");
