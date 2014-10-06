@@ -3,6 +3,8 @@ package org.kanomchan.core.common.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -214,6 +216,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	    	displayFiled.setMessage(rs.getString("MESSAGE"));
 	    	displayFiled.setMessageKey(rs.getString("MESSAGE_KEY"));
 	    	displayFiled.setMessageParameter(rs.getString("MESSAGE_PARAMETER"));
+	    	displayFiled.setSeq(rs.getInt("SEQ"));
 	        return displayFiled;
 	    }
     }
@@ -250,6 +253,15 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 				page.put(fieldValidator.getPage(), fieldValidators);
 			}
 			fieldValidators.add(fieldValidator);
+			
+			Collections.sort(fieldValidators, new Comparator<FieldValidatorBean>() {
+
+				@Override
+				public int compare(FieldValidatorBean o1, FieldValidatorBean o2) {
+					return o1.getSeq().compareTo(o2.getSeq() );
+				}
+
+			});
 		}
 		return page;
 	}
