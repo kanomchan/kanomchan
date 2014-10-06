@@ -61,8 +61,14 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 	public List<Validator> getValidators(Class clazz, String context, String method) {
 		
 		ActionMapping actionMapping = ServletActionContext.getActionMapping();
+		final String validatorKey;
+		if(clazz.isInstance(BaseAction.class)){
+			validatorKey = actionMapping.getNamespace()+"/"+context;
+		}else{
+			validatorKey = buildValidatorKey(clazz, context);
+		}
 		
-		final String validatorKey = actionMapping.getNamespace()+"/"+context;
+		
 		
 		ValueStack stack = ActionContext.getContext().getValueStack();
 		
@@ -135,6 +141,8 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         	}
         	
         	
+        }else{
+        	validators = getValidators(object.getClass(), context, method);
         }
 
         for (final Validator validator : validators) {
@@ -324,9 +332,11 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         		String validatorType = fieldValidatorBean.getType();
         		Map<String, Object> extraParams = new ConcurrentHashMap<String, Object>();
         		Type typeOfSrc = new TypeToken<Map<String, Object>>(){}.getType();
-        		Map<String, Object> out = gson.fromJson(fieldValidatorBean.getParameter(), typeOfSrc);
-        		if(out!=null)
-        			extraParams.putAll(out);
+        		try{
+	        		Map<String, Object> out = gson.fromJson(fieldValidatorBean.getParameter(), typeOfSrc);
+	        		if(out!=null)
+	        			extraParams.putAll(out);
+        		}catch(Exception E){}
                 extraParams.put("fieldName", fieldValidatorBean.getField());
         		// ensure that the type is valid...
                 try {
@@ -346,9 +356,10 @@ public class DBActionValidatorManager implements ActionValidatorManager {
                 
         		
         		typeOfSrc = new TypeToken<String[]>(){}.getType();
-        		String[] bodyMap = gson.fromJson(fieldValidatorBean.getMessageParameter(), typeOfSrc);
-                
-                vCfg.messageParams(bodyMap);
+        		try{
+	        		String[] bodyMap = gson.fromJson(fieldValidatorBean.getMessageParameter(), typeOfSrc);
+	                vCfg.messageParams(bodyMap);
+        		}catch(Exception E){}
                 validatorCfgs.add(vCfg.build());
     		}
     	}
