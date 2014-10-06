@@ -127,6 +127,7 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 	public void validate(Object object, String context, ValidatorContext validatorContext, String method) throws ValidationException {
         List<Validator> validators = new ArrayList<Validator>();
         Set<String> shortcircuitedFields = null;
+        Set<String> implFields = null;
         if(object instanceof BaseAction){
         	BaseAction baseAction = (BaseAction) object;
         	ConfigService configService= ApplicationContextUtil.getBean(ConfigService.class);

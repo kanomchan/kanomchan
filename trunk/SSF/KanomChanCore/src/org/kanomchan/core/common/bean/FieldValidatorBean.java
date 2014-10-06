@@ -9,5 +9,6 @@ public interface FieldValidatorBean  {
 	public String getMessage();
 	public String getMessageParameter();
 	public String getMessageKey();
+	public Integer getSeq();
 
 }

@@ -9,6 +9,7 @@ public class FieldValidatorDefault implements FieldValidatorBean {
 	private String message;
 	private String messageKey;
 	private String messageParameter;
+	private Integer seq;
 	
 	
 	public String getPage() {
@@ -52,6 +53,12 @@ public class FieldValidatorDefault implements FieldValidatorBean {
 	}
 	public void setMessageKey(String messageKey) {
 		this.messageKey = messageKey;
+	}
+	public Integer getSeq() {
+		return seq;
+	}
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 	
 	
