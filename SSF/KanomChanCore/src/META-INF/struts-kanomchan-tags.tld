@@ -318,6 +318,7 @@
     </attribute>
     <dynamic-attributes>true</dynamic-attributes>
   </tag>
+  
   <tag>
     <description><![CDATA[Render a select element]]></description>
     <name>multiSelect</name>
@@ -482,6 +483,12 @@
     <attribute>
       <description><![CDATA[The name to set for element]]></description>
       <name>beanName</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[The name to set for element]]></description>
+      <name>nameValue</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
