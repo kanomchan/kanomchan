@@ -24,6 +24,8 @@ public class MultiSelect extends ListUIBean {
     protected String size;
 
     protected String beanName;
+    protected String nameValue;
+    protected String itemList;
     protected String color;
     protected String fontColor;
     protected String placeholder;
@@ -58,6 +60,12 @@ public class MultiSelect extends ListUIBean {
         
         if (beanName != null) {
         	addParameter("beanName", findString(beanName));
+        	addParameter("itemList", findValue(beanName));
+        }
+        if (nameValue != null) {
+        	addParameter("nameValue", findString(name+"."+nameValue));
+        }else{
+        	addParameter("nameValue", findString(name));
         }
         if (color != null) {
         	addParameter("color", findString(color));
@@ -68,13 +76,13 @@ public class MultiSelect extends ListUIBean {
         if (placeholder != null) {
         	addParameter("placeholder", findString(placeholder));
         }
-        if ((beanName != null) && (name != null)) {
-        	if(findValue(beanName+name)!=null){
-        		addParameter("itemList", findValue(beanName+name));
-        	}
-        }
     }
-    
+    public String getItemList() {
+		return itemList;
+	}
+    public void setItemList(String itemList) {
+		this.itemList = itemList;
+	}
     public String getPlaceholder() {
 		return placeholder;
 	}
@@ -98,6 +106,12 @@ public class MultiSelect extends ListUIBean {
 	}
     public void setBeanName(String beanName) {
 		this.beanName = beanName;
+	}
+    public String getNameValue() {
+		return nameValue;
+	}
+    public void setNameValue(String nameValue) {
+		this.nameValue = nameValue;
 	}
     @StrutsTagAttribute(description="Whether or not to add an empty (--) option after the header option", type="Boolean", defaultValue="false")
     public void setEmptyOption(String emptyOption) {
