@@ -160,10 +160,14 @@
 <script>
     $("#${parameters.id}").select2({
     	placeholder: "${parameters.placeholder}",
-    })<#if parameters.itemList??>.select2("data", 
-         [{"id":"2127","text":"Henry Ford"},{"id":"2199","text":"Tom Phillips"}]);<#else>;</#if>
+    })<#if parameters.itemList??>.select2("val", 
+         [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameValue)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
+	$(".${parameters.id}-hidden").remove();
+    var split${parameters.id} = $("#${parameters.id}").select2('val');
+    for(var i=0;i<split${parameters.id}.length;i++){
+		$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.name}' class='${parameters.id}-hidden'/>");
+    }
     $("#${parameters.id}").change(function() {
-	    console.log('Selected options: ' + $("#${parameters.id}").select2('val'));
 	    $(".${parameters.id}-hidden").remove();
 	    var split${parameters.id} = $("#${parameters.id}").select2('val');
 	    for(var i=0;i<split${parameters.id}.length;i++){
