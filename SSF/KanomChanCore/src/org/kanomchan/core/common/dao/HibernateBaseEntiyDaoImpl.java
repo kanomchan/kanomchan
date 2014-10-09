@@ -196,7 +196,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 				List<PagingBean.Order> orderL = pagingBean.getOrderList();
 			    if(orderL!=null&&orderL.size()>0){
 			    	for (PagingBean.Order order : orderL) {
-			    		if(order.getOrderMode().equalsIgnoreCase(PagingBean.ORDER_ASC)){
+			    		if(order.getOrderMode().equals(PagingBean.ORDER_MODE.ASC)){
 			    			criteria.addOrder(Order.asc(order.getOrderBy()) );
 			    		}else{
 			    			criteria.addOrder(Order.desc(order.getOrderBy()) );
@@ -237,7 +237,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 				List<PagingBean.Order> orderL = pagingBean.getOrderList();
 			    if(orderL!=null&&orderL.size()>0){
 			    	for (PagingBean.Order order : orderL) {
-			    		if(order.getOrderMode().equalsIgnoreCase(PagingBean.ORDER_ASC)){
+			    		if(order.getOrderMode().equals(PagingBean.ORDER_MODE.ASC)){
 			    			criteria.addOrder(Order.asc(order.getOrderBy()) );
 			    		}else{
 			    			criteria.addOrder(Order.desc(order.getOrderBy()) );
