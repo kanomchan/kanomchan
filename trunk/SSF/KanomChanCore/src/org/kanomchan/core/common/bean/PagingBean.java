@@ -22,9 +22,9 @@ public class PagingBean implements Serializable {
 		 * 
 		 */
 		private String orderBy;
-		private String orderMode;
+		private ORDER_MODE orderMode;
 		
-		public Order(String orderBy, String orderMode) {
+		public Order(String orderBy, ORDER_MODE orderMode) {
 			super();
 			this.orderBy = orderBy;
 			this.orderMode = orderMode;
@@ -36,19 +36,35 @@ public class PagingBean implements Serializable {
 		public void setOrderBy(String orderBy) {
 			this.orderBy = orderBy;
 		}
-		public String getOrderMode() {
-			return orderMode;
+		public ORDER_MODE getOrderMode() {
+			return ORDER_MODE.DESC==orderMode?ORDER_MODE.DESC:ORDER_MODE.ASC;
 		}
-		public void setOrderMode(String orderMode) {
+		public void setOrderMode(ORDER_MODE orderMode) {
 			this.orderMode = orderMode;
 		}		
 
 	}
 	
+	public enum ORDER_MODE implements Serializable {
+		DESC("DESC"), ASC("ASC");
+		
+		private ORDER_MODE(String code) {
+			this.code = code;
+		}
+		private String code;
+		@Override
+		public String toString() {
+			return code;
+		}
+//		public boolean equalsIgnoreCase(ORDER_MODE mode){
+//			return this.code.equalsIgnoreCase(mode.code);
+//		}
+	}
+	
 	private static final int DEFAULT_ROWS_PER_PAGE = 10;
 	
-	public static final String ORDER_DESC = "DESC";
-	public static final String ORDER_ASC = "ASC";
+//	public static final String ORDER_DESC = "DESC";
+//	public static final String ORDER_ASC = "ASC";
 		
 	private static final long DEFAULT_SHOW_PAGE = 10;
 	
@@ -57,7 +73,7 @@ public class PagingBean implements Serializable {
 	private long currentPage;
 	
 	private String orderBy;		//Name of column
-	private String orderMode;	//ASC or DESC
+	private ORDER_MODE orderMode;	//ASC or DESC
 	private List<Order> orderList;		//For multi order by
 	//Order style
 	
@@ -73,7 +89,7 @@ public class PagingBean implements Serializable {
 		setCurrentPage(currentPage);
 		setRowsPerPage(rowsPerPage);
 		this.totalRows = 0;
-		this.orderMode = " ASC ";
+		this.orderMode = ORDER_MODE.ASC;
 		orderList = new ArrayList<Order>();
 	}
 	
@@ -164,18 +180,18 @@ public class PagingBean implements Serializable {
 		addOrder( this.orderBy, this.orderMode );
 	}
 
-	public String getOrderMode() {
+	public ORDER_MODE getOrderMode() {
 		return orderMode;
 	}
-	public void setOrderMode(String orderMode) {
+	public void setOrderMode(ORDER_MODE orderMode) {
 		this.orderMode = orderMode;
 		this.orderList.clear();		
 		addOrder( this.orderBy, this.orderMode );		
 	}	
 	
-	public void addOrder( String orderBy, String orderMode ){
+	public void addOrder( String orderBy, ORDER_MODE orderMode ){
 		if( orderBy != null && orderBy.length() > 0 &&
-			orderMode != null && orderMode.length() > 0 ){
+			orderMode != null  ){
 			this.orderList.add( new Order( orderBy, orderMode ) );
 		}
 	}
