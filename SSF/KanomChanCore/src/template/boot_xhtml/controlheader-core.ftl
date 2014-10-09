@@ -35,11 +35,11 @@
 		   		for="${parameters.id}"
 			</#if> >
 				<div class="col-md-offset-4 col-md-4">
-					<div class="message error" role="alert">${error?html}</div>
+					<div class="message warning" role="alert">${error?html}</div>
 				</div>
 			</div>
 			<#else>
-				<div class="message error" role="alert" <#if parameters.id??>
+				<div class="message warning" role="alert" <#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >${error?html}</div>
 		</#if>
@@ -51,11 +51,11 @@
 		   		for="${parameters.id}"
 			</#if> >
 				<div style="display:none" class="col-md-offset-4 col-md-4">
-					<div class="message error" role="alert"></div>
+					<div class="message warning" role="alert"></div>
 				</div>
 			</div>
 			<#else>
-				<div style="display:none" class="message error" role="alert" <#if parameters.id??>
+				<div style="display:none" class="message warning" role="alert" <#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> ></div>
 		</#if>
