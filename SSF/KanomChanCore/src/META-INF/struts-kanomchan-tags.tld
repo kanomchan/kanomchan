@@ -488,7 +488,7 @@
     </attribute>
     <attribute>
       <description><![CDATA[The name to set for element]]></description>
-      <name>nameValue</name>
+      <name>nameKey</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -803,6 +803,12 @@
     <attribute>
       <description><![CDATA[The name to set for check element]]></description>
       <name>checkName</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[The name to set for check element]]></description>
+      <name>nameKey</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
