@@ -30,7 +30,7 @@
 	<#if hasFieldErrors>
 	<#list fieldErrors[parameters.name] as error>
 		<#if parameters.label??>
-			<div class="row"
+			<div <#-- class="row"  20140910 Edit by Bee  -->
 			<#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >
@@ -46,7 +46,8 @@
 	</#list>
 	<#else>
 		<#if parameters.label??>
-			<div class="row" <#if parameters.id??>
+			<div <#-- class="row"  20140910 Edit by Bee  --> 
+			<#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >
 				<div style="display:none" class="col-md-offset-4 col-md-4">
@@ -60,7 +61,7 @@
 		</#if>
 	</#if>
 	</#if>
-	<div class="row">
+	<div <#-- class="row"  20140910 Edit by Bee  -->>
 		<#if parameters.label??>
 			<label
 			<#if parameters.labelposition?default("left") == 'top'>
@@ -90,6 +91,6 @@
 			${parameters.labelseparator?default("")?html}</label>
 			<#if parameters.labelposition?default("left") == 'top'>
 				</div>
-				<div class="row">
+				<div <#-- class="row"  20140910 Edit by Bee  -->>
 			</#if>
 		</#if>
