@@ -161,17 +161,17 @@
     $("#${parameters.id}").select2({
     	placeholder: "${parameters.placeholder}",
     })<#if parameters.itemList??>.select2("val", 
-         [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameValue)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
+         [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
 	$(".${parameters.id}-hidden").remove();
     var split${parameters.id} = $("#${parameters.id}").select2('val');
     for(var i=0;i<split${parameters.id}.length;i++){
-		$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.name}' class='${parameters.id}-hidden'/>");
+		$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
     }
     $("#${parameters.id}").change(function() {
 	    $(".${parameters.id}-hidden").remove();
 	    var split${parameters.id} = $("#${parameters.id}").select2('val');
 	    for(var i=0;i<split${parameters.id}.length;i++){
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.name}' class='${parameters.id}-hidden'/>");
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
 	    }
 	});
 </script>
