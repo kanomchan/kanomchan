@@ -15,13 +15,9 @@ import com.opensymphony.xwork2.util.ValueStack;
  * @see CheckboxList
  */
 public class CheckboxListWithAllTag extends AbstractRequiredListTag {
-
-	    
-    private static final long serialVersionUID = 4023034029558150010L;
-
-    protected String beanName;
+	protected String beanName;
     protected String checkName;
-    
+    protected String nameKey;
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new CheckboxListWithAll(stack, req, res);
     }
@@ -31,8 +27,12 @@ public class CheckboxListWithAllTag extends AbstractRequiredListTag {
     	CheckboxListWithAll checkboxListWithAll = (CheckboxListWithAll) component;
     	checkboxListWithAll.setBeanName(beanName);
     	checkboxListWithAll.setCheckName(checkName);
+    	checkboxListWithAll.setNameKey(nameKey);
     }
 
+    public void setNameKey(String nameKey) {
+		this.nameKey = nameKey;
+	}
     public void setCheckName(String checkName) {
 		this.checkName = checkName;
 	}

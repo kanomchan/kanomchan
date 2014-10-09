@@ -15,7 +15,7 @@ public class CheckboxListWithAll extends ListUIBean {
     final public static String TEMPLATE = "checkboxlistwithall";
     protected String beanName;
     protected String checkName;
-    
+    protected String nameKey;
 
     public CheckboxListWithAll(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -29,14 +29,40 @@ public class CheckboxListWithAll extends ListUIBean {
         boolean result = super.start(writer);
         
         beanName = (String) findString(beanName);
-        checkName = (String) findString(checkName);
+        
+        if(name != null && nameKey != null){
+        	addParameter("nameKey", findString("." + name + "." + nameKey));
+        }
+        else if(name != null){
+        	addParameter("nameKey", findString("." + name));
+        }
+        else if(nameKey != null){
+        	addParameter("nameKey", findString("." + nameKey));
+        }
+        
+        if(name != null && checkName != null){
+        	checkName = (String) findString("." + name + "." + checkName);
+        	addParameter("checkName", checkName);
+        }
+        else if(name != null){
+        	checkName = (String) findString("." + name);
+        	addParameter("checkName", checkName);
+        }
+        else if(checkName != null){
+        	checkName = (String) findString("." + checkName);
+        	addParameter("checkName", checkName);
+        }
+        
         addParameter("beanName", beanName);
-        addParameter("checkName", checkName);
 		return result;
         
     }
-    
-    
+    public String getNameKey() {
+		return nameKey;
+	}
+    public void setNameKey(String nameKey) {
+		this.nameKey = nameKey;
+	}
     public String getBeanName() {
 		return beanName;
 	}

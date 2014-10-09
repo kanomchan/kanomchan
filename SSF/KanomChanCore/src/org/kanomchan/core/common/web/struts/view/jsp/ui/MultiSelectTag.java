@@ -25,7 +25,7 @@ public class MultiSelectTag extends AbstractRequiredListTag {
     protected String size;
     protected String multiple;
     protected String beanName;
-    protected String nameValue;
+    protected String nameKey;
     protected String color;
     protected String fontColor;
     protected String placeholder;
@@ -39,7 +39,7 @@ public class MultiSelectTag extends AbstractRequiredListTag {
 
         MultiSelect multiSelect = ((MultiSelect) component);
         multiSelect.setBeanName(beanName);
-        multiSelect.setNameValue(nameValue);
+        multiSelect.setNameKey(nameKey);
         multiSelect.setPlaceholder(placeholder);
     	multiSelect.setEmptyOption(emptyOption);
     	multiSelect.setHeaderKey(headerKey);
@@ -62,8 +62,8 @@ public class MultiSelectTag extends AbstractRequiredListTag {
 	public void setBeanName(String beanName) {
 		this.beanName = beanName;
 	}
-	public void setNameValue(String nameValue) {
-		this.nameValue = nameValue;
+	public void setNameKey(String nameKey) {
+		this.nameKey = nameKey;
 	}
 	public void setPlaceholder(String placeholder) {
 		this.placeholder = placeholder;
