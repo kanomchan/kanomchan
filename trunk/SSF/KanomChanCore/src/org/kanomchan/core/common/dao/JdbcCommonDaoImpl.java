@@ -2,13 +2,19 @@ package org.kanomchan.core.common.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.kanomchan.core.common.bean.PagingBean;
+import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
+import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+
+import com.google.common.base.Joiner;
 
 public class JdbcCommonDaoImpl implements JdbcCommonDao {
 
@@ -79,7 +85,116 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 
 	@Override
-	public <T> T nativeQueryOneRow(String sql, RowMapper<T> rm)  {
+	public <T extends Object> T nativeQueryOneRow(String sql, RowMapper<T> rm)  {
 		return simpleJdbcTemplate.queryForObject(sql, rm);
+	}
+	
+	@Override
+	public <T extends Object>  List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Object... params) {
+		String countQuery = "Select count(*) from ("+sql+") data";
+		
+		Long totalRows = simpleJdbcTemplate.queryForLong(countQuery, params);
+		pagingBean.setTotalRows(totalRows);
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(sql);
+		if(pagingBean.getOrderList()!=null&&pagingBean.getOrderList().size()>0){
+			List<String> joinlist  = new ArrayList<String>();
+			sb.append(" ORDER BY ");
+			for (Order order  : pagingBean.getOrderList()) {
+				
+				sb.append(order.getOrderBy());
+				if(order.getOrderMode().equals(ORDER_MODE.ASC)){
+					joinlist.add(order.getOrderBy()+" ASC ");
+				}else{
+					joinlist.add(order.getOrderBy()+" DESC ");
+				}
+			}
+			
+			sb.append(" ORDER BY ");
+			sb.append(Joiner.on(" , ").skipNulls().join(joinlist));
+		}
+		
+		
+		sb.append("LIMIT ");
+		sb.append(pagingBean.getOffsetBegin());
+		sb.append(" , ");
+		sb.append(pagingBean.getOffsetEnd());
+		
+		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm, params);
+		return resultList;
+	}
+	@Override
+	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Map<String, Object> params) {
+		String countQuery = "Select count(*) from ("+sql+") data";
+		
+		Long totalRows = simpleJdbcTemplate.queryForLong(countQuery, params);
+		pagingBean.setTotalRows(totalRows);
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(sql);
+		if(pagingBean.getOrderList()!=null&&pagingBean.getOrderList().size()>0){
+			List<String> joinlist  = new ArrayList<String>();
+			sb.append(" ORDER BY ");
+			for (Order order  : pagingBean.getOrderList()) {
+				
+				sb.append(order.getOrderBy());
+				if(order.getOrderMode().equals(ORDER_MODE.ASC)){
+					joinlist.add(order.getOrderBy()+" ASC ");
+				}else{
+					joinlist.add(order.getOrderBy()+" DESC ");
+				}
+			}
+			
+			sb.append(" ORDER BY ");
+			sb.append(Joiner.on(" , ").skipNulls().join(joinlist));
+		}
+		
+		
+		sb.append("LIMIT ");
+		sb.append(pagingBean.getOffsetBegin());
+		sb.append(" , ");
+		sb.append(pagingBean.getOffsetEnd());
+		
+		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm, params);
+		return resultList;
+	}
+	@Override
+	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm) {
+		String countQuery = "Select count(*) from ("+sql+") data";
+		
+		Long totalRows = simpleJdbcTemplate.queryForLong(countQuery);
+		pagingBean.setTotalRows(totalRows);
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(sql);
+		if(pagingBean.getOrderList()!=null&&pagingBean.getOrderList().size()>0){
+			List<String> joinlist  = new ArrayList<String>();
+			sb.append(" ORDER BY ");
+			for (Order order  : pagingBean.getOrderList()) {
+				
+				sb.append(order.getOrderBy());
+				if(order.getOrderMode().equals(ORDER_MODE.ASC)){
+					joinlist.add(order.getOrderBy()+" ASC ");
+				}else{
+					joinlist.add(order.getOrderBy()+" DESC ");
+				}
+			}
+			
+			sb.append(" ORDER BY ");
+			sb.append(Joiner.on(" , ").skipNulls().join(joinlist));
+		}
+		
+		
+		sb.append("LIMIT ");
+		sb.append(pagingBean.getOffsetBegin());
+		sb.append(" , ");
+		sb.append(pagingBean.getOffsetEnd());
+		
+		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm);
+		return resultList;
 	}
 }
