@@ -209,8 +209,10 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public static final class FieldValidatorBeanMapper<T extends FieldValidatorBean> implements RowMapper<FieldValidatorBean> {
 	    public FieldValidatorBean mapRow(ResultSet rs, int num)throws SQLException {
 	    	FieldValidatorDefault displayFiled = new FieldValidatorDefault();
+	    	displayFiled.setId(rs.getLong("ID_FIELD_VALIDATOR"));
 	    	displayFiled.setPage(rs.getString("PAGE"));
 	    	displayFiled.setField(rs.getString("FIELD"));
+	    	displayFiled.setPreCon(rs.getLong("PRE_CON"));
 	    	displayFiled.setType(rs.getString("TYPE"));
 	    	displayFiled.setParameter(rs.getString("PARAMETER"));
 	    	displayFiled.setMessage(rs.getString("MESSAGE"));
