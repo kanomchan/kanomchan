@@ -461,4 +461,59 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 		
 		return obj;
 	}
+
+	@Override
+	public <T extends EntityBean> T updateStatusDelete(T entity)
+			throws RollBackTechnicalException {
+		ProcessContext processContext = CurrentThread.getProcessContext();
+		entity.setUpdateUser(processContext.getUserName());
+		entity.setUpdateDate(new Date());
+		Class<? extends EntityBean> vlass = entity.getClass();
+		Table t = vlass.getAnnotation(Table.class);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(" UPDATE ");
+		sb.append(t.name());
+		sb.append(" SET STATUS = 'I'");
+
+		LinkedList<Object> para = new LinkedList<Object>();
+		Method[] arrmet = entity.getClass().getMethods();
+		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> pkName = new ArrayList<String>();
+		ArrayList<Long> pkId = new ArrayList<Long>();
+		for (Method method : arrmet) {
+			try {
+				Column column = method.getAnnotation(Column.class);
+				Id id = method.getAnnotation(Id.class);
+				AttributeOverrides attributeOverrides = method.getAnnotation(AttributeOverrides.class);
+				if(id != null){
+					Object value = method.invoke(entity);
+					if(value != null && !value.toString().equals("0")){
+						pkName.add(column.name() + " = ? ");
+						pkId.add((Long) value);
+					}
+				}
+				if(attributeOverrides != null){
+					Object value = method.invoke(entity);
+					if(value != null && !value.toString().equals("0")){
+						for (AttributeOverride attributeOverride : attributeOverrides.value()) 
+							pkName.add(attributeOverride.column().name() + " = ? ");
+						pkId.add((Long) value);
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		sb.append(Joiner.on(" , ").skipNulls().join(list));
+		if(pkName.size() != 0){
+			sb.append(" WHERE ");
+			sb.append(Joiner.on(" AND ").skipNulls().join(pkName));
+			for (Long id : pkId)
+				para.add(id);
+			executeNativeSQL(sb.toString(),para.toArray());
+		}
+		
+		return entity;
+	}
 }
