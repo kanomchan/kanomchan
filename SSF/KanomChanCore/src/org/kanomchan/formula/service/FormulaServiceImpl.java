@@ -51,7 +51,7 @@ public class FormulaServiceImpl implements FormulaService {
 			for (FormulaEffect formulaEffect : formulaEffects) {
 				formulaBuilder.append(formulaEffect.getSymbol().getSymbol());
 				Formula formulaInput = formulaEffect.getFormulaByIdFormulaInput();
-				if(formulaInput==null)
+				if(formulaInput==null||FormulaUtil.SYMBOL.equalsIgnoreCase(formulaInput.getFormulaType()))
 					continue;
 				
 				StringBuilder sb = new StringBuilder();
@@ -132,7 +132,7 @@ public class FormulaServiceImpl implements FormulaService {
 								Formula formulaout = getInputloop(formulaInput.getIdFormula(), formulaInputMap, formulaInputCaseMap);
 								formulaInputCaseMap.put(formulaout.getIdFormula(), formulaout);
 							}
-						}else{
+						}else if(FormulaUtil.INPUT.equalsIgnoreCase(formulaInput.getFormulaType())){
 							formulaInputMap.put(formulaInput.getIdFormula(), formulaInput);
 						}
 					}
