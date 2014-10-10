@@ -1,9 +1,12 @@
 package org.kanomchan.core.common.bean;
 
+
 public class FieldValidatorDefault implements FieldValidatorBean {
 	
+	private Long id;
 	private String page;
 	private String field;
+	private Long preCon;
 	private String type;
 	private String parameter;
 	private String message;
@@ -11,7 +14,12 @@ public class FieldValidatorDefault implements FieldValidatorBean {
 	private String messageParameter;
 	private Integer seq;
 	
-	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getPage() {
 		return page;
 	}
@@ -23,6 +31,12 @@ public class FieldValidatorDefault implements FieldValidatorBean {
 	}
 	public void setField(String field) {
 		this.field = field;
+	}
+	public Long getPreCon() {
+		return preCon;
+	}
+	public void setPreCon(Long preCon) {
+		this.preCon = preCon;
 	}
 	public String getType() {
 		return type;
@@ -60,7 +74,5 @@ public class FieldValidatorDefault implements FieldValidatorBean {
 	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
-	
-	
 	
 }
