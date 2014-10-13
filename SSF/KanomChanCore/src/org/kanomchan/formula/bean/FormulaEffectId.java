@@ -1,7 +1,6 @@
 package org.kanomchan.formula.bean;
 
-
-// Generated Oct 7, 2014 3:22:51 PM by Hibernate Tools 3.4.0.CR1
+// Generated Oct 10, 2014 3:15:49 PM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,16 +12,16 @@ import javax.persistence.Embeddable;
 public class FormulaEffectId implements java.io.Serializable {
 
 	private Long idFormula;
-	private Long idFormulaInput;
 	private String symbol;
+	private int seq;
 
 	public FormulaEffectId() {
 	}
 
-	public FormulaEffectId(Long idFormula, Long idFormulaInput, String symbol) {
+	public FormulaEffectId(Long idFormula, String symbol, int seq) {
 		this.idFormula = idFormula;
-		this.idFormulaInput = idFormulaInput;
 		this.symbol = symbol;
+		this.seq = seq;
 	}
 
 	@Column(name = "ID_FORMULA", nullable = false)
@@ -34,15 +33,6 @@ public class FormulaEffectId implements java.io.Serializable {
 		this.idFormula = idFormula;
 	}
 
-	@Column(name = "ID_FORMULA_INPUT", nullable = false)
-	public Long getIdFormulaInput() {
-		return this.idFormulaInput;
-	}
-
-	public void setIdFormulaInput(Long idFormulaInput) {
-		this.idFormulaInput = idFormulaInput;
-	}
-
 	@Column(name = "SYMBOL", nullable = false, length = 20)
 	public String getSymbol() {
 		return this.symbol;
@@ -50,6 +40,15 @@ public class FormulaEffectId implements java.io.Serializable {
 
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+
+	@Column(name = "SEQ", nullable = false)
+	public int getSeq() {
+		return this.seq;
+	}
+
+	public void setSeq(int seq) {
+		this.seq = seq;
 	}
 
 	public boolean equals(Object other) {
@@ -62,17 +61,16 @@ public class FormulaEffectId implements java.io.Serializable {
 		FormulaEffectId castOther = (FormulaEffectId) other;
 
 		return ((this.getIdFormula() == castOther.getIdFormula()) || (this.getIdFormula() != null && castOther.getIdFormula() != null && this.getIdFormula().equals(castOther.getIdFormula())))
-				&& ((this.getIdFormulaInput() == castOther.getIdFormulaInput()) || (this.getIdFormulaInput() != null && castOther.getIdFormulaInput() != null && this.getIdFormulaInput().equals(
-						castOther.getIdFormulaInput())))
-				&& ((this.getSymbol() == castOther.getSymbol()) || (this.getSymbol() != null && castOther.getSymbol() != null && this.getSymbol().equals(castOther.getSymbol())));
+				&& ((this.getSymbol() == castOther.getSymbol()) || (this.getSymbol() != null && castOther.getSymbol() != null && this.getSymbol().equals(castOther.getSymbol())))
+				&& (this.getSeq() == castOther.getSeq());
 	}
 
 	public int hashCode() {
 		int result = 17;
 
 		result = 37 * result + (getIdFormula() == null ? 0 : this.getIdFormula().hashCode());
-		result = 37 * result + (getIdFormulaInput() == null ? 0 : this.getIdFormulaInput().hashCode());
 		result = 37 * result + (getSymbol() == null ? 0 : this.getSymbol().hashCode());
+		result = 37 * result + this.getSeq();
 		return result;
 	}
 
