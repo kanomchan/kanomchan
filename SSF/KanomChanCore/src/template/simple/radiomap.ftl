@@ -53,6 +53,7 @@
           <#assign itemTitle = ''/>
         </#if>
     </#if>
+    <div class="radio radio-inline">
 <input type="radio"<#rt/>
 <#if parameters.name??>
  name="${parameters.name?html}"<#rt/>
@@ -96,7 +97,8 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/dynamic-attributes.ftl" />
 /><#rt/>
-<label for="${parameters.id?html}${itemKeyStr?html}"<#include "/${parameters.templateDir}/${parameters.expandTheme}/css.ftl"/>><#rt/>
+<label for="${parameters.id?html}${itemKeyStr?html}"<#include "/${parameters.templateDir}/${parameters.expandTheme}/css.ftl"/> class="radio-label"><#rt/>
     ${itemValue}<#t/>
 </label>
+</div>
 </@s.iterator>
