@@ -6,4 +6,7 @@
 <struts>
     <bean type="org.apache.struts2.views.TagLibraryDirectiveProvider" name="kc" class="org.kanomchan.core.common.web.struts.view.KanomChanTagLibrary" />
     <bean type="org.apache.struts2.views.TagLibraryModelProvider" name="kc" class="org.kanomchan.core.common.web.struts.view.KanomChanTagLibrary" />
+
+    <bean type="org.apache.struts2.views.TagLibraryDirectiveProvider" name="sb" class="com.jgeppert.struts2.bootstrap.views.BootstrapTagLibrary" />
+    <bean type="org.apache.struts2.views.TagLibraryModelProvider" name="sb" class="com.jgeppert.struts2.bootstrap.views.BootstrapTagLibrary" />
 </struts>

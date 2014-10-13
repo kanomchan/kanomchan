@@ -1,11 +1,9 @@
 package org.kanomchan.formula.bean;
 
+// Generated Oct 10, 2014 3:15:49 PM by Hibernate Tools 3.4.0.CR1
 
-// Generated Oct 7, 2014 3:22:51 PM by Hibernate Tools 3.4.0.CR1
-
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,11 +16,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FUM_M_SYMBOL")
-public class Symbol implements java.io.Serializable{
+public class Symbol implements java.io.Serializable {
 
 	private String symbol;
 	private String symbolType;
-	private List<FormulaEffect> formulaEffects = new ArrayList<FormulaEffect>(0);
+	private Set<FormulaEffect> formulaEffects = new HashSet<FormulaEffect>(0);
 
 	public Symbol() {
 	}
@@ -31,8 +29,9 @@ public class Symbol implements java.io.Serializable{
 		this.symbol = symbol;
 	}
 
-	public Symbol(String symbol, List<FormulaEffect> formulaEffects) {
+	public Symbol(String symbol, String symbolType, Set<FormulaEffect> formulaEffects) {
 		this.symbol = symbol;
+		this.symbolType = symbolType;
 		this.formulaEffects = formulaEffects;
 	}
 
@@ -46,23 +45,22 @@ public class Symbol implements java.io.Serializable{
 		this.symbol = symbol;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "symbol")
-	public List<FormulaEffect> getFormulaEffects() {
-		return this.formulaEffects;
-	}
-
-	public void setFormulaEffects(List<FormulaEffect> formulaEffects) {
-		this.formulaEffects = formulaEffects;
-	}
-	@Column(name = "SYMBOL_TYPE")
+	@Column(name = "SYMBOL_TYPE", length = 20)
 	public String getSymbolType() {
-		return symbolType;
+		return this.symbolType;
 	}
 
 	public void setSymbolType(String symbolType) {
 		this.symbolType = symbolType;
 	}
-	
-	
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "symbol")
+	public Set<FormulaEffect> getFormulaEffects() {
+		return this.formulaEffects;
+	}
+
+	public void setFormulaEffects(Set<FormulaEffect> formulaEffects) {
+		this.formulaEffects = formulaEffects;
+	}
 
 }

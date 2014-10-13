@@ -43,7 +43,7 @@ public class FormulaDaoImpl extends JdbcCommonDaoImpl implements FormulaDao {
 		
 		
 		
-		return nativeQuery("SELECT E.`SYMBOL` , E.SEQ , F.*  FROM `FUM_M_FORMULA_EFFECT` E LEFT JOIN `FUM_M_FORMULA` F ON E.`ID_FORMULA` = ? AND F.`ID_FORMULA` = E.`ID_FORMULA_INPUT` WHERE E.`ID_FORMULA` = ? ORDER BY E.ID_FORMULA ,E.SEQ ", FORMULA_EFFECT_MAPPER , formulaId,formulaId);
+		return nativeQuery("SELECT E.ID_FORMULA AS EID_FORMULA, E.`ID_FORMULA_INPUT`, E.`SYMBOL` , E.SEQ , F.*  FROM `FUM_M_FORMULA_EFFECT` E LEFT JOIN `FUM_M_FORMULA` F ON E.`ID_FORMULA` = ? AND F.`ID_FORMULA` = E.`ID_FORMULA_INPUT` WHERE E.`ID_FORMULA` = ? ORDER BY E.ID_FORMULA ,E.SEQ ", FORMULA_EFFECT_MAPPER , formulaId,formulaId);
 	}
 	
 	private static final RowMapper<FormulaEffect> FORMULA_EFFECT_MAPPER = new RowMapper<FormulaEffect>() {
@@ -54,7 +54,14 @@ public class FormulaDaoImpl extends JdbcCommonDaoImpl implements FormulaDao {
 			Symbol symbol = new Symbol();
 			symbol.setSymbol(rs.getString("SYMBOL"));
 			formulaEffect.setSymbol(symbol );
-			long s = rs.getLong("ID_FORMULA");
+			FormulaEffectId id = new FormulaEffectId();
+			formulaEffect.setId(id );
+			
+			id.setSymbol(rs.getString("SYMBOL"));
+			id.setSeq(rs.getInt("SEQ"));
+			id.setIdFormula(rs.getLong("EID_FORMULA"));
+			
+			long s = rs.getLong("ID_FORMULA_INPUT");
 		    if (!rs.wasNull()) {
 		    	Formula formula = new Formula();
 				formula.setIdFormula(s);
