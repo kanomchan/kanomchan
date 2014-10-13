@@ -53,6 +53,10 @@
 <#elseif parameters.name??>
 <span class="${parameters.name}">
 </#if>
+<#if parameters.choiceValue?default("true") == "true">
+	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option1" checked><label for="${parameters.id}-option1" class="control-label">Specific Value</label></div>&nbsp</lt>
+	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option2"><label for="${parameters.id}-option2" class="control-label">Except Value</label></div></lt>
+</#if>
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
 <#if parameters.get("size")??>
@@ -153,6 +157,9 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 
 </select>
+<#if parameters.choiceValue?default("true") == "true">
+<label class="inline pull-right" style="color:#C9C9C9;">* If you want to select all value please leave it blank </label>
+</#if>
 <span>
 <script>
 	<#include "js/select2.min.js"> 
@@ -160,7 +167,7 @@
 <script>
     $("#${parameters.id}").select2({
     	placeholder: "${parameters.placeholder}",
-    })<#if parameters.itemList??>.select2("val", 
+    })<#if parameters.itemList?? && stack.findValue(parameters.nameKey)??>.select2("val", 
          [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
 	$(".${parameters.id}-hidden").remove();
     var split${parameters.id} = $("#${parameters.id}").select2('val');
