@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +20,7 @@ import org.kanomchan.core.common.context.ApplicationContextUtil;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
 import org.kanomchan.core.common.web.struts.validator.validators.Impl;
-import org.kanomchan.core.common.web.struts.validator.validators.ImplEnd;
-import org.kanomchan.core.common.web.struts.validator.validators.ImplPost;
-import org.kanomchan.core.common.web.struts.validator.validators.ImplStart;
 import org.kanomchan.core.common.web.struts.validator.validators.PreConditionValidator;
-import org.kanomchan.core.security.authorize.bean.MenuBean;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -219,95 +214,93 @@ public class DBAndImplLoadActionValidatorManager implements ActionValidatorManag
                 	fullFieldName = "";
                 }
                 
-                if (validator instanceof ImplPost) {
-                	post = true;
-                	start = false;
-                	continue;
-                }
-                if(start){
-                	preValids.add(validator);
-                	continue;
-                }
-                if (validator instanceof ImplStart) {
-                	start = true;
-                	continue;
-                }
-                if (validator instanceof ImplEnd) {
-                	post = false;
-                	for (Validator preValid : preValids) {
-                		try{
-                			preValid.setValidatorContext(validatorContext);
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug("Running validator: " + validator + " for object " + object + " and method " + method);
-                            }
-                            FieldValidator fieldPreValid = null;
-                            String fullNamefieldPreValid = null;
-                            if (preValid instanceof FieldValidator) {
-                            	fieldPreValid = (FieldValidator) preValid;
-                            	fullNamefieldPreValid = new InternalValidatorContextWrapper(fieldPreValid.getValidatorContext()).getFullFieldName(fieldPreValid.getFieldName());
-                                // This is pretty crap, but needed to support short-circuited validations on nested visited objects
-                                if (validatorContext instanceof VisitorFieldValidator.AppendingValidatorContext) {
-                                    VisitorFieldValidator.AppendingValidatorContext appendingValidatorContext =
-                                            (VisitorFieldValidator.AppendingValidatorContext) validatorContext;
-                                    fullNamefieldPreValid = appendingValidatorContext.getFullFieldNameFromParent(fieldPreValid.getFieldName());
-                                }
-                                if ((shortcircuitedFields != null) && shortcircuitedFields.contains(fullNamefieldPreValid)) {
-                                    if (LOG.isDebugEnabled()) {
-                                        LOG.debug("Short-circuited, skipping");
-                                    }
-                                    continue;
-                                }
-                            }
-                            preValid.validate(object);
-                		}finally{
-                			preValid.setValidatorContext(null);
-                		}
-                	}
-                	List<String> errs = null;
-                	if (validator != null) {
-                        if (validatorContext.hasFieldErrors()) {
-                            Collection<String> fieldErrors = validatorContext.getFieldErrors().get(fullFieldName);
-
-                            if (fieldErrors != null) {
-                                errs = new ArrayList<String>(fieldErrors);
-                            }
-                        }else{
-                        	for (Validator postValid : postValids) {
-                        		try{
-                        			postValid.setValidatorContext(validatorContext);
-
-                                    if (LOG.isDebugEnabled()) {
-                                        LOG.debug("Running validator: " + postValid + " for object " + object + " and method " + method);
-                                    }
-                                    FieldValidator fieldPostValid = null;
-                                    String fullNamefieldPostValid = null;
-
-                                    if (postValid instanceof FieldValidator) {
-                                    	fieldPostValid = (FieldValidator) postValid;
-                                    	fullNamefieldPostValid = new InternalValidatorContextWrapper(fieldPostValid.getValidatorContext()).getFullFieldName(fieldPostValid.getFieldName());
-                                    }
-                                    postValid.validate(object);
-                        		}finally{
-                        			postValid.setValidatorContext(null);
-                        		}
-                        	}
-                        	preValids = new ArrayList<Validator>();
-                        	postValids = new ArrayList<Validator>();
-                        	
-                        	continue;
-                        }
-                    } else if (validatorContext.hasActionErrors()) {
-                        Collection<String> actionErrors = validatorContext.getActionErrors();
-
-                        if (actionErrors != null) {
-                            errs = new ArrayList<String>(actionErrors);
-                        }
-                    }else{
-                    	continue;
-                    }
-                	
-               
-                }
+//                if (validator instanceof ImplPost) {
+//                	post = true;
+//                	start = false;
+//                	continue;
+//                }
+//                if(start){
+//                	preValids.add(validator);
+//                	continue;
+//                }
+//                if (validator instanceof ImplStart) {
+//                	start = true;
+//                	continue;
+//                }
+//                if (validator instanceof ImplEnd) {
+//                	post = false;
+//                	for (Validator preValid : preValids) {
+//                		try{
+//                			preValid.setValidatorContext(validatorContext);
+//                            if (LOG.isDebugEnabled()) {
+//                                LOG.debug("Running validator: " + validator + " for object " + object + " and method " + method);
+//                            }
+//                            FieldValidator fieldPreValid = null;
+//                            String fullNamefieldPreValid = null;
+//                            if (preValid instanceof FieldValidator) {
+//                            	fieldPreValid = (FieldValidator) preValid;
+//                            	fullNamefieldPreValid = new InternalValidatorContextWrapper(fieldPreValid.getValidatorContext()).getFullFieldName(fieldPreValid.getFieldName());
+//                                // This is pretty crap, but needed to support short-circuited validations on nested visited objects
+//                                if (validatorContext instanceof VisitorFieldValidator.AppendingValidatorContext) {
+//                                    VisitorFieldValidator.AppendingValidatorContext appendingValidatorContext =
+//                                            (VisitorFieldValidator.AppendingValidatorContext) validatorContext;
+//                                    fullNamefieldPreValid = appendingValidatorContext.getFullFieldNameFromParent(fieldPreValid.getFieldName());
+//                                }
+//                                if ((shortcircuitedFields != null) && shortcircuitedFields.contains(fullNamefieldPreValid)) {
+//                                    if (LOG.isDebugEnabled()) {
+//                                        LOG.debug("Short-circuited, skipping");
+//                                    }
+//                                    continue;
+//                                }
+//                            }
+//                            preValid.validate(object);
+//                		}finally{
+//                			preValid.setValidatorContext(null);
+//                		}
+//                	}
+//                	List<String> errs = null;
+//                	if (validator != null) {
+//                        if (validatorContext.hasFieldErrors()) {
+//                            Collection<String> fieldErrors = validatorContext.getFieldErrors().get(fullFieldName);
+//
+//                            if (fieldErrors != null) {
+//                                errs = new ArrayList<String>(fieldErrors);
+//                            }
+//                        }else{
+//                        	for (Validator postValid : postValids) {
+//                        		try{
+//                        			postValid.setValidatorContext(validatorContext);
+//
+//                                    if (LOG.isDebugEnabled()) {
+//                                        LOG.debug("Running validator: " + postValid + " for object " + object + " and method " + method);
+//                                    }
+//                                    FieldValidator fieldPostValid = null;
+//                                    String fullNamefieldPostValid = null;
+//
+//                                    if (postValid instanceof FieldValidator) {
+//                                    	fieldPostValid = (FieldValidator) postValid;
+//                                    	fullNamefieldPostValid = new InternalValidatorContextWrapper(fieldPostValid.getValidatorContext()).getFullFieldName(fieldPostValid.getFieldName());
+//                                    }
+//                                    postValid.validate(object);
+//                        		}finally{
+//                        			postValid.setValidatorContext(null);
+//                        		}
+//                        	}
+//                        	preValids = new ArrayList<Validator>();
+//                        	postValids = new ArrayList<Validator>();
+//                        	
+//                        	continue;
+//                        }
+//                    } else if (validatorContext.hasActionErrors()) {
+//                        Collection<String> actionErrors = validatorContext.getActionErrors();
+//
+//                        if (actionErrors != null) {
+//                            errs = new ArrayList<String>(actionErrors);
+//                        }
+//                    }else{
+//                    	continue;
+//                    }
+//                }
                 
                 if(post){
                 	postValids.add(validator);
