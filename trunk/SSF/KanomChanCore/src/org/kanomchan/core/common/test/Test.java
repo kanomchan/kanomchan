@@ -1,14 +1,9 @@
 package org.kanomchan.core.common.test;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import org.kanomchan.core.common.proxy.ProxyEntity;
 
 public class Test {
 
@@ -80,7 +75,7 @@ public class Test {
 //			String s = gson.toJson(list, typeOfSrc);
 //			System.out.println(s);
 		
-		System.out.println(ORDER_MODE.ASC.equals(ORDER_MODE.ASC));
+//		System.out.println(ORDER_MODE.ASC.equals(ORDER_MODE.ASC));
 //			List<String> extraParams = gson.fromJson(fieldValidatorBean.getParameter(), typeOfSrc);
 			 
 //			 
@@ -90,6 +85,15 @@ public class Test {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		
+		
+		ProxyEntity proxyBean = new ProxyEntity(TestBean.class);
+		Map<String, String[]> para = new HashMap<String, String[]>();
+		para.put("test", new String[]{"5555"});
+		proxyBean.setParamter(para);
+		System.out.println(proxyBean);
+//		  check
+//		ProxyEntity
 	}
 
 }
