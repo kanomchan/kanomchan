@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.constant.CommonMessageCode;
@@ -349,8 +351,23 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 				}
 				if(joinColumn != null){
 					Object jColumn = method.invoke(entity);
+					
+					
 					if(jColumn != null){
-						Method[] jMethods = jColumn.getClass().getMethods();
+						Class cls = jColumn.getClass();
+						if(entity instanceof HibernateProxy){
+							HibernateProxy hibernateProxy =((HibernateProxy) entity);
+							LazyInitializer lazyInitializer = hibernateProxy.getHibernateLazyInitializer();
+							try {
+								cls = Class.forName(lazyInitializer.getEntityName());
+							} catch (ClassNotFoundException e) {
+//								e.printStackTrace();
+							}
+						}
+						Method[] jMethods = cls.getMethods();
+						
+						
+						
 						for (Method jMethod : jMethods) {
 							Id jId = jMethod.getAnnotation(Id.class);
 							if(jId != null){
