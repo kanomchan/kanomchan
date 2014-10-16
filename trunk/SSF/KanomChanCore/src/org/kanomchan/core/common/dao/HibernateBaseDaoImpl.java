@@ -356,8 +356,8 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 					if(jColumn != null){
 						Class cls = jColumn.getClass();
 						//support lazy Proxy
-						if(entity instanceof HibernateProxy){
-							HibernateProxy hibernateProxy =((HibernateProxy) entity);
+						if(jColumn instanceof HibernateProxy){
+							HibernateProxy hibernateProxy =((HibernateProxy) jColumn);
 							LazyInitializer lazyInitializer = hibernateProxy.getHibernateLazyInitializer();
 							try {
 								cls = Class.forName(lazyInitializer.getEntityName());

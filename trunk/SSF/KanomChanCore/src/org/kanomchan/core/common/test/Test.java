@@ -3,7 +3,7 @@ package org.kanomchan.core.common.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kanomchan.core.common.proxy.ProxyEntity;
+//import org.kanomchan.core.common.proxy.ProxyEntity;
 
 public class Test {
 
@@ -87,11 +87,11 @@ public class Test {
 //		}
 		
 		
-		ProxyEntity proxyBean = new ProxyEntity(TestBean.class);
-		Map<String, String[]> para = new HashMap<String, String[]>();
-		para.put("test", new String[]{"5555"});
-		proxyBean.setParamter(para);
-		System.out.println(proxyBean);
+//		ProxyEntity proxyBean = new ProxyEntity(TestBean.class);
+//		Map<String, String[]> para = new HashMap<String, String[]>();
+//		para.put("test", new String[]{"5555"});
+//		proxyBean.setParamter(para);
+//		System.out.println(proxyBean);
 //		  check
 //		ProxyEntity
 	}
