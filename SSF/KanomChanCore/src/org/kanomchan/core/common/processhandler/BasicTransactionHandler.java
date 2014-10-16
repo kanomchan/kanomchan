@@ -1,11 +1,16 @@
 package org.kanomchan.core.common.processhandler;
 
-import org.apache.log4j.Logger;
-
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import javax.persistence.Id;
+
+import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -113,97 +118,97 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	}
 	
 	private <T> T clearUnproxy(T entity)  {
-//	    if (entity == null) {
-//	    	return entity;
-//	    }
-//
-//	    if (entity instanceof HibernateProxy) {
-//	    	HibernateProxy hibernateProxy =((HibernateProxy) entity);
-//	    	
-//	    	LazyInitializer lazyInitializer = hibernateProxy.getHibernateLazyInitializer();
-//	    	if(lazyInitializer.isUninitialized()){
-//	    		T out = null;
-//	    		try {
-//	    			Class cls = Class.forName(lazyInitializer.getEntityName());
-//					out = (T) cls.newInstance();
-//					Field[] fs = cls.getDeclaredFields();
-//					for (Field field : fs) {
-//						if(field.isAnnotationPresent(Id.class)){
-//							String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-//							Method methodSet = out.getClass().getMethod(nameset,lazyInitializer.getIdentifier().getClass());
-//							methodSet.invoke(out, lazyInitializer.getIdentifier());
-//							break;
-//						}else{
-//							String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-//							Method methodSet = cls.getMethod(nameset,lazyInitializer.getIdentifier().getClass());
-//							if(methodSet.isAnnotationPresent(Id.class)){
-//								methodSet.invoke(out, lazyInitializer.getIdentifier());
-//								break;
-//							}else{
-//								String nameget = "get"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-//								Method methodGet = cls.getMethod(nameget);
-//								if(methodGet.isAnnotationPresent(Id.class)){
-//									methodSet.invoke(out, lazyInitializer.getIdentifier());
-//									break;
-//								}
-//							}
-//							
-//						}
-//					}
-//				} catch (ClassNotFoundException e) {
-//					e.printStackTrace();
-//				} catch (NoSuchMethodException e) {
-//					e.printStackTrace();
-//				} catch (SecurityException e) {
-//					e.printStackTrace();
-//				} catch (InstantiationException e) {
-//					e.printStackTrace();
-//				} catch (IllegalAccessException e) {
-//					e.printStackTrace();
-//				} catch (IllegalArgumentException e) {
-//					e.printStackTrace();
-//				} catch (InvocationTargetException e) {
-//					e.printStackTrace();
-//				}
-//	    		entity =out;
-//	    	}else{
-//	    		entity = (T) lazyInitializer.getImplementation();
-//	    	}
-//	    }
-//	    
-//	    Class<? extends Object> class1   = entity.getClass();
-//		Field[] fields = entity.getClass().getDeclaredFields();
-//		if(fields!=null){
-//			for (Field field : fields) {
-//				String nameget = "get"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-//				String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-//				try {
-//					if(!field.isAccessible()&&java.lang.reflect.Modifier.isStatic(field.getModifiers())){
-//						Method methodGet = class1.getMethod(nameget);
-//						Method methodSet = class1.getMethod(nameset,methodGet.getReturnType());
-//						Object o = methodGet.invoke(entity);
-//						if(o instanceof HibernateProxy){
-//							methodSet.invoke(entity, clearUnproxy(o));
-//						}
-//					}
-//				} catch (NoSuchMethodException e) {
-//					e.printStackTrace();
-//				} catch (SecurityException e) {
-//					e.printStackTrace();
-//				} catch (IllegalAccessException e) {
-//					e.printStackTrace();
-//				} catch (IllegalArgumentException e) {
-//					e.printStackTrace();
-//				} catch (InvocationTargetException e) {
-//					e.printStackTrace();
-//				}
-//				
-//				
-//			}
-//		}
-//	    
-//	    return entity;
-		return entity;
+	    if (entity == null) {
+	    	return entity;
+	    }
+
+	    if (entity instanceof HibernateProxy) {
+	    	HibernateProxy hibernateProxy =((HibernateProxy) entity);
+	    	
+	    	LazyInitializer lazyInitializer = hibernateProxy.getHibernateLazyInitializer();
+	    	if(lazyInitializer.isUninitialized()){
+	    		T out = null;
+	    		try {
+	    			Class cls = Class.forName(lazyInitializer.getEntityName());
+					out = (T) cls.newInstance();
+					Field[] fs = cls.getDeclaredFields();
+					for (Field field : fs) {
+						if(field.isAnnotationPresent(Id.class)){
+							String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
+							Method methodSet = out.getClass().getMethod(nameset,lazyInitializer.getIdentifier().getClass());
+							methodSet.invoke(out, lazyInitializer.getIdentifier());
+							break;
+						}else{
+							String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
+							Method methodSet = cls.getMethod(nameset,lazyInitializer.getIdentifier().getClass());
+							if(methodSet.isAnnotationPresent(Id.class)){
+								methodSet.invoke(out, lazyInitializer.getIdentifier());
+								break;
+							}else{
+								String nameget = "get"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
+								Method methodGet = cls.getMethod(nameget);
+								if(methodGet.isAnnotationPresent(Id.class)){
+									methodSet.invoke(out, lazyInitializer.getIdentifier());
+									break;
+								}
+							}
+							
+						}
+					}
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+	    		entity =out;
+	    	}else{
+	    		entity = (T) lazyInitializer.getImplementation();
+	    	}
+	    }
+	    
+	    Class<? extends Object> class1   = entity.getClass();
+		Field[] fields = entity.getClass().getDeclaredFields();
+		if(fields!=null){
+			for (Field field : fields) {
+				String nameget = "get"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
+				String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
+				try {
+					if(!field.isAccessible()&&java.lang.reflect.Modifier.isStatic(field.getModifiers())){
+						Method methodGet = class1.getMethod(nameget);
+						Method methodSet = class1.getMethod(nameset,methodGet.getReturnType());
+						Object o = methodGet.invoke(entity);
+						if(o instanceof HibernateProxy){
+							methodSet.invoke(entity, clearUnproxy(o));
+						}
+					}
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+				
+			}
+		}
+	    
+	    return entity;
+//		return entity;
 	}
 	@Override
 	public void rollbackTxn(ProcessContext processContext){

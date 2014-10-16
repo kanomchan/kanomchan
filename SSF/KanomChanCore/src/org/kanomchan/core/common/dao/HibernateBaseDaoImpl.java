@@ -376,7 +376,7 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 								Object jValue = jMethod.invoke(jColumn);
 								if(jValue != null && !jValue.toString().equals("0")){
 									list.add(joinColumn.name() + " = ? ");
-									para.add(jValue);
+									para.add((Long) jValue);
 									
 //									pkName.add(joinColumn.name() + " = ? ");
 //									pkId.add((Long) jValue);
