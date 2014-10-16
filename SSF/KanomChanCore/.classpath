@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/javassist-3.11.0.GA.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/ognl-3.0.6.jar" sourcepath="C:/Users/kwan/.m2/repository/ognl/ognl/3.0.6/ognl-3.0.6-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/xstream-1.4.2.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aop-3.0.5.RELEASE.jar" sourcepath="C:/Users/kwan/.m2/repository/org/springframework/spring-aop/3.0.5.RELEASE/spring-aop-3.0.5.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aop-3.0.5.RELEASE.jar" sourcepath="C:/Users/Ball/.m2/repository/org/springframework/spring-aop/3.0.5.RELEASE/spring-aop-3.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-asm-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aspects-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-beans-3.0.5.RELEASE.jar" sourcepath="C:/Users/kwan/.m2/repository/org/springframework/spring-beans/3.0.5.RELEASE/spring-beans-3.0.5.RELEASE-sources.jar"/>
