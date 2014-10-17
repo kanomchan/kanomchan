@@ -45,6 +45,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected String backUrl;
 	protected String nextNamespace; 
 	protected String nextAction;
+	protected String dynamicParameterValue;
+	protected String dynamicParameterName;
 	protected String inputResultName;
 	
 	protected String expression;
@@ -212,6 +214,26 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 
 	public void setExpression(String expression) {
 		this.expression = expression;
+	}
+
+
+	public String getDynamicParameterValue() {
+		return dynamicParameterValue;
+	}
+
+
+	public void setDynamicParameterValue(String dynamicParameterValue) {
+		this.dynamicParameterValue = dynamicParameterValue;
+	}
+
+
+	public String getDynamicParameterName() {
+		return dynamicParameterName;
+	}
+
+
+	public void setDynamicParameterName(String dynamicParameterName) {
+		this.dynamicParameterName = dynamicParameterName;
 	}
 	
 	
