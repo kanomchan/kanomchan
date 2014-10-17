@@ -39,133 +39,165 @@
 		jQuery(document).ready(function() {
 			formId = "${parameters.id?html}";
 			formName = "${parameters.name?html}";
-			form = $("form[name='"+formName+"']");
+			//form = $("form[name='"+formName+"']");
 			console.log("form name :"+formId);
 			console.log("action url : ${parameters.action?html}");
-			editable(formName);
+			${parameters.id?html}Editable();
+			form.prepend(
+    			'<div class="box-align-center" id="editable-edit${parameters.id?html}"> '
+					+'<p><input type="button" Class="btn btn-save pull-right" id="btnEdit${parameters.id?html}" value="Edit"/></p>'
+				+'</div>'
+    		);
+    		
+    		form.append(
+    			'<div class="box-align-center" id="editable-save${parameters.id?html}" style="display:none;"> '
+					+'<p><input type="button" class="btn btn-primary" id="btnSave${parameters.id?html}" value="Save"/>'
+					+'<input type="button" class="btn btn-default"  id="btnCancel${parameters.id?html}" value="Cancel"/></p>'
+				+'</div>'
+	    	);
 				
-			function editable(formName){
-		    	elementInForm = $("form[name='"+formName+"'] :input[name^='"+formName+".']");
-		    	elementInForm.each(function(i){
-		    		$(this).css("display","none");
-					if($(this).is("input[type=radio]")){
-						$(this).next("label").css("display","none");
-						if($(this).is(":checked")){
-							valueName = $(this).next("label").text();
-						}
-						else{
-							valueName = "";
-						}
-					}	
-					else if($(this).is("input[type=checkbox]"))
-		    			if($(this).is(":checked"))
-		    				valueName = $(this).text();
-		    			else{
-		    				valueName = "";
-		    				$(this).next().next().css("display","none");
-		    			}
-		    		else if($(this).is("select"))
-		    			if($(this).val() == 0)
-		    				valueName = "-";
-		    			else
-		    				valueName = $(this).find("option:selected").text();
-		    		else if($(this).is("input"))
-		    			valueName = $(this).val();
-		    		$(this).parent().append('<p class="value" style="margin-top:6px;">'+valueName+'</p>');
-		    	});
-	    		$("form[name='"+formName+"']").prepend(
-    				'<div class="box-align-center editable-edit"> '
-						+'<p><input type="button" Class="btn btn-save pull-right btnEdit"  value="Edit"/></p>'
-					+'</div>'
-	    		);
+			function ${parameters.id?html}Editable(){
+				form = $("#${parameters.id?html}");
+			<#list parameters.tagNames as tagName>
+				var fieldName = "${tagName?replace(".", "\\\\.")}";
+				var field = $("#" + fieldName);
+				var valueName = "";
+				field.hide();
+				if(field.is("input[type=radio]")){
+					field.next("label").hide();
+					if(field.is(":checked")){
+						valueName = field.next("label").text();
+					}
+					else{
+						valueName = "";
+					}
+				}	
+				else if(field.is("input[type=checkbox]"))
+	    			if(field.is(":checked"))
+	    				valueName = field.text();
+	    			else{
+	    				valueName = "";
+	    				field.next().next().hide();
+	    			}
+	    		else if(field.is("select"))
+	    			if(field.val() == 0)
+	    				if(valueName != "-")
+	    					valueName = "-";
+	    			else
+	    				valueName = field.find("option:selected").text();
+	    		else if(field.is("input"))
+	    			valueName = field.val();
+	    		
+	    		
+				if(field.parent().find('p.value').length){
+					field.parent().find('p.value').text(valueName);
+					field.parent().find('p.value').show();
+				}else{
+					field.parent().append('<p class="value" style="margin-top:6px;">'+valueName+'</p>');
+				}
+			</#list>
+	    		$("#editable-edit${parameters.id?html}").show();
+				$("#editable-save${parameters.id?html}").hide();
 			}
-			$(document).on('click', "input:button.btnEdit", function() {
-				form = $(this).parents("form");
-		    	formName = $(this).parents("form")[0].name;
-		    	elementInForm = $(form).find(":input[name^='"+formName+".']");
-		    	elementInForm.each(function(){
-		    		$(this).parent().find("p.value").remove();
-		    		$(this).css("display","");
-		    		if($(this).is("input[type=radio]"))
-		    			$(this).next("label").css("display","");
-					else 
-						if($(this).is("input[type=checkbox]"))
-		    				$(this).next().next().css("display","");
-		    	});
-		    	$(form).find(".editable-edit").remove();
-		    	$(form).append(
-    				'<div class="box-align-center editable-save"> '
-						+'<p><input type="button" Class="btn btn-primary btnSave" value="Save"/><input type="button" Class="btn btn-default btnCancel" value="Cancel"/></p>'
-					+'</div>'
-	    		);
-		    });
-			$(document).on('click', "input:button.btnCancel", function(){
-				form = $(this).parents("form");
-		    	formName = $(this).parents("form")[0].name;
-				$(form).find(".editable-save").remove();
-				editable(formName);
+			
+			$("#btnEdit${parameters.id?html}").click( function(){
+				form = $("#${parameters.id?html}");
+	    	<#list parameters.tagNames as tagName>
+				var fieldName = "${tagName?replace(".", "\\\\.")}";
+				var field = $("#" + fieldName);
+				field.parent().find("p.value").hide();
+	    		field.show();
+	    		if(field.is("input[type=radio]"))
+	    			field.next("label").show();
+				else 
+					if(field.is("input[type=checkbox]"))
+	    				field.next().next().show();
+			</#list>
+		    	
+		    	$("#editable-edit${parameters.id?html}").hide();
+		    	$("#editable-save${parameters.id?html}").show();
+		    	
+	    		$("#btnCancel${parameters.id?html}").click( function(){
+					$("#editable-save${parameters.id?html}").hide();
+					${parameters.id?html}Editable();
+				});
+				$("#btnSave${parameters.id?html}").click( function(){
+			    	jsondata={};
+			    	//validate check null and put data to json
+			    	validPass = true;
+					<#list parameters.tagNames as tagName>
+						var fieldName = "${tagName?replace(".", "\\\\.")}";
+						var field = $("#" + fieldName);
+						if(field.val() == ""){
+							if(field.parent().find('p.error').length){
+								field.parent().find("p.error").show();
+							}else{
+								field.parent().append('<p class="error" style="margin-top:6px; color:red;"> warning not null');
+							}
+			    			
+			    			field.closest('.form-group').removeClass('has-success').addClass('has-error');
+			    			validPass = false;
+			    			return;
+			    		}else{
+			    			if(field.is("input[type=radio]")){
+								if(field.is(":checked"))
+									jsondata[field.attr("name")] = field.val();
+							}else if(field.is("input[type=checkbox]")){
+								if(field.is(":checked"))
+									jsondata[field.attr("name")] = field.val();
+								else
+									jsondata[field.attr("name")] = "N";
+							}else
+			    				jsondata[field.attr("name")] = field.val();
+			    			field.closest('.form-group').removeClass('has-error').addClass('has-success');
+			    		}
+					</#list>
+			    	
+			    	if(validPass == false)
+			    		return false;
+			    	else{
+			    		<#list parameters.tagNames as tagName>
+						var fieldName = "${tagName?replace(".", "\\\\.")}";
+						var field = $("#" + fieldName);
+						field.next("p.error").hide();
+						</#list>
+			    		<#list parameters.tagNames as tagName>
+						var fieldName = "${tagName?replace(".", "\\\\.")}";
+						var field = $("#" + fieldName);
+						field.removeClass('has-error').addClass('has-success');
+						</#list>
+			    		//form.find(".editable-save").hide();
+			    		$("#editable-save${parameters.id?html}").hide();
+						//urlUpdate = form.attr('action');
+						console.log("${parameters.action?html}");
+						console.log(jsondata);
+			    	    resultUpdate = ${parameters.id?html}ajaxUpdate("${parameters.action?html}",jsondata,${parameters.id?html}UpdateSuccess,${parameters.id?html}UpdateFail);
+			    	    function ${parameters.id?html}UpdateSuccess(){
+			    	    	${parameters.id?html}Editable(form);		    	    
+						}
+			    	    function ${parameters.id?html}UpdateFail(){
+					    	<#list parameters.tagNames as tagName>
+							var fieldName = "${tagName?replace(".", "\\\\.")}";
+							var field = $("#" + fieldName);
+							field.parent().find("p.value").hide();
+				    		field.css("display","");
+							</#list>
+					    	//form.find(".editable-edit").hide();
+					    	$("#editable-edit${parameters.id?html}").hide();
+					    	$("#editable-save${parameters.id?html}").show();
+					    	/*form.append(
+			    				'<div class="box-align-center editable-save"> '
+									+'<p><input type="button" class="btn btn-primary btnSave" id="btnSave${parameters.id?html}" value="Save"/><input type="button" class="btn btn-default btnCancel" id="btnCancel${parameters.id?html}" value="Cancel"/></p>'
+								+'</div>'
+				    		);*/
+			    	    	alert("Update Fail!");
+			    	    }
+			    	}
+				});
 			});
-		    $(document).on('click', "input:button.btnSave", function() {
-		    	form = $(this).parents("form");
-		    	formName = $(this).parents("form")[0].name;
-		    	jsondata={};
-		    	//validate check null and put data to json
-		    	validPass = true;
-		    	$(form).find(":input[name^='"+formName+".']").each(function(){
-		    		if($(this).val() == ""){
-		    			$(this).parent().find("p.error").remove();
-		    			$(this).parent().append('<p class="error" style="margin-top:6px; color:red;"> warning not null');
-		    			$(this).closest('.form-group').removeClass('has-success').addClass('has-error');
-		    			validPass = false;
-		    			return;
-		    		}else{
-		    			if($(this).is("input[type=radio]")){
-							if($(this).is(":checked"))
-								jsondata[$(this)[0].name] = $(this).val();
-						}else if($(this).is("input[type=checkbox]")){
-							if($(this).is(":checked"))
-								jsondata[$(this)[0].name] = $(this).val();
-							else
-								jsondata[$(this)[0].name] = "N";
-						}else
-		    				jsondata[$(this)[0].name] = $(this).val();
-		    			$(this).closest('.form-group').removeClass('has-error').addClass('has-success');
-		    		}
-		    	});
-		    	if(validPass == false)
-		    		return false;
-		    	else{
-		    		$(form).find(":input[name^='"+formName+".']").each(function(){
-		    			$(this).next("p.error").remove();
-		    		});
-		    		$(form).find('.form-group').each(function(){
-		    			$(this).removeClass('has-error').addClass('has-success');
-		    		});
-		    		$(form).find(".editable-save").remove();
-// 		    	    alert(JSON.stringify(jsondata));
-					urlUpdate = $(form).attr('action');
-		    	    resultUpdate = ajaxUpdate(urlUpdate,jsondata,UpdateSuccess,UpdateFail);
-		    	    function UpdateSuccess(){
-		    	    	editable(formName);
-		    	    }
-		    	    function UpdateFail(){
-				    	elementInForm = $(form).find(":input[name^='"+formName+".']");
-				    	elementInForm.each(function(){
-				    		$(this).parent().find("p.value").remove();
-				    		$(this).css("display","");
-				    	});
-				    	$(form).find(".editable-edit").remove();
-				    	$(form).append(
-		    				'<div class="box-align-center editable-save"> '
-								+'<p><input type="button" Class="btn btn-primary btnSave" value="Save"/><input type="button" Class="btn btn-default btnCancel" value="Cancel"/></p>'
-							+'</div>'
-			    		);
-		    	    	alert("Update Fail!");
-		    	    }
-		    	}
-		    });
+
 		    
-		    function ajaxUpdate(url,jsondata,updateSuccess,updateFail){
+		    function ${parameters.id?html}ajaxUpdate(url,jsondata,${parameters.id?html}updateSuccess,${parameters.id?html}updateFail){
 			    $.ajax({
 	            	type: "POST",
 	            	url: url,
@@ -174,12 +206,12 @@
 	              	success: function(returnData){
  						console.log(returnData);
 	              		if(returnData == "done"){
-	              			updateSuccess();
+	              			${parameters.id?html}updateSuccess();
 	              		}else{
-	              			updateFail();
+	              			${parameters.id?html}updateFail();
 	              		}
 	              	},error: function(xhr, textStatus, errorThrown){
-	              		alert('ajax loading error... ... '+url + query);
+	              		alert('ajax loading error... ... '+url);
 	              		return false;
 	              	}
 	            });
