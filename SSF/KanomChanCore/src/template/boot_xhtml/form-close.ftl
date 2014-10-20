@@ -60,7 +60,8 @@
 				form = $("#${parameters.id?html}");
 			<#list parameters.tagNames as tagName>
 				var fieldName = "${tagName?replace(".", "\\\\.")}";
-				var field = $("#" + fieldName);
+				//var field = $("#" + fieldName);
+				var field = $("[name='" + fieldName + "']");
 				var valueName = "";
 				field.hide();
 				if(field.is("input[type=radio]")){
@@ -79,10 +80,11 @@
 	    				field.next().next().hide();
 	    			}
 	    		}else if(field.is("select")){
-	    			if(field.val() == 0)
+	    			console.log(field.val());
+	    			if(field.val() == 0){
 	    				if(valueName != "-")
 	    					valueName = "-";
-	    			else
+	    			}else
 	    				valueName = field.find("option:selected").text();
 	    		}else if(field.is("input")){
 	    			valueName = field.val();
@@ -106,7 +108,7 @@
 				form = $("#${parameters.id?html}");
 	    	<#list parameters.tagNames as tagName>
 				var fieldName = "${tagName?replace(".", "\\\\.")}";
-				var field = $("#" + fieldName);
+				var field = $("[name='" + fieldName + "']");
 				field.parent().find("p.value").hide();
 	    		field.show();
 	    		if(field.is("input[type=radio]"))
@@ -129,7 +131,7 @@
 			    	validPass = true;
 					<#list parameters.tagNames as tagName>
 						var fieldName = "${tagName?replace(".", "\\\\.")}";
-						var field = $("#" + fieldName);
+						var field = $("[name='" + fieldName + "']");
 						if(field.val() == ""){
 							if(field.parent().find('p.error').length){
 								field.parent().find("p.error").show();
@@ -160,7 +162,7 @@
 			    	else{
 			    		<#list parameters.tagNames as tagName>
 						var fieldName = "${tagName?replace(".", "\\\\.")}";
-						var field = $("#" + fieldName);
+						var field = $("[name='" + fieldName + "']");
 						field.next("p.error").hide();
 						</#list>
 			    		<#list parameters.tagNames as tagName>
@@ -180,7 +182,7 @@
 			    	    function ${parameters.id?html}UpdateFail(){
 					    	<#list parameters.tagNames as tagName>
 							var fieldName = "${tagName?replace(".", "\\\\.")}";
-							var field = $("#" + fieldName);
+							var field = $("[name='" + fieldName + "']");
 							field.parent().find("p.value").hide();
 				    		field.css("display","");
 							</#list>
