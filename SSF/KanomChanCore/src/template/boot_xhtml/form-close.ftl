@@ -71,22 +71,24 @@
 					else{
 						valueName = "";
 					}
-				}	
-				else if(field.is("input[type=checkbox]"))
+				}else if(field.is("input[type=checkbox]")){
 	    			if(field.is(":checked"))
 	    				valueName = field.text();
 	    			else{
 	    				valueName = "";
 	    				field.next().next().hide();
 	    			}
-	    		else if(field.is("select"))
+	    		}else if(field.is("select")){
 	    			if(field.val() == 0)
 	    				if(valueName != "-")
 	    					valueName = "-";
 	    			else
 	    				valueName = field.find("option:selected").text();
-	    		else if(field.is("input"))
+	    		}else if(field.is("input")){
 	    			valueName = field.val();
+	    			console.log(field.val());
+	    		}
+	    			
 	    		
 	    		
 				if(field.parent().find('p.value').length){
