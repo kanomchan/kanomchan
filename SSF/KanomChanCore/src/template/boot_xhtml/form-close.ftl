@@ -209,7 +209,7 @@
 	              	data: jsondata, 
 	              	success: function(returnData){
  						console.log(returnData);
-	              		if(returnData == "done"){
+	              		if(returnData == "S"){
 	              			${parameters.id?html}updateSuccess();
 	              		}else{
 	              			${parameters.id?html}updateFail();
