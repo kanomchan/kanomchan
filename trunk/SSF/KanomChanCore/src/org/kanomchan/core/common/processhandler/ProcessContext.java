@@ -55,7 +55,7 @@ public class ProcessContext {
 	protected Long station;
 	protected Long currency;
 	
-	public ProcessContext() {
+	protected ProcessContext() {
 		// TODO Auto-generated constructor stub
 	}
 //	protected ProcessContext(Long zone,Long country,Long region,Long province,Long city,Long county,Long postal,Long station,Long currency) {
