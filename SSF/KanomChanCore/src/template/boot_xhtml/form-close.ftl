@@ -80,7 +80,6 @@
 	    				field.next().next().hide();
 	    			}
 	    		}else if(field.is("select")){
-	    			console.log(field.val());
 	    			if(field.val() == 0){
 	    				if(valueName != "-")
 	    					valueName = "-";
@@ -88,10 +87,7 @@
 	    				valueName = field.find("option:selected").text();
 	    		}else if(field.is("input")){
 	    			valueName = field.val();
-	    			console.log(field.val());
 	    		}
-	    			
-	    		
 	    		
 				if(field.parent().find('p.value').length){
 					field.parent().find('p.value').text(valueName);
