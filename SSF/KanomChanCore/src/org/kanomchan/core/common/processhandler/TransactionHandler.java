@@ -12,6 +12,6 @@ public interface TransactionHandler {
 
 	void rollbackTxn(ProcessContext processContext);
 
-	<T> T unProxy(T returnValue, boolean fristProcess);
+	<T> T unProxy(T returnValue, boolean isTxnProcess);
 
 }
