@@ -124,7 +124,7 @@ public class ProcessHandler {
 	private Object afterProcess(Object returnValue,ProcessContext processContext, boolean isTxnProcess,boolean fristProcess) {
 		if(isTxnProcess){
 			transactionHandler.commitTxn(processContext);
-			transactionHandler.unProxy(returnValue, fristProcess);
+			transactionHandler.unProxy(returnValue, isTxnProcess);
 		}
 			
 		if(returnValue!=null &&returnValue instanceof ServiceResult ){
