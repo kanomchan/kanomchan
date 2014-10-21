@@ -344,7 +344,7 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 				AttributeOverrides attributeOverrides = method.getAnnotation(AttributeOverrides.class);
 				if(column != null && id == null){
 					Object value = method.invoke(entity);
-					if(value != null && !value.toString().equals("0")){
+					if(value != null ){
 						para.add(value);
 						list.add(column.name() + " = ? ");
 					}
@@ -374,7 +374,7 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 							Id jId = jMethod.getAnnotation(Id.class);
 							if(jId != null){
 								Object jValue = jMethod.invoke(jColumn);
-								if(jValue != null && !jValue.toString().equals("0")){
+								if(jValue != null ){
 									list.add(joinColumn.name() + " = ? ");
 									para.add((Long) jValue);
 									
@@ -387,14 +387,14 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 				}
 				if(id != null){
 					Object value = method.invoke(entity);
-					if(value != null && !value.toString().equals("0")){
+					if(value != null){
 						pkName.add(column.name() + " = ? ");
 						pkId.add((Long) value);
 					}
 				}
 				if(attributeOverrides != null){
 					Object value = method.invoke(entity);
-					if(value != null && !value.toString().equals("0")){
+					if(value != null){
 						for (AttributeOverride attributeOverride : attributeOverrides.value()) 
 							pkName.add(attributeOverride.column().name() + " = ? ");
 						pkId.add((Long) value);

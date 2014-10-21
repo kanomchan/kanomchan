@@ -278,11 +278,36 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	}
 	@Override
 	public void saveOrUpdate(T entity){
+		ProcessContext processContext = CurrentThread.getProcessContext();
+		if(entity.getCreateDate() == null){
+			entity.setCreateDate(new Date());
+			entity.setCreateUser(processContext.getUserName());
+		}else{
+			entity.setUpdateDate(new Date());
+			entity.setUpdateUser(processContext.getUserName());
+		}
 		getHibernateTemplate().saveOrUpdate(entity);
 	}
 	@Override
-	public void saveOrUpdateAll(Collection<T> entity){
-		getHibernateTemplate().saveOrUpdateAll(entity);
+	public void saveOrUpdateAll(final Collection<T> entities){
+//		getHibernateTemplate().saveOrUpdateAll(entities);
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
+			public T doInHibernate(Session session) throws HibernateException {
+//				checkWriteOperationAllowed(session);
+				for (T entity : entities) {
+					ProcessContext processContext = CurrentThread.getProcessContext();
+					if(entity.getCreateDate() == null){
+						entity.setCreateDate(new Date());
+						entity.setCreateUser(processContext.getUserName());
+					}else{
+						entity.setUpdateDate(new Date());
+						entity.setUpdateUser(processContext.getUserName());
+					}
+					session.saveOrUpdate(entity);
+				}
+				return null;
+			}
+		});
 	}
 	
 //	public void save(T entity) throws RollBackTechnicalException{
