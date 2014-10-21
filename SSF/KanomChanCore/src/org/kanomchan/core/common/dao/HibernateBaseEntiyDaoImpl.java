@@ -33,6 +33,8 @@ import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
+
+@Transactional
 public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBaseDaoImpl implements HibernateBaseEntiyDao<T> {
 	
 	
