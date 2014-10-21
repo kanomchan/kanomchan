@@ -28,11 +28,12 @@ import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Joiner;
 
 
-
+@Transactional
 public class HibernateBaseDaoImpl extends HibernateDaoSupport implements HibernateBaseDao {
 
 	public Logger log = Logger.getLogger(this.getClass());
@@ -354,6 +355,7 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 					
 					
 					if(jColumn != null){
+//						Class cls =  jColumn instanceof HibernateProxy ? Class.forName(((HibernateProxy) jColumn).getHibernateLazyInitializer().getEntityName()):  jColumn.getClass();
 						Class cls = jColumn.getClass();
 						//support lazy Proxy
 						if(jColumn instanceof HibernateProxy){
