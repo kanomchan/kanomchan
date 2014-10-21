@@ -1,8 +1,11 @@
 package org.kanomchan.core.common.processhandler;
 
+import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Id;
 
@@ -11,6 +14,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
+import org.kanomchan.core.common.util.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -100,17 +104,17 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	}
 	
 	@Override
-	public  <T> T unProxy(T returnValue, boolean fristProcess){
+	public  <T> T unProxy(T returnValue, boolean isTxnProcess){
 		if(returnValue!=null &&returnValue instanceof ServiceResult){
 			
-			if(fristProcess){
+			if(isTxnProcess){
 				ServiceResult serviceResult = (ServiceResult) returnValue;
 				serviceResult.setResult(clearUnproxy(serviceResult.getResult()));
 			}
 			
 		}else{
 			
-			if(fristProcess){
+			if(isTxnProcess){
 				returnValue = clearUnproxy(returnValue);
 			}
 		}
@@ -121,7 +125,15 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	    if (entity == null) {
 	    	return entity;
 	    }
-
+	    if(entity instanceof Collection){
+	    	Collection out = new ArrayList();
+	    	Collection collection = (Collection) entity;
+	    	for (Object object : collection) {
+	    		out.add(clearUnproxy(object));
+			}
+	    	return (T) out;
+	    }
+	    
 	    if (entity instanceof HibernateProxy) {
 	    	HibernateProxy hibernateProxy =((HibernateProxy) entity);
 	    	
@@ -134,19 +146,16 @@ public class BasicTransactionHandler  implements TransactionHandler{
 					Field[] fs = cls.getDeclaredFields();
 					for (Field field : fs) {
 						if(field.isAnnotationPresent(Id.class)){
-							String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-							Method methodSet = out.getClass().getMethod(nameset,lazyInitializer.getIdentifier().getClass());
+							Method methodSet = ClassUtil.findSetter(cls, field.getName());
 							methodSet.invoke(out, lazyInitializer.getIdentifier());
 							break;
 						}else{
-							String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-							Method methodSet = cls.getMethod(nameset,lazyInitializer.getIdentifier().getClass());
+							Method methodSet = ClassUtil.findSetter(cls, field.getName());
 							if(methodSet.isAnnotationPresent(Id.class)){
 								methodSet.invoke(out, lazyInitializer.getIdentifier());
 								break;
 							}else{
-								String nameget = "get"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-								Method methodGet = cls.getMethod(nameget);
+								Method methodGet = ClassUtil.findGetter(cls, field.getName());
 								if(methodGet.isAnnotationPresent(Id.class)){
 									methodSet.invoke(out, lazyInitializer.getIdentifier());
 									break;
@@ -157,7 +166,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 					}
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
+				} catch (NoSuchFieldException | IntrospectionException  e) {
 					e.printStackTrace();
 				} catch (SecurityException e) {
 					e.printStackTrace();
@@ -170,7 +179,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
-	    		entity =out;
+	    		return out;
 	    	}else{
 	    		entity = (T) lazyInitializer.getImplementation();
 	    	}
@@ -180,18 +189,19 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		Field[] fields = entity.getClass().getDeclaredFields();
 		if(fields!=null){
 			for (Field field : fields) {
-				String nameget = "get"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
-				String nameset = "set"+field.getName().substring(0, 1).toUpperCase()+field.getName().substring(1);
+				if(java.lang.reflect.Modifier.isStatic(field.getModifiers()))
+					continue;
 				try {
-					if(!field.isAccessible()&&java.lang.reflect.Modifier.isStatic(field.getModifiers())){
-						Method methodGet = class1.getMethod(nameget);
-						Method methodSet = class1.getMethod(nameset,methodGet.getReturnType());
+					if(!field.isAccessible()){
+						Method methodGet = ClassUtil.findGetter(class1, field.getName());
+						Method methodSet = ClassUtil.findSetter(class1, field.getName());
+						
 						Object o = methodGet.invoke(entity);
 						if(o instanceof HibernateProxy){
 							methodSet.invoke(entity, clearUnproxy(o));
 						}
 					}
-				} catch (NoSuchMethodException e) {
+				} catch (NoSuchFieldException | IntrospectionException  e) {
 					e.printStackTrace();
 				} catch (SecurityException e) {
 					e.printStackTrace();
