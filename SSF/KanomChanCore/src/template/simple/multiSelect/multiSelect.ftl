@@ -167,7 +167,7 @@
 <script>
     $("#${parameters.id}").select2({
     	placeholder: "${parameters.placeholder}",
-    })<#if parameters.itemList?? && stack.findValue(parameters.nameKey)??>.select2("val", 
+    })<#if parameters.itemList?? && parameters.nameKey??>.select2("val", 
          [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
 	$(".${parameters.id}-hidden").remove();
     var split${parameters.id} = $("#${parameters.id}").select2('val');
