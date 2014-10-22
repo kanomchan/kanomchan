@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hibernate.collection.PersistentCollection;
+import org.hibernate.collection.PersistentSet;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.kanomchan.core.common.util.ClassUtil;
@@ -128,6 +130,8 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	    if(entity instanceof Collection){
 	    	Collection out = new ArrayList();
 	    	Collection collection = (Collection) entity;
+	    	if(collection.size()==0)
+	    		return null;
 	    	for (Object object : collection) {
 	    		out.add(clearUnproxy(object));
 			}
@@ -197,8 +201,17 @@ public class BasicTransactionHandler  implements TransactionHandler{
 						Method methodSet = ClassUtil.findSetter(class1, field.getName());
 						
 						Object o = methodGet.invoke(entity);
-						if(o instanceof HibernateProxy){
-							methodSet.invoke(entity, clearUnproxy(o));
+						if(o instanceof HibernateProxy ){
+							Object objClear = clearUnproxy(o);
+							methodSet.invoke(entity, objClear);
+						}else if (o instanceof PersistentCollection) {
+							PersistentCollection persistentCollection = (PersistentCollection) o;
+//							persistentCollection.
+							if(!persistentCollection.wasInitialized()){
+								methodSet.invoke(entity,new Object[]{ null });
+							}
+//							Object objClear = clearUnproxy(o);
+							;
 						}
 					}
 				} catch (NoSuchFieldException | IntrospectionException  e) {
