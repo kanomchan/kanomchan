@@ -6,8 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Id;
@@ -141,8 +143,8 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	    }
 	    
 	    if(entity instanceof Set){
-	    	Collection out = new HashSet();
-	    	Collection collection = (Collection) entity;
+	    	Set out = new HashSet();
+	    	Set collection = (Set) entity;
 	    	if(collection.size()==0)
 	    		return null;
 	    	for (Object object : collection) {
@@ -151,6 +153,17 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	    	return (T) out;
 	    }
 	    
+	    if(entity instanceof Map){
+	    	Map out = new HashMap();
+	    	Map collection = (Map) entity;
+	    	if(collection.size()==0)
+	    		return null;
+	    	
+	    	for (Object	key : collection.keySet()) {
+	    		out.put(key, clearUnproxy(collection.get(key)));
+			}
+	    	return (T) out;
+	    }
 	    if (entity instanceof HibernateProxy) {
 	    	HibernateProxy hibernateProxy =((HibernateProxy) entity);
 	    	
