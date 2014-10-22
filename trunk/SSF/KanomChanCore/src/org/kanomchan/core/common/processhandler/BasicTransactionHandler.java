@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.hibernate.collection.PersistentCollection;
-import org.hibernate.collection.PersistentSet;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.kanomchan.core.common.util.ClassUtil;
@@ -97,7 +96,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		TransactionStatus txnStatus = processContext.txnStatus;
 		if( txnStatus != null ){
 			processContext.txnStatus = (null);
-			System.out.println("commitTxn");
+//			System.out.println("commitTxn");
 			platformTransactionManager.commit(txnStatus);
 			
 		}
@@ -168,19 +167,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 							
 						}
 					}
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (NoSuchFieldException | IntrospectionException  e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
+				} catch (ClassNotFoundException | InstantiationException | NoSuchFieldException | IntrospectionException | SecurityException |IllegalAccessException | IllegalArgumentException | InvocationTargetException  e) {
 					e.printStackTrace();
 				}
 	    		return out;
@@ -214,15 +201,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 							;
 						}
 					}
-				} catch (NoSuchFieldException | IntrospectionException  e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
+				} catch (NoSuchFieldException | IntrospectionException | SecurityException |IllegalAccessException | IllegalArgumentException | InvocationTargetException  e) {
 					e.printStackTrace();
 				}
 				
@@ -238,7 +217,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		TransactionStatus txnStatus = processContext.txnStatus;
 		if( txnStatus != null ){
 			processContext.txnStatus = (null);
-			System.out.println("rollback");
+//			System.out.println("rollback");
 			platformTransactionManager.rollback(txnStatus);
 		}
 		
