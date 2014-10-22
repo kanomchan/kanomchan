@@ -21,6 +21,20 @@
  */
 -->
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/control-close.ftl" />
+<#if parameters.editview?? && parameters.action?? >
+	<div class="box-align-center" id="editable-save${parameters.id?html}" style="display:none;">
+		<p><input type="button" class="btn btn-primary" id="btnSave${parameters.id?html}" value="Save"/>
+		<input type="button" class="btn btn-default"  id="btnCancel${parameters.id?html}" value="Cancel"/></p>
+	</div>
+</div>
+</#if>
+<#if parameters.editview?? && parameters.action?? >
+<div id="ajaxView${parameters.id?html}">
+	<div class="box-align-center" id="editable-save${parameters.id?html}" style="display:none;">
+		<p><input type="submit" class="btn btn-primary" id="btnSave${parameters.id?html}" value="Save"/></p>
+	</div>
+</div>
+</#if>
 <#include "/${parameters.templateDir}/simple/form-close.ftl" />
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/form-close-validate.ftl" />
 <#if parameters.focusElement?if_exists != "">
