@@ -45,6 +45,9 @@
     <#if tag.contains(parameters.nameValue, itemKey)>
        checked="checked"<#rt/>
     </#if>
+	<#if parameters.nameValue?? && itemKey?? >
+       checked="checked"<#rt/>
+    </#if>
     <#if parameters.disabled?default(false)>
        disabled="disabled"<#rt/>
     </#if>
