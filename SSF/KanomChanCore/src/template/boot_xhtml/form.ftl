@@ -30,4 +30,7 @@
   </#if>
 </#if>
 >
+<#if parameters.editview?? && parameters.action?? >
+<div id="ajaxEdit${parameters.id?html}">
+</#if>
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/control.ftl" />
