@@ -6,6 +6,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
 
@@ -126,8 +129,19 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	    if (entity == null) {
 	    	return entity;
 	    }
-	    if(entity instanceof Collection){
+	    if(entity instanceof List){
 	    	Collection out = new ArrayList();
+	    	Collection collection = (Collection) entity;
+	    	if(collection.size()==0)
+	    		return null;
+	    	for (Object object : collection) {
+	    		out.add(clearUnproxy(object));
+			}
+	    	return (T) out;
+	    }
+	    
+	    if(entity instanceof Set){
+	    	Collection out = new HashSet();
 	    	Collection collection = (Collection) entity;
 	    	if(collection.size()==0)
 	    		return null;
