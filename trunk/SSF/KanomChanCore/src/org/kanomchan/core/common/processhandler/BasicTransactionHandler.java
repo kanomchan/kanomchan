@@ -196,6 +196,9 @@ public class BasicTransactionHandler  implements TransactionHandler{
 //							persistentCollection.
 							if(!persistentCollection.wasInitialized()){
 								methodSet.invoke(entity,new Object[]{ null });
+							}else{
+								methodSet.invoke(entity,clearUnproxy(persistentCollection.getValue()));
+								
 							}
 //							Object objClear = clearUnproxy(o);
 							;
