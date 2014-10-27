@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -132,7 +134,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	    	return entity;
 	    }
 	    if(entity instanceof List){
-	    	Collection out = new ArrayList();
+	    	Collection out = new LinkedList();
 	    	Collection collection = (Collection) entity;
 	    	if(collection.size()==0)
 	    		return null;
@@ -143,7 +145,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	    }
 	    
 	    if(entity instanceof Set){
-	    	Set out = new HashSet();
+	    	Set out = new LinkedHashSet();
 	    	Set collection = (Set) entity;
 	    	if(collection.size()==0)
 	    		return null;
@@ -195,7 +197,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 						}
 					}
 				} catch (ClassNotFoundException | InstantiationException | NoSuchFieldException | IntrospectionException | SecurityException |IllegalAccessException | IllegalArgumentException | InvocationTargetException  e) {
-					e.printStackTrace();
+//					e.printStackTrace();
 				}
 	    		return out;
 	    	}else{
@@ -232,7 +234,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 						}
 					}
 				} catch (NoSuchFieldException | IntrospectionException | SecurityException |IllegalAccessException | IllegalArgumentException | InvocationTargetException  e) {
-					e.printStackTrace();
+//					e.printStackTrace();
 				}
 				
 				
