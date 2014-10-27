@@ -21,19 +21,42 @@
  */
 -->
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/control-close.ftl" />
-<#if parameters.editview?? && parameters.action?? >
+<#if parameters.editview?default("false") == "true" && parameters.action?? >
 	<div class="box-align-center" id="editable-save${parameters.id?html}" style="display:none;">
 		<p><input type="button" class="btn btn-primary" id="btnSave${parameters.id?html}" value="Save"/>
 		<input type="button" class="btn btn-default"  id="btnCancel${parameters.id?html}" value="Cancel"/></p>
 	</div>
 </div>
-</#if>
-<#if parameters.editview?? && parameters.action?? >
-<div id="ajaxView${parameters.id?html}">
-	<div class="box-align-center" id="editable-save${parameters.id?html}" style="display:none;">
+<#elseif parameters.action??>
+	<div class="box-align-center" id="editable-save${parameters.id?html}">
 		<p><input type="submit" class="btn btn-primary" id="btnSave${parameters.id?html}" value="Save"/></p>
 	</div>
+</#if>
+
+<#if parameters.editview?default("false") == "true" && parameters.action?? >
+<div id="ajaxView${parameters.id?html}">
+	<div class="box-align-center" id="editable-edit${parameters.id?html}">
+		<p><input type="button" class="btn btn-save pull-right" id="btnEdit${parameters.id?html}" value="Edit"/></p>
+	</div>
+	<div class='form-horizontal'>
+		<#list parameters.tagNames as tagName>
+		<div class='form-group'>
+			<div>
+				<label class='col-md-4 control-label' id="lblView${parameters.id?html}${tagName}">
+					
+				</label>
+				<div class='col-md-4'>
+					<p class='value' style='margin-top:6px;' id="pView${parameters.id?html}${tagName}">
+					
+					</p>
+				</div>
+			</div>
+		</div>
+		</#list>
+	</div>
 </div>
+<#elseif parameters.action??>
+
 </#if>
 <#include "/${parameters.templateDir}/simple/form-close.ftl" />
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/form-close-validate.ftl" />
@@ -48,44 +71,28 @@
 </script>
 </#if>
 
-<#if parameters.editview?? && parameters.action?? >
+<#if parameters.editview?default("false") == "true" && parameters.action?? >
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			formId = "${parameters.id?html}";
 			formName = "${parameters.name?html}";
-			//form = $("form[name='"+formName+"']");
-			console.log("form name :"+formId);
-			console.log("action url : ${parameters.action?html}");
 			${parameters.id?html}Editable();
-			form.prepend(
-    			'<div class="box-align-center" id="editable-edit${parameters.id?html}"> '
-					+'<p><input type="button" Class="btn btn-save pull-right" id="btnEdit${parameters.id?html}" value="Edit"/></p>'
-				+'</div>'
-    		);
-    		
-    		form.append(
-    			'<div class="box-align-center" id="editable-save${parameters.id?html}" style="display:none;"> '
-					+'<p><input type="button" class="btn btn-primary" id="btnSave${parameters.id?html}" value="Save"/>'
-					+'<input type="button" class="btn btn-default"  id="btnCancel${parameters.id?html}" value="Cancel"/></p>'
-				+'</div>'
-	    	);
-				
-			function ${parameters.id?html}Editable(){
+			
+	    	function ${parameters.id?html}Editable(){
 				form = $("#${parameters.id?html}");
+				$("#ajaxEdit${parameters.id?html}").hide();
+				$("#ajaxView${parameters.id?html}").show();
 			<#list parameters.tagNames as tagName>
 				var fieldName = "${tagName?replace(".", "\\\\.")}";
-				//var field = $("#" + fieldName);
 				var field = $("[name='" + fieldName + "']");
 				var valueName = "";
-				field.hide();
+				//${tagName?html}
 				if(field.is("input[type=radio]")){
 					field.next("label").hide();
-					if(field.is(":checked")){
+					if(field.is(":checked"))
 						valueName = field.next("label").text();
-					}
-					else{
+					else
 						valueName = "";
-					}
 				}else if(field.is("input[type=checkbox]")){
 	    			if(field.is(":checked"))
 	    				valueName = field.text();
@@ -102,35 +109,38 @@
 	    		}else if(field.is("input")){
 	    			valueName = field.val();
 	    		}
-	    		
 				if(field.parent().find('p.value').length){
 					field.parent().find('p.value').text(valueName);
 					field.parent().find('p.value').show();
 				}else{
-					field.parent().append('<p class="value" style="margin-top:6px;">'+valueName+'</p>');
+					
+					var label = field.parent().prev();
+					console.log("lblView${parameters.id?html}" + fieldName);
+					$("#lblView${parameters.id?html}" + fieldName).text(label.text());
+					$("#pView${parameters.id?html}" + fieldName).text(valueName);
 				}
 			</#list>
 	    		$("#editable-edit${parameters.id?html}").show();
 				$("#editable-save${parameters.id?html}").hide();
 			}
-			
 			$("#btnEdit${parameters.id?html}").click( function(){
 				form = $("#${parameters.id?html}");
+				$("#ajaxView${parameters.id?html}").hide();
+				$("#ajaxEdit${parameters.id?html}").show();
 	    	<#list parameters.tagNames as tagName>
-				var fieldName = "${tagName?replace(".", "\\\\.")}";
-				var field = $("[name='" + fieldName + "']");
-				field.parent().find("p.value").hide();
-	    		field.show();
-	    		if(field.is("input[type=radio]"))
-	    			field.next("label").show();
-				else 
-					if(field.is("input[type=checkbox]"))
-	    				field.next().next().show();
+				//var fieldName = "${tagName?replace(".", "\\\\.")}";
+				//var field = $("[name='" + fieldName + "']");
+				//field.parent().find("p.value").hide();
+	    		//field.show();
+	    		//if(field.is("input[type=radio]"))
+	    			//field.next("label").show();
+				//else{
+				//	if(field.is("input[type=checkbox]"))
+	    				//field.next().next().show();
+	    		//}
 			</#list>
-		    	
 		    	$("#editable-edit${parameters.id?html}").hide();
 		    	$("#editable-save${parameters.id?html}").show();
-		    	
 	    		$("#btnCancel${parameters.id?html}").click( function(){
 					$("#editable-save${parameters.id?html}").hide();
 					${parameters.id?html}Editable();
@@ -143,12 +153,10 @@
 						var fieldName = "${tagName?replace(".", "\\\\.")}";
 						var field = $("[name='" + fieldName + "']");
 						if(field.val() == ""){
-							if(field.parent().find('p.error').length){
+							if(field.parent().find('p.error').length)
 								field.parent().find("p.error").show();
-							}else{
+							else
 								field.parent().append('<p class="error" style="margin-top:6px; color:red;"> warning not null');
-							}
-			    			
 			    			field.closest('.form-group').removeClass('has-success').addClass('has-error');
 			    			validPass = false;
 			    			return;
@@ -166,7 +174,6 @@
 			    			field.closest('.form-group').removeClass('has-error').addClass('has-success');
 			    		}
 					</#list>
-			    	
 			    	if(validPass == false)
 			    		return false;
 			    	else{
@@ -180,11 +187,7 @@
 						var field = $("#" + fieldName);
 						field.removeClass('has-error').addClass('has-success');
 						</#list>
-			    		//form.find(".editable-save").hide();
 			    		$("#editable-save${parameters.id?html}").hide();
-						//urlUpdate = form.attr('action');
-						console.log("${parameters.action?html}");
-						console.log(jsondata);
 			    	    resultUpdate = ${parameters.id?html}ajaxUpdate("${parameters.action?html}",jsondata,${parameters.id?html}UpdateSuccess,${parameters.id?html}UpdateFail);
 			    	    function ${parameters.id?html}UpdateSuccess(){
 			    	    	${parameters.id?html}Editable(form);		    	    
@@ -196,14 +199,8 @@
 							field.parent().find("p.value").hide();
 				    		field.css("display","");
 							</#list>
-					    	//form.find(".editable-edit").hide();
 					    	$("#editable-edit${parameters.id?html}").hide();
 					    	$("#editable-save${parameters.id?html}").show();
-					    	/*form.append(
-			    				'<div class="box-align-center editable-save"> '
-									+'<p><input type="button" class="btn btn-primary btnSave" id="btnSave${parameters.id?html}" value="Save"/><input type="button" class="btn btn-default btnCancel" id="btnCancel${parameters.id?html}" value="Cancel"/></p>'
-								+'</div>'
-				    		);*/
 			    	    	alert("Update Fail!");
 			    	    }
 			    	}
