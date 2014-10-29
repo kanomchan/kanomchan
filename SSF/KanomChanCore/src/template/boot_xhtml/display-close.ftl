@@ -20,5 +20,4 @@
  * under the License.
  */
 -->
-<#include "/${parameters.templateDir}/${parameters.expandTheme}/control-close.ftl" />
 </display>
