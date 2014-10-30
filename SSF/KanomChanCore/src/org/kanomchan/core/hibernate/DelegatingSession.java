@@ -73,584 +73,487 @@ public class DelegatingSession implements Session {
 
 	@Override
 	public void setCacheMode(CacheMode cacheMode) {
-		// TODO Auto-generated method stub
-		
+		session.setCacheMode(cacheMode);
 	}
 
 	@Override
 	public CacheMode getCacheMode() {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getCacheMode();
 	}
 
 	@Override
 	public SessionFactory getSessionFactory() {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getSessionFactory();
 	}
 
 	@Override
 	public Connection connection() throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.connection();
 	}
 
 	@Override
 	public Connection close() throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.close();
 	}
 
 	@Override
 	public void cancelQuery() throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.cancelQuery();
 	}
 
 	@Override
 	public boolean isOpen() {
-		// TODO Auto-generated method stub
-		return false;
+		return session.isOpen();
 	}
 
 	@Override
 	public boolean isConnected() {
-		// TODO Auto-generated method stub
-		return false;
+		return session.isConnected();
 	}
 
 	@Override
 	public boolean isDirty() throws HibernateException {
-		// TODO Auto-generated method stub
-		return false;
+		return session.isDirty();
 	}
 
 	@Override
 	public boolean isDefaultReadOnly() {
-		// TODO Auto-generated method stub
-		return false;
+		return session.isDefaultReadOnly();
 	}
 
 	@Override
 	public void setDefaultReadOnly(boolean readOnly) {
-		// TODO Auto-generated method stub
-		
+		session.setDefaultReadOnly(readOnly);
 	}
 
 	@Override
 	public Serializable getIdentifier(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getIdentifier(object);
 	}
 
 	@Override
 	public boolean contains(Object object) {
-		// TODO Auto-generated method stub
-		return false;
+		return session.contains(object);
 	}
 
 	@Override
 	public void evict(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.evict(object);
 	}
 
 	@Override
 	public Object load(Class theClass, Serializable id, LockMode lockMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.load(theClass, id, lockMode);
 	}
 
 	@Override
 	public Object load(Class theClass, Serializable id, LockOptions lockOptions) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.load(theClass, id, lockOptions);
 	}
 
 	@Override
 	public Object load(String entityName, Serializable id, LockMode lockMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.load(entityName, id, lockMode);
 	}
 
 	@Override
 	public Object load(String entityName, Serializable id, LockOptions lockOptions) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.load(entityName, id, lockOptions);
 	}
 
 	@Override
 	public Object load(Class theClass, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.load(theClass, id);
 	}
 
 	@Override
 	public Object load(String entityName, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.load(entityName, id);
 	}
 
 	@Override
 	public void load(Object object, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.load(object, id);
 	}
 
 	@Override
 	public void replicate(Object object, ReplicationMode replicationMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.replicate(object, replicationMode);
 	}
 
 	@Override
 	public void replicate(String entityName, Object object, ReplicationMode replicationMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.replicate(entityName, object, replicationMode);
 	}
 
 	@Override
 	public Serializable save(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.save(object);
 	}
 
 	@Override
 	public Serializable save(String entityName, Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.save(entityName, object);
 	}
 
 	@Override
 	public void saveOrUpdate(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.saveOrUpdate(object);
 	}
 
 	@Override
 	public void saveOrUpdate(String entityName, Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.saveOrUpdate(entityName, object);
 	}
 
 	@Override
 	public void update(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.update(object);
 	}
 
 	@Override
 	public void update(String entityName, Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.update(entityName, object);
 	}
 
 	@Override
 	public Object merge(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.merge(object);
 	}
 
 	@Override
 	public Object merge(String entityName, Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.merge(entityName, object);
 	}
 
 	@Override
 	public void persist(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.persist(object);
 	}
 
 	@Override
 	public void persist(String entityName, Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.persist(entityName, object);
 	}
 
 	@Override
 	public void delete(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.delete(object);
 	}
 
 	@Override
 	public void delete(String entityName, Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.delete(entityName, object);
 	}
 
 	@Override
 	public void lock(Object object, LockMode lockMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.lock(object, lockMode);
 	}
 
 	@Override
 	public void lock(String entityName, Object object, LockMode lockMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.lock(entityName, object, lockMode);
 	}
 
 	@Override
 	public LockRequest buildLockRequest(LockOptions lockOptions) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.buildLockRequest(lockOptions);
 	}
 
 	@Override
 	public void refresh(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.refresh(object);
 	}
 
 	@Override
 	public void refresh(Object object, LockMode lockMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.refresh(object, lockMode);
 	}
 
 	@Override
 	public void refresh(Object object, LockOptions lockOptions) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.refresh(object, lockOptions);
 	}
 
 	@Override
 	public LockMode getCurrentLockMode(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getCurrentLockMode(object);
 	}
 
 	@Override
 	public Transaction beginTransaction() throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.beginTransaction();
 	}
 
 	@Override
 	public Transaction getTransaction() {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getTransaction();
 	}
 
 	@Override
 	public Criteria createCriteria(Class persistentClass) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createCriteria(persistentClass);
 	}
 
 	@Override
 	public Criteria createCriteria(Class persistentClass, String alias) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createCriteria(persistentClass, alias);
 	}
 
 	@Override
 	public Criteria createCriteria(String entityName) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createCriteria(entityName);
 	}
 
 	@Override
 	public Criteria createCriteria(String entityName, String alias) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createCriteria(entityName, alias);
 	}
 
 	@Override
 	public Query createQuery(String queryString) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createQuery(queryString);
 	}
 
 	@Override
 	public SQLQuery createSQLQuery(String queryString) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createSQLQuery(queryString);
 	}
 
 	@Override
 	public Query createFilter(Object collection, String queryString) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createFilter(collection, queryString);
 	}
 
 	@Override
 	public Query getNamedQuery(String queryName) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getNamedQuery(queryName);
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		session.clear();
 	}
 
 	@Override
 	public Object get(Class clazz, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.get(clazz, id);
 	}
 
 	@Override
 	public Object get(Class clazz, Serializable id, LockMode lockMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.get(clazz, id, lockMode);
 	}
 
 	@Override
 	public Object get(Class clazz, Serializable id, LockOptions lockOptions) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.get(clazz, id, lockOptions);
 	}
 
 	@Override
 	public Object get(String entityName, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.get(entityName, id);
 	}
 
 	@Override
 	public Object get(String entityName, Serializable id, LockMode lockMode) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.get(entityName, id, lockMode);
 	}
 
 	@Override
 	public Object get(String entityName, Serializable id, LockOptions lockOptions) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.get(entityName, id, lockOptions);
 	}
 
 	@Override
 	public String getEntityName(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getEntityName(object);
 	}
 
 	@Override
 	public Filter enableFilter(String filterName) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getEnabledFilter(filterName);
 	}
 
 	@Override
 	public Filter getEnabledFilter(String filterName) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getEnabledFilter(filterName);
 	}
 
 	@Override
 	public void disableFilter(String filterName) {
-		// TODO Auto-generated method stub
-		
+		session.disableFilter(filterName);
 	}
 
 	@Override
 	public SessionStatistics getStatistics() {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getStatistics();
 	}
 
 	@Override
 	public boolean isReadOnly(Object entityOrProxy) {
-		// TODO Auto-generated method stub
-		return false;
+		return session.isReadOnly(entityOrProxy);
 	}
 
 	@Override
 	public void setReadOnly(Object entityOrProxy, boolean readOnly) {
-		// TODO Auto-generated method stub
-		
+		session.setReadOnly(entityOrProxy, readOnly);
 	}
 
 	@Override
 	public void doWork(Work work) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.doWork(work);
 	}
 
 	@Override
 	public Connection disconnect() throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.disconnect();
 	}
 
 	@Override
 	public void reconnect() throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.reconnect();
 	}
 
 	@Override
 	public void reconnect(Connection connection) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.reconnect(connection);
 	}
 
 	@Override
 	public boolean isFetchProfileEnabled(String name) throws UnknownProfileException {
-		// TODO Auto-generated method stub
-		return false;
+		return session.isFetchProfileEnabled(name);
 	}
 
 	@Override
 	public void enableFetchProfile(String name) throws UnknownProfileException {
-		// TODO Auto-generated method stub
-		
+		session.enableFetchProfile(name);
 	}
 
 	@Override
 	public void disableFetchProfile(String name) throws UnknownProfileException {
-		// TODO Auto-generated method stub
-		
+		session.disableFetchProfile(name);
 	}
 
 	@Override
 	public TypeHelper getTypeHelper() {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getTypeHelper();
 	}
 
 	@Override
 	public LobHelper getLobHelper() {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getLobHelper();
 	}
 
 	@Override
 	public Object saveOrUpdateCopy(Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.saveOrUpdateCopy(object);
 	}
 
 	@Override
 	public Object saveOrUpdateCopy(Object object, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.saveOrUpdateCopy(object, id);
 	}
 
 	@Override
 	public Object saveOrUpdateCopy(String entityName, Object object) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.saveOrUpdateCopy(entityName, object);
 	}
 
 	@Override
 	public Object saveOrUpdateCopy(String entityName, Object object, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.saveOrUpdateCopy(entityName, object, id);
 	}
 
 	@Override
 	public List find(String query) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.find(query);
 	}
 
 	@Override
 	public List find(String query, Object value, Type type) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.find(query, value, type);
 	}
 
 	@Override
 	public List find(String query, Object[] values, Type[] types) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.find(query, values, types);
 	}
 
 	@Override
 	public Iterator iterate(String query) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.iterate(query);
 	}
 
 	@Override
 	public Iterator iterate(String query, Object value, Type type) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.iterate(query, value, type);
 	}
 
 	@Override
 	public Iterator iterate(String query, Object[] values, Type[] types) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.iterate(query, values, types);
 	}
 
 	@Override
 	public Collection filter(Object collection, String filter) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.filter(collection, filter);
 	}
 
 	@Override
 	public Collection filter(Object collection, String filter, Object value, Type type) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.filter(collection, filter, value, type);
 	}
 
 	@Override
 	public Collection filter(Object collection, String filter, Object[] values, Type[] types) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return session.filter(collection, filter, values, types);
 	}
 
 	@Override
 	public int delete(String query) throws HibernateException {
-		// TODO Auto-generated method stub
-		return 0;
+		return session.delete(query);
 	}
 
 	@Override
 	public int delete(String query, Object value, Type type) throws HibernateException {
-		// TODO Auto-generated method stub
-		return 0;
+		return session.delete(query, value, type);
 	}
 
 	@Override
 	public int delete(String query, Object[] values, Type[] types) throws HibernateException {
-		// TODO Auto-generated method stub
-		return 0;
+		return session.delete(query, values, types);
 	}
 
 	@Override
 	public Query createSQLQuery(String sql, String returnAlias, Class returnClass) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createSQLQuery(sql, returnAlias, returnClass);
 	}
 
 	@Override
 	public Query createSQLQuery(String sql, String[] returnAliases, Class[] returnClasses) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.createSQLQuery(sql, returnAliases, returnClasses);
 	}
 
 	@Override
 	public void save(Object object, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.save(object, id);
 	}
 
 	@Override
 	public void save(String entityName, Object object, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.save(entityName, object, id);
 	}
 
 	@Override
 	public void update(Object object, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.update(object, id);
 	}
 
 	@Override
 	public void update(String entityName, Object object, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		session.update(entityName, object, id);
 	}
 
 
