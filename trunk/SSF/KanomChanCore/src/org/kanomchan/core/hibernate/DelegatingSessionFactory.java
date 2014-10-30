@@ -33,170 +33,142 @@ public class DelegatingSessionFactory implements SessionFactory {
 
 	@Override
 	public Session openSession() throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return new DelegatingSession(sessionFactory.openSession());
 	}
 
 	@Override
 	public Session openSession(Interceptor interceptor) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return new DelegatingSession(sessionFactory.openSession(interceptor));
 	}
 
 	@Override
 	public Session openSession(Connection connection) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DelegatingSession(sessionFactory.openSession(connection));
 	}
 
 	@Override
 	public Session openSession(Connection connection, Interceptor interceptor) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DelegatingSession(sessionFactory.openSession(connection, interceptor));
 	}
 
 	@Override
 	public Session getCurrentSession() throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return new DelegatingSession(sessionFactory.getCurrentSession());
 	}
 
 	@Override
 	public StatelessSession openStatelessSession() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.openStatelessSession();
 	}
 
 	@Override
 	public StatelessSession openStatelessSession(Connection connection) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.openStatelessSession(connection);
 	}
 
 	@Override
 	public ClassMetadata getClassMetadata(Class entityClass) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getClassMetadata(entityClass);
 	}
 
 	@Override
 	public ClassMetadata getClassMetadata(String entityName) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getClassMetadata(entityName);
 	}
 
 	@Override
 	public CollectionMetadata getCollectionMetadata(String roleName) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getCollectionMetadata(roleName);
 	}
 
 	@Override
 	public Map<String, ClassMetadata> getAllClassMetadata() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getAllClassMetadata();
 	}
 
 	@Override
 	public Map getAllCollectionMetadata() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getAllCollectionMetadata();
 	}
 
 	@Override
 	public Statistics getStatistics() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getStatistics();
 	}
 
 	@Override
 	public void close() throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.close();
 	}
 
 	@Override
 	public boolean isClosed() {
-		// TODO Auto-generated method stub
-		return false;
+		return sessionFactory.isClosed();
 	}
 
 	@Override
 	public Cache getCache() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getCache();
 	}
 
 	@Override
 	public void evict(Class persistentClass) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evict(persistentClass);
 	}
 
 	@Override
 	public void evict(Class persistentClass, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evict(persistentClass, id);
 	}
 
 	@Override
 	public void evictEntity(String entityName) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evictEntity(entityName);
 	}
 
 	@Override
 	public void evictEntity(String entityName, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evictEntity(entityName, id);
 	}
 
 	@Override
 	public void evictCollection(String roleName) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evictCollection(roleName);
 	}
 
 	@Override
 	public void evictCollection(String roleName, Serializable id) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evictCollection(roleName, id);
 	}
 
 	@Override
 	public void evictQueries(String cacheRegion) throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evictQueries(cacheRegion);
 	}
 
 	@Override
 	public void evictQueries() throws HibernateException {
-		// TODO Auto-generated method stub
-		
+		sessionFactory.evictQueries();
 	}
 
 	@Override
 	public Set getDefinedFilterNames() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getDefinedFilterNames();
 	}
 
 	@Override
 	public FilterDefinition getFilterDefinition(String filterName) throws HibernateException {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getFilterDefinition(filterName);
 	}
 
 	@Override
 	public boolean containsFetchProfileDefinition(String name) {
-		// TODO Auto-generated method stub
-		return false;
+		return sessionFactory.containsFetchProfileDefinition(name);
 	}
 
 	@Override
 	public TypeHelper getTypeHelper() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionFactory.getTypeHelper();
 	}
 
 }
