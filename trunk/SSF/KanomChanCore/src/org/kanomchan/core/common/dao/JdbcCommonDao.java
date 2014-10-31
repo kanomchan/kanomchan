@@ -32,6 +32,10 @@ public interface JdbcCommonDao {
 
 	public int executeNativeSQL(String sql);
 
+	public int executeNativeSQLGetId(String sql, Object[] params);
+
+	public int executeNativeSQLGetId(String sql, Map<String, Object> params);
+
 	
 
 }
