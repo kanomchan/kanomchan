@@ -21,7 +21,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Joiner;
-import com.jobsmatcher.jm.common.bean.User;
 
 @Transactional
 public class JdbcCommonDaoImpl implements JdbcCommonDao {
