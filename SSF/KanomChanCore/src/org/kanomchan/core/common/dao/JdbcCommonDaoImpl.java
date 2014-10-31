@@ -12,10 +12,16 @@ import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Joiner;
+import com.jobsmatcher.jm.common.bean.User;
 
 @Transactional
 public class JdbcCommonDaoImpl implements JdbcCommonDao {
@@ -38,7 +44,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //	executeNativeSQL
 	@Override
 	public int executeNativeSQL(String sql) {
-		return simpleJdbcTemplate.update( sql);
+		
+		return simpleJdbcTemplate.update( sql );
 	}
 	@Override
 	public int executeNativeSQL(String sql, Object... params) {
@@ -47,6 +54,26 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	@Override
 	public int executeNativeSQL(String sql, Map<String, Object> params) {
 		return simpleJdbcTemplate.update( sql, params );
+	}
+	
+	@Override
+	public int executeNativeSQLGetId(String sql, Object... params) {
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource sd = new BeanPropertySqlParameterSource(params);
+		simpleJdbcTemplate.getNamedParameterJdbcOperations().update(sql, sd , keyHolder);
+		return keyHolder.getKey().intValue();
+//		return simpleJdbcTemplate.update( sql, params );
+	}
+	
+	@Override
+	public int executeNativeSQLGetId(String sql, Map<String, Object> params) {
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource sd = new MapSqlParameterSource(params);
+		simpleJdbcTemplate.getNamedParameterJdbcOperations().update(sql, sd , keyHolder);
+		return keyHolder.getKey().intValue();
+//		return simpleJdbcTemplate.update( sql, params );
 	}
 	
 //	executeNativeSQL
