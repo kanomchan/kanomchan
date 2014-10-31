@@ -6,14 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterUtils;
+import org.springframework.jdbc.core.namedparam.ParsedSql;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -57,6 +61,31 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public int executeNativeSQLGetId(String sql, Object... params) {
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+//		SqlParameterSource sd = new BeanPropertySqlParameterSource(params);
+//		simpleJdbcTemplate.getJdbcOperations().update(psc, generatedKeyHolder);
+//		return keyHolder.getKey().intValue();
+		
+		
+//		ParsedSql parsedSql = getParsedSql(sql);
+//		String sqlToUse = NamedParameterUtils.substituteNamedParameters(parsedSql, paramSource);
+//		Object[] params = NamedParameterUtils.buildValueArray(parsedSql, paramSource, null);
+//		int[] paramTypes = NamedParameterUtils.buildSqlTypeArray(parsedSql, paramSource);
+		PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(sql);
+//		if (keyColumnNames != null) {
+//			pscf.setGeneratedKeysColumnNames(keyColumnNames);
+//		}
+//		else {
+			pscf.setReturnGeneratedKeys(true);
+//		}
+		simpleJdbcTemplate.getJdbcOperations().update(pscf.newPreparedStatementCreator(params), keyHolder);
+		return keyHolder.getKey().intValue();
+//		return simpleJdbcTemplate.update( sql, params );
+	}
+	
+	@Override
+	public int executeNativeSQLGetId(String sql, EntityBean params) {
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource sd = new BeanPropertySqlParameterSource(params);
