@@ -187,6 +187,41 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 		  return result;
 		 }
 	@Override
+	public ServiceResult<List<T>> findAndPagingIgnoreCase(final PagingBean pagingBean ,final T example){
+		
+		@SuppressWarnings("unchecked")
+		List<T> list = getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
+			public List<T> doInHibernate(final Session session) {
+//				example.setStatus("A");
+				final Example ex = Example.create(example).ignoreCase().enableLike(MatchMode.ANYWHERE);
+				final Criteria criteria = session.createCriteria(entityClass).add(Restrictions.disjunction().add(ex));
+				List<PagingBean.Order> orderL = pagingBean.getOrderList();
+				if(orderL!=null&&orderL.size()>0){
+					for (PagingBean.Order order : orderL) {
+						if(order.getOrderMode().equals(PagingBean.ORDER_MODE.ASC)){
+							criteria.addOrder(Order.asc(order.getOrderBy()) );
+						}else{
+							criteria.addOrder(Order.desc(order.getOrderBy()) );
+						}
+					}
+				}
+				
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+				criteria.setProjection(Projections.rowCount());
+				
+				pagingBean.setTotalRows((Long)criteria.uniqueResult());
+				
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+				criteria.setProjection(null);
+				criteria.setFirstResult((int) pagingBean.getOffsetBegin());
+				criteria.setMaxResults(pagingBean.getRowsPerPage());
+				List list = criteria.list();
+				return list;
+			}
+		});
+		return new ServiceResult<List<T>>(list,pagingBean);
+	}
+	@Override
 	public ServiceResult<List<T>> findExampleAndPagingIgnoreCase(final PagingBean pagingBean ,final T example){
 
 		@SuppressWarnings("unchecked")

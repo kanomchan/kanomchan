@@ -25,6 +25,7 @@ public interface HibernateBaseEntiyDao<T extends EntityBean> extends HibernateBa
 
 	public T findExample(T example);
 
+	public ServiceResult<List<T>> findAndPagingIgnoreCase(PagingBean pagingBean, T example);
 	public ServiceResult<List<T>> findExampleAndPagingIgnoreCase(PagingBean pagingBean, T example);
 	public ServiceResult<List<T>> findExampleAndPaging(PagingBean pagingBean, T example);
 
