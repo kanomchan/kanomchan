@@ -33,12 +33,31 @@ public interface JdbcCommonDao {
 
 	public int executeNativeSQL(String sql);
 
-	public int executeNativeSQLGetId(String sql, Object... params);
+	public Number executeNativeSQLGetId(String sql, Object... params);
 
-	public int executeNativeSQLGetId(String sql, Map<String, Object> params);
+	public Number executeNativeSQLGetId(String sql, Map<String, Object> params);
 
-	public int executeNativeSQLGetId(String sql, EntityBean object);
+	public Number executeNativeSQLGetId(String sql, EntityBean object);
 
+//	public <T extends Object> List<T> nativeQueryOneRow(String sql, Class<T> class1, Object[] params);
+	
+	public <T extends Object> T nativeQueryOneRow(String sql, Class<T> class1, Map<String, Object> params);
+
+	public <T extends Object> T nativeQueryOneRow(String sql, Class<T> class1, Object... params);
+	
+	public <T extends Object> T nativeQueryOneRow(String sql, Class<T> class1);
+
+	public <T extends Object> List<T> nativeQuery(String sql, Class<T> class1, Map<String, Object> params);
+
+	public <T extends Object> List<T> nativeQuery(String sql, Class<T> class1, Object... params);
+	
+	public <T extends Object> List<T> nativeQuery(String sql, Class<T> class1);
+	
+	public  <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Object... params);
+	
+	public  <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Map<String, Object> params);
+	
+	public  <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1);
 	
 
 }
