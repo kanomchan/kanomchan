@@ -90,7 +90,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 				System.out.println("beginTxn");
 				TransactionDefinition txnDefinition = new DefaultTransactionDefinition(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
 				TransactionStatus txnStatus = platformTransactionManager.getTransaction(txnDefinition);	
-				logger.debug("TransactionStatus.isCompleted "+txnStatus.isCompleted());
+//				logger.debug("TransactionStatus.isCompleted "+txnStatus.isCompleted());
 				processContext.txnStatus = txnStatus;
 			}
 		} 
@@ -104,7 +104,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		TransactionStatus txnStatus = processContext.txnStatus;
 		if( txnStatus != null ){
 			processContext.txnStatus = (null);
-//			System.out.println("commitTxn");
+			System.out.println("commitTxn");
 			platformTransactionManager.commit(txnStatus);
 			
 		}
@@ -138,7 +138,7 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		TransactionStatus txnStatus = processContext.txnStatus;
 		if( txnStatus != null ){
 			processContext.txnStatus = (null);
-//			System.out.println("rollback");
+			System.out.println("rollback");
 			platformTransactionManager.rollback(txnStatus);
 		}
 		
