@@ -8,17 +8,26 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 import org.kanomchan.core.common.bean.ClassMapper;
+import org.kanomchan.core.common.bean.ColumnType;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
+import org.kanomchan.core.common.bean.Property;
 import org.kanomchan.core.common.util.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -260,53 +269,189 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return resultList;
 	}
 	
-	public <T extends Object> T save(T t){
-		ClassMapper classMapper =getClassMapper(t.getClass());
+	public <T extends Object> T save(T target){
+		Class<? extends Object> clazz = target.getClass();
+		ClassMapper classMapper =getClassMapper(clazz);
+		StringBuilder sb = new StringBuilder();
+		Table table = clazz.getAnnotation(Table.class);
+		
+		sb.append(" INSERT INTO  ");
+		sb.append(table.name());
+//		sb.append(" SET ");
+		List<Object> para = new LinkedList<Object>();
+//		Method[] arrmet = clazz.getMethods();
+		List<String> listColumnName = new LinkedList<String>();
+		List<String> listParaName = new LinkedList<String>();
+		List<String> listPkName = new LinkedList<String>();
+		List<Object> listPkId = new LinkedList<Object>();
+		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+		
+		for (String  columnName : classMapper.getColumn().keySet()) {
+			Property property = classMapper.getColumn().get(columnName);
+			Method method = property.getMethodGet();
+			try {
+//				Column column = method.getAnnotation(Column.class);
+//				Id id = method.getAnnotation(Id.class);
+//				JoinColumn joinColumn = method.getAnnotation(JoinColumn.class);
+//				AttributeOverrides attributeOverrides = method.getAnnotation(AttributeOverrides.class);
+				if(property.getColumnType() == ColumnType.column){
+					Object value = method.invoke(target);
+					if(value != null){
+						listColumnName.add(columnName);
+						listParaName.add("?");
+						para.add(value);
+					}
+				}
+				if(property.getColumnType() == ColumnType.joinColumn){
+					Object value = method.invoke(target);
+					if(value != null){
+						Entity entity = method.getReturnType().getAnnotation(Entity.class);
+						if(entity!=null){
+							ClassMapper classMapperId = getClassMapper(method.getReturnType());
+							
+							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+							if(value!=null){
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								para.add(value);
+							}
+						}else{
+							listColumnName.add(columnName);
+							listParaName.add("?");
+							para.add(value);
+						}
+						
+					}
+				}
+				if(property.getColumnType() == ColumnType.id){
+					Object value = method.invoke(target);
+					if(value != null){
+						listColumnName.add(columnName);
+						listParaName.add("?");
+						para.add(value);
+					}
+				}
+//				if(attributeOverrides != null){
+//					Object value = method.invoke(target);
+//					if(value != null){
+//						for (AttributeOverride attributeOverride : attributeOverrides.value()) 
+//							listPkName.add(attributeOverride.column().name());
+//						listPkId.add(value);
+//					}
+//				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		sb.append(" ( ");
+		sb.append(Joiner.on(" , ").skipNulls().join(listColumnName));
+		sb.append(" ) VALUES ( ");
+		sb.append(Joiner.on(" , ").skipNulls().join(listColumnName));
+		sb.append(" ) ");
+//		if(listPkName.size() != 0){
+//			sb.append(" WHERE ");
+//			sb.append(Joiner.on(" AND ").skipNulls().join(listPkName));
+//			for (Object id : listPkId) 
+//				para.add(id);
+			Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+			if(methodSetId !=null){
+				try {
+					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
+						
+						Class<?> type = methodSetId.getParameterTypes()[0];
+						if(type == Long.class){
+							methodSetId.invoke(target, idNumber.longValue());
+						}else if(type == Integer.class){
+							methodSetId.invoke(target, idNumber.intValue());
+						}else if(type == Short.class){
+							methodSetId.invoke(target, idNumber.shortValue());
+						}else if(type == Double.class){
+							methodSetId.invoke(target, idNumber.doubleValue());
+						}
+
+						
+							
+						
+					}
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+//		}
+		return target;
+	}
+	public <T extends Object> T saveOrUpdate(T t){
+//		ClassMapper classMapper =getClassMapper(t.getClass());
+		
+		
+		return t;
+	}
+	
+	public <T extends Object> T update(T t){
+//		ClassMapper classMapper =getClassMapper(t.getClass());
+		
+		
+		return t;
+	}
+	
+	public <T extends Object> T delete(T t){
+//		ClassMapper classMapper =getClassMapper(t.getClass());
 		
 		
 		return t;
 	}
 	
 	
-	private <T extends Object> ClassMapper getClassMapper(Class<?> class1){
+	private ClassMapper getClassMapper(Class<?> class1){
 		ClassMapper classMapper =mapClass.get(class1.getName());
-		if(classMapper ==null){
+//		classMapper = null;
 //			ClassMapper classMapper = mapClass.get(class1.getName());
-			if(classMapper==null){
-				classMapper = new ClassMapper();
-				
-				for (Field field : class1.getFields()) {
-					
+		if (classMapper == null) {
+			classMapper = new ClassMapper();
+
+			for (Field field : class1.getDeclaredFields()) {
+				try {
+					Method methodSet = ClassUtil.findSetter(class1, field.getName());
+					Method methodGet = ClassUtil.findGetter(class1, field.getName());
 					Column column = field.getAnnotation(Column.class);
-					if(column!=null&&classMapper.containsKeyMethodSet(column.name())){
-						try {
-						Method methodSet = ClassUtil.findSetter(class1, field.getName());
-						
-						classMapper.putMethodSet(column.name(),methodSet);
-						} catch (NoSuchFieldException | IntrospectionException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					Id id = field.getAnnotation(Id.class);
+					JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
+					if (column == null)
+						column = methodGet.getAnnotation(Column.class);
+					if (id == null)
+						id = methodGet.getAnnotation(Id.class);
+					if (joinColumn == null)
+						joinColumn = methodGet.getAnnotation(JoinColumn.class);
+					if (column != null) {
+						if (!classMapper.getColumn().containsKey(column.name())) {
+							Property property = new Property();
+							property.setMethodGet(methodGet);
+							property.setMethodSet(methodSet);
+							property.setColumnType(ColumnType.column);
+							classMapper.getColumn().put(column.name(), property);
+							if(id!=null){
+								property.setColumnType(ColumnType.id);
+								classMapper.setPropertyId(property);
+							}
+						}
+
+					}else if(joinColumn!=null){
+						Property property = new Property();
+						property.setMethodGet(methodGet);
+						property.setMethodSet(methodSet);
+						property.setColumnType(ColumnType.joinColumn);
+						classMapper.getColumn().put(joinColumn.name(), property);
+						if(id!=null){
+							property.setColumnType(ColumnType.id);
+							classMapper.setPropertyId(property);
 						}
 					}
-//					field.
+				} catch (NoSuchFieldException | IntrospectionException e) {
+					e.printStackTrace();
 				}
-				for (Method method : class1.getMethods()) {
-					
-					Column column = method.getAnnotation(Column.class);
-					if(column!=null&&classMapper.containsKeyMethodSet(column.name())){
-						try {
-							// TODO  Fix Bug
-						Method methodSet = ClassUtil.findSetter(class1, method.getName());
-						classMapper.putMethodSet(column.name(),methodSet);
-						} catch (NoSuchFieldException | IntrospectionException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-//					field.
-				}
-				mapClass.put(class1.getName(),classMapper);
 			}
+				mapClass.put(class1.getName(),classMapper);
 		}
 		return classMapper;
 	}
@@ -326,7 +471,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					ResultSetMetaData md = rs.getMetaData();
 					for (int i = 0; i < md.getColumnCount(); i++) {
 						String columnName = md.getColumnName(i);
-						Method methodSet = classMapper.getMethodSet(columnName);
+						Method methodSet = classMapper.getColumn().get(columnName).getMethodSet();
 						
 						try {
 							methodSet.invoke(t, rs.getObject(columnName, methodSet.getParameterTypes()[0]));
