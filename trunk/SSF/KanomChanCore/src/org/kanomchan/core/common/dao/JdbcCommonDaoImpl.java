@@ -346,7 +346,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(" ( ");
 		sb.append(Joiner.on(" , ").skipNulls().join(listColumnName));
 		sb.append(" ) VALUES ( ");
-		sb.append(Joiner.on(" , ").skipNulls().join(listColumnName));
+		sb.append(Joiner.on(" , ").skipNulls().join(listParaName));
 		sb.append(" ) ");
 //		if(listPkName.size() != 0){
 //			sb.append(" WHERE ");
@@ -354,7 +354,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //			for (Object id : listPkId) 
 //				para.add(id);
 			Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
-			if(methodSetId !=null){
+			if(methodSetId !=null&&idNumber!=null){
 				try {
 					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
 						
