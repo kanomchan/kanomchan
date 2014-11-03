@@ -1,15 +1,25 @@
 package org.kanomchan.core.common.dao;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import javax.persistence.Column;
+
+import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
+import org.kanomchan.core.common.util.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -27,6 +37,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Joiner;
+import com.sun.xml.ws.rx.rm.protocol.wsrm200702.SequenceAcknowledgementElement.Final;
 
 @Transactional
 public class JdbcCommonDaoImpl implements JdbcCommonDao {
@@ -62,7 +73,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	@Override
-	public int executeNativeSQLGetId(String sql, Object... params) {
+	public Number executeNativeSQLGetId(String sql, Object... params) {
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		List<SqlParameter> types = new ArrayList<SqlParameter>();
@@ -75,26 +86,26 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(sql, types);
 		pscf.setReturnGeneratedKeys(true);
 		simpleJdbcTemplate.getJdbcOperations().update(pscf.newPreparedStatementCreator(params), keyHolder);
-		return keyHolder.getKey().intValue();
+		return keyHolder.getKey();
 	}
 	
 	@Override
-	public int executeNativeSQLGetId(String sql, EntityBean params) {
+	public Number executeNativeSQLGetId(String sql, EntityBean params) {
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource sd = new BeanPropertySqlParameterSource(params);
 		simpleJdbcTemplate.getNamedParameterJdbcOperations().update(sql, sd , keyHolder);
-		return keyHolder.getKey().intValue();
+		return keyHolder.getKey();
 //		return simpleJdbcTemplate.update( sql, params );
 	}
 	
 	@Override
-	public int executeNativeSQLGetId(String sql, Map<String, Object> params) {
+	public Number executeNativeSQLGetId(String sql, Map<String, Object> params) {
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource sd = new MapSqlParameterSource(params);
 		simpleJdbcTemplate.getNamedParameterJdbcOperations().update(sql, sd , keyHolder);
-		return keyHolder.getKey().intValue();
+		return keyHolder.getKey();
 //		return simpleJdbcTemplate.update( sql, params );
 	}
 	
@@ -109,7 +120,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T extends Object> List<T> nativeQuery( String sql, RowMapper<T> rm ,Object... params){
 		return simpleJdbcTemplate.query(sql, rm, params);
 	}
-	
+
 	@Override
 	public <T extends Object> List<T> nativeQuery( String sql, RowMapper<T> rm ,Map<String, Object> params){
 		return simpleJdbcTemplate.query(sql, rm, params);
@@ -248,4 +259,125 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm);
 		return resultList;
 	}
+	
+	public <T extends Object> T save(T t){
+		ClassMapper classMapper =getClassMapper(t.getClass());
+		
+		
+		return t;
+	}
+	
+	
+	private <T extends Object> ClassMapper getClassMapper(Class<?> class1){
+		ClassMapper classMapper =mapClass.get(class1.getName());
+		if(classMapper ==null){
+//			ClassMapper classMapper = mapClass.get(class1.getName());
+			if(classMapper==null){
+				classMapper = new ClassMapper();
+				
+				for (Field field : class1.getFields()) {
+					
+					Column column = field.getAnnotation(Column.class);
+					if(column!=null&&classMapper.containsKeyMethodSet(column.name())){
+						try {
+						Method methodSet = ClassUtil.findSetter(class1, field.getName());
+						
+						classMapper.putMethodSet(column.name(),methodSet);
+						} catch (NoSuchFieldException | IntrospectionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+//					field.
+				}
+				for (Method method : class1.getMethods()) {
+					
+					Column column = method.getAnnotation(Column.class);
+					if(column!=null&&classMapper.containsKeyMethodSet(column.name())){
+						try {
+							// TODO  Fix Bug
+						Method methodSet = ClassUtil.findSetter(class1, method.getName());
+						classMapper.putMethodSet(column.name(),methodSet);
+						} catch (NoSuchFieldException | IntrospectionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+//					field.
+				}
+				mapClass.put(class1.getName(),classMapper);
+			}
+		}
+		return classMapper;
+	}
+	
+	
+
+	private static Map<String, ClassMapper > mapClass = new ConcurrentHashMap<String,ClassMapper>();
+	private <T extends Object> RowMapper<T> getRm(final Class<T> class1){
+		return new RowMapper<T>() {
+
+			@Override
+			public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+				T t = null;
+				try {
+					t = class1.newInstance();
+					ClassMapper classMapper = getClassMapper(class1);
+					ResultSetMetaData md = rs.getMetaData();
+					for (int i = 0; i < md.getColumnCount(); i++) {
+						String columnName = md.getColumnName(i);
+						Method methodSet = classMapper.getMethodSet(columnName);
+						
+						try {
+							methodSet.invoke(t, rs.getObject(columnName, methodSet.getParameterTypes()[0]));
+						} catch (IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+					}
+					
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+				return t;
+			}
+		};
+	}
+	
+	@Override
+	public <T extends Object> List<T> nativeQuery( String sql, Class<T> class1 ,Object... params){
+		return simpleJdbcTemplate.query(sql, getRm(class1), params);
+	}
+	@Override
+	public <T> T nativeQueryOneRow(String sql, Class<T> class1, Map<String, Object> params) {
+		return nativeQueryOneRow(sql, getRm(class1), params);
+	}
+	@Override
+	public <T> T nativeQueryOneRow(String sql, Class<T> class1, Object... params) {
+		return nativeQueryOneRow(sql, getRm(class1), params);
+	}
+	@Override
+	public <T> T nativeQueryOneRow(String sql, Class<T> class1) {
+		return nativeQueryOneRow(sql, getRm(class1));
+	}
+	@Override
+	public <T> List<T> nativeQuery(String sql, Class<T> class1, Map<String, Object> params) {
+		return nativeQuery(sql, getRm(class1), params);
+	}
+	@Override
+	public <T> List<T> nativeQuery(String sql, Class<T> class1) {
+		return nativeQuery(sql, getRm(class1));
+	}
+	@Override
+	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Object... params) {
+		return nativeQuery(sql, pagingBean, getRm(class1), params);
+	}
+	@Override
+	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Map<String, Object> params) {
+		return nativeQuery(sql, pagingBean, getRm(class1), params);
+	}
+	@Override
+	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1) {
+		return nativeQuery(sql, pagingBean, getRm(class1));
+	}
+	
 }
