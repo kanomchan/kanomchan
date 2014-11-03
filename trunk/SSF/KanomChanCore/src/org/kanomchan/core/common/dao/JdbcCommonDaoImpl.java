@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterUtils;
@@ -63,25 +65,17 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public int executeNativeSQLGetId(String sql, Object... params) {
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-//		SqlParameterSource sd = new BeanPropertySqlParameterSource(params);
-//		simpleJdbcTemplate.getJdbcOperations().update(psc, generatedKeyHolder);
-//		return keyHolder.getKey().intValue();
-		
-		
-//		ParsedSql parsedSql = getParsedSql(sql);
-//		String sqlToUse = NamedParameterUtils.substituteNamedParameters(parsedSql, paramSource);
-//		Object[] params = NamedParameterUtils.buildValueArray(parsedSql, paramSource, null);
-//		int[] paramTypes = NamedParameterUtils.buildSqlTypeArray(parsedSql, paramSource);
-		PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(sql);
-//		if (keyColumnNames != null) {
-//			pscf.setGeneratedKeysColumnNames(keyColumnNames);
-//		}
-//		else {
-			pscf.setReturnGeneratedKeys(true);
-//		}
+		List<SqlParameter> types = new ArrayList<SqlParameter>();
+		for (Object object : params) {
+			int t = 0;
+			if(object!=null)
+			t = StatementCreatorUtils.javaTypeToSqlParameterType(object.getClass());
+			types.add(new SqlParameter(t));
+		}
+		PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(sql, types);
+		pscf.setReturnGeneratedKeys(true);
 		simpleJdbcTemplate.getJdbcOperations().update(pscf.newPreparedStatementCreator(params), keyHolder);
 		return keyHolder.getKey().intValue();
-//		return simpleJdbcTemplate.update( sql, params );
 	}
 	
 	@Override
