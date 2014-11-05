@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.util;
 
+import org.apache.log4j.Logger;
+
 import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -7,6 +9,9 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 
@@ -24,6 +30,10 @@ import org.kanomchan.core.common.bean.Property;
 import org.springframework.jdbc.core.RowMapper;
 
 public class JPAUtil {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(JPAUtil.class);
 	
 	public static List<Criteria> beanToParamterList(Object traget){
 		List<Criteria> criterias = null;
@@ -122,21 +132,99 @@ public class JPAUtil {
 					ClassMapper classMapper = getClassMapper(clazz);
 					ResultSetMetaData md = rs.getMetaData();
 					for (int i = 0; i < md.getColumnCount(); i++) {
-						String columnName = md.getColumnName(i);
-						Method methodSet = classMapper.getColumn().get(columnName).getMethodSet();
-						
-						try {
-							methodSet.invoke(t, rs.getObject(columnName, methodSet.getParameterTypes()[0]));
+						String columnName = md.getColumnName(i+1);
+						if(!classMapper.getColumn().containsKey(columnName))
+							continue;
+						Property property = classMapper.getColumn().get(columnName);
+						if(property==null)
+							continue;
+						Method methodSet = property.getMethodSet();
+						if(methodSet==null)
+							continue;
+						try {Object objectData = new Object[]{null};
+							if(methodSet.getParameterTypes()[0].isAnnotationPresent(Entity.class)){
+								ClassMapper classMapperId = getClassMapper(methodSet.getParameterTypes()[0]);
+								objectData = methodSet.getParameterTypes()[0].newInstance();
+								Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
+								methodSetId.invoke(objectData,  getObject(rs, columnName, methodSetId.getParameterTypes()[0]));
+							}else{
+								objectData = getObject(rs, columnName, methodSet.getParameterTypes()[0]);
+							}
+							methodSet.invoke(t, objectData);
 						} catch (IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace();
+							logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
 						}
 					}
 					
 				} catch (InstantiationException | IllegalAccessException e) {
-					e.printStackTrace();
+					logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
 				}
 				return t;
 			}
 		};
+	}
+	
+	private static <T> T getObject(ResultSet rs,String  columnName ,Class<T> clazz ){
+		Object objectData = new Object[]{null};
+		try{
+			if(clazz.equals(Date.class)){
+				objectData = new Date(rs.getTimestamp(columnName).getTime());
+			}else
+			objectData = rs.getObject(columnName, clazz);
+		}catch(Exception e){
+			if(clazz.equals(Integer.class)){
+				try {
+					objectData =  rs.getInt(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+			}else if(clazz.equals(Short.class)){
+				try {
+					objectData =  rs.getShort(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+			}else if(clazz.equals(Long.class)){
+				try {
+					objectData =  rs.getLong(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+			}else if(clazz.equals(Double.class)){
+				try {
+					objectData =  rs.getDouble(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+			}else if(clazz.equals(String.class)){
+				try {
+					objectData =  rs.getString(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+			}else if(clazz.equals(Date.class)){
+				try {
+					objectData =  rs.getDate(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+				
+			}else if(clazz.equals(Time.class)){
+				try {
+					objectData =  rs.getTime(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+			}else if(clazz.equals(Timestamp.class)){
+				try {
+					objectData =  rs.getTimestamp(columnName);
+				} catch (SQLException e1) {
+					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+				}
+			}else{
+				logger.error("column :"+columnName+" type: "+clazz.getSimpleName());
+			}
+		}
+		return (T) objectData;
 	}
 }
