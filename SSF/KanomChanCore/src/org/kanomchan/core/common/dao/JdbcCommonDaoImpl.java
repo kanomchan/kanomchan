@@ -1,7 +1,5 @@
 package org.kanomchan.core.common.dao;
 
-import org.apache.log4j.Logger;
-
 import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -9,10 +7,7 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +29,7 @@ import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.kanomchan.core.common.bean.Property;
 import org.kanomchan.core.common.util.ClassUtil;
+import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -55,10 +51,6 @@ import com.sun.xml.ws.rx.rm.protocol.wsrm200702.SequenceAcknowledgementElement.F
 
 @Transactional
 public class JdbcCommonDaoImpl implements JdbcCommonDao {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger.getLogger(JdbcCommonDaoImpl.class);
 
 	
 	protected SimpleJdbcTemplate simpleJdbcTemplate;
@@ -280,7 +272,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	public <T extends Object> T save(T target){
 		Class<? extends Object> clazz = target.getClass();
-		ClassMapper classMapper =getClassMapper(clazz);
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
 		Table table = clazz.getAnnotation(Table.class);
 		
@@ -316,7 +308,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					if(value != null){
 						Entity entity = method.getReturnType().getAnnotation(Entity.class);
 						if(entity!=null){
-							ClassMapper classMapperId = getClassMapper(method.getReturnType());
+							ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 							
 							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
 							if(value!=null){
@@ -349,7 +341,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //					}
 //				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				logger.error("save(T)", e); //$NON-NLS-1$
+				e.printStackTrace();
 			}
 		}
 		sb.append(" ( ");
@@ -384,7 +376,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					}
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					// TODO Auto-generated catch block
-				logger.error("save(T)", e); //$NON-NLS-1$
+					e.printStackTrace();
 				}
 			}
 //		}
@@ -412,204 +404,43 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	
-	private ClassMapper getClassMapper(Class<?> class1){
-		ClassMapper classMapper =mapClass.get(class1.getName());
-//		classMapper = null;
-//			ClassMapper classMapper = mapClass.get(class1.getName());
-		if (classMapper == null) {
-			classMapper = new ClassMapper();
 
-			for (Field field : class1.getDeclaredFields()) {
-				try {
-					Method methodSet = ClassUtil.findSetter(class1, field.getName());
-					Method methodGet = ClassUtil.findGetter(class1, field.getName());
-					Column column = field.getAnnotation(Column.class);
-					Id id = field.getAnnotation(Id.class);
-					JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
-					if (column == null)
-						column = methodGet.getAnnotation(Column.class);
-					if (id == null)
-						id = methodGet.getAnnotation(Id.class);
-					if (joinColumn == null)
-						joinColumn = methodGet.getAnnotation(JoinColumn.class);
-					if (column != null) {
-						if (!classMapper.getColumn().containsKey(column.name())) {
-							Property property = new Property();
-							property.setMethodGet(methodGet);
-							property.setMethodSet(methodSet);
-							property.setColumnType(ColumnType.column);
-							classMapper.getColumn().put(column.name(), property);
-							if(id!=null){
-								property.setColumnType(ColumnType.id);
-								classMapper.setPropertyId(property);
-							}
-						}
-
-					}else if(joinColumn!=null){
-						Property property = new Property();
-						property.setMethodGet(methodGet);
-						property.setMethodSet(methodSet);
-						property.setColumnType(ColumnType.joinColumn);
-						classMapper.getColumn().put(joinColumn.name(), property);
-						if(id!=null){
-							property.setColumnType(ColumnType.id);
-							classMapper.setPropertyId(property);
-						}
-					}
-				} catch (NoSuchFieldException | IntrospectionException e) {
-					logger.error("getClassMapper(Class<?>)", e); //$NON-NLS-1$
-				}
-			}
-				mapClass.put(class1.getName(),classMapper);
-		}
-		return classMapper;
-	}
-	
-	
-
-	private static Map<String, ClassMapper > mapClass = new ConcurrentHashMap<String,ClassMapper>();
-	private <T extends Object> RowMapper<T> getRm(final Class<T> class1){
-		return new RowMapper<T>() {
-
-			@Override
-			public T mapRow(ResultSet rs, int rowNum) throws SQLException {
-				T t = null;
-				try {
-					t = class1.newInstance();
-					ClassMapper classMapper = getClassMapper(class1);
-					ResultSetMetaData md = rs.getMetaData();
-					for (int i = 0; i < md.getColumnCount(); i++) {
-						String columnName = md.getColumnName(i+1);
-						if(!classMapper.getColumn().containsKey(columnName))
-							continue;
-						Property property = classMapper.getColumn().get(columnName);
-						if(property==null)
-							continue;
-						Method methodSet = property.getMethodSet();
-						if(methodSet==null)
-							continue;
-						try {Object objectData = new Object[]{null};
-							if(methodSet.getParameterTypes()[0].isAnnotationPresent(Entity.class)){
-								ClassMapper classMapperId = getClassMapper(methodSet.getParameterTypes()[0]);
-								objectData = methodSet.getParameterTypes()[0].newInstance();
-								Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
-								methodSetId.invoke(objectData,  getObject(rs, columnName, methodSetId.getParameterTypes()[0]));
-							}else{
-								objectData = getObject(rs, columnName, methodSet.getParameterTypes()[0]);
-							}
-							methodSet.invoke(t, objectData);
-						} catch (IllegalArgumentException | InvocationTargetException e) {
-							logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
-						}
-					}
-					
-				} catch (InstantiationException | IllegalAccessException e) {
-					logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
-				}
-				return t;
-			}
-		};
-	}
-	
-	private <T> T getObject(ResultSet rs,String  columnName ,Class<T> clazz ){
-		Object objectData = new Object[]{null};
-		try{
-			if(clazz.equals(Date.class)){
-				objectData = new Date(rs.getTimestamp(columnName).getTime());
-			}else
-			objectData = rs.getObject(columnName, clazz);
-		}catch(Exception e){
-			if(clazz.equals(Integer.class)){
-				try {
-					objectData =  rs.getInt(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-			}else if(clazz.equals(Short.class)){
-				try {
-					objectData =  rs.getShort(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-			}else if(clazz.equals(Long.class)){
-				try {
-					objectData =  rs.getLong(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-			}else if(clazz.equals(Double.class)){
-				try {
-					objectData =  rs.getDouble(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-			}else if(clazz.equals(String.class)){
-				try {
-					objectData =  rs.getString(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-			}else if(clazz.equals(Date.class)){
-				try {
-					objectData =  rs.getDate(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-				
-			}else if(clazz.equals(Time.class)){
-				try {
-					objectData =  rs.getTime(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-			}else if(clazz.equals(Timestamp.class)){
-				try {
-					objectData =  rs.getTimestamp(columnName);
-				} catch (SQLException e1) {
-					logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-				}
-			}else{
-				logger.error("column :"+columnName+" type: "+clazz.getSimpleName());
-			}
-		}
-		return (T) objectData;
-	}
 	
 	@Override
 	public <T extends Object> List<T> nativeQuery( String sql, Class<T> class1 ,Object... params){
-		return simpleJdbcTemplate.query(sql, getRm(class1), params);
+		return nativeQuery(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> T nativeQueryOneRow(String sql, Class<T> class1, Map<String, Object> params) {
-		return nativeQueryOneRow(sql, getRm(class1), params);
+		return nativeQueryOneRow(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> T nativeQueryOneRow(String sql, Class<T> class1, Object... params) {
-		return nativeQueryOneRow(sql, getRm(class1), params);
+		return nativeQueryOneRow(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> T nativeQueryOneRow(String sql, Class<T> class1) {
-		return nativeQueryOneRow(sql, getRm(class1));
+		return nativeQueryOneRow(sql, JPAUtil.getRm(class1));
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> class1, Map<String, Object> params) {
-		return nativeQuery(sql, getRm(class1), params);
+		return nativeQuery(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> class1) {
-		return nativeQuery(sql, getRm(class1));
+		return nativeQuery(sql, JPAUtil.getRm(class1));
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Object... params) {
-		return nativeQuery(sql, pagingBean, getRm(class1), params);
+		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Map<String, Object> params) {
-		return nativeQuery(sql, pagingBean, getRm(class1), params);
+		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1) {
-		return nativeQuery(sql, pagingBean, getRm(class1));
+		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1));
 	}
 	
 }
