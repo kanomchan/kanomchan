@@ -335,6 +335,10 @@ public class CommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T> List<T> findAll(Class<T> clazz, PagingBean pagingBean) throws RollBackTechnicalException {
+		if(pagingBean == null){
+			
+		}
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
