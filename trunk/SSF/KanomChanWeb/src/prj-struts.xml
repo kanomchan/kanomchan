@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<bean type="com.opensymphony.xwork2.validator.ActionValidatorManager" name="db-validator" class="org.kanomchan.core.common.web.struts.validator.DBActionValidatorManager" />
+    <bean type="com.opensymphony.xwork2.TextProvider" name="db-textprovider" class="org.kanomchan.core.common.web.struts.DBTextProvider" />
+	<constant name="struts.custom.i18n.resources" value="ApplicationResource" />
+	<constant name="struts.action.extension" value="htm" />
+	<constant name="struts.ui.theme" value="boot_xhtml" />
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
+	<constant name="struts.locale" value="en_US" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<constant name="struts.devMode" value="true" />
+	<!-- use Spring as Object Factory -->
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.actionValidatorManager" value="db-validator" />
+	<constant name="struts.xworkTextProvider" value="db-textprovider" />
+	
+	<!-- Add packages here -->
+	<package name="prj-default" namespace="/"
+		extends="struts-default,tiles-default,json-default">
+
+		<interceptors>
+			<interceptor name="LabelInterceptor" class="org.kanomchan.core.common.web.struts.interceptor.LabelInterceptor" />
+			<interceptor name="LanguageInterceptor" class="org.kanomchan.core.common.web.struts.interceptor.LanguageInterceptor" />
+			<interceptor name="LogInterceptor" class="org.kanomchan.core.common.web.struts.interceptor.LogInterceptor" />
+			<interceptor name="MenuInterceptor" class="org.kanomchan.core.common.web.struts.interceptor.MenuInterceptor" />
+			<interceptor name="NavigationInterceptor" class="org.kanomchan.core.common.web.struts.interceptor.NavigationInterceptor" />
+			<interceptor name="SessionInterceptor" class="org.kanomchan.core.common.web.struts.interceptor.SessionInterceptor" />
+			
+			
+			<interceptor-stack name="standPrjStack">
+				<interceptor-ref name="i18nStack" />
+<!-- 				<interceptor-ref name="basicStack" /> -->
+				<interceptor-ref name="LogInterceptor" />
+				
+				<interceptor-ref name="LanguageInterceptor" />
+				<interceptor-ref name="LabelInterceptor" />
+				<interceptor-ref name="MenuInterceptor" />
+				<interceptor-ref name="NavigationInterceptor" />
+<!-- 				<interceptor-ref name="validation"/> -->
+<!-- 				<interceptor-ref name="workflow"/>  -->
+				
+			</interceptor-stack>
+			
+			<interceptor-stack name="prjStack">
+				
+				<interceptor-ref name="standPrjStack" />
+				<interceptor-ref name="SessionInterceptor" />
+			</interceptor-stack>
+
+			<interceptor-stack name="guestStack">
+				<interceptor-ref name="standPrjStack" />
+			</interceptor-stack>
+
+		</interceptors>
+
+		<default-interceptor-ref name="prjStack" />
+
+      
+		<global-results>
+			<result name="json" type="json">
+				<param name="root">results</param>
+			</result>
+			<result name="message" type="tiles">common.message</result>
+			<result name="FORCE_TO_LOGGEDIN_WELCOME_PAGE" type="redirectAction">
+				<param name="actionName">home-end</param>
+				<param name="namespace">/home</param>
+				<!-- FORCE_TO_LOGGEDIN_WELCOME_PAGE</result> -->
+			</result>
+			<result name="FORCE_TO_NEXT_URL" type="redirect">${nextUrl}</result>
+			<result name="FORCE_TO_BACK_URL" type="redirect">${backUrl}</result>
+			<result name="FORCE_TO_NEXT_ACTION" type="redirectAction">
+				<param name="actionName">${nextAction}</param>
+				<param name="namespace">${nextNamespace}</param>
+			</result>
+			
+			<result name="FORCE_TO_LOGIN_PAGE" type="redirectAction">
+				<param name="actionName">login-end</param>
+				<param name="namespace">/login</param>
+			</result>
+			
+			<result name="errorPage" type="tiles">
+				errorPage
+			</result>
+			
+			
+		</global-results>
+		
+		<global-exception-mappings>
+		   <exception-mapping exception="java.lang.Exception"
+		   result="errorPage" />
+		   <exception-mapping exception="org.apache.tiles.definition.NoSuchDefinitionException"
+		   result="errorPage" />
+		</global-exception-mappings>
+
+
+	</package>
+
+	<package name="com.jobsmatcher.main" namespace="/main"
+		extends="prj-default">
+		<result-types>
+			<result-type name="tiles"
+				class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>
+
+		<interceptors>
+
+			<interceptor-stack name="moduleScopeStack">
+				<interceptor-ref name="scope">
+					<param name="session"></param>
+					<param name="autoCreateSession">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="guestStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="loginScopeStack">
+				<interceptor-ref name="scope">
+					<param name="session">
+					</param>
+					<param name="autoCreateSession">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="guestStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="refreshScopeStack">
+				<interceptor-ref name="scope">
+					<param name="session">
+					</param>
+					<param name="autoCreateSession">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="guestStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="logoutScopeStack">
+				<interceptor-ref name="scope">
+					<param name="session">
+					</param>
+					<param name="autoCreateSession">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="guestStack" />
+			</interceptor-stack>
+			
+			<interceptor-stack name="registerScopeStack">
+				<interceptor-ref name="scope">
+					<param name="session">
+					</param>
+					<param name="autoCreateSession">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="guestStack" />
+			</interceptor-stack>
+		</interceptors>
+
+
+		<action name="*-start" class="{1}Action" method="start">
+			<interceptor-ref name="moduleScopeStack">
+				<param name="scope.type">start</param>
+			</interceptor-ref>
+			<result name="success" type="redirectAction">{1}-init</result>
+		</action>
+
+		<action name="*-end" class="{1}Action" method="end">
+			<interceptor-ref name="moduleScopeStack">
+				<param name="scope.type">end</param>
+			</interceptor-ref>
+			<result name="success" type="redirectAction">{1}-start</result>
+		</action>
+
+		<action name="login-*" class="loginAction" method="{1}">
+			<interceptor-ref name="loginScopeStack" />
+			<result name="loginPage" type="tiles">common.login</result>
+		</action>
+
+		<action name="logout-*" class="logoutAction" method="{1}">
+			<interceptor-ref name="logoutScopeStack" />
+			<!-- <result name="loginPage" type="tiles">common.login</result> -->
+		</action>
+
+		<action name="refresh-*" class="refreshAction" method="{1}">
+			<interceptor-ref name="refreshScopeStack" />
+		</action>
+
+		<action name="register-*" class="registerAction" method="{1}">
+			<interceptor-ref name="registerScopeStack" />
+		</action>
+		
+
+	</package>
+</struts>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="org.kanomchan.projectname.home.action.web" namespace="/home" extends="prj-default">
+		
+		<interceptors>
+			<interceptor-stack name="moduleScopeStack">
+				<interceptor-ref name="scope">
+					<param name="session"></param>
+					<param name="autoCreateSession">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="guestStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="homeScopeStack">
+				<interceptor-ref name="scope">
+					<param name="session">
+										</param>
+					<param name="autoCreateSession">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="guestStack" />
+			</interceptor-stack>
+			
+		</interceptors>
+
+		<action name="*-start" class="{1}Action" method="start">
+			<interceptor-ref name="moduleScopeStack">
+				<param name="scope.type">start</param>
+			</interceptor-ref>
+			<result name="success" type="redirectAction">{1}-init</result>
+		</action>
+
+		<action name="*-end" class="{1}Action" method="end">
+			<interceptor-ref name="moduleScopeStack">
+				<param name="scope.type">end</param>
+			</interceptor-ref>
+			<result name="success" type="redirectAction">{1}-start</result>
+		</action>
+		
+		<action name="home-*" class="homeAction" method="{1}">
+			<interceptor-ref name="homeScopeStack" />
+			<result name="home.init" type="tiles">home.init</result>
+		</action>
+
+
+	</package>
+</struts>

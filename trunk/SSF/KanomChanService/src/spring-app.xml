@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:ehcache="http://www.springmodules.org/schema/ehcache"    
+    xmlns:tx="http://www.springframework.org/schema/tx"	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springmodules.org/schema/ehcache http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd"
+	default-autowire="byName">
+        
+    <!--== Engine Config ========================================================================================-->
+        <bean id="templateEngine" class="org.kanomchan.core.common.util.TemplateEngine">
+    	<constructor-arg>
+    		<props>
+               	<prop key="file.resource.loader.path">/</prop>               
+            </props>
+    	</constructor-arg>
+    </bean>
+    <!-- DataSource -->
+    <import resource="persist-config/persist-jdbc.xml"/>
+    <import resource="persist-config/persist-jpa.xml"/>
+<!--     <import resource="persist-config/HibernateSessionFactory.xml" /> -->
+    
+    <!-- Auto Scan Component -->
+    <import resource="prj-config-app.xml"/>
+    
+    <!-- enable the configuration of transactional behavior based on annotations -->
+	<!-- <tx:annotation-driven transaction-manager="txManager"/> -->
+	
+	<!-- a PlatformTransactionManager is still required -->
+	<!-- <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		(this dependency is defined somewhere else)
+		<property name="dataSource" ref="jmDs"/>
+	</bean> --> 
+	
+</beans>

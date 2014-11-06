@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- Hibernate session factory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+
+		<property name="ConfigurationClass" value="org.kanomchan.core.hibernate.NoProxyConfiguration" />
+		<property name="dataSource" ref="dataSource" />
+
+<!-- 		<property name="jtaTransactionManager"> -->
+<!-- 			<bean factory-bean="platformTransactionManager" factory-method="getTransactionManager"></bean> -->
+<!-- 		</property> -->
+		<property name="packagesToScan" >
+		
+			<list>
+				<value>com.jobsmatcher.jm.common.bean</value>
+				<value>com.jobsmatcher.jm.shop.bean</value>
+				<value>com.jobsmatcher.jm.job.bean</value>
+			</list>
+		</property>
+<!-- 		<property name="annotatedClasses"> -->
+		
+<!-- 			<list> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMUser</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMRole</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMUserMapRole</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMUserInformation</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMPrefixName</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobAProfile</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobAProfilePersonalData</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobAFamily</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobAFamilyType</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobAProfilePersonalDataMapFamily</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobCorpProfile</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobCorpProfileContact</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobCorpProfileFactory</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMAddress</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMPhone</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMPhoneType</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMUserMapPhone</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMPrefixPhone</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMUserMapAddress</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMAddressType</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMlPrefixName</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpTCartProduct</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpMProduct</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpTCart</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpTProductAttribute</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMCurrency</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpTOrders</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpMProductPrice</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMCountry</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMZone</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMLanguage</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpTAttributeImpact</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpMAttribute</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpTOrderDetail</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ShpTInvoice</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.PayTPayment</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.PayTOrderInvoicePayment</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMRegion</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMProvince</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMCity</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMCounty</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMZipcode</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.ComMCountyMapZipcode</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobAProfilePersonalDataMapFamily</value> -->
+<!-- 				<value>com.jobsmatcher.jm.common.bean.JobAProfilePersonalDataMapFamilyId</value> -->
+<!-- 			</list> -->
+		
+<!-- 		</property> -->
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+				<prop key="javax.persistence.validation.mode">NONE</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">false</prop>
+				<prop key="hibernate.max_fetch_depth">0</prop>
+<!-- 				<prop key="hibernate.default_catalog">JM_DEV</prop> -->
+<!-- 				<prop key="hibernate.hbm2ddl.auto"></prop> -->
+				<prop key="hibernate.validator.apply_to_ddl">false</prop>
+				<prop key="hibernate.validator.autoregister_listeners">false</prop>
+			</props>
+		</property>
+	</bean>
+	
+
+</beans>
