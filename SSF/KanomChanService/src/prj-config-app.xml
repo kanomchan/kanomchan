@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+    http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd" 
+	default-autowire="byName">
+	
+	
+
+	<context:component-scan base-package="org.kanomchan.projectname">
+		<context:include-filter type="aspectj" expression="org.kanomchan.projectname..dao.*Impl"/>
+	</context:component-scan>
+	<bean id="configService"  class="org.kanomchan.core.common.service.ConfigServiceImpl" init-method="initConfig"/>
+	<bean id="labelService"  class="org.kanomchan.core.common.service.LabelServiceImpl" init-method="refresh"/>
+<!-- 	<bean id="locationService"  class="org.kanomchan.core.common.service.LocationServiceImpl" init-method="init"/> -->
+	<bean id="messageService"  class="org.kanomchan.core.common.service.MessageServiceImpl" />
+<!-- 	<bean id="formulaDao"  class="org.kanomchan.formula.dao.FormulaDaoImpl" /> -->
+<!-- 	<bean id="formulaService"  class="org.kanomchan.formula.service.FormulaServiceImpl" /> -->
+	<context:component-scan base-package="org.kanomchan.projectname">
+		<context:include-filter type="aspectj" expression="org.kanomchan.projectname..service.*Impl"/>
+	</context:component-scan>
+	
+	
+	
+	
+	<bean id="configDao"  class="org.kanomchan.core.common.dao.ConfigDaoImpl"/>
+	
+<!-- 	<bean id="platformTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" scope="singleton"> -->
+<!-- 	  <property name="dataSource" ref="dataSource" /> -->
+<!-- 	</bean> -->
+	
+	<bean id="serviceClassAspect" class="org.kanomchan.core.common.processhandler.ProcessHandler">
+	 <property name="transactionHandler" >
+	 	<bean class="org.kanomchan.core.common.processhandler.BasicTransactionHandler"></bean>
+	 </property>
+	 
+	 <property name="messageHandler" >
+	 	<bean class="org.kanomchan.core.common.processhandler.BasicMessageHandler">
+	 	<property name="messageService">
+	 	<bean class="org.kanomchan.core.common.service.MessageServiceImpl">
+	 	<property name="configDao" ref="configDao"/>
+	 	</bean>
+	 	</property>
+	 	</bean>
+	 </property>
+	</bean>
+	
+	
+<!-- 			<aop:pointcut id="serviceClassPointcut" expression="execution(public * org.kanomchan.formula..*Impl.*(..)) || execution(public * org.kanomchan.formula..*Impl.*(..))"/> -->
+	<aop:config>
+		<aop:pointcut id="serviceClassPointcut" expression=" execution(public * org.kanomchan..*Impl.*(..))"/>
+		<aop:aspect id="serviceAspect" ref="serviceClassAspect">
+			<aop:around method="doAspect" pointcut-ref="serviceClassPointcut"/>
+		</aop:aspect>
+	</aop:config>
+
+	<ehcache:annotation-driven cache-manager="ehCacheManager" />
+	
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+	  <property name="configLocation">
+	    <value>classpath:/module-config/ehcache.xml</value>
+	  </property>
+  	</bean>
+	
+	
+</beans>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	
+	<definition name="blankLayout" template="/pages/templates/std/blankLayout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="body" value="/pages/templates/std/body.jsp" />
+	</definition>
+	
+	<definition name="baseLayout" template="/pages/templates/std/baseLayout.jsp">
+		<put-attribute name="title" value="" />
+<!-- 		<put-attribute name="preHeader" value="/pages/templates/std/preHeader.jsp" /> -->
+<!-- 		<put-attribute name="header" value="/pages/templates/std/header.jsp" /> -->
+<!-- 		<put-attribute name="menu" value="/pages/templates/std/menu.jsp" /> -->
+<!-- 		<put-attribute name="navigation" value="/pages/templates/std/navigation.jsp" /> -->
+<!-- 		<put-attribute name="sideMenu" value="/pages/templates/std/sideMenu.jsp" /> -->
+<!-- 		<put-attribute name="slider" value="/pages/templates/std/slider.jsp" /> -->
+		<put-attribute name="body" value="/pages/templates/std/body.jsp" />
+<!-- 		<put-attribute name="preFooter" value="/pages/templates/std/preFooter.jsp" /> -->
+<!-- 		<put-attribute name="footer" value="/pages/templates/std/footer.jsp" /> -->
+	</definition>
+	
+	<definition name="homeLayout" template="/pages/templates/home/baseLayout.jsp">
+		<put-attribute name="title" value="" />
+<!-- 		<put-attribute name="rightSide" value="/pages/templates/home/rightSide.jsp" /> -->
+<!-- 		<put-attribute name="preHeader" value="/pages/templates/home/preHeader.jsp" /> -->
+<!-- 		<put-attribute name="header" value="/pages/templates/home/header.jsp" /> -->
+<!-- 		<put-attribute name="menu" value="/pages/templates/home/menu.jsp" /> -->
+		<!-- <put-attribute name="navigation" value="/pages/templates/home/navigation.jsp" /> -->
+<!-- 		<put-attribute name="sideMenu" value="/pages/templates/home/sideMenu.jsp" /> -->
+<!-- 		<put-attribute name="slider" value="/pages/templates/home/slider.jsp" /> -->
+		<put-attribute name="body" value="/pages/templates/home/body.jsp" />
+<!-- 		<put-attribute name="preFooter" value="/pages/templates/home/preFooter.jsp" /> -->
+<!-- 		<put-attribute name="footer" value="/pages/templates/home/footer.jsp" /> -->
+	</definition>
+
+	
+	
+</tiles-definitions>
