@@ -33,9 +33,9 @@ public class CommonDaoImpl implements CommonDao {
 		this.entityManager = entityManager;
 	}
 
-	protected Query genQueryByExample(String queryString,List<Criteria> criteriaList,List<Order> orderList,boolean like){
+	protected Query genQueryByExample(Class<?> clazz,String queryString,List<Criteria> criteriaList,List<Order> orderList,boolean like){
 		
-		Query query = entityManager.createQuery(queryString);
+		Query query = entityManager.createQuery(queryString,clazz);
 		if(criteriaList !=null){
 			for (Criteria criteria : criteriaList) {
 				if(criteria.getValue() instanceof String)
@@ -61,19 +61,21 @@ public class CommonDaoImpl implements CommonDao {
 	
 	protected Long getTotalRowByExample(Class<?> clazz,List<Criteria> criteriaList,String extraWhereClause,boolean like) {
 		StringBuilder countQueryString = new StringBuilder();
-		countQueryString.append("select count(*) from "+clazz.getSimpleName()+" model ");
+		countQueryString.append("select count(*) from ");
+		countQueryString.append(clazz.getSimpleName());
+		countQueryString.append(AILIAT);
 		if(criteriaList !=null && criteriaList.size()>0){
-			countQueryString.append(" where 1 = 1 ");
+			countQueryString.append(WHERE);
 			for (Criteria criteria : criteriaList) {
 				if(criteria.getValue() instanceof String && like){
-					countQueryString.append(" and UPPER(model.");
+					countQueryString.append(AND_UPPER);
 					countQueryString.append(criteria.getColumn());
-					countQueryString.append(") like :");
+					countQueryString.append(LIKE);
 					countQueryString.append(criteria.getParam());
 				}else{
-					countQueryString.append(" and model.");
+					countQueryString.append(AND);
 					countQueryString.append(criteria.getColumn());
-					countQueryString.append(" = :");
+					countQueryString.append(EQU);
 					countQueryString.append(criteria.getParam());
 				}
 			}
@@ -85,7 +87,6 @@ public class CommonDaoImpl implements CommonDao {
 		
 		Query countQuery = entityManager.createQuery(countQueryString.toString());
 		if(criteriaList !=null && criteriaList.size()>0){
-			countQueryString.append(" where 1 = 1 ");
 			for (Criteria criteria : criteriaList) {
 				countQuery.setParameter(criteria.getColumn(), criteria.getValue());
 			}
@@ -93,25 +94,34 @@ public class CommonDaoImpl implements CommonDao {
 		return (Long)countQuery.getSingleResult();
 	}
 	
+	private static final String LIKE = ") like :"; 
+	private static final String AND = " and "+CommonDao.ENTITY_MODEL_ALIAS+"."; 
+	private static final String AND_UPPER = " and UPPER("+CommonDao.ENTITY_MODEL_ALIAS+"."; 
+	private static final String EQU = " = :"; 
+	private static final String WHERE = " where 1=1 "; 
+	private static final String FROM = "select "+CommonDao.ENTITY_MODEL_ALIAS+" from "; 
+	private static final String ORDER = " order by "; 
+	private static final String AILIAT = " "+CommonDao.ENTITY_MODEL_ALIAS+" "; 
+	
 	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList, List<Order> orderList,String extraWhereClause,boolean like) {
 		StringBuilder queryString = new StringBuilder();
-		queryString.append("select model from ");
+		queryString.append(FROM);
 		queryString.append(clazz.getSimpleName());
-		queryString.append(" model ");
+		queryString.append(AILIAT);
 		
 		if(criteriaList !=null && criteriaList.size()>0){
-			queryString.append(" where 1 = 1 ");
+			queryString.append(WHERE);
 			for (Criteria criteria : criteriaList) {
 				
 				if(criteria.getValue() instanceof String && like){
-					queryString.append(" and UPPER(model.");
+					queryString.append(AND_UPPER);
 					queryString.append(criteria.getColumn());
-					queryString.append(") like :");
+					queryString.append(LIKE);
 					queryString.append(criteria.getParam());
 				}else{
-					queryString.append(" and model.");
+					queryString.append(AND);
 					queryString.append(criteria.getColumn());
-					queryString.append(" = :");
+					queryString.append(EQU);
 					queryString.append(criteria.getParam());
 				}
 			}
@@ -122,7 +132,7 @@ public class CommonDaoImpl implements CommonDao {
 			}
 		}
 		if(orderList!=null&&orderList.size()>0){
-			queryString.append(" order by ");
+			queryString.append(ORDER);
 			for (int i = 0; i < orderList.size(); i++) {
 				Order order = orderList.get(i);
 				queryString.append(CommonDao.ENTITY_MODEL_ALIAS+"."+order.getOrderBy()+" "+order.getOrderMode()+",");
@@ -232,9 +242,12 @@ public class CommonDaoImpl implements CommonDao {
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackTechnicalException {
 		if(pagingBean==null){
 			try{
-				String queryString = "select model from "+clazz.getSimpleName()+ " model where model."+propertyName+" = :propertyValue";
-				Query query = entityManager.createQuery(queryString,clazz);
-				query.setParameter("propertyValue", value);
+				List<Criteria> criteriaList = new LinkedList<Criteria>();
+				criteriaList.add(new Criteria(propertyName, value));
+				String queryString = genQueryStringByExample(clazz, criteriaList, null, null, false);
+				Query query = genQueryByExample(clazz , queryString, criteriaList, null, false);
+//				Query query = entityManager.createQuery(queryString,clazz);
+//				query.setParameter("propertyValue", value);
 				
 				return query.getResultList();
 			}catch(RuntimeException e){
@@ -249,7 +262,7 @@ public class CommonDaoImpl implements CommonDao {
 				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
 				
 				String qureyString = genQueryStringByExample(clazz, criteriaList, null, null, false);
-				Query query = genQueryByExample(qureyString, criteriaList, pagingBean.getOrderList(), false);
+				Query query = genQueryByExample(clazz,qureyString, criteriaList, pagingBean.getOrderList(), false);
 				
 				query.setFirstResult((int)pagingBean.getOffsetBegin()).setMaxResults(pagingBean.getRowsPerPage());
 				
@@ -305,7 +318,7 @@ public class CommonDaoImpl implements CommonDao {
 		if(pagingBean==null){
 			List<Criteria> criterias =  JPAUtil.beanToParamterList(example);
 			String queryString  = genQueryStringByExample(example.getClass(), criterias, null, extraWhereClause, like);
-			Query query = genQueryByExample(queryString, criterias, null, like);
+			Query query = genQueryByExample(example.getClass(),queryString, criterias, null, like);
 			return query.getResultList();
 		}else{
 			List<Criteria> criterias =  JPAUtil.beanToParamterList(example);
@@ -313,7 +326,7 @@ public class CommonDaoImpl implements CommonDao {
 			pagingBean.setTotalRows(getTotalRowByExample(example.getClass(), criterias, extraWhereClause, like));
 			
 			String queryString  = genQueryStringByExample(example.getClass(), criterias, null, extraWhereClause, like);
-			Query query = genQueryByExample(queryString, criterias, null, like);
+			Query query = genQueryByExample(example.getClass(),queryString, criterias, null, like);
 			
 			query.setFirstResult((int)pagingBean.getOffsetBegin()).setMaxResults(pagingBean.getRowsPerPage());
 			return query.getResultList();
@@ -324,7 +337,7 @@ public class CommonDaoImpl implements CommonDao {
 	public <T> List<T> findAll(Class<T> clazz) throws RollBackTechnicalException {
 		try{
 			String queryString = genQueryStringByExample(clazz, null, null, null, false);
-			Query query = genQueryByExample(queryString, null, null, false);
+			Query query = genQueryByExample(clazz,queryString, null, null, false);
 			return query.getResultList();
 		}catch(Exception e){
 			throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
