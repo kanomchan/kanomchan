@@ -14,8 +14,8 @@ import org.kanomchan.formula.bean.Formula;
 import org.kanomchan.formula.bean.FormulaEffect;
 import org.kanomchan.formula.dao.FormulaDao;
 import org.kanomchan.formula.util.FormulaUtil;
-import org.matheclipse.core.eval.EvalUtilities;
-import org.matheclipse.core.interfaces.IExpr;
+//import org.matheclipse.core.eval.EvalUtilities;
+//import org.matheclipse.core.interfaces.IExpr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -46,7 +46,7 @@ public class FormulaServiceImpl implements FormulaService {
 			throw new NonRollBackProcessException();
 		List<FormulaEffect> formulaEffects = formulaDao.getFormulaInput(formulaId);
 		StringBuilder formulaBuilder = new StringBuilder();
-		EvalUtilities util = new EvalUtilities(false, true);
+//		EvalUtilities util = new EvalUtilities(false, true);
 		if(formulaEffects!=null){
 			for (FormulaEffect formulaEffect : formulaEffects) {
 				formulaBuilder.append(formulaEffect.getSymbol().getSymbol());
@@ -70,12 +70,13 @@ public class FormulaServiceImpl implements FormulaService {
 					
 				}
 				
-				util.evaluate(sb.toString());
+//				util.evaluate(sb.toString());
 			}
 		}
 		
-		IExpr out = util.evaluate(formulaBuilder.toString());
-		return out.toString();
+//		IExpr out = util.evaluate(formulaBuilder.toString());
+//		return out.toString();
+		return null;
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.util.JPAUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -29,6 +30,7 @@ public class CommonDaoImpl implements CommonDao {
 
 	@Required
 	@PersistenceContext
+//	@Autowired
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}

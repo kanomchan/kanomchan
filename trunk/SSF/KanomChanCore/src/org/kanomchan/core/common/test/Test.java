@@ -1,7 +1,9 @@
 package org.kanomchan.core.common.test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.beans.IntrospectionException;
+
+import org.kanomchan.core.common.bean.UserBeanDefault;
+import org.kanomchan.core.common.util.ClassUtil;
 
 //import org.kanomchan.core.common.proxy.ProxyEntity;
 
@@ -94,6 +96,32 @@ public class Test {
 //		System.out.println(proxyBean);
 //		  check
 //		ProxyEntity
+		
+//		User.class
+		
+		try {
+			System.out.println(ClassUtil.findSetterName(UserBeanDefault.class, "getuserName".substring(3)));
+		} catch (NoSuchFieldException | NoSuchMethodException | IntrospectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		;
+		
+//		List<String> listColumnName = new LinkedList<String>();
+//		
+//		
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		listColumnName.add(" 22222 ");
+//		System.out.println(Joiner.on(" , ").skipNulls().join(listColumnName));
+//		;
 	}
 
 }
