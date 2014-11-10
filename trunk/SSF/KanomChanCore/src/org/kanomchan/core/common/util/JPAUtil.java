@@ -121,7 +121,14 @@ public class JPAUtil {
 	
 
 	private static Map<String, ClassMapper > mapClass = new ConcurrentHashMap<String,ClassMapper>();
+	
 	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz){
+		return getRm(clazz, null);
+	}
+	
+	
+	
+	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz,final String prefix){
 		return new RowMapper<T>() {
 
 			@Override
