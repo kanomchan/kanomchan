@@ -324,6 +324,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						
 					}
 				}
+				
 				if(property.getColumnType() == ColumnType.id){
 					Object value = method.invoke(target);
 					if(value != null){
@@ -388,21 +389,183 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		
 		return t;
 	}
+//	public <T extends Object> T update(T t){
+//		return t;
+//	}
 	
-	public <T extends Object> T update(T t){
-//		ClassMapper classMapper =getClassMapper(t.getClass());
+	public <T extends Object> T update(T target){
+		Class<? extends Object> clazz = target.getClass();
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		StringBuilder sb = new StringBuilder();
+		Table table = clazz.getAnnotation(Table.class);
 		
+		List<Object> para = new LinkedList<Object>();
+		List<String> listPkName = new LinkedList<String>();
+		List<Object> listPkNamePara = new LinkedList<Object>();
+		List<String> listColumnName = new LinkedList<String>();
+		List<String> listParaName = new LinkedList<String>();
+		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		
-		return t;
+		for (String  columnName : classMapper.getColumn().keySet()) {
+			Property property = classMapper.getColumn().get(columnName);
+			Method method = property.getMethodGet();
+			try {
+				if(property.getColumnType() == ColumnType.column){
+					Object value = method.invoke(target);
+					if(value != null){
+						listColumnName.add(columnName);
+						listParaName.add("?");
+						para.add(value);
+					}
+				}
+				if(property.getColumnType() == ColumnType.joinColumn){
+					Object value = method.invoke(target);
+					if(value != null){
+						Entity entity = method.getReturnType().getAnnotation(Entity.class);
+						if(entity!=null){
+							ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+							
+							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+							if(value!=null){
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								para.add(value);
+							}
+						}else{
+							listColumnName.add(columnName);
+							listParaName.add("?");
+							para.add(value);
+						}
+					}
+				}
+				if(property.getColumnType() == ColumnType.id){
+					Object value = method.invoke(target);
+					if(value != null){
+						listPkName.add(columnName);
+						listPkNamePara.add(value);
+//						listColumnName.add(columnName);
+//						listParaName.add("?");
+//						para.add(value);
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		sb.append(" UPDATE ");
+		sb.append(table.name());
+		sb.append(" SET ");
+//		sb.append(" ( ");
+		for (int i = 0; i < listColumnName.size(); i++) {
+			sb.append( i > 0 ? ",":"" );
+			sb.append(listColumnName.get(i));
+			sb.append(" = ");
+			sb.append(listParaName.get(i));
+		}
+//		sb.append(" ) ");
+		
+		if(listPkName.size() > 0){
+			sb.append(" WHERE ");
+			for (int i = 0; i < listPkName.size(); i++) {
+				sb.append( i > 0 ? ",":"" );
+				sb.append(listPkName.get(i));
+				sb.append(" = ? ");
+				para.add(listPkNamePara.get(i));
+//				sb.append(listPkNamePara.get(i));
+			}
+		}
+		
+
+		Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+		if(methodSetId !=null&&idNumber!=null){
+			try {
+				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
+					
+					Class<?> type = methodSetId.getParameterTypes()[0];
+					if(type == Long.class){
+						methodSetId.invoke(target, idNumber.longValue());
+					}else if(type == Integer.class){
+						methodSetId.invoke(target, idNumber.intValue());
+					}else if(type == Short.class){
+						methodSetId.invoke(target, idNumber.shortValue());
+					}else if(type == Double.class){
+						methodSetId.invoke(target, idNumber.doubleValue());
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return target;
 	}
 	
-	public <T extends Object> T delete(T t){
-//		ClassMapper classMapper =getClassMapper(t.getClass());
-		
-		
-		return t;
+	public <T extends Object> T delete(T target){
+		return target;
 	}
-	
+	public <T extends Object> T updateStatusDelete(T target) {
+		Class<? extends Object> clazz = target.getClass();
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		StringBuilder sb = new StringBuilder();
+		Table table = clazz.getAnnotation(Table.class);
+		
+		List<Object> para = new LinkedList<Object>();
+		List<String> listPkName = new LinkedList<String>();
+		List<Object> listPkNamePara = new LinkedList<Object>();
+		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+		
+		for (String  columnName : classMapper.getColumn().keySet()) {
+			Property property = classMapper.getColumn().get(columnName);
+			Method method = property.getMethodGet();
+			try {
+				if(property.getColumnType() == ColumnType.id){
+					Object value = method.invoke(target);
+					if(value != null){
+						listPkName.add(columnName);
+						listPkNamePara.add(value);
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		sb.append(" UPDATE ");
+		sb.append(table.name());
+		sb.append(" SET STATUS = ? ");
+		para.add("I");
+		if(listPkName.size() > 0){
+			sb.append(" WHERE ");
+			for (int i = 0; i < listPkName.size(); i++) {
+				sb.append( i > 0 ? ",":"" );
+				sb.append(listPkName.get(i));
+				sb.append(" = ? ");
+				para.add(listPkNamePara.get(i));
+			}
+		}
+
+		Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+		if(methodSetId !=null&&idNumber!=null){
+			try {
+				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
+					
+					Class<?> type = methodSetId.getParameterTypes()[0];
+					if(type == Long.class){
+						methodSetId.invoke(target, idNumber.longValue());
+					}else if(type == Integer.class){
+						methodSetId.invoke(target, idNumber.intValue());
+					}else if(type == Short.class){
+						methodSetId.invoke(target, idNumber.shortValue());
+					}else if(type == Double.class){
+						methodSetId.invoke(target, idNumber.doubleValue());
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return target;
+	}
 	
 
 	
@@ -442,5 +605,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1) {
 		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1));
 	}
+	
 	
 }
