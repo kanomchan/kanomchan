@@ -5,20 +5,13 @@ import java.sql.Connection;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import javax.naming.NamingException;
-import javax.naming.Reference;
-
-import org.hibernate.Cache;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.EntityMode;
 import org.hibernate.Filter;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
-import org.hibernate.Interceptor;
 import org.hibernate.LobHelper;
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
@@ -26,17 +19,12 @@ import org.hibernate.Query;
 import org.hibernate.ReplicationMode;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 import org.hibernate.TypeHelper;
 import org.hibernate.UnknownProfileException;
 import org.hibernate.classic.Session;
-import org.hibernate.engine.FilterDefinition;
 import org.hibernate.jdbc.Work;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.stat.SessionStatistics;
-import org.hibernate.stat.Statistics;
 import org.hibernate.type.Type;
 
 public class DelegatingSession implements Session {
