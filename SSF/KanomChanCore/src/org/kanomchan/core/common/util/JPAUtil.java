@@ -172,7 +172,7 @@ public class JPAUtil {
 								if (prefix!=null) {
 									columnName = prefix+ column.getKey();
 								} else {
-									columnName = prefix+ column.getKey();
+									columnName = column.getKey();
 								}
 								
 								rs.findColumn(columnName);
