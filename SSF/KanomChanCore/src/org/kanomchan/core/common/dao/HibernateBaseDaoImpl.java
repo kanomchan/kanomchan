@@ -370,14 +370,14 @@ public class HibernateBaseDaoImpl extends HibernateDaoSupport implements Hiberna
 						//support lazy Proxy
 						Method[] jMethods = cls.getMethods();
 						
-						
-						
 						for (Method jMethod : jMethods) {
 							Id jId = jMethod.getAnnotation(Id.class);
 							if(jId != null){
 								Object jValue = jMethod.invoke(jColumn);
 								if(jValue != null ){
 									list.add(joinColumn.name() + " = ? ");
+									if((Long)jValue == 0)
+										jValue = null;
 									para.add((Long) jValue);
 									
 //									pkName.add(joinColumn.name() + " = ? ");
