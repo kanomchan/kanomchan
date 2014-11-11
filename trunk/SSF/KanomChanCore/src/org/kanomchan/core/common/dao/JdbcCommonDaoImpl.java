@@ -426,9 +426,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 							
 							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-							if(value!=null){
+							if(value!=null ) {
 								listColumnName.add(columnName);
 								listParaName.add("?");
+								if((Long)value == 0)
+									value = null;
 								para.add(value);
 							}
 						}else{
