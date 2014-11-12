@@ -28,6 +28,7 @@ import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.kanomchan.core.common.bean.Property;
+import org.kanomchan.core.common.constant.CommonConstant.LOG;
 import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -384,9 +385,20 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return target;
 	}
 	public <T extends Object> T saveOrUpdate(T t){
-//		ClassMapper classMapper =getClassMapper(t.getClass());
-		
-		
+		ClassMapper classMapper =JPAUtil.getClassMapper(t.getClass());
+		Object objectId = null;
+		try {
+			objectId = classMapper.getPropertyId().getMethodGet().invoke(t);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			
+		}
+		if(objectId!=null){
+			update(t);
+		}
+		else{
+			save(t);
+		}
 		return t;
 	}
 //	public <T extends Object> T update(T t){
