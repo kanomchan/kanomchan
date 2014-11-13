@@ -144,7 +144,8 @@ public class JPAUtil {
 							String columnName = md.getColumnName(i+1);
 							String columnNameMap=null;
 							if(prefix!=null){
-								if(!columnName.startsWith(prefix)&&!md.getTableName(i+1).equalsIgnoreCase(prefix))
+//								if(!columnName.startsWith(prefix)&&!md.getTableName(i+1).equalsIgnoreCase(prefix))
+								if(!columnName.startsWith(prefix))
 										continue;
 								else
 									columnNameMap = columnName.substring(prefix.length());
