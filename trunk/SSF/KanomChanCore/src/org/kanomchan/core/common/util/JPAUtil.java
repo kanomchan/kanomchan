@@ -142,20 +142,22 @@ public class JPAUtil {
 //					if (md.getColumnCount() < columns.size()) {
 						for (int i = 0; i < md.getColumnCount(); i++) {
 							String columnName = md.getColumnName(i+1);
-							String columnNameMap=null;
+//							String columnNameMap=null;
 							if(prefix!=null){
 //								if(!columnName.startsWith(prefix)&&!md.getTableName(i+1).equalsIgnoreCase(prefix))
-								if(!columnName.startsWith(prefix))
-									continue;
-								else if(md.getTableName(i+1).equalsIgnoreCase(prefix)){
-									
-								}else
-									columnNameMap = columnName.substring(prefix.length());
+								if(!columnName.startsWith(prefix)){
+									if(md.getTableName(i+1).equalsIgnoreCase(prefix)){
+									}else{
+										continue;
+									}
+								}else{
+									columnName = columnName.substring(prefix.length());
+								}
 							}
 							
-							if(!columns.containsKey(columnNameMap))
+							if(!columns.containsKey(columnName))
 								continue;
-							Property property = columns.get(columnNameMap);
+							Property property = columns.get(columnName);
 							if(property==null)
 								continue;
 							Method methodSet = property.getMethodSet();
