@@ -139,50 +139,51 @@ public class JPAUtil {
 					ClassMapper classMapper = getClassMapper(clazz);
 					Map<String, Property> columns = classMapper.getColumn();
 					ResultSetMetaData md = rs.getMetaData();
-					if (md.getColumnCount() < columns.size()) {
+//					if (md.getColumnCount() < columns.size()) {
 						for (int i = 0; i < md.getColumnCount(); i++) {
 							String columnName = md.getColumnName(i+1);
 							String columnNameMap=null;
 							if(prefix!=null){
 //								if(!columnName.startsWith(prefix)&&!md.getTableName(i+1).equalsIgnoreCase(prefix))
 								if(!columnName.startsWith(prefix))
-										continue;
-								else
+									continue;
+								else if(md.getTableName(i+1).equalsIgnoreCase(prefix)){
+									
+								}else
 									columnNameMap = columnName.substring(prefix.length());
 							}
 							
-							if(!classMapper.getColumn().containsKey(columnNameMap))
+							if(!columns.containsKey(columnNameMap))
 								continue;
-							Property property = classMapper.getColumn().get(columnNameMap);
+							Property property = columns.get(columnNameMap);
 							if(property==null)
 								continue;
 							Method methodSet = property.getMethodSet();
 							if(methodSet==null)
 								continue;
-							
 							try {
-								t = mapRow(rs, rowNum, t, columnName, property);
+								t = mapRow(rs, rowNum, t, i+1, property);
 							} catch (Exception e) {
 								// TODO: handle exception
 							}
 						}
-					} else {
-						for ( Entry<String, Property> column : columns.entrySet()) {
-							try {
-								String columnName=null;
-								if (prefix!=null) {
-									columnName = prefix+ column.getKey();
-								} else {
-									columnName = column.getKey();
-								}
-								
-								rs.findColumn(columnName);
-								t = mapRow(rs, rowNum, t, columnName, column.getValue());
-							} catch (Exception e) {
-								// TODO: handle exception
-							}
-						}
-					}
+//					} else {
+//						for ( Entry<String, Property> column : columns.entrySet()) {
+//							try {
+//								String columnName=null;
+//								if (prefix!=null) {
+//									columnName = prefix+ column.getKey();
+//								} else {
+//									columnName = column.getKey();
+//								}
+//								
+//								rs.findColumn(columnName);
+//								t = mapRow(rs, rowNum, t, columnName, column.getValue());
+//							} catch (Exception e) {
+//								// TODO: handle exception
+//							}
+//						}
+//					}
 
 					
 					
@@ -192,7 +193,7 @@ public class JPAUtil {
 				return t;
 			}
 			
-			private T mapRow(ResultSet rs , int rowNum,T traget, String columnName ,Property property ) throws SQLException {
+			private T mapRow(ResultSet rs , int rowNum,T traget, int columnNum ,Property property ) throws SQLException {
 				
 				
 				Method methodSet = property.getMethodSet();
@@ -204,9 +205,9 @@ public class JPAUtil {
 						ClassMapper classMapperId = getClassMapper(methodSet.getParameterTypes()[0]);
 						objectData = methodSet.getParameterTypes()[0].newInstance();
 						Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
-						methodSetId.invoke(objectData,  getObject(rs, columnName, methodSetId.getParameterTypes()[0]));
+						methodSetId.invoke(objectData,  getObject(rs, columnNum, methodSetId.getParameterTypes()[0]));
 					}else{
-						objectData = getObject(rs, columnName, methodSet.getParameterTypes()[0]);
+						objectData = getObject(rs, columnNum, methodSet.getParameterTypes()[0]);
 					}
 					methodSet.invoke(traget, objectData);
 				} catch (IllegalArgumentException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
@@ -215,65 +216,65 @@ public class JPAUtil {
 				return traget;
 			}
 			
-			private <T> T getObject(ResultSet rs,String  columnName ,Class<T> clazz ){
+			private <T> T getObject(ResultSet rs,int  columnNum ,Class<T> clazz ){
 				Object objectData = new Object[]{null};
 				try{
 					if(clazz.equals(Date.class)){
-						objectData = new Date(rs.getTimestamp(columnName).getTime());
+						objectData = new Date(rs.getTimestamp(columnNum).getTime());
 					}else
-					objectData = rs.getObject(columnName, clazz);
+					objectData = rs.getObject(columnNum, clazz);
 				}catch(Exception e){
 					if(clazz.equals(Integer.class)){
 						try {
-							objectData =  rs.getInt(columnName);
+							objectData =  rs.getInt(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 					}else if(clazz.equals(Short.class)){
 						try {
-							objectData =  rs.getShort(columnName);
+							objectData =  rs.getShort(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 					}else if(clazz.equals(Long.class)){
 						try {
-							objectData =  rs.getLong(columnName);
+							objectData =  rs.getLong(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 					}else if(clazz.equals(Double.class)){
 						try {
-							objectData =  rs.getDouble(columnName);
+							objectData =  rs.getDouble(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 					}else if(clazz.equals(String.class)){
 						try {
-							objectData =  rs.getString(columnName);
+							objectData =  rs.getString(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 					}else if(clazz.equals(Date.class)){
 						try {
-							objectData =  rs.getDate(columnName);
+							objectData =  rs.getDate(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 						
 					}else if(clazz.equals(Time.class)){
 						try {
-							objectData =  rs.getTime(columnName);
+							objectData =  rs.getTime(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 					}else if(clazz.equals(Timestamp.class)){
 						try {
-							objectData =  rs.getTimestamp(columnName);
+							objectData =  rs.getTimestamp(columnNum);
 						} catch (SQLException e1) {
 							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
 						}
 					}else{
-						logger.error("column :"+columnName+" type: "+clazz.getSimpleName());
+						logger.error("column :"+columnNum+" type: "+clazz.getSimpleName());
 					}
 				}
 				return (T) objectData;
