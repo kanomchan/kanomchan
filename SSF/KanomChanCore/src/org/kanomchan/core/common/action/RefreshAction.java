@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.action;
 
+import org.apache.struts2.dispatcher.Dispatcher;
 import org.kanomchan.core.common.service.RefreshService;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,13 @@ public class RefreshAction extends BaseAction {
 	public String init() throws Exception {
 		
 		refreshService.refreshAll();
+		return "json";
+	}
+	
+	
+	public String refreshXml() throws Exception {
+		
+		Dispatcher.getInstance().getConfigurationManager().reload();
 		return "json";
 	}
 
