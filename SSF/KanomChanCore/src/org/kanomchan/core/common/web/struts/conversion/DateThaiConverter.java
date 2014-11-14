@@ -118,10 +118,12 @@ public class DateThaiConverter extends DateConverter {
         DateFormat d1 = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         DateFormat d2 = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
         DateFormat d3 = DateFormat.getDateInstance(DateFormat.LONG, locale);
-
+        DateFormat d4 = new SimpleDateFormat("dd/M/yy", locale);
+        
         DateFormat rfc3399 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-        return new DateFormat[]{dt1, dt2, dt3, time, rfc3399, d1, d2, d3};
+
+        return new DateFormat[]{dt1, dt2, dt3, time, rfc3399, d1, d2, d3, d4};
     }
 
 }
