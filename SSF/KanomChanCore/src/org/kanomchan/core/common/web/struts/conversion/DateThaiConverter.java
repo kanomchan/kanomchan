@@ -1,6 +1,7 @@
 package org.kanomchan.core.common.web.struts.conversion;
 
 import com.opensymphony.xwork2.XWorkException;
+import com.opensymphony.xwork2.conversion.impl.DateConverter;
 import com.opensymphony.xwork2.conversion.impl.DefaultTypeConverter;
 
 import java.lang.reflect.Constructor;
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-public class DateConverter extends DefaultTypeConverter {
+public class DateThaiConverter extends DateConverter {
 
     @Override
     public Object convertValue(Map<String, Object> context, Object target, Member member, String propertyName, Object value, Class toType) {

@@ -62,7 +62,7 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 		
 		ActionMapping actionMapping = ServletActionContext.getActionMapping();
 		final String validatorKey;
-		if(clazz.isInstance(BaseAction.class)){
+		if(clazz.getGenericSuperclass()!=null && clazz.getGenericSuperclass().equals(BaseAction.class)){
 			validatorKey = actionMapping.getNamespace()+"/"+context;
 		}else{
 			validatorKey = buildValidatorKey(clazz, context);
