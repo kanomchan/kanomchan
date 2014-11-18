@@ -11,12 +11,12 @@ public interface MessageService {
 
 	public void load();
 	public void clearCache();
-	public Message getMessage( MessageCode messageCode );
-	public Message getMessage( MessageCode messageCode, Locale locale );
-	public Message getMessage( MessageCode messageCode, String lang );
-	public Message getMessage( String messageCode );
-	public Message getMessage( String messageCode, Locale locale );
-	public Message getMessage( String messageCode, String lang );
+	public Message getMessage( MessageCode messageCode ,String[] para  );
+	public Message getMessage( MessageCode messageCode, Locale locale ,String[] para);
+	public Message getMessage( MessageCode messageCode, String lang ,String[] para);
+	public Message getMessage( String messageCode , String[] para );
+	public Message getMessage( String messageCode, Locale locale ,String[] para);
+	public Message getMessage( String messageCode, String lang ,String[] para);
 	
 
 	public List<Message> getMessageList();
