@@ -26,7 +26,7 @@ public class BasicMessageHandler implements MessageHandler {
 		List<Message> messageList = processContext.messageList;
 		if(messageList!=null && messageList.size()>0){
 			for (Message message : messageList) {
-				Message messageOut = messageService.getMessage(message.getMessageCode());
+				Message messageOut = messageService.getMessage(message.getMessageCode(),message.getPara());
 				if(messageOut!=null)
 				messageOutList.add(messageOut);
 			}
@@ -46,7 +46,7 @@ public class BasicMessageHandler implements MessageHandler {
 	public <T> ServiceResult<T> addMessage(ServiceResult<T> serviceResult,BaseException baseException){
 		List<Message> messageOutList = new LinkedList<Message>();
 		if(baseException!=null&&baseException.getMessageCode()!=null){
-				Message messageOut = messageService.getMessage(baseException.getMessageCode().getCode());
+				Message messageOut = messageService.getMessage(baseException.getMessageCode().getCode(),new String[]{});
 				if(messageOut!=null)
 				messageOutList.add(messageOut);
 			serviceResult.setMessages(messageOutList);
