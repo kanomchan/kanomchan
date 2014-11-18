@@ -3,6 +3,7 @@ package org.kanomchan.core.common.web.struts;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -175,7 +176,9 @@ public class DBTextProvider implements TextProvider {
     }
     
     private static String formatWithNullDetection(MessageFormat mf, Object[] args) {
-        String message = mf.format(args);
+    	LinkedList<Object> argList = new LinkedList<Object>(Arrays.asList(args));
+    	argList.addFirst("");
+        String message = mf.format(argList.toArray());
         if ("null".equals(message)) {
             return null;
         } else {
