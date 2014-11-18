@@ -30,7 +30,7 @@
 	<#if hasFieldErrors>
 	<#list fieldErrors[parameters.name] as error>
 		<#if parameters.label??>
-			<div class="row"
+			<div class="rowError"
 			<#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >
@@ -46,7 +46,7 @@
 	</#list>
 	<#else>
 		<#if parameters.label??>
-			<div class="row"
+			<div class="rowError"
 			<#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >

@@ -40,7 +40,8 @@ END SNIPPET: supported-validators
             In case of multiselect fields return only the first value.
         -->
         var getFieldValue = function(field) {
-            var type = field.type ? field.type : field[0].type;
+			var type = field.type ? field.type : field[0].type;
+            
             if (type == 'select-one' || type == 'select-multiple') {
                 return (field.selectedIndex == -1 ? "" : field.options[field.selectedIndex].value);
             } else if (type == 'checkbox' || type == 'radio') {
@@ -56,17 +57,16 @@ END SNIPPET: supported-validators
             }
             return field.value;
         }
-        form = document.getElementById("${parameters.id}");
+        //form = document.getElementById("${parameters.id}");
+        form = $("#${parameters.id}")[0];
         clearErrorLabels(form);
 
         var errors = false;
         var continueValidation = true;
     <#list parameters.tagNames as tagName>
         <#list tag.getValidators("${tagName}") as aValidator>
-        // field name: ${aValidator.fieldName}
-        // validator name: ${aValidator.validatorType}
-        if (form.elements['${aValidator.fieldName}']) {
-            field = form.elements['${aValidator.fieldName}'];
+		var field = form.elements['${aValidator.fieldName}'];
+		if(field){
             <#if aValidator.validatorType = "field-visitor">
                 <#assign validator = aValidator.fieldValidator >
                 //visitor validator switched to: ${validator.validatorType}
