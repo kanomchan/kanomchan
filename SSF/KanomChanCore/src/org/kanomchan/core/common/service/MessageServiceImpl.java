@@ -1,10 +1,15 @@
 package org.kanomchan.core.common.service;
 
 import java.lang.reflect.Modifier;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.kanomchan.core.common.bean.MessageDefault;
 import org.kanomchan.core.common.bean.Message;
@@ -20,7 +25,7 @@ import org.springframework.beans.factory.annotation.Required;
 //import com.google.gson.GsonBuilder;
 
 public class MessageServiceImpl implements MessageService {
-
+    private static final ConcurrentMap<MessageFormatKey, MessageFormat> messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>();
 	private ConfigDao configDao;
 	@Autowired
 	@Required
@@ -60,16 +65,23 @@ public class MessageServiceImpl implements MessageService {
 	
 	
 	@Override
-	public Message getMessage(String messageCode, Locale locale) {
+	public Message getMessage(String messageCode, Locale locale,String[] para) {
 		if(locale == null){locale = CommonConstant.DEFAULT_LOCALE;}
-		return getMessage(messageCode, locale.getISO3Language().toUpperCase());
+		return getMessage(messageCode, locale.getISO3Language().toUpperCase(),para);
 	}
 
 	@Override
-	public Message getMessage(String messageCode, String lang) {
+	public Message getMessage(String messageCode, String lang,String[] para) {
 		if(lang == null){lang = CommonConstant.DEFAULT_LOCALE.getISO3Language().toUpperCase();}
 		Map<String,Message> messageMap = configDao.getMessageMap();	
 		Message message = messageMap.get(messageCode+"_"+lang);
+		
+		if(para!=null&&para.length>0){
+			MessageFormat mf = buildMessageFormat(message.getDisplayText(), CommonConstant.DEFAULT_LOCALE);
+			String  out = formatWithNullDetection(mf, para);
+			message.setDisplayText(out);
+		}
+		
 		if(message == null){
 			message = messageMap.get(messageCode+"_"+CommonConstant.DEFAULT_LOCALE.getISO3Language().toUpperCase());
 			if(message == null){
@@ -81,28 +93,30 @@ public class MessageServiceImpl implements MessageService {
 		return message;
 	}
 	@Override
-	public Message getMessage(String messageCode) {
+	public Message getMessage(String messageCode,String[] para) {
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		Locale locale = processContext.getLocale();
 		if(locale==null){
 			locale = CommonConstant.DEFAULT_LOCALE;
 		}
-		return getMessage(messageCode,locale);
+		return getMessage(messageCode,locale,para);
+	}
+
+	
+
+	@Override
+	public Message getMessage(MessageCode messageCode,String[] para) {
+		return getMessage(messageCode.getCode(),para);
 	}
 
 	@Override
-	public Message getMessage(MessageCode messageCode) {
-		return getMessage(messageCode.getCode());
+	public Message getMessage(MessageCode messageCode, Locale locale,String[] para) {
+		return getMessage(messageCode.getCode(),locale,para);
 	}
 
 	@Override
-	public Message getMessage(MessageCode messageCode, Locale locale) {
-		return getMessage(messageCode.getCode(),locale);
-	}
-
-	@Override
-	public Message getMessage(MessageCode messageCode, String lang) {
-		return getMessage(messageCode.getCode(),lang);
+	public Message getMessage(MessageCode messageCode, String lang,String[] para) {
+		return getMessage(messageCode.getCode(),lang,para);
 	}
 
 	
@@ -126,6 +140,61 @@ public class MessageServiceImpl implements MessageService {
 		
 		return map;
 	}
+    private static String formatWithNullDetection(MessageFormat mf, Object[] args) {
+    	LinkedList<Object> argList = new LinkedList<Object>(Arrays.asList(args));
+    	argList.addFirst("");
+        String message = mf.format(argList.toArray());
+        if ("null".equals(message)) {
+            return null;
+        } else {
+            return message;
+        }
+    }
+	
+    private static MessageFormat buildMessageFormat(String pattern, Locale locale) {
+        MessageFormatKey key = new MessageFormatKey(pattern, locale);
+        MessageFormat format = messageFormats.get(key);
+        if (format == null) {
+            format = new MessageFormat(pattern);
+            format.setLocale(locale);
+            format.applyPattern(pattern);
+            messageFormats.put(key, format);
+        }
 
+        return format;
+    }
+    
+    static class MessageFormatKey {
+        String pattern;
+        Locale locale;
+
+        MessageFormatKey(String pattern, Locale locale) {
+            this.pattern = pattern;
+            this.locale = locale;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof MessageFormatKey)) return false;
+
+            final MessageFormatKey messageFormatKey = (MessageFormatKey) o;
+
+            if (locale != null ? !locale.equals(messageFormatKey.locale) : messageFormatKey.locale != null)
+                return false;
+            if (pattern != null ? !pattern.equals(messageFormatKey.pattern) : messageFormatKey.pattern != null)
+                return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result;
+            result = (pattern != null ? pattern.hashCode() : 0);
+            result = 29 * result + (locale != null ? locale.hashCode() : 0);
+            return result;
+        }
+    }
 
 }
