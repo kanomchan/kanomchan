@@ -38,14 +38,11 @@
     </#if>
     <#assign itemKeyStr=itemKey.toString() />
 <label class="checkbox-mobile" for="${parameters.id?html}-${itemCount}">
-<input type="hidden" name="${parameters.beanName?html}[${itemCount-1}]<#if parameters.nameKey??>${parameters.nameKey}</#if>" value="${itemKeyStr?html}" id="hidden-${parameters.id?html}-${itemCount}"<#rt/>>
 <input type="checkbox" 
-		name="${parameters.beanName?html}[${itemCount-1}]<#if parameters.checkName??>${parameters.checkName}</#if>" 
+		value="${itemKeyStr?html}"
+		name="${parameters.beanName?html}[${itemCount-1}].${parameters.name}" 
 		id="${parameters.id?html}-${itemCount}"<#rt/>
-    <#if tag.contains(parameters.nameValue, itemKey)>
-       checked="checked"<#rt/>
-    </#if>
-	<#if parameters.nameValue?? && itemKey?? >
+	<#if tag.contains(parameters.nameValue, itemKey)>
        checked="checked"<#rt/>
     </#if>
     <#if parameters.disabled?default(false)>
