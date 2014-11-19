@@ -315,6 +315,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(value!=null){
 								listColumnName.add(columnName);
 								listParaName.add("?");
+								if((Long)value == 0)
+									value = null;
 								para.add(value);
 							}
 						}else{
