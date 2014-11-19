@@ -12,6 +12,7 @@ public interface Message {
 	public String[] getPara();
 	public String getMessageLang();
 	public String getDisplayText();
+	public void setDisplayText(String displayText);
 	public String getMessageDesc();
 	public String getMessageType();
 	public String getMessageTypeCss();
