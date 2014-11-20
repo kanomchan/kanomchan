@@ -39,6 +39,9 @@ END SNIPPET: supported-validators
         <#--
             In case of multiselect fields return only the first value.
         -->
+		try{
+		
+
         var getFieldValue = function(field) {
 			var type = field.type ? field.type : field[0].type;
             
@@ -85,7 +88,7 @@ END SNIPPET: supported-validators
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
 			<#elseif validator.validatorType = "customjs">
-            if (continueValidation && ${validator.call?js_string}(fieldValue)) {
+            if (continueValidation && !${validator.call?js_string}(fieldValue)) {
                 addError(field, error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
@@ -157,7 +160,9 @@ END SNIPPET: supported-validators
         }
         </#list>
     </#list>
-
+		}catch(err){
+		return false;
+		}
         return !errors;
     }
 </script>

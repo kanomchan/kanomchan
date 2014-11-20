@@ -53,7 +53,7 @@
           <#assign itemTitle = ''/>
         </#if>
     </#if>
-    <div class="radio radio-inline">
+    <div class="radio">
 <input type="radio"<#rt/>
 <#if parameters.name??>
  name="${parameters.name?html}"<#rt/>
