@@ -65,6 +65,7 @@ END SNIPPET: supported-validators
         var continueValidation = true;
     <#list parameters.tagNames as tagName>
         <#list tag.getValidators("${tagName}") as aValidator>
+		//${tagName}
 		var field = form.elements['${aValidator.fieldName}'];
 		if(field){
             <#if aValidator.validatorType = "field-visitor">
@@ -78,7 +79,13 @@ END SNIPPET: supported-validators
             var fieldValue = getFieldValue(field);
             
             <#if validator.validatorType = "required">
-            if (fieldValue == "") {
+            if (fieldValue == "" || fieldValue == "0") {
+                addError(field, error);
+                errors = true;
+                <#if validator.shortCircuit>continueValidation = false;</#if>
+            }
+			<#elseif validator.validatorType = "customjs">
+            if (continueValidation && ${validator.call?js_string}(fieldValue)) {
                 addError(field, error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
