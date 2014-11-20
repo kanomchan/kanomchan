@@ -108,9 +108,6 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 		return getValidators(clazz, context, null);
 	}
 
-	
-	
-	
 	public void validate(Object object, String context) throws ValidationException {
 		validate(object, context, (String) null);
 	}
@@ -140,8 +137,6 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         		}
         		
         	}
-        	
-        	
         }else{
         	validators = getValidators(object.getClass(), context, method);
         }
