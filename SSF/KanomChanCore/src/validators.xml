@@ -21,7 +21,9 @@
     <validator name="stringlength" class="com.opensymphony.xwork2.validator.validators.StringLengthFieldValidator"/>
     <validator name="regex" class="com.opensymphony.xwork2.validator.validators.RegexFieldValidator"/>
     <validator name="conditionalvisitor" class="com.opensymphony.xwork2.validator.validators.ConditionalVisitorFieldValidator"/>
+    <validator name="customjs" class="org.kanomchan.core.common.web.struts.validator.validators.CustomJs" />
 	<validator name="precondition" class="org.kanomchan.core.common.web.struts.validator.validators.PreConditionValidator"/>
 	<validator name="impl" class="org.kanomchan.core.common.web.struts.validator.validators.Impl"/>
+	
 </validators>
 <!--  END SNIPPET: validators-default -->
