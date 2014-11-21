@@ -43,13 +43,13 @@ function clearErrorLabels(form) {
 
 function addErrorXHTML(e, errorText) {
 	try {
-		var field = (e.type ? e : e[0]);
-		var formGroup = $(field).closest('.form-group');
-		var rowError = formGroup.find(".rowError");
-		var errorChild = rowError.children();
+		var fieldError = $("[name='" + e + "Error']");
+//		var field = (e.type ? e : e[0]);
+		var formGroup = fieldError.closest('.form-group');
+//		var rowError = formGroup.find(".rowError");
+		var errorChild = fieldError.children();
 		errorChild.slideDown();
-		$(field).closest('.form-group').removeClass('has-success').addClass(
-				'has-error');
+		formGroup.removeClass('has-success').addClass('has-error');
 		if (errorChild.prop("role") == "alert")
 			errorChild.text(errorText);
 		else

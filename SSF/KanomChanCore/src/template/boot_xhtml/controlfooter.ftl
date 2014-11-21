@@ -28,7 +28,7 @@
 	<#if hasFieldErrors>
 	<#list fieldErrors[parameters.name] as error>
 		<#if parameters.label??>
-			<div class="rowError" <#if parameters.id??>
+			<div class="rowError ${parameters.name?html}Error" <#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >
 				<div class="col-md-offset-4 col-md-4">
@@ -43,7 +43,7 @@
 	</#list>
 	<#else>
 		<#if parameters.label??>
-			<div class="rowError" <#if parameters.id??>
+			<div class="rowError ${parameters.name?html}Error" <#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >
 				<div style="display:none" class="col-md-offset-4 col-md-4">
