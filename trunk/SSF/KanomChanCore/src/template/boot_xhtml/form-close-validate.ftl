@@ -83,19 +83,19 @@ END SNIPPET: supported-validators
             
             <#if validator.validatorType = "required">
             if (fieldValue == "" || fieldValue == "0") {
-                addError(field, error);
+                addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
 			<#elseif validator.validatorType = "customjs">
             if (continueValidation && !${validator.call?js_string}(fieldValue)) {
-                addError(field, error);
+                addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
             <#elseif validator.validatorType = "requiredstring">
             if (continueValidation && fieldValue != null && (fieldValue == "" || fieldValue.replace(/^\s+|\s+$/g,"").length == 0)) {
-                addError(field, error);
+                addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
@@ -111,26 +111,26 @@ END SNIPPET: supported-validators
                 </#if>
                 if ((${validator.minLength?c} > -1 && value.length < ${validator.minLength?c}) ||
                     (${validator.maxLength?c} > -1 && value.length > ${validator.maxLength?c})) {
-                    addError(field, error);
+                    addError("${aValidator.fieldName?js_string}", error);
                     errors = true;
                     <#if validator.shortCircuit>continueValidation = false;</#if>
                 }
             }
             <#elseif validator.validatorType = "regex">
             if (continueValidation && fieldValue != null && !fieldValue.match("${validator.regex?js_string}")) {
-                addError(field, error);
+                addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
             <#elseif validator.validatorType = "email">
             if (continueValidation && fieldValue != null && fieldValue.length > 0 && fieldValue.match("${validator.regex?js_string}")==null) {
-                addError(field, error);
+                addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
             <#elseif validator.validatorType = "url">
             if (continueValidation && fieldValue != null && fieldValue.length > 0 && fieldValue.match("${validator.regex?js_string}")==null) {
-                addError(field, error);
+                addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
@@ -140,7 +140,7 @@ END SNIPPET: supported-validators
                      ${validator.min?c}<#else>false</#if> ||
                         <#if validator.max??>parseInt(fieldValue) >
                            ${validator.max?c}<#else>false</#if>) {
-                    addError(field, error);
+                    addError("${aValidator.fieldName?js_string}", error);
                     errors = true;
                     <#if validator.shortCircuit>continueValidation = false;</#if>
                 }
@@ -152,7 +152,7 @@ END SNIPPET: supported-validators
                         <#if validator.maxInclusive??>value > ${validator.maxInclusive?c}<#else>false</#if> ||
                         <#if validator.minExclusive??>value <= ${validator.minExclusive?c}<#else>false</#if> ||
                         <#if validator.maxExclusive??>value >= ${validator.maxExclusive?c}<#else>false</#if>) {
-                    addError(field, error);
+                    addError("${aValidator.fieldName?js_string}", error);
                     errors = true;
                 }
             }
