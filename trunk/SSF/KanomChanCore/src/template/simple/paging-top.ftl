@@ -26,7 +26,7 @@
 			<div class="inline">
 				Show 
 				<select 
-					class="form-control field-xs inline" 
+					class="form-control paging-select inline" 
 					id="rowsPerPage_Top_${parameters.id}" 
 					name="rowsPerPage" 
 					onchange="rowsPerPage_Top_${parameters.id}_select()">
@@ -60,6 +60,7 @@
 				</script>
 				rows
 			</div>
+			<br class="hidden-md hidden-lg">
 			<ul class="pagination pull-right inline">
 				<#if parameters.currentPage == 1>
 					<li><a class="disabled">&laquo;</a></li>
