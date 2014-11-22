@@ -88,7 +88,7 @@ END SNIPPET: supported-validators
                 <#if validator.shortCircuit>continueValidation = false;</#if>
             }
 			<#elseif validator.validatorType = "customjs">
-            if (continueValidation && !${validator.call?js_string}(fieldValue)) {
+            if ((continueValidation && fieldValue != null && fieldValue != "") && !${validator.call?js_string}(fieldValue)) {
                 addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
