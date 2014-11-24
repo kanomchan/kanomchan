@@ -56,6 +56,7 @@
 <#if parameters.choiceValue?default("true") == "true">
 	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option1" checked><label for="${parameters.id}-option1" class="control-label">Specific Value</label></div>&nbsp</lt>
 	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option2"><label for="${parameters.id}-option2" class="control-label">Except Value</label></div></lt>
+	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option3"><label for="${parameters.id}-option3" class="control-label">All</label></div>&nbsp</lt>
 </#if>
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
@@ -157,13 +158,15 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 
 </select>
+<#--
 <#if parameters.choiceValue?default("true") == "true">
 <label class="inline pull-right" style="color:#C9C9C9;">* If you want to select all value please leave it blank </label>
 </#if>
+-->
 <span>
 <script>
 	<#include "js/select2.min.js"> 
-</script>
+</script> 
 <script>
     $("#${parameters.id}").select2({
     	placeholder: "${parameters.placeholder}",
@@ -180,6 +183,12 @@
 	    for(var i=0;i<split${parameters.id}.length;i++){
 			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
 	    }
+	});
+	$("#${parameters.id}-option3").click(function() {
+		$("#s2id_${parameters.id?html}").fadeOut(200);
+	});
+	$("#${parameters.id}-option1, #${parameters.id}-option2").click(function() {
+		$("#s2id_${parameters.id?html}").fadeIn(200);
 	});
 </script>
 
