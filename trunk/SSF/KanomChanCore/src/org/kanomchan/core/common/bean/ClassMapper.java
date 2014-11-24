@@ -11,7 +11,7 @@ public class ClassMapper {
 //	public void setMapCol(Map<String, Property> mapCol) {
 //		this.mapCol = mapCol;
 //	}
-
+	private String tableName;
 	private Property propertyId;
 	private Map<String, Property> column = new ConcurrentHashMap<String, Property>();
 	public Property getPropertyId() {
@@ -26,7 +26,12 @@ public class ClassMapper {
 	public void setColumn(Map<String, Property> column) {
 		this.column = column;
 	}
-	
+	public String getTableName() {
+		return tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 	
 //	public void putMethodSet(String name, Method methodSet) {
 //		mapSet.put(name, methodSet);

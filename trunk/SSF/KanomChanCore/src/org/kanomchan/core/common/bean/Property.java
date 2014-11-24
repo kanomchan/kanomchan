@@ -6,6 +6,7 @@ public class Property {
 	private Method methodGet;
 	private Method methodSet;
 	private ColumnType columnType;
+	private String columnName;
 	public Method getMethodGet() {
 		return methodGet;
 	}
@@ -23,6 +24,12 @@ public class Property {
 	}
 	public void setColumnType(ColumnType columnType) {
 		this.columnType = columnType;
+	}
+	public String getColumnName() {
+		return columnName;
+	}
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
 	}
 
 	

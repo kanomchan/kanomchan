@@ -22,6 +22,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.ColumnType;
@@ -66,12 +67,15 @@ public class JPAUtil {
 		return criterias;
 	}
 	public static ClassMapper getClassMapper(Class<?> clazz){
+		
 		ClassMapper classMapper =mapClass.get(clazz.getName());
+		
 //		classMapper = null;
 //			ClassMapper classMapper = mapClass.get(clazz.getName());
 		if (classMapper == null) {
 			classMapper = new ClassMapper();
-
+			Table table = clazz.getAnnotation(Table.class);
+			classMapper.setTableName(table.name());
 			for (Field field : clazz.getDeclaredFields()) {
 				try {
 					Method methodSet = ClassUtil.findSetter(clazz, field.getName());
@@ -90,6 +94,7 @@ public class JPAUtil {
 							Property property = new Property();
 							property.setMethodGet(methodGet);
 							property.setMethodSet(methodSet);
+							property.setColumnName(column.name());
 							property.setColumnType(ColumnType.column);
 							classMapper.getColumn().put(column.name(), property);
 							if(id!=null){
