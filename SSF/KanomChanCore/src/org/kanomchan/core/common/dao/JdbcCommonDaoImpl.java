@@ -1,24 +1,16 @@
 package org.kanomchan.core.common.dao;
 
-import java.beans.IntrospectionException;
-import java.lang.reflect.Field;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.kanomchan.core.common.bean.ClassMapper;
@@ -28,8 +20,6 @@ import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.kanomchan.core.common.bean.Property;
-import org.kanomchan.core.common.constant.CommonConstant.LOG;
-import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -39,8 +29,6 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterUtils;
-import org.springframework.jdbc.core.namedparam.ParsedSql;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -48,7 +36,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Joiner;
-import com.sun.xml.ws.rx.rm.protocol.wsrm200702.SequenceAcknowledgementElement.Final;
 
 @Transactional
 public class JdbcCommonDaoImpl implements JdbcCommonDao {
@@ -408,6 +395,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //	}
 	
 	public <T extends Object> T update(T target){
+		return update(target, true);
+	}
+	
+	public <T extends Object> T update(T target, boolean aowlobmung){
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
@@ -440,12 +431,25 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 							
 							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+							
 							if(value!=null ) {
-								listColumnName.add(columnName);
-								listParaName.add("?");
-								if((Long)value == 0)
-									value = null;
-								para.add(value);
+								if(value instanceof Number){
+									if(aowlobmung || ((Number)value).intValue() !=-1){
+										listColumnName.add(columnName);
+										listParaName.add("?");
+										if((Long)value == 0)
+											value = null;
+										para.add(value);
+									}
+								}else{
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									if((Long)value == 0)
+										value = null;
+									para.add(value);
+								}
+								
+								
 							}
 						}else{
 							listColumnName.add(columnName);
@@ -621,6 +625,15 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1) {
 		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1));
 	}
+	public <T> T updateOnlyNotNullBasic(T target) {
+		return update(target);
+	}
 	
+	public <T> T get(Serializable target,  Class<T> clazz) {
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		Property property = classMapper.getPropertyId();
+		String sql = "select * from " + classMapper.getTableName() + " where " + property.getColumnName() + " = ?";
+		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
+	}
 	
 }
