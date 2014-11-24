@@ -56,49 +56,51 @@
         </#if>
     </#if>
     <#assign itemKeyStr=itemKey.toString() />
-<div class="checkbox">
-<input type="checkbox" name="${parameters.name?html}" value="${itemKeyStr?html}"
-       id="${parameters.name?html}-${itemCount}"<#rt/>
-    <#if tag.contains(parameters.nameValue, itemKey)>
-       checked="checked"<#rt/>
-    </#if>
-    <#if parameters.disabled?default(false)>
-       disabled="disabled"<#rt/>
-    </#if>
-    <#if itemCssClass?if_exists != "">
-     class="${itemCssClass?html}"<#rt/>
-    <#else>
-        <#if parameters.cssClass??>
-     class="${parameters.cssClass?html}"<#rt/>
-        </#if>
-    </#if>
-    <#if itemCssStyle?if_exists != "">
-     style="${itemCssStyle?html}"<#rt/>
-    <#else>
-        <#if parameters.cssStyle??>
-     style="${parameters.cssStyle?html}"<#rt/>
-        </#if>
-    </#if>
-    <#if itemTitle?if_exists != "">
-     title="${itemTitle?html}"<#rt/>
-    <#else>
-        <#if parameters.title??>
-     title="${parameters.title?html}"<#rt/>
-        </#if>
-    </#if>
-    <#include "/${parameters.templateDir}/${parameters.expandTheme}/css.ftl" />
-    <#include "/${parameters.templateDir}/${parameters.expandTheme}/scripting-events.ftl" />
-    <#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
-        />
-<label for="${parameters.name?html}-${itemCount}" class="checkboxLabel">${itemValue?html}</label>
-</div>
-</@s.iterator>
-    <#else>
-    &nbsp;
-</#if>
-<input type="hidden" id="__multiselect_${parameters.id?html}" name="__multiselect_${parameters.name?html}"
-       value=""<#rt/>
-<#if parameters.disabled?default(false)>
-       disabled="disabled"<#rt/>
-</#if>
-        />
+
+<div class="col-md-6">
+	<label class="checkbox-mobile">
+	<input type="checkbox" name="${parameters.name?html}" value="${itemKeyStr?html}"
+	       id="${parameters.name?html}-${itemCount}"<#rt/>
+	    <#if tag.contains(parameters.nameValue, itemKey)>
+	       checked="checked"<#rt/>
+	    </#if>
+	    <#if parameters.disabled?default(false)>
+	       disabled="disabled"<#rt/>
+	    </#if>
+	    <#if itemCssClass?if_exists != "">
+	     class="${itemCssClass?html}"<#rt/>
+	    <#else>
+	        <#if parameters.cssClass??>
+	     class="${parameters.cssClass?html}"<#rt/>
+	        </#if>
+	    </#if>
+	    <#if itemCssStyle?if_exists != "">
+	     style="${itemCssStyle?html}"<#rt/>
+	    <#else>
+	        <#if parameters.cssStyle??>
+	     style="${parameters.cssStyle?html}"<#rt/>
+	        </#if>
+	    </#if>
+	    <#if itemTitle?if_exists != "">
+	     title="${itemTitle?html}"<#rt/>
+	    <#else>
+	        <#if parameters.title??>
+	     title="${parameters.title?html}"<#rt/>
+	        </#if>
+	    </#if>
+	    <#include "/${parameters.templateDir}/${parameters.expandTheme}/css.ftl" />
+	    <#include "/${parameters.templateDir}/${parameters.expandTheme}/scripting-events.ftl" />
+	    <#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
+	        />
+	<label for="${parameters.name?html}-${itemCount}" class="checkboxLabel">${itemValue?html}</label></label></div>
+	</@s.iterator>
+	    <#else>
+	    &nbsp;
+	</#if>
+	<input type="hidden" id="__multiselect_${parameters.id?html}" name="__multiselect_${parameters.name?html}"
+	       value=""<#rt/>
+	<#if parameters.disabled?default(false)>
+	       disabled="disabled"<#rt/>
+	</#if>
+	        />
+
