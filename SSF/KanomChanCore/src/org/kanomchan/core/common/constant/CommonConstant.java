@@ -16,6 +16,7 @@ public interface CommonConstant {
     public static interface SESSION {
 	// public static final String USER_BEAN = "SESSION_USER_BEAN";
 	public static final String LANG_KEY = "SESSION_LANG_KEY";
+	public static final String LANG_LIST_KEY = "SESSION_LANG_LIST_KEY";
 	public static final String LOCALE_KEY = "SESSION_LOCALE_KEY";
 	public static final String USER_BEAN_KEY = "SESSION_USER_BEAN_KEY";
 	public static final String NAVIGATION_BEAN_KEY = "SESSION_NAVIGATION_BEAN_KEY";
