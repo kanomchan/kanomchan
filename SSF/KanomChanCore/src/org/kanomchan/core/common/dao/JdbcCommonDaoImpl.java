@@ -625,15 +625,22 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1) {
 		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1));
 	}
+	@Override
 	public <T> T updateOnlyNotNullBasic(T target) {
 		return update(target);
 	}
-	
+	@Override
 	public <T> T get(Serializable target,  Class<T> clazz) {
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		Property property = classMapper.getPropertyId();
 		String sql = "select * from " + classMapper.getTableName() + " where " + property.getColumnName() + " = ?";
 		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
+	}
+	@Override
+	public <T> List<T> findAll(Class<T> clazz) {
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		String sql = "select * from " + classMapper.getTableName();
+		return nativeQuery(sql, clazz);
 	}
 	
 }

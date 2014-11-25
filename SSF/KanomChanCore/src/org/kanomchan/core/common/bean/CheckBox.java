@@ -4,6 +4,9 @@ public class CheckBox<T> {
 	
 	private T value;
 	private boolean check;
+	public CheckBox(T value) {
+		this.value = value;
+	}
 	public T getValue() {
 		return value;
 	}

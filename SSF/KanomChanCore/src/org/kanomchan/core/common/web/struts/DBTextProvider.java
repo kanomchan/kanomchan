@@ -177,7 +177,7 @@ public class DBTextProvider implements TextProvider {
     
     private static String formatWithNullDetection(MessageFormat mf, Object[] args) {
     	LinkedList<Object> argList = new LinkedList<Object>(Arrays.asList(args));
-    	argList.addFirst("");
+//    	argList.addFirst("");
         String message = mf.format(argList.toArray());
         if ("null".equals(message)) {
             return null;
