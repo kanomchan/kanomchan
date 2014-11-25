@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.dao;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,11 @@ public interface JdbcCommonDao {
 	public  <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Map<String, Object> params);
 	
 	public  <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1);
+
+	public <T> T updateOnlyNotNullBasic(T target);
 	
+	public <T> T get(Serializable target,  Class<T> clazz);
+
+	public <T> List<T> findAll(Class<T> class1);
 
 }

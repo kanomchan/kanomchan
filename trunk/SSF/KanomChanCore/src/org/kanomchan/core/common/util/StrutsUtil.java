@@ -31,4 +31,15 @@ public class StrutsUtil {
 		return list;
 	}
 
+	public static <T extends Object> List<CheckBox<T>> convertListCheckBox(List<T> list) {
+		
+		List<CheckBox<T>> listOut = new LinkedList<CheckBox<T>>();
+		if(list !=null){
+			for (T obje : list) {
+				listOut.add(new CheckBox<T>(obje));
+			}
+		}
+		return listOut;
+	}
+
 }
