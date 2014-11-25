@@ -75,7 +75,10 @@ public class JPAUtil {
 		if (classMapper == null) {
 			classMapper = new ClassMapper();
 			Table table = clazz.getAnnotation(Table.class);
-			classMapper.setTableName(table.name());
+			if(table!=null)
+				classMapper.setTableName(table.name());
+			else
+				classMapper.setTableName(clazz.getSimpleName());
 			for (Field field : clazz.getDeclaredFields()) {
 				try {
 					Method methodSet = ClassUtil.findSetter(clazz, field.getName());
