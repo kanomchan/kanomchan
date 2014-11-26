@@ -151,7 +151,8 @@ END SNIPPET: supported-validators
                 if (<#if validator.minInclusive??>value < ${validator.minInclusive?c}<#else>false</#if> ||
                         <#if validator.maxInclusive??>value > ${validator.maxInclusive?c}<#else>false</#if> ||
                         <#if validator.minExclusive??>value <= ${validator.minExclusive?c}<#else>false</#if> ||
-                        <#if validator.maxExclusive??>value >= ${validator.maxExclusive?c}<#else>false</#if>) {
+                        <#if validator.maxExclusive??>value >= ${validator.maxExclusive?c}<#else>false</#if> || 
+						isNaN(value)) {
                     addError("${aValidator.fieldName?js_string}", error);
                     errors = true;
                 }
