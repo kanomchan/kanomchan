@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.util;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,26 @@ public class StrutsUtil {
 			for (T obje : listShow) {
 				
 				if(edit.contains(obje)){
+					CheckBox<T> checkBox = new CheckBox<T>(obje);
+					checkBox.setCheck(true);
+					listOut.add(checkBox);
+				}else{
+					listOut.add(new CheckBox<T>(obje));
+				}
+				
+			}
+		}
+		return listOut;
+	}
+	
+	public static <T extends Object,E extends Object> List<CheckBox<T>> convertListCheckBox(List<T> listShow, List<E> listedit,ComparatorTwoObject<T,E> comparatorTwoObject ) {
+		
+		List<CheckBox<T>> listOut = new LinkedList<CheckBox<T>>();
+		Set<E> edit = new HashSet<E>(listedit);
+		if(listShow !=null){
+			for (T obje : listShow) {
+				
+				if(comparatorTwoObject.contains(obje,edit)){
 					CheckBox<T> checkBox = new CheckBox<T>(obje);
 					checkBox.setCheck(true);
 					listOut.add(checkBox);
