@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.ServletConfigInterceptor;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.processhandler.ProcessContext;
@@ -15,9 +14,14 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class LanguageInterceptor  extends ServletConfigInterceptor{
+public class LanguageInterceptor  extends AbstractInterceptor{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6649212718361712229L;
 	private ConfigService configService;
 	@Autowired
 	@Required

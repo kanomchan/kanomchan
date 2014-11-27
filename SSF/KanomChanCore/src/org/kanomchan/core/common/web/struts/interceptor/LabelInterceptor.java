@@ -2,8 +2,6 @@ package org.kanomchan.core.common.web.struts.interceptor;
 
 import java.util.Map;
 
-import org.apache.struts2.interceptor.ServletConfigInterceptor;
-import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.service.LabelService;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +9,15 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class LabelInterceptor extends ServletConfigInterceptor {
+public class LabelInterceptor extends AbstractInterceptor {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2374188586405898080L;
 	private LabelService labelService;
 	@Autowired
 	@Required
