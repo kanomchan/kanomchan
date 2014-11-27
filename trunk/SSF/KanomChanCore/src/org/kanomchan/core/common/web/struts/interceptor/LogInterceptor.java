@@ -1,20 +1,24 @@
 package org.kanomchan.core.common.web.struts.interceptor;
 
 import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.ServletConfigInterceptor;
 
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class LogInterceptor extends ServletConfigInterceptor {
+public class LogInterceptor extends AbstractInterceptor {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 153758418084830793L;
 	private static final Logger logger = Logger.getLogger(LogInterceptor.class);
 	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		String actionName = invocation.getProxy().getActionName();
 		String namespace = invocation.getProxy().getNamespace();
-		String method = invocation.getProxy().getMethod();
+//		String method = invocation.getProxy().getMethod();
 		String action = namespace+"/"+actionName;
 		logger.info("[Action  Start]\tCall Action:" +action);
 		long start = System.currentTimeMillis();

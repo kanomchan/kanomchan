@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletConfigInterceptor;
-import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.security.authorize.Authorize;
 
@@ -55,14 +54,16 @@ public class SessionInterceptor extends ServletConfigInterceptor  {
 				session.put(CommonConstant.SESSION.NEXT_URL_KEY, url);
 			return "FORCE_TO_LOGIN_PAGE";
 		}else{
-//			UserBean userBean = (UserBean) session.get(CommonConstant.SESSION.USER_BEAN_KEY);
-//			Set<String> privileges = userBean.getPrivileges();
-//			String methodStr = invocation.getProxy().getMethod();
-//			Set<String> codes = getcode(invocation.getAction().getClass(), methodStr);
-//			if(!privileges.containsAll(codes)){
-//				return "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
-//			}
-//			
+//			 UserBean userBean = (UserBean)
+//			 session.get(CommonConstant.SESSION.USER_BEAN_KEY);
+//			 Set<String> privileges = userBean.getPrivileges();
+//			 String methodStr = invocation.getProxy().getMethod();
+//			 Set<String> codes = getcode(invocation.getAction().getClass(),
+//			 methodStr);
+//			 if(!privileges.containsAll(codes)){
+//				 return "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
+//			 }
+			
 		}
 		
 		

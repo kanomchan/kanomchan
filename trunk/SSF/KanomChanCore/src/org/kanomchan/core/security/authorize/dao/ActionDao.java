@@ -1,6 +1,6 @@
 package org.kanomchan.core.security.authorize.dao;
 
-import org.kanomchan.core.security.authorize.bean.ActionBean;
+import org.kanomchan.core.common.bean.ActionBean;
 
 public interface ActionDao {
 	
