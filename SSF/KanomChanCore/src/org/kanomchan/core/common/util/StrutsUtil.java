@@ -48,7 +48,11 @@ public class StrutsUtil {
 	public static <T extends Object> List<CheckBox<T>> convertListCheckBox(List<T> listShow, List<T> listedit) {
 		
 		List<CheckBox<T>> listOut = new LinkedList<CheckBox<T>>();
-		Set<T> edit = new HashSet<T>(listedit);
+		Set<T> edit = null;
+		if(listedit != null)
+			edit = new HashSet<T>(listedit);
+		else
+			edit = new HashSet<T>();
 		if(listShow !=null){
 			for (T obje : listShow) {
 				
