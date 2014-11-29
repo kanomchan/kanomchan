@@ -268,7 +268,9 @@ public class JPAUtil {
 						try {
 							objectData =  rs.getDate(columnNum);
 						} catch (SQLException e1) {
-							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							columnNum,rs.getMetaData().getColumnName(columnNum)
+							
+//							logger.error("getObject(ResultSet, String, Class<T>) Type: Date Error"+columnNum,rs.getMetaData().getColumnName(columnNum), e1); //$NON-NLS-1$
 						}
 						
 					}else if(clazz.equals(Time.class)){
