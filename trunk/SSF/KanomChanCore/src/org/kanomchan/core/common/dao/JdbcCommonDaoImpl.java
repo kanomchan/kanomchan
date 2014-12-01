@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.dao;
 
+import org.apache.log4j.Logger;
+
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,6 +42,10 @@ import com.google.common.base.Joiner;
 
 @Transactional
 public class JdbcCommonDaoImpl implements JdbcCommonDao {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(JdbcCommonDaoImpl.class);
 
 	
 	protected SimpleJdbcTemplate simpleJdbcTemplate;
@@ -470,7 +476,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+				logger.error("update(T, boolean)", e); //$NON-NLS-1$
 			}
 		}
 		
@@ -497,27 +503,33 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 		}
 		
-
-		Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
-		if(methodSetId !=null&&idNumber!=null){
-			try {
-				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
-					
-					Class<?> type = methodSetId.getParameterTypes()[0];
-					if(type == Long.class){
-						methodSetId.invoke(target, idNumber.longValue());
-					}else if(type == Integer.class){
-						methodSetId.invoke(target, idNumber.intValue());
-					}else if(type == Short.class){
-						methodSetId.invoke(target, idNumber.shortValue());
-					}else if(type == Double.class){
-						methodSetId.invoke(target, idNumber.doubleValue());
+		if(listColumnName.size() > 0){
+			Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+			if(methodSetId !=null&&idNumber!=null){
+				try {
+					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
+						
+						Class<?> type = methodSetId.getParameterTypes()[0];
+						if(type == Long.class){
+							methodSetId.invoke(target, idNumber.longValue());
+						}else if(type == Integer.class){
+							methodSetId.invoke(target, idNumber.intValue());
+						}else if(type == Short.class){
+							methodSetId.invoke(target, idNumber.shortValue());
+						}else if(type == Double.class){
+							methodSetId.invoke(target, idNumber.doubleValue());
+						}
 					}
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					logger.error("update(T, boolean)", e); //$NON-NLS-1$
 				}
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+			}
+		}else{
+			if (logger.isDebugEnabled()) {
+				logger.debug("update(T, boolean) - column size 0"); //$NON-NLS-1$
 			}
 		}
+		
 		return target;
 	}
 	
