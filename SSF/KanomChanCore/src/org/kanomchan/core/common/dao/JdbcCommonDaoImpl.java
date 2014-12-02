@@ -23,6 +23,8 @@ import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.kanomchan.core.common.bean.Property;
+import org.kanomchan.core.common.constant.CommonMessageCode;
+import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -390,7 +392,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			
 		}
 		if(objectId!=null){
-			update(t);
+			try{
+				update(t);
+			} catch (Exception e){
+				save(t);
+			}
+			
 		}
 		else{
 			save(t);
@@ -401,11 +408,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		return t;
 //	}
 	
-	public <T extends Object> T update(T target){
+	public <T extends Object> T update(T target) throws RollBackTechnicalException{
 		return update(target, true);
 	}
 	
-	public <T extends Object> T update(T target, boolean aowlobmung){
+	public <T extends Object> T update(T target, boolean aowlobmung) throws RollBackTechnicalException{
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
@@ -504,30 +511,36 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		
 		if(listColumnName.size() > 0){
-			Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
-			if(methodSetId !=null&&idNumber!=null){
-				try {
-					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
-						
-						Class<?> type = methodSetId.getParameterTypes()[0];
-						if(type == Long.class){
-							methodSetId.invoke(target, idNumber.longValue());
-						}else if(type == Integer.class){
-							methodSetId.invoke(target, idNumber.intValue());
-						}else if(type == Short.class){
-							methodSetId.invoke(target, idNumber.shortValue());
-						}else if(type == Double.class){
-							methodSetId.invoke(target, idNumber.doubleValue());
-						}
-					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					logger.error("update(T, boolean)", e); //$NON-NLS-1$
-				}
+			int row = executeNativeSQL(sb.toString(),para.toArray());
+			if(row == 0){
+				throw new RollBackTechnicalException(CommonMessageCode.COM4993);
 			}
+//			System.out.println(idNumber);
+//			if(methodSetId !=null&&idNumber!=null){
+//				try {
+//					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
+//						
+//						Class<?> type = methodSetId.getPar6ameterTypes()[0];
+//						if(type == Long.class){
+//							methodSetId.invoke(target, idNumber.longValue());
+//						}else if(type == Integer.class){
+//							methodSetId.invoke(target, idNumber.intValue());
+//						}else if(type == Short.class){
+//							methodSetId.invoke(target, idNumber.shortValue());
+//						}else if(type == Double.class){
+//							methodSetId.invoke(target, idNumber.doubleValue());
+//						}
+//					}
+//				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+//					logger.error("update(T, boolean)", e); //$NON-NLS-1$
+//				}
+//			}
 		}else{
 			if (logger.isDebugEnabled()) {
 				logger.debug("update(T, boolean) - column size 0"); //$NON-NLS-1$
 			}
+			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
+
 		}
 		
 		return target;
@@ -639,7 +652,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1));
 	}
 	@Override
-	public <T> T updateOnlyNotNullBasic(T target) {
+	public <T> T updateOnlyNotNullBasic(T target) throws RollBackTechnicalException {
 		return update(target);
 	}
 	@Override
