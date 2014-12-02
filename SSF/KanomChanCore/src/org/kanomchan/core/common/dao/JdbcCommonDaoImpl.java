@@ -284,8 +284,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		Method[] arrmet = clazz.getMethods();
 		List<String> listColumnName = new LinkedList<String>();
 		List<String> listParaName = new LinkedList<String>();
-		List<String> listPkName = new LinkedList<String>();
-		List<Object> listPkId = new LinkedList<Object>();
+//		List<String> listPkName = new LinkedList<String>();
+//		List<Object> listPkId = new LinkedList<Object>();
 		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
@@ -467,7 +467,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<Object> listPkNamePara = new LinkedList<Object>();
 		List<String> listColumnName = new LinkedList<String>();
 		List<String> listParaName = new LinkedList<String>();
-		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+//		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
 			Property property = classMapper.getColumn().get(columnName);
