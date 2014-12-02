@@ -268,6 +268,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	public <T extends Object> T save(T target){
+		return save(target, true);
+	}
+	
+	public <T extends Object> T save(T target, boolean includeMinusOne){
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
@@ -308,12 +312,29 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 							
 							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-							if(value!=null){
-								listColumnName.add(columnName);
-								listParaName.add("?");
-								if((Long)value == 0)
-									value = null;
-								para.add(value);
+//							if(value!=null){
+//								listColumnName.add(columnName);
+//								listParaName.add("?");
+//								if((Long)value == 0)
+//									value = null;
+//								para.add(value);
+//							}
+							if(value!=null ) {
+								if(value instanceof Number){
+									if(includeMinusOne || ((Number)value).intValue() !=-1){
+										listColumnName.add(columnName);
+										listParaName.add("?");
+										if((Long)value == 0)
+											value = null;
+										para.add(value);
+									}
+								}else{
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									if((Long)value == 0)
+										value = null;
+									para.add(value);
+								}
 							}
 						}else{
 							listColumnName.add(columnName);
@@ -382,6 +403,29 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		}
 		return target;
 	}
+	public <T extends Object> T saveOrUpdate(T t, boolean includeMinusOne){
+		ClassMapper classMapper =JPAUtil.getClassMapper(t.getClass());
+		Object objectId = null;
+		try {
+			objectId = classMapper.getPropertyId().getMethodGet().invoke(t);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			
+		}
+		if(objectId!=null){
+			try{
+				update(t, includeMinusOne);
+			} catch (Exception e){
+				save(t, includeMinusOne);
+			}
+			
+		}
+		else{
+			save(t, includeMinusOne);
+		}
+		return t;
+	}
+	
 	public <T extends Object> T saveOrUpdate(T t){
 		ClassMapper classMapper =JPAUtil.getClassMapper(t.getClass());
 		Object objectId = null;
@@ -393,14 +437,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		if(objectId!=null){
 			try{
-				update(t);
+				update(t, true);
 			} catch (Exception e){
-				save(t);
+				save(t, true);
 			}
 			
 		}
 		else{
-			save(t);
+			save(t, true);
 		}
 		return t;
 	}
@@ -412,7 +456,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return update(target, true);
 	}
 	
-	public <T extends Object> T update(T target, boolean aowlobmung) throws RollBackTechnicalException{
+	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackTechnicalException{
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
@@ -448,7 +492,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							
 							if(value!=null ) {
 								if(value instanceof Number){
-									if(aowlobmung || ((Number)value).intValue() !=-1){
+									if(includeMinusOne || ((Number)value).intValue() !=-1){
 										listColumnName.add(columnName);
 										listParaName.add("?");
 										if((Long)value == 0)
@@ -462,8 +506,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 										value = null;
 									para.add(value);
 								}
-								
-								
 							}
 						}else{
 							listColumnName.add(columnName);
