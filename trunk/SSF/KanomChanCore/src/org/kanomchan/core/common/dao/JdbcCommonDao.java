@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
+import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.springframework.jdbc.core.RowMapper;
 
 public interface JdbcCommonDao {
@@ -60,7 +61,7 @@ public interface JdbcCommonDao {
 	
 	public  <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1);
 
-	public <T> T updateOnlyNotNullBasic(T target);
+	public <T> T updateOnlyNotNullBasic(T target) throws RollBackTechnicalException;
 	
 	public <T> T get(Serializable target,  Class<T> clazz);
 

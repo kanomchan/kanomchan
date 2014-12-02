@@ -11,6 +11,10 @@ public class RollBackTechnicalException extends RollBackException implements Tec
 		super(messageCode, throwable, null);
 	}
 
+	public RollBackTechnicalException(MessageCode messageCode) {
+		super(messageCode, null, null);
+	}
+
 	/**
 	 * 
 	 */
