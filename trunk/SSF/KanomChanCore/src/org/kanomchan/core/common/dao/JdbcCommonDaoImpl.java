@@ -510,7 +510,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 		}
 		
-		if(listColumnName.size() > 0){
+		if(listColumnName.size() > 0&&listPkName.size() > 0){
 			int row = executeNativeSQL(sb.toString(),para.toArray());
 			if(row == 0){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4993);
