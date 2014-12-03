@@ -189,7 +189,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append("LIMIT ");
 		sb.append(pagingBean.getOffsetBegin());
 		sb.append(" , ");
-		sb.append(pagingBean.getOffsetEnd());
+		sb.append(pagingBean.getRowsPerPage());
 		
 		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm, params);
 		return resultList;
@@ -225,7 +225,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append("LIMIT ");
 		sb.append(pagingBean.getOffsetBegin());
 		sb.append(" , ");
-		sb.append(pagingBean.getOffsetEnd());
+		sb.append(pagingBean.getRowsPerPage());
 		
 		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm, params);
 		return resultList;
@@ -261,7 +261,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append("LIMIT ");
 		sb.append(pagingBean.getOffsetBegin());
 		sb.append(" , ");
-		sb.append(pagingBean.getOffsetEnd());
+		sb.append(pagingBean.getRowsPerPage());
 		
 		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm);
 		return resultList;
