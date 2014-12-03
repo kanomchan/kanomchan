@@ -22,6 +22,7 @@
 -->
 <#assign itemCount = 0/>
 <#if parameters.list??>
+<div class="checkbox">
 <@s.iterator value="parameters.list">
     <#assign itemCount = itemCount + 1/>
     <#if parameters.listKey??>
@@ -56,7 +57,7 @@
         </#if>
     </#if>
     <#assign itemKeyStr=itemKey.toString() />
-<div class="checkbox">
+<label class="checkbox-mobile" for="${parameters.id?html}-${itemCount}">
 <input type="checkbox" name="${parameters.name?html}" value="${itemKeyStr?html}"
        id="${parameters.name?html}-${itemCount}"<#rt/>
     <#if tag.contains(parameters.nameValue, itemKey)>
@@ -90,9 +91,9 @@
     <#include "/${parameters.templateDir}/${parameters.expandTheme}/scripting-events.ftl" />
     <#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
         />
-<label for="${parameters.name?html}-${itemCount}" class="checkboxLabel">${itemValue?html}</label>
-</div>
+<label for="${parameters.name?html}-${itemCount}" class="checkboxLabel">${itemValue?html}</label></label><br class="hidden-xs hidden-sm">
 </@s.iterator>
+</div>
     <#else>
     &nbsp;
 </#if>

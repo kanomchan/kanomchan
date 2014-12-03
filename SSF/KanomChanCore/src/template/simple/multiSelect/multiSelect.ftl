@@ -54,9 +54,9 @@
 <span class="${parameters.name}">
 </#if>
 <#if parameters.choiceValue?default("true") == "true">
-	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option1" checked><label for="${parameters.id}-option1" class="control-label">Specific Value</label></div>&nbsp</lt>
-	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option2"><label for="${parameters.id}-option2" class="control-label">Except Value</label></div></lt>
-	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option3"><label for="${parameters.id}-option3" class="control-label">All</label></div>&nbsp</lt>
+	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option1" checked><label for="${parameters.id}-option1" class="">Specific Value</label></div>&nbsp</lt>
+	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option2"><label for="${parameters.id}-option2" class="">Except Value</label></div></lt>
+	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option3"><label for="${parameters.id}-option3" class="">All</label></div>&nbsp</lt>
 </#if>
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
