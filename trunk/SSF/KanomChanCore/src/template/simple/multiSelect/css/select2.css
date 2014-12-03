@@ -553,7 +553,7 @@ html[dir="rtl"] .select2-container-multi .select2-choices .select2-search-choice
 
     font-size: 1px;
     outline: none;
-    background: url('/JMWeb/struts/simple/selectCountry/img/select2.png') right top no-repeat;
+    padding-left: 2px;
 }
 html[dir="rtl"] .select2-search-choice-close {
     right: auto;

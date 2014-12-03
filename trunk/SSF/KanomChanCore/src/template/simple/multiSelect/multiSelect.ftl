@@ -165,23 +165,34 @@
 -->
 <span>
 <script>
-	<#include "js/select2.min.js"> 
+	<#include "js/select2.js">
+	
 </script> 
 <script>
     $("#${parameters.id}").select2({
+    	<#if parameters.placeholder??>
     	placeholder: "${parameters.placeholder}",
+		</#if>
     })<#if parameters.itemList?? && parameters.nameKey??>.select2("val", 
          [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
 	$(".${parameters.id}-hidden").remove();
     var split${parameters.id} = $("#${parameters.id}").select2('val');
     for(var i=0;i<split${parameters.id}.length;i++){
-		$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
-    }
+		<#if parameters.beanName??>
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
+    	<#else>
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>");
+		</#if>
+	}
     $("#${parameters.id}").change(function() {
 	    $(".${parameters.id}-hidden").remove();
 	    var split${parameters.id} = $("#${parameters.id}").select2('val');
 	    for(var i=0;i<split${parameters.id}.length;i++){
+	    <#if parameters.beanName??>
 			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
+		<#else>
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>");
+		</#if>
 	    }
 	});
 	$("#${parameters.id}-option3").click(function() {
