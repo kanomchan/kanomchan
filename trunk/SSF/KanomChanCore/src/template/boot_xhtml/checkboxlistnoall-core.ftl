@@ -1,5 +1,6 @@
 <#assign itemCount = 0/>
 <#if parameters.list??>
+<div class="checkbox">
 <@s.iterator value="parameters.list">
     <#assign itemCount = itemCount + 1/>
  	<#assign itemCheck = stack.findValue('check')/>
@@ -35,7 +36,6 @@
         </#if>
     </#if>
     <#assign itemKeyStr=itemKey.toString() />
-<div class="col-md-12">
 <label class="checkbox-mobile" for="${parameters.id?html}-${itemCount}">
 <input type="checkbox" 
 		<#if parameters.beanName??>
@@ -53,7 +53,9 @@
      class="${itemCssClass?html}"<#rt/>
     <#else>
         <#if parameters.cssClass??>
-     class="${parameters.cssClass?html} checkbox-${parameters.id?html}"<#rt/>
+			class="${parameters.cssClass?html} checkbox-${parameters.id?html}"<#rt/>
+		<#else>
+			class="checkbox-${parameters.id?html}"<#rt/>
         </#if>
     </#if>
     <#if itemCssStyle?if_exists != "">
@@ -80,9 +82,9 @@
        disabled="disabled"<#rt/>
 </#if>
         />
-</label>
-</div>
+</label><br class="hidden-xs hidden-sm">
 </@s.iterator>
+</div>
     <#else>
     &nbsp;
 </#if>

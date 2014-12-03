@@ -22,6 +22,7 @@
 -->
 <#assign itemCount = 0/>
 <#if parameters.list??>
+<div class="checkbox row">
 <@s.iterator value="parameters.list">
     <#assign itemCount = itemCount + 1/>
     <#if parameters.listKey??>
@@ -94,6 +95,7 @@
 	        />
 	<label for="${parameters.name?html}-${itemCount}" class="checkboxLabel">${itemValue?html}</label></label></div>
 	</@s.iterator>
+</div>
 	    <#else>
 	    &nbsp;
 	</#if>
