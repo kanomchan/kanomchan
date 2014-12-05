@@ -24,7 +24,7 @@
 <!-- 		jBoss -->
 	
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="jdbc/JMDB" />
+		<property name="jndiName" value="jdbc/KMDB" />
 		<property name="cache" value="true" />
 		<property name="proxyInterface" value="javax.sql.DataSource" />
 	</bean>

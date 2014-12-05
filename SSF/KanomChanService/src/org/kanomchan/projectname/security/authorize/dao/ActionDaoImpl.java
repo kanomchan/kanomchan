@@ -3,8 +3,8 @@ package org.kanomchan.projectname.security.authorize.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.kanomchan.core.common.bean.ActionBean;
 import org.kanomchan.core.common.dao.JdbcCommonDaoImpl;
-import org.kanomchan.core.security.authorize.bean.ActionBean;
 import org.kanomchan.core.security.authorize.dao.ActionDao;
 import org.springframework.jdbc.core.RowMapper;
 
