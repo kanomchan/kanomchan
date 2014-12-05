@@ -51,7 +51,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/template/velocity-1.7.jar" sourcepath="C:/Users/Lenovo/.m2/repository/org/apache/velocity/velocity/1.7/velocity-1.7-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ehcache/ehcache-spring-annotations/ehcache-spring-annotations-1.2.0.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-jquery-plugin-3.7.1/struts2-jquery-plugin-3.7.1.jar" sourcepath="C:/Users/kwan/.m2/repository/com/jgeppert/struts2/jquery/struts2-jquery-plugin/3.7.1/struts2-jquery-plugin-3.7.1-sources.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_67">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
@@ -66,6 +66,5 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/hibernate-validator-4.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/json/struts2-json-plugin-2.3.16.3.jar" sourcepath="C:/Users/kwan/.m2/repository/org/apache/struts/struts2-json-plugin/2.3.16.3/struts2-json-plugin-2.3.16.3-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/guava/guava-18.0.jar" sourcepath="C:/Users/kwan/.m2/repository/com/google/guava/guava/18.0/guava-18.0-sources.jar"/>
-	<classpathentry kind="lib" path="/JMLib/lib/core/guava/guava-18.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
