@@ -35,9 +35,9 @@
 	
 	<bean id="configDao"  class="org.kanomchan.core.common.dao.ConfigDaoImpl"/>
 	
-<!-- 	<bean id="platformTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" scope="singleton"> -->
-<!-- 	  <property name="dataSource" ref="dataSource" /> -->
-<!-- 	</bean> -->
+	<bean id="platformTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" scope="singleton">
+	  <property name="dataSource" ref="dataSource" />
+	</bean>
 	
 	<bean id="serviceClassAspect" class="org.kanomchan.core.common.processhandler.ProcessHandler">
 	 <property name="transactionHandler" >
