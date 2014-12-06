@@ -14,7 +14,7 @@
 		<put-attribute name="title" value="" />
 <!-- 		<put-attribute name="preHeader" value="/pages/templates/std/preHeader.jsp" /> -->
 <!-- 		<put-attribute name="header" value="/pages/templates/std/header.jsp" /> -->
-<!-- 		<put-attribute name="menu" value="/pages/templates/std/menu.jsp" /> -->
+		<put-attribute name="menu" value="/pages/templates/std/menu.jsp" />
 <!-- 		<put-attribute name="navigation" value="/pages/templates/std/navigation.jsp" /> -->
 <!-- 		<put-attribute name="sideMenu" value="/pages/templates/std/sideMenu.jsp" /> -->
 <!-- 		<put-attribute name="slider" value="/pages/templates/std/slider.jsp" /> -->
