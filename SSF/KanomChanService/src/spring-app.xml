@@ -22,7 +22,7 @@
     </bean>
     <!-- DataSource -->
     <import resource="persist-config/persist-jdbc.xml"/>
-    <import resource="persist-config/persist-jpa.xml"/>
+<!--     <import resource="persist-config/persist-jpa.xml"/> -->
 <!--     <import resource="persist-config/HibernateSessionFactory.xml" /> -->
     
     <!-- Auto Scan Component -->
