@@ -79,7 +79,7 @@
 			
 			<result name="FORCE_TO_LOGIN_PAGE" type="redirectAction">
 				<param name="actionName">login-end</param>
-				<param name="namespace">/login</param>
+				<param name="namespace">/main</param>
 			</result>
 			
 			<result name="errorPage" type="tiles">
@@ -170,12 +170,12 @@
 
 		<action name="login-*" class="loginAction" method="{1}">
 			<interceptor-ref name="loginScopeStack" />
-			<result name="loginPage" type="tiles">common.login</result>
+			<result name="loginPage" type="tiles">login.init</result>
 		</action>
 
 		<action name="logout-*" class="logoutAction" method="{1}">
 			<interceptor-ref name="logoutScopeStack" />
-			<!-- <result name="loginPage" type="tiles">common.login</result> -->
+<!-- 			<result name="loginPage" type="tiles">common.login</result> -->
 		</action>
 
 		<action name="refresh-*" class="refreshAction" method="{1}">
