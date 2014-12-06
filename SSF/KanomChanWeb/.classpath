@@ -85,7 +85,11 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/javassist-3.11.0.GA.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/javassist-3.11.0.GA.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/ognl-3.0.6.jar" sourcepath="C:/Users/kwan/.m2/repository/ognl/ognl/3.0.6/ognl-3.0.6-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -156,7 +160,11 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/req-aop/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/req-aop/aopalliance-1.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/req-aop/aspectjrt.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -217,11 +225,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ehcache/ehcache-core/aopalliance-1.0.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ehcache/ehcache-core/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ehcache/ehcache-core/commons-codec-1.5.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -347,6 +351,16 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_51">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-jquery-plugin-3.7.1/struts2-jquery-plugin-3.7.1.jar" sourcepath="C:/Users/kwan/.m2/repository/com/jgeppert/struts2/jquery/struts2-jquery-plugin/3.7.1/struts2-jquery-plugin-3.7.1-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-jquery-richtext-plugin-3.7.1/struts2-jquery-richtext-plugin-3.7.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
