@@ -82,7 +82,7 @@ END SNIPPET: supported-validators
             var fieldValue = getFieldValue(field);
             
             <#if validator.validatorType = "required">
-            if (fieldValue == "" || fieldValue == "0") {
+            if (fieldValue == "" || fieldValue == "0" || fieldValue == "-1" || fieldValue == 0 || fieldValue == -1) {
                 addError("${aValidator.fieldName?js_string}", error);
                 errors = true;
                 <#if validator.shortCircuit>continueValidation = false;</#if>
