@@ -24,7 +24,9 @@
 	<div class="row">
 	    <div class="col-md-12">
 			<div class="inline">
+				<label class="control-label">
 				Show 
+				</label>
 				<select 
 					class="form-control paging-select inline" 
 					id="rowsPerPage_${parameters.id}" 
@@ -58,7 +60,9 @@
 						$('#${parameters.id}').submit();
 					}
 				</script>
+				<label class="control-label">
 				rows
+				</label>
 			</div>
 			<br class="hidden-md hidden-lg">
 			<ul class="pagination pull-right inline">
@@ -155,6 +159,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="inline">
+				<label class="control-label">
 				Showing ${(parameters.currentPage * parameters.rowsPerPage - parameters.rowsPerPage + 1)} to 
 				<@s.if test="%{${parameters.currentPage} == ${parameters.pageCount}}">
 					${parameters.totalRows}
@@ -163,6 +168,7 @@
 					${parameters.currentPage * parameters.rowsPerPage}
 				</@s.else>
 					 from Total ${parameters.totalRows} rows
+				</label>
 			</div>
 		</div>
 	</div>
