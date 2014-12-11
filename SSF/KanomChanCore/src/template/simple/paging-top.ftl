@@ -24,7 +24,9 @@
 	<div class="row">
 	    <div class="col-md-12">
 			<div class="inline">
+				<label class="control-label">
 				Show 
+				</label>
 				<select 
 					class="form-control paging-select inline" 
 					id="rowsPerPage_Top_${parameters.id}" 
@@ -58,7 +60,9 @@
 						$('#${parameters.id}').submit();
 					}
 				</script>
+				<label class="control-label">
 				rows
+				</label>
 			</div>
 			<br class="hidden-md hidden-lg">
 			<ul class="pagination pull-right inline">
