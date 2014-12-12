@@ -26,6 +26,7 @@ import org.kanomchan.core.common.bean.MessageDefault;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
 
 public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
@@ -174,12 +175,14 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	}
 	
 	@Override
+	@TriggersRemove(cacheName="getActionByActionId", removeAll=true)
 	public void clearConfigCache() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@TriggersRemove(cacheName="getMessageMap", removeAll=true)
 	public void clearMessageCache() {
 		// TODO Auto-generated method stub
 		
