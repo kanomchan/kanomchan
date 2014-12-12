@@ -20,6 +20,7 @@
  * under the License.
  */
 -->
+<#assign other = false>
 <#setting number_format="#.#####">
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
@@ -56,6 +57,7 @@
 <#if parameters.emptyOption?default(false)>
     <option value=""></option>
 </#if>
+
 <@s.iterator value="parameters.list">
         <#if parameters.listKey??>
             <#if stack.findValue(parameters.listKey)??>
@@ -99,11 +101,16 @@
               <#assign itemTitle = ''/>
             </#if>
         </#if>
+
     <option value="${itemKeyStr?html}"<#rt/>
         <#if tag.contains(parameters.nameValue, itemKey) == true>
  selected="selected"<#rt/>
+		<#elseif !parameters.nameValue??>
+			<#assign other = false>
+		<#else>
+			<#assign other = true>
         </#if>
-        <#if itemCssClass?if_exists != "">
+		<#if itemCssClass?if_exists != "">
  class="${itemCssClass?html}"<#rt/>
         </#if>
         <#if itemCssStyle?if_exists != "">
@@ -114,20 +121,40 @@
         </#if>
     >${itemValue?html}</option><#lt/>
 </@s.iterator>
+<#assign nameAtt = "${parameters.name}">
+
+<#assign names = nameAtt?split(".")>
+
+<#assign nameId = names[names?size - 1]>
+
 
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
-<option value="-2">Other<@s.property value="label.OTHER_OTHER" /></option>
+<option value="-2" 
+<#if other == true>
+ selected="selected"<#rt/>
+</#if>
+>Other<@s.property value="label.OTHER_OTHER" /></option>
 </select>
 
-<input type="text" style="display:none;" class="form-control" name="${parameters.name}Other" />
+<input type="text" 
+<#if other == false>
+ style="display:none;"
+</#if>
+ class="form-control" name="${nameAtt?replace(nameId,"name")}" />
+
 <script>
+		$("[name='${parameters.name}']").append('');
+		
 		$("[name='${parameters.name}']").change( function(i, e){	
 			var name = $(this).attr('name');
+			var names = name.split(".");
+			var nameId = names[names.length -1];
+			name = name.replace(nameId, "name");
 			if($(this).val() == "-2"){
-				$("[name='${parameters.name}Other']").show();
-				$("[name='${parameters.name}Other']").val("");
+				$("[name='" + name + "']").show();
+				$("[name='" + name + "']").val("");
 	    	}else{
-				$("[name='${parameters.name}Other']").hide();
+				$("[name='" + name + "']").hide();
 	    	}
 		});
 </script>
