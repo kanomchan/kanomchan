@@ -24,8 +24,8 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class DBTextProvider implements TextProvider {
 	
     private static final ConcurrentMap<MessageFormatKey, MessageFormat> messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>();
-    private static final Map<String, Map<String,String>> lableCache  = new ConcurrentHashMap<String, Map<String,String>>();
-    private static final Map<String, Map<String,Message>> messageCache  = new ConcurrentHashMap<String, Map<String,Message>>();
+//    private static final Map<String, Map<String,String>> lableCache  = new ConcurrentHashMap<String, Map<String,String>>();
+//    private static final Map<String, Map<String,Message>> messageCache  = new ConcurrentHashMap<String, Map<String,Message>>();
 
     private static final Object[] EMPTY_ARGS = new Object[0];
 
@@ -142,14 +142,15 @@ public class DBTextProvider implements TextProvider {
     }
     private static String findDBText(  String aTextName ,Locale locale) {
     	
-    	if(messageCache.containsKey(locale.getISO3Language().toUpperCase())){
-    		
-    	}else{
-    		MessageService messageService= ApplicationContextUtil.getBean(MessageService.class);
-    		
-    		messageCache.put(locale.getISO3Language().toUpperCase(), messageService.getMessageMap(locale.getISO3Language().toUpperCase()));
-    	}
-    	Map<String, Message> message =  messageCache.get(locale.getISO3Language().toUpperCase());
+//    	if(messageCache.containsKey(locale.getISO3Language().toUpperCase())){
+//    		
+//    	}else{
+//    		MessageService messageService= ApplicationContextUtil.getBean(MessageService.class);
+//    		
+//    		messageCache.put(locale.getISO3Language().toUpperCase(), messageService.getMessageMap(locale.getISO3Language().toUpperCase()));
+//    	}
+    	MessageService messageService= ApplicationContextUtil.getBean(MessageService.class);
+    	Map<String, Message> message = messageService.getMessageMap(locale.getISO3Language().toUpperCase());//  messageCache.get(locale.getISO3Language().toUpperCase());
         if (message == null) {
             return null;
         }
@@ -161,13 +162,14 @@ public class DBTextProvider implements TextProvider {
         }
         
     	
-    	if(lableCache.containsKey(locale.getISO3Language().toUpperCase())){
-    		
-    	}else{
-    		LabelService labelService= ApplicationContextUtil.getBean(LabelService.class);
-    		lableCache.put(locale.getISO3Language().toUpperCase(), labelService.getLabel(locale.getISO3Language().toUpperCase()));
-    	}
-    	Map<String, String> lable =  lableCache.get(locale.getISO3Language().toUpperCase());
+//    	if(lableCache.containsKey(locale.getISO3Language().toUpperCase())){
+//    		
+//    	}else{
+//    		LabelService labelService= ApplicationContextUtil.getBean(LabelService.class);
+//    		lableCache.put(locale.getISO3Language().toUpperCase(), labelService.getLabel(locale.getISO3Language().toUpperCase()));
+//    	}
+    	LabelService labelService= ApplicationContextUtil.getBean(LabelService.class);
+    	Map<String, String> lable = labelService.getLabel(locale.getISO3Language().toUpperCase());// lableCache.get(locale.getISO3Language().toUpperCase());
         if (lable == null) {
             return null;
         }
