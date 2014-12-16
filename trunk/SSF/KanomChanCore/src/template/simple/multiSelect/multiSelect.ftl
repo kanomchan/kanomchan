@@ -31,7 +31,7 @@
 	<#if parameters.id??>
 		<style>
 			.${parameters.id} .select2-container-multi .select2-choices .select2-search-choice {
-				background: ${parameters.color?default("#3ECC4F")?html} !important;
+				background: ${parameters.color?default("#5F64C0")?html} !important;
 				color: ${parameters.fontColor?default("#EEE")?html} !important;
 				border-radius: 5px !important;
 			}
@@ -40,7 +40,7 @@
 		<#elseif parameters.name??>
 		<style>
 			.${parameters.name} .select2-container-multi .select2-choices .select2-search-choice {
-				background: ${parameters.color?default("#3ECC4F")?html} !important;
+				background: ${parameters.color?default("#5F64C0")?html} !important;
 				color: ${parameters.fontColor?default("#EEE")?html} !important;
 				border-radius: 5px !important;
 			}
