@@ -305,9 +305,25 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				if(property.getColumnType() == ColumnType.column){
 					Object value = method.invoke(target);
 					if(value != null){
-						listColumnName.add(columnName);
-						listParaName.add("?");
-						para.add(value);
+//						listColumnName.add(columnName);
+//						listParaName.add("?");
+//						para.add(value);
+						if(value instanceof Number){
+							if(includeMinusOne || ((Number)value).intValue() !=-1){
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								if((Long)value == 0)
+									value = null;
+								para.add(value);
+							}
+						}else{
+							if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								para.add(value);
+							}
+								
+						}
 					}
 				}
 				if(property.getColumnType() == ColumnType.joinColumn){
@@ -481,10 +497,31 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			try {
 				if(property.getColumnType() == ColumnType.column){
 					Object value = method.invoke(target);
+//					if(value != null){
+//						listColumnName.add(columnName);
+//						listParaName.add("?");
+//						para.add(value);
+//					}
 					if(value != null){
-						listColumnName.add(columnName);
-						listParaName.add("?");
-						para.add(value);
+//						listColumnName.add(columnName);
+//						listParaName.add("?");
+//						para.add(value);
+						if(value instanceof Number){
+							if(includeMinusOne || ((Number)value).intValue() !=-1){
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								if((Long)value == 0)
+									value = null;
+								para.add(value);
+							}
+						}else{
+							if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								para.add(value);
+							}
+								
+						}
 					}
 				}
 				if(property.getColumnType() == ColumnType.joinColumn){
