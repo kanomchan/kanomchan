@@ -35,7 +35,6 @@
 				color: ${parameters.fontColor?default("#EEE")?html} !important;
 				border-radius: 5px !important;
 			}
-		
 		</style>
 		<#elseif parameters.name??>
 		<style>
@@ -44,7 +43,24 @@
 				color: ${parameters.fontColor?default("#EEE")?html} !important;
 				border-radius: 5px !important;
 			}
-		
+		</style>
+	</#if>
+<#else>
+	<#if parameters.id??>
+		<style>
+			.${parameters.id} .select2-container-multi .select2-choices .select2-search-choice {
+				background: ${parameters.color?default("#5F64C0")?html} !important;
+				color: ${parameters.fontColor?default("#EEE")?html} !important;
+				border-radius: 5px !important;
+			}
+		</style>
+		<#elseif parameters.name??>
+		<style>
+			.${parameters.name} .select2-container-multi .select2-choices .select2-search-choice {
+				background: #5F64C0 !important;
+				color: #EEE !important;
+				border-radius: 5px !important;
+			}
 		</style>
 	</#if>
 </#if>
