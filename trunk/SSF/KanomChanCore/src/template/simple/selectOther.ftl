@@ -20,7 +20,7 @@
  * under the License.
  */
 -->
-<#assign other = false>
+<@s.set var="check" value="%{true}"/>
 <#setting number_format="#.#####">
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
@@ -103,12 +103,16 @@
         </#if>
 
     <option value="${itemKeyStr?html}"<#rt/>
+		<#--<@s.if test="tag.contains(parameters.nameValue, itemKey)">
+ selected="selected"<#rt/>
+		</@s.if>-->
+
         <#if tag.contains(parameters.nameValue, itemKey) == true>
  selected="selected"<#rt/>
+			<@s.set var="check" value="%{false}"/>
+<@s.set var="check2" value="%{'ffff'}"/>
 		<#elseif !parameters.nameValue??>
-			<#assign other = false>
-		<#else>
-			<#assign other = true>
+			<@s.set var="check" value="%{false}"/>
         </#if>
 		<#if itemCssClass?if_exists != "">
  class="${itemCssClass?html}"<#rt/>
@@ -130,20 +134,38 @@
 
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 <option value="-2" 
-<#if other == true>
+<@s.if test="%{#check}">
  selected="selected"<#rt/>
-</#if>
+</@s.if>
 >Other<@s.property value="label.OTHER_OTHER" /></option>
 </select>
 
-<input type="text" 
-<#if other == false>
- style="display:none;"
-</#if>
- class="form-control" name="${nameAtt?replace(nameId,"name")}" />
 
+ <#assign check = '<@s.property value="#check"/>'>
+
+<#--<input type="text" 
+<@s.if test="%{!#check}">
+ style="display:none;"
+</@s.if>
+ class="form-control" name="${nameAtt?replace(nameId,"name")}" />-->
+
+<#assign name = '${nameAtt?replace(nameId,"name")}'>
+
+<@s.textfield theme="simple" name="${name?html}" cssClass="form-control"/>
+ 
+<#--<@s.textfield name="jobPositionOtherList"
+<input type="text" name="${nameId?html}" 
+<#if check=='false'>
+  cssStyle="display:none;" 
+</#if>
+class="form-control"/>
+</@s.textfield>-->
 <script>
-		$("[name='${parameters.name}']").append('');
+		if('<@s.property value="#check"/>' == 'true'){
+			$("[name='${name?html}']").show();
+		}else{
+			$("[name='${name?html}']").hide();
+		}
 		
 		$("[name='${parameters.name}']").change( function(i, e){	
 			var name = $(this).attr('name');
@@ -155,6 +177,7 @@
 				$("[name='" + name + "']").val("");
 	    	}else{
 				$("[name='" + name + "']").hide();
+				$("[name='" + name + "']").val("");
 	    	}
 		});
 </script>
