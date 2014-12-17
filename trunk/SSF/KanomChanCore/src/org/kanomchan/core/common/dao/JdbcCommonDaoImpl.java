@@ -312,7 +312,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(includeMinusOne || ((Number)value).intValue() !=-1){
 								listColumnName.add(columnName);
 								listParaName.add("?");
-								if((Long)value == 0)
+								if(((Number)value).longValue() == 0)
 									value = null;
 								para.add(value);
 							}
