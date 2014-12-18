@@ -188,7 +188,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		
 		
-		sb.append("LIMIT ");
+		sb.append(" LIMIT ");
 		sb.append(pagingBean.getOffsetBegin());
 		sb.append(" , ");
 		sb.append(pagingBean.getRowsPerPage());
@@ -226,7 +226,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		
 		
-		sb.append("LIMIT ");
+		sb.append(" LIMIT ");
 		sb.append(pagingBean.getOffsetBegin());
 		sb.append(" , ");
 		sb.append(pagingBean.getRowsPerPage());
@@ -264,7 +264,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		
 		
-		sb.append("LIMIT ");
+		sb.append(" LIMIT ");
 		sb.append(pagingBean.getOffsetBegin());
 		sb.append(" , ");
 		sb.append(pagingBean.getRowsPerPage());
