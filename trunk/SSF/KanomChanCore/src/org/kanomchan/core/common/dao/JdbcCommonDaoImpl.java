@@ -9,15 +9,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
+import javax.persistence.Query;
 import javax.persistence.Table;
 
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.ColumnType;
+import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
@@ -754,6 +757,154 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return nativeQuery(sql, clazz);
 	}
 	
+	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value) throws RollBackTechnicalException {
+		return findByColumn(clazz, propertyName, value,null);
+	}
+	
+	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackTechnicalException {
+		if(pagingBean==null){
+			try{
+				List<Criteria> criteriaList = new LinkedList<Criteria>();
+				criteriaList.add(new Criteria(propertyName, value));
+				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false);
+				Map<String, Object>params = new HashMap<String, Object>();
+				if (criteriaList != null && criteriaList.size() > 0) {
+					for (Criteria criteria : criteriaList) {
+						params.put(criteria.getParam(), criteria.getValue());
+					}
+				}
+				List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+				return resultList1;
+			}catch(RuntimeException e){
+				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
+			}
+			
+		}else{
+			try{
+				
+				List<Criteria> criteriaList = new LinkedList<Criteria>();
+				criteriaList.add(new Criteria(propertyName, value));
+				
+				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
+				
+				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false);
+				Map<String, Object>params = new HashMap<String, Object>();
+				if (criteriaList != null && criteriaList.size() > 0) {
+					for (Criteria criteria : criteriaList) {
+						params.put(criteria.getParam(), criteria.getValue());
+					}
+				}
+				List<T> resultList1 = simpleJdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
+				
+				return resultList1;
+				
+			}catch (RuntimeException re){
+				throw new RollBackTechnicalException(CommonMessageCode.COM4991, re);
+			}
+		}
+	}
+	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like){
+		
+		StringBuilder countQueryString = new StringBuilder();
+		countQueryString.append(FROM);
+		countQueryString.append(JPAUtil.getClassMapper(clazz).getTableName());
+		countQueryString.append(AILIAT);
+		
+		countQueryString.append(genQueryWhereStringByECriteria(criteriaList, extraWhereClause, like));
+		
+//		sb.append(sql);
+		if(pagingBean !=null){
+			countQueryString.append(genQueryOrderStringByOrders(pagingBean.getOrderList()));
+//			
+			countQueryString.append("LIMIT ");
+			countQueryString.append(pagingBean.getOffsetBegin());
+			countQueryString.append(" , ");
+			countQueryString.append(pagingBean.getRowsPerPage());
+		}
+
+		return countQueryString.toString();
+	}
+	
+	protected Long getTotalRowByExample(Class<?> clazz,List<Criteria> criteriaList,String extraWhereClause,boolean like) {
+		StringBuilder countQueryString = new StringBuilder();
+		countQueryString.append("select count(*) from ");
+		countQueryString.append(JPAUtil.getClassMapper(clazz).getTableName());
+		countQueryString.append(AILIAT);
+		
+		countQueryString.append(genQueryWhereStringByECriteria(criteriaList, extraWhereClause, like));
+		Map<String, Object>params = new HashMap<String, Object>();
+		if (criteriaList != null && criteriaList.size() > 0) {
+			for (Criteria criteria : criteriaList) {
+				params.put(criteria.getParam(), criteria.getValue());
+			}
+		}
+		Long totalRows = simpleJdbcTemplate.queryForLong(countQueryString.toString(), params);
+		return totalRows;
+	}
+	
+	protected String genQueryWhereStringByECriteria(List<Criteria> criteriaList,String extraWhereClause,boolean like) {
+		StringBuilder queryString = new StringBuilder();
+		
+		if(criteriaList !=null && criteriaList.size()>0){
+			queryString.append(WHERE);
+			List<String> criteriaString = new ArrayList<String>();
+			for (Criteria criteria : criteriaList) {
+				StringBuilder sb = new StringBuilder();
+				if(criteria.getValue() instanceof String && like){
+					sb.append(UPPER);
+					sb.append(criteria.getColumn());
+					sb.append(LIKE);
+					sb.append(criteria.getParam());
+				}else{
+					sb.append(NON);
+					sb.append(criteria.getColumn());
+					sb.append(EQU);
+					sb.append(criteria.getParam());
+				}
+				criteriaString.add(sb.toString());
+			}
+			queryString.append(Joiner.on(" AND ").skipNulls().join(criteriaString));
+		}
+		
+		if(extraWhereClause!=null &&extraWhereClause.length()>0){
+			if (criteriaList==null||criteriaList.size()>0) {
+				queryString.append(extraWhereClause);
+			}
+		}
+		
+		return queryString.toString();
+	}
+	protected String genQueryOrderStringByOrders(List<Order> orderList) {
+		StringBuilder sb = new StringBuilder();
+		if(orderList!=null&&orderList.size()>0){
+			List<String> joinlist  = new ArrayList<String>();
+//			sb.append(ORDER);
+			for (Order order  : orderList) {
+				
+				sb.append(order.getOrderBy());
+				if(order.getOrderMode().equals(ORDER_MODE.ASC)){
+					joinlist.add(NON+order.getOrderBy()+" ASC ");
+				}else{
+					joinlist.add(NON+order.getOrderBy()+" DESC ");
+				}
+			}
+			
+			sb.append(ORDER);
+			sb.append(Joiner.on(" , ").skipNulls().join(joinlist));
+		}
+		return sb.toString();
+	}
+//	genQueryOrderStringByOrders
+	
+	
+	private static final String LIKE = ") like :"; 
+	private static final String NON = CommonDao.ENTITY_MODEL_ALIAS+"."; 
+	private static final String UPPER = " UPPER("+CommonDao.ENTITY_MODEL_ALIAS+"."; 
+	private static final String EQU = " = :"; 
+	private static final String WHERE = " where "; 
+	private static final String FROM = "select "+CommonDao.ENTITY_MODEL_ALIAS+".* from "; 
+	private static final String ORDER = " order by "; 
+	private static final String AILIAT = " "+CommonDao.ENTITY_MODEL_ALIAS+" "; 
 	
 	public void saveOrUpdateAll(final Collection entities){
 		for (Object entity : entities) {
