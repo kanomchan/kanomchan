@@ -513,7 +513,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(includeMinusOne || ((Number)value).intValue() !=-1){
 								listColumnName.add(columnName);
 								listParaName.add("?");
-								if((Long)value == 0)
+								if(((Number)value).intValue() == 0)
 									value = null;
 								para.add(value);
 							}
@@ -541,14 +541,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 									if(includeMinusOne || ((Number)value).intValue() !=-1){
 										listColumnName.add(columnName);
 										listParaName.add("?");
-										if((Long)value == 0)
+										if(((Number)value).intValue() == 0)
 											value = null;
 										para.add(value);
 									}
 								}else{
 									listColumnName.add(columnName);
 									listParaName.add("?");
-									if((Long)value == 0)
+									if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
 										value = null;
 									para.add(value);
 								}
@@ -750,7 +750,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		String sql = "select * from " + classMapper.getTableName() + " where " + property.getColumnName() + " = ?";
 		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
 	}
-	@Override
+//	@Override
 	public <T> List<T> findAll(Class<T> clazz) {
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		String sql = "select * from " + classMapper.getTableName();
