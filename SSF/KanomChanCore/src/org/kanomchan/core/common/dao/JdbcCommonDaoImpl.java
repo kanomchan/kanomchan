@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +28,9 @@ import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.kanomchan.core.common.bean.Property;
 import org.kanomchan.core.common.constant.CommonMessageCode;
+import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
+import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -281,6 +284,13 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	public <T extends Object> T save(T target, boolean includeMinusOne){
+		
+		if(target instanceof EntityBean){
+			ProcessContext processContext = CurrentThread.getProcessContext();
+			EntityBean entityBean = (EntityBean) target;
+			entityBean.setCreateDate(new Date());
+			entityBean.setCreateUser(processContext.getUserName());
+		}
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
@@ -482,6 +492,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackTechnicalException{
+		if(target instanceof EntityBean){
+			ProcessContext processContext = CurrentThread.getProcessContext();
+			EntityBean entityBean = (EntityBean) target;
+			entityBean.setUpdateDate(new Date());
+			entityBean.setUpdateUser(processContext.getUserName());
+		}
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
