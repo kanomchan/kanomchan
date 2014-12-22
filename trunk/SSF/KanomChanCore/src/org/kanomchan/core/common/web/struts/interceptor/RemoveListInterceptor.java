@@ -4,6 +4,7 @@ package org.kanomchan.core.common.web.struts.interceptor;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -45,6 +46,29 @@ public class RemoveListInterceptor extends AbstractInterceptor {
                     // if not, let's be sure to default the value to an empty string array
                     newParams.put(name, new String[0]);
                 }
+            }
+            else if(key.startsWith("__pushotheronremove_")){
+            	String name = key.substring("__pushotheronremove_".length());
+            	Object value = parameters.get(key);
+                iterator.remove();
+                if(parameters.get(name).getClass().isArray()){
+                	Object[] values = (Object[]) parameters.get(name);
+                	if("-2".equals(values[0])){
+                    	newParams.put(name, value);
+                    }
+                }else{
+                	if("-2".equals(parameters.get(name))){
+                    	newParams.put(name, value);
+                    }
+                }
+                
+//                parameters.get(name);
+                // is this multi-select box submitted?
+//                if (!parameters.containsKey(name)) {
+//
+//                    // if not, let's be sure to default the value to an empty string array
+//                    newParams.put(name, new String[0]);
+//                }
             }
         }
 
