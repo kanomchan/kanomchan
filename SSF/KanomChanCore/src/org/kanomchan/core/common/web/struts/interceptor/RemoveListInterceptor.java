@@ -25,13 +25,14 @@ public class RemoveListInterceptor extends AbstractInterceptor {
             if (key.startsWith("__pushdataonremove_")) {
                 String name = key.substring("__pushdataonremove_".length());
 
+                Object value = parameters.get(key);
                 iterator.remove();
 
                 // is this multi-select box submitted?
                 if (!parameters.containsKey(name)) {
 
                     // if not, let's be sure to default the value to an empty string array
-                    newParams.put(name, parameters.get(key));
+                    newParams.put(name, value);
                 }
             }else if(key.startsWith("__pushnullonremove_")){
             	String name = key.substring("__pushnullonremove_".length());
