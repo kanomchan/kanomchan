@@ -99,13 +99,21 @@ public class Test {
 		
 //		User.class
 		
-		try {
-			System.out.println(ClassUtil.findSetterName(UserBeanDefault.class, "getuserName".substring(3)));
-		} catch (NoSuchFieldException | NoSuchMethodException | IntrospectionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		;
+//		try {
+//			System.out.println(ClassUtil.findSetterName(UserBeanDefault.class, "getuserName".substring(3)));
+//		} catch (NoSuchFieldException | NoSuchMethodException | IntrospectionException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		;
+		
+		
+		String pattern = "(\\w)(\\s+)([\\.,])";
+		String test = "wefwefwef+-wefwefwef+wefwefwefwef wefwefwef+wefwefwef wefwef";
+		for (String string : test.split("-")) {
+			System.out.println(string); 
+		} 
+		
 		
 //		List<String> listColumnName = new LinkedList<String>();
 //		
