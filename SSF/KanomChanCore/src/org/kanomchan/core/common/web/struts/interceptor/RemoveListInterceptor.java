@@ -1,0 +1,55 @@
+
+package org.kanomchan.core.common.web.struts.interceptor;
+
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+
+public class RemoveListInterceptor extends AbstractInterceptor {
+    private static final long serialVersionUID = 1L;
+
+
+    public String intercept(ActionInvocation actionInvocation) throws Exception {
+        Map<String, Object> parameters = actionInvocation.getInvocationContext().getParameters();
+        Map<String, Object> newParams = new HashMap<String, Object>();
+        Set<String> keys = parameters.keySet();
+
+        for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
+            String key = iterator.next();
+
+            if (key.startsWith("__pushdataonremove_")) {
+                String name = key.substring("__pushdataonremove_".length());
+
+                iterator.remove();
+
+                // is this multi-select box submitted?
+                if (!parameters.containsKey(name)) {
+
+                    // if not, let's be sure to default the value to an empty string array
+                    newParams.put(name, parameters.get(key));
+                }
+            }else if(key.startsWith("__pushnullonremove_")){
+            	String name = key.substring("__pushnullonremove_".length());
+
+                iterator.remove();
+
+                // is this multi-select box submitted?
+                if (!parameters.containsKey(name)) {
+
+                    // if not, let's be sure to default the value to an empty string array
+                    newParams.put(name, new String[0]);
+                }
+            }
+        }
+
+        parameters.putAll(newParams);
+
+        return actionInvocation.invoke();
+    }
+
+}
