@@ -1,6 +1,8 @@
 package org.kanomchan.core.common.bean;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Button implements Serializable {
 	
@@ -12,8 +14,8 @@ public class Button implements Serializable {
 	private String namespace;
 	private String url;
 	private String name;
-	private String paramName;
-	private String paramValue;
+	private Map<String, Object> para = new HashMap<String, Object>();
+//	private String paramValue;
 	public String getAction() {
 		return action;
 	}
@@ -32,28 +34,39 @@ public class Button implements Serializable {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public String getParamName() {
-		return paramName;
+	
+	public void addPara(String name,Object value){
+		para.put(name, value);
 	}
-	public void setParamName(String paramName) {
-		this.paramName = paramName;
-	}
-	public String getParamValue() {
-		return paramValue;
-	}
-	public void setParamValue(String paramValue) {
-		this.paramValue = paramValue;
-	}
+//	public String getParamName() {
+//		return paramName;
+//	}
+//	public void setParamName(String paramName) {
+//		this.paramName = paramName;
+//	}
+//	public String getParamValue() {
+//		return paramValue;
+//	}
+//	public void setParamValue(String paramValue) {
+//		this.paramValue = paramValue;
+//	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
+	public Map<String, Object> getPara() {
+		return para;
+	}
+	public void setPara(Map<String, Object> para) {
+		this.para = para;
+	}
 	@Override
 	public String toString() {
 		return "Button [action=" + action + ", namespace=" + namespace
-				+ ", url=" + url + ", name=" + name + ", paramName="
-				+ paramName + ", paramValue=" + paramValue + "]";
+				+ ", url=" + url + ", name=" + name + "]";
 	}
 }
