@@ -42,7 +42,7 @@ import com.opensymphony.xwork2.validator.validators.VisitorFieldValidator;
 public class DBActionValidatorManager implements ActionValidatorManager {
 
     private final Map<String, List<ValidatorConfig>> validatorCache = Collections.synchronizedMap(new HashMap<String, List<ValidatorConfig>>());
-    private final Map<String, List<ValidatorConfig>> validatorFileCache = Collections.synchronizedMap(new HashMap<String, List<ValidatorConfig>>());
+//    private final Map<String, List<ValidatorConfig>> validatorFileCache = Collections.synchronizedMap(new HashMap<String, List<ValidatorConfig>>());
     private final Logger LOG = LoggerFactory.getLogger(DBActionValidatorManager.class);
     
     private ValidatorFactory validatorFactory;
