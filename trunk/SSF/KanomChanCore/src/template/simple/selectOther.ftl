@@ -20,7 +20,7 @@
  * under the License.
  */
 -->
-<@s.set var="check" value="%{true}"/>
+<#assign check = true/>
 <#setting number_format="#.#####">
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
@@ -109,10 +109,7 @@
 
         <#if tag.contains(parameters.nameValue, itemKey) == true>
  selected="selected"<#rt/>
-			<@s.set var="check" value="%{false}"/>
-<@s.set var="check2" value="%{'ffff'}"/>
-		<#elseif !parameters.nameValue??>
-			<@s.set var="check" value="%{false}"/>
+		<#assign check = false/>
         </#if>
 		<#if itemCssClass?if_exists != "">
  class="${itemCssClass?html}"<#rt/>
@@ -134,14 +131,11 @@
 
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 <option value="-2" 
-<@s.if test="%{#check}">
- selected="selected"<#rt/>
-</@s.if>
->Other<@s.property value="label.OTHER_OTHER" /></option>
+    <#if parameters.nameValue?? && check>
+    selected="selected"
+    </#if>
+><@s.text name="OTHER_OTHER" /></option>
 </select>
-
-
- <#assign check = '<@s.property value="#check"/>'>
 
 <#--<input type="text" 
 <@s.if test="%{!#check}">
@@ -161,25 +155,23 @@
 class="form-control"/>
 </@s.textfield>-->
 <script>
-		if('<@s.property value="#check"/>' == 'true'){
-			$("[name='${name?html}']").show();
-		}else{
-			$("[name='${name?html}']").hide();
-		}
+	<#if (parameters.nameValue?? && !check)>
+	$("[name='${name?html}']").hide();
+	</#if>
 		
-		$("[name='${parameters.name}']").change( function(i, e){	
-			var name = $(this).attr('name');
-			var names = name.split(".");
-			var nameId = names[names.length -1];
-			name = name.replace(nameId, "name");
-			if($(this).val() == "-2"){
-				$("[name='" + name + "']").show();
-				$("[name='" + name + "']").val("");
-	    	}else{
-				$("[name='" + name + "']").hide();
-				$("[name='" + name + "']").val("");
-	    	}
-		});
+	$("[name='${parameters.name}']").change( function(i, e){	
+		var name = $(this).attr('name');
+		var names = name.split(".");
+		var nameId = names[names.length -1];
+		name = name.replace(nameId, "name");
+		if($(this).val() == "-2"){
+			$("[name='" + name + "']").show();
+			$("[name='" + name + "']").val("");
+    	}else{
+			$("[name='" + name + "']").hide();
+			$("[name='" + name + "']").val("");
+    	}
+	});
 </script>
 <#if parameters.multiple?default(false)>
   <#if (parameters.id?? && parameters.name??)>
