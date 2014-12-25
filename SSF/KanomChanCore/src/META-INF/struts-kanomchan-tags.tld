@@ -595,6 +595,12 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+      <description><![CDATA[if true show choice]]></description>
+      <name>choiceName</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
       <description><![CDATA[The css class to use for element]]></description>
       <name>cssClass</name>
       <required>false</required>
@@ -657,6 +663,12 @@
     <attribute>
       <description><![CDATA[Value expression for first item in list]]></description>
       <name>headerValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Value expression for first item in list]]></description>
+      <name>setStatus</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
