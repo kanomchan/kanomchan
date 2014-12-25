@@ -25,10 +25,12 @@ public class MultiSelect extends ListUIBean {
 
     protected String beanName;
     protected String nameKey;
+    protected String setStatus;
     protected String color;
     protected String fontColor;
     protected String placeholder;
     protected String choiceValue;
+    protected String choiceName;
 
     public MultiSelect(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -67,6 +69,9 @@ public class MultiSelect extends ListUIBean {
         }else{
         	addParameter("nameKey", findString(name));
         }
+        if (setStatus != null) {
+        	addParameter("setStatus", findString(setStatus));
+        }
         if (color != null) {
         	addParameter("color", findString(color));
         }
@@ -75,6 +80,9 @@ public class MultiSelect extends ListUIBean {
         }
         if (choiceValue != null) {
         	addParameter("choiceValue", findString(choiceValue));
+        }
+        if (choiceName != null) {
+        	addParameter("choiceName", findString(choiceName));
         }
         if (placeholder != null) {
         	addParameter("placeholder", findString(placeholder));
@@ -85,6 +93,12 @@ public class MultiSelect extends ListUIBean {
 	}
     public void setChoiceValue(String choiceValue) {
 		this.choiceValue = choiceValue;
+	}
+    public String getChoiceName() {
+		return choiceName;
+	}
+    public void setChoiceName(String choiceName) {
+		this.choiceName = choiceName;
 	}
     public String getPlaceholder() {
 		return placeholder;
@@ -100,6 +114,12 @@ public class MultiSelect extends ListUIBean {
 	}
     public String getFontColor() {
 		return fontColor;
+	}
+    public String getSetStatus() {
+		return setStatus;
+	}
+    public void setSetStatus(String setStatus) {
+		this.setStatus = setStatus;
 	}
     public void setFontColor(String fontColor) {
 		this.fontColor = fontColor;

@@ -69,10 +69,51 @@
 <#elseif parameters.name??>
 <span class="${parameters.name}">
 </#if>
+<#if stack.findValue(parameters.choiceName+".choice"+parameters.id)??>
+<#assign checkChoiceKey = stack.findValue(parameters.choiceName+".choice"+parameters.id)>
+<#else>
+<#assign checkChoiceKey = "I">
+</#if>
 <#if parameters.choiceValue?default("true") == "true">
-	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option1" checked><label for="${parameters.id}-option1" class="">Specific Value</label></div>&nbsp</lt>
-	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option2"><label for="${parameters.id}-option2" class="">Except Value</label></div></lt>
-	<div class="radio radio-inline"><input type="radio" name="${parameters.id}-option" id="${parameters.id}-option3"><label for="${parameters.id}-option3" class="">All</label></div>&nbsp</lt>
+	<div class="radio radio-inline"><input type="radio" 
+	<#if parameters.choiceName??>
+	name="${parameters.choiceName}.choice${parameters.id}"
+	<#else>
+	name="${parameters.id}-option"
+	</#if>
+	 id="${parameters.id}-option1"
+	 value="I"
+	 <#if checkChoiceKey == "I">
+	 	checked="checked"
+ 	 </#if>
+	><label for="${parameters.id}-option1" class="">Specific Value</label></div>&nbsp</lt>
+
+	<div class="radio radio-inline"><input type="radio" 
+	<#if parameters.choiceName??>
+	name="${parameters.choiceName}.choice${parameters.id}"
+	<#else>
+	name="${parameters.id}-option"
+	</#if>
+	 id="${parameters.id}-option2"
+	 value="E"
+	 <#if checkChoiceKey == "E">
+	 checked="checked"
+	 </#if>
+	><label for="${parameters.id}-option2" class="">Except Value</label></div></lt>
+	 
+	<div class="radio radio-inline"><input type="radio"
+	<#if parameters.choiceName??>
+	name="${parameters.choiceName}.choice${parameters.id}"
+	<#else>
+	name="${parameters.id}-option"
+	</#if>
+ 	id="${parameters.id}-option3"
+ 	value="A"
+ 	 <#if checkChoiceKey == "A">
+	 checked="checked"
+	 </#if>
+	><label for="${parameters.id}-option3" class="">All</label></div>&nbsp</lt>
+
 </#if>
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
@@ -179,6 +220,11 @@
 <label class="inline pull-right" style="color:#C9C9C9;">* If you want to select all value please leave it blank </label>
 </#if>
 -->
+<#if stack.findValue('status')??>
+<#assign itemStatus = stack.findValue('status')/>
+<#else>
+	<#assign itemStatus = 'D'/>
+</#if>
 <span>
 <script>
 	<#include "js/select2.js">
@@ -195,9 +241,13 @@
     var split${parameters.id} = $("#${parameters.id}").select2('val');
     for(var i=0;i<split${parameters.id}.length;i++){
 		<#if parameters.beanName??>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
-    	<#else>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>");
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}'/>");
+		<#else>
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' />");
 		</#if>
 	}
     $("#${parameters.id}").change(function() {
@@ -205,9 +255,13 @@
 	    var split${parameters.id} = $("#${parameters.id}").select2('val');
 	    for(var i=0;i<split${parameters.id}.length;i++){
 	    <#if parameters.beanName??>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>");
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}'/>");
 		<#else>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>");
+			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}'/>");
 		</#if>
 	    }
 	});
@@ -217,7 +271,10 @@
 	$("#${parameters.id}-option1, #${parameters.id}-option2").click(function() {
 		$("#s2id_${parameters.id?html}").fadeIn(200);
 	});
-</script>
+	<#if checkChoiceKey == "A">
+		$("#s2id_${parameters.id?html}").hide();
+	</#if>
+	</script>
 
 <#if parameters.multiple?default(false)>
   <#if (parameters.id?? && parameters.name??)>

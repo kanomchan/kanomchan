@@ -26,10 +26,12 @@ public class MultiSelectTag extends AbstractRequiredListTag {
     protected String multiple;
     protected String beanName;
     protected String nameKey;
+    protected String setStatus;
     protected String color;
     protected String fontColor;
     protected String placeholder;
     protected String choiceValue;
+    protected String choiceName;
 	
 	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new MultiSelect(stack, req, res);
@@ -45,6 +47,7 @@ public class MultiSelectTag extends AbstractRequiredListTag {
     	multiSelect.setEmptyOption(emptyOption);
     	multiSelect.setHeaderKey(headerKey);
     	multiSelect.setHeaderValue(headerValue);
+    	multiSelect.setSetStatus(setStatus);
     	multiSelect.setList(list);
     	multiSelect.setListKey(listKey);
     	multiSelect.setListValue(listValue);
@@ -53,10 +56,14 @@ public class MultiSelectTag extends AbstractRequiredListTag {
     	multiSelect.setColor(color);
     	multiSelect.setFontColor(fontColor);
     	multiSelect.setChoiceValue(choiceValue);
+    	multiSelect.setChoiceName(choiceName);
     }
 	
 	public void setChoiceValue(String choiceValue) {
 		this.choiceValue = choiceValue;
+	}
+	public void setChoiceName(String choiceName) {
+		this.choiceName = choiceName;
 	}
 	public void setColor(String color) {
 		this.color = color;
@@ -88,6 +95,9 @@ public class MultiSelectTag extends AbstractRequiredListTag {
     public void setList(String list) {
     	this.list = list;
     }
+    public void setSetStatus(String setStatus) {
+		this.setStatus = setStatus;
+	}
 
     public void setListKey(String listKey) {
     	this.listKey = listKey;
