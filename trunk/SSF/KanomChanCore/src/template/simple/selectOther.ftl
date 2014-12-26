@@ -50,10 +50,10 @@
 <#if parameters.headerKey?? && parameters.headerValue??>
     <option value="${parameters.headerKey?html}"
     <#if tag.contains(parameters.nameValue, parameters.headerKey) == true>
-    selected="selected">
+    selected="selected"
     <#assign check = false/>
     </#if>
-    ${parameters.headerValue?html}</option>
+    >${parameters.headerValue?html}</option>
 </#if>
 <#if parameters.emptyOption?default(false)>
     <option value=""></option>
@@ -138,7 +138,7 @@
     <#if  !parameters.nameValue?? && check>
     selected="selected"
     </#if>
-><@s.text name="OTHER_OTHER" /></option>
+><@s.text name="COMMON_OTHER" /></option>
 </select>
 
 <#--<input type="text" 
@@ -159,7 +159,7 @@
 class="form-control"/>
 </@s.textfield>-->
 <script>
-	<#if (parameters.nameValue?? && !check)>
+	<#if !(!parameters.nameValue?? && check)>
 	$("[name='${name?html}']").hide();
 	</#if>
 		
