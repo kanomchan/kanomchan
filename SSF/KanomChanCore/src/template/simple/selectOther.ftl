@@ -50,10 +50,10 @@
 <#if parameters.headerKey?? && parameters.headerValue??>
     <option value="${parameters.headerKey?html}"
     <#if tag.contains(parameters.nameValue, parameters.headerKey) == true>
-    selected="selected"
-    <#assign check = true/>
+    selected="selected">
+    <#assign check = false/>
     </#if>
-    >${parameters.headerValue?html}</option>
+    ${parameters.headerValue?html}</option>
 </#if>
 <#if parameters.emptyOption?default(false)>
     <option value=""></option>
@@ -128,11 +128,14 @@
 <#assign names = nameAtt?split(".")>
 
 <#assign nameId = names[names?size - 1]>
+ <#if  !parameters.nameValue??>
+<#assign check = false/>
+    </#if>
 
 
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 <option value="-2" 
-    <#if parameters.nameValue?? && check>
+    <#if  !parameters.nameValue?? && check>
     selected="selected"
     </#if>
 ><@s.text name="OTHER_OTHER" /></option>
