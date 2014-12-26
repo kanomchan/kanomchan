@@ -51,6 +51,7 @@
     <option value="${parameters.headerKey?html}"
     <#if tag.contains(parameters.nameValue, parameters.headerKey) == true>
     selected="selected"
+    <#assign check = true/>
     </#if>
     >${parameters.headerValue?html}</option>
 </#if>
