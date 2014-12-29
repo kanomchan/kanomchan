@@ -69,12 +69,12 @@
 <#elseif parameters.name??>
 <span class="${parameters.name}">
 </#if>
-<#if stack.findValue(parameters.choiceName+".choice"+parameters.id)??>
-<#assign checkChoiceKey = stack.findValue(parameters.choiceName+".choice"+parameters.id)>
-<#else>
-<#assign checkChoiceKey = "I">
-</#if>
 <#if parameters.choiceValue?default("true") == "true">
+	<#if stack.findValue(parameters.choiceName+".choice"+parameters.id)??>
+	<#assign checkChoiceKey = stack.findValue(parameters.choiceName+".choice"+parameters.id)>
+	<#else>
+	<#assign checkChoiceKey = "I">
+	</#if>
 	<div class="radio radio-inline"><input type="radio" 
 	<#if parameters.choiceName??>
 	name="${parameters.choiceName}.choice${parameters.id}"
@@ -271,8 +271,10 @@
 	$("#${parameters.id}-option1, #${parameters.id}-option2").click(function() {
 		$("#s2id_${parameters.id?html}").fadeIn(200);
 	});
-	<#if checkChoiceKey == "A">
-		$("#s2id_${parameters.id?html}").hide();
+	<#if parameters.choiceValue?default("true") == "true">
+		<#if checkChoiceKey == "A">
+			$("#s2id_${parameters.id?html}").hide();
+		</#if>
 	</#if>
 	</script>
 
