@@ -30,9 +30,6 @@ public class MenuInterceptor extends AbstractInterceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		
-        
-		
-		String s = invocation.invoke();
 		Map<String, Object> session = invocation.getInvocationContext().getSession();
 		try{
 			if(session.get(CommonConstant.SESSION.MENU_BEAN_KEY) == null){
@@ -46,6 +43,6 @@ public class MenuInterceptor extends AbstractInterceptor {
 			
 		}
 		
-		return s;
+		return invocation.invoke();
 	}
 }
