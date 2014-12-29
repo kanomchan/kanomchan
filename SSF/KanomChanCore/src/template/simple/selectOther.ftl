@@ -135,7 +135,7 @@
 
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 <option value="-2" 
-    <#if  !parameters.nameValue?? && check>
+    <#if  (tag.contains(parameters.nameValue, -2) == true) || (!parameters.nameValue?? && check)>
     selected="selected"
     </#if>
 ><@s.text name="COMMON_OTHER" /></option>
@@ -159,7 +159,7 @@
 class="form-control"/>
 </@s.textfield>-->
 <script>
-	<#if !(!parameters.nameValue?? && check)>
+	<#if !((tag.contains(parameters.nameValue, -2) == true) || (!parameters.nameValue?? && check))>
 	$("[name='${name?html}']").hide();
 	</#if>
 		

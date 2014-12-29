@@ -283,6 +283,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return save(target, true);
 	}
 	
+//	public <T extends EntityBean> T save(T target){
+//		return save(target, true);
+//	}
+	
 	public <T extends Object> T save(T target, boolean includeMinusOne){
 		
 		if(target instanceof EntityBean){
