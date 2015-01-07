@@ -39,6 +39,7 @@ public interface CommonConstant {
 	public static final String SESSION_ID = "SESSION_ID";
 	public static final String CONTEXT_PATH = "CONTEXT_PATH";
 	public static final String USER_ID = "USER_ID";
+	public static final String USER_NAME = "USER_NAME";
     }
     
 
