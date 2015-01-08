@@ -2953,8 +2953,8 @@
   </tag>
     <tag>
 <!--     <description><![CDATA[Print out expression which evaluates against the stack]]></description> -->
-    <name>displaytext</name>
-    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.ui.DisplayTextTag</tag-class>
+    <name>authen</name>
+    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.ui.AuthenTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
       <description><![CDATA[The default value to be used if <u>value</u> attribute is null]]></description>
