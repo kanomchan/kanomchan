@@ -21,8 +21,6 @@
 
 package org.kanomchan.core.common.web.struts.view.jsp.ui;
 
-import java.text.Normalizer.Form;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,6 +32,10 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 public class AuthenTag extends IfTag {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5144405943382307271L;
 	String code;
 
 	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
