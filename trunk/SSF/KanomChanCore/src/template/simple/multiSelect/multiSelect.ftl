@@ -243,11 +243,11 @@
 		<#if parameters.beanName??>
 			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
 											"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}'/>");
+											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}'/> class='__pushdataonremove_${parameters.id}-hidden'");
 		<#else>
 			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
 											"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' />");
+											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
 		</#if>
 	}
     $("#${parameters.id}").change(function() {
@@ -257,11 +257,11 @@
 	    <#if parameters.beanName??>
 			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
 											"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}'/>");
+											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
 		<#else>
 			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
 											"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}'/>");
+											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
 		</#if>
 	    }
 	});
