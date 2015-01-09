@@ -89,6 +89,11 @@
 </@s.iterator>
 </div>
 <script type="text/javascript">
+	$( document ).ready(function() {
+		if ($('.checkbox-${parameters.id?html}:checked').length == $('.checkbox-${parameters.id?html}').length) {
+			$('#all${parameters.id?html}').prop( "checked", true );
+		}
+	});
 	$('#all${parameters.id?html}').change(function() {
 		if(this.checked) {
 			$('[id^=${parameters.id?html}]').prop( "checked", true );
