@@ -2,6 +2,6 @@ package org.kanomchan.core.common.bean;
 
 public enum ColumnType {
 	
-	column,joinColumn, id
+	column,joinColumn, id,embeddedId
 
 }
