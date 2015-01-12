@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface ComparatorTwoObject<T,E> {
 	
-//	int compare(T o1, T o2);
+	boolean compare(T o1, E o2);
 	
 //	boolean equals(Object obj);
 	
