@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.kanomchan.core.common.bean.CheckBox;
+import org.kanomchan.core.common.bean.EntityBean;
+
 
 public class StrutsUtil {
 	
@@ -27,6 +29,22 @@ public class StrutsUtil {
 		if(checkBoxs !=null){
 			for (CheckBox<T> checkBox : checkBoxs) {
 				if (!checkBox.isCheck()) {
+					list.add(checkBox.getValue());
+				}
+			}
+		}
+		return list;
+	}
+	public static <T extends EntityBean>  List<T> getPushStatus(List<CheckBox<T>> checkBoxs,String statusTrue,String statusFalse){
+		List<T> list = new LinkedList<T>();
+		if(checkBoxs !=null){
+			for (CheckBox<T> checkBox : checkBoxs) {
+				if (checkBox.isCheck()) { //Status True
+					checkBox.getValue().setStatus(statusTrue);
+					list.add(checkBox.getValue());
+				}
+				if (!checkBox.isCheck()) { //Status False
+					checkBox.getValue().setStatus(statusFalse);
 					list.add(checkBox.getValue());
 				}
 			}
@@ -69,19 +87,33 @@ public class StrutsUtil {
 		return listOut;
 	}
 	
-	public static <T extends Object,E extends Object> List<CheckBox<T>> convertListCheckBox(List<T> listShow, List<E> listedit,ComparatorTwoObject<T,E> comparatorTwoObject ) {
+	public static <T extends Object,E extends Object> List<CheckBox<E>> convertListCheckBox(final Class<E> clazz,List<T> listShow, List<E> listedit,ComparatorTwoObject<T,E> comparatorTwoObject,SetData<T,E> set ) {
 		
-		List<CheckBox<T>> listOut = new LinkedList<CheckBox<T>>();
+		List<CheckBox<E>> listOut = new LinkedList<CheckBox<E>>();
 		Set<E> edit = new HashSet<E>(listedit);
 		if(listShow !=null){
 			for (T obje : listShow) {
 				
 				if(comparatorTwoObject.contains(obje,edit)){
-					CheckBox<T> checkBox = new CheckBox<T>(obje);
-					checkBox.setCheck(true);
-					listOut.add(checkBox);
+					for (E e : edit) {
+						if(comparatorTwoObject.compare(obje, e)){
+							E out = set.setData(obje,e);
+							CheckBox<E> checkBox = new CheckBox<E>(out);
+							checkBox.setCheck(true);
+							listOut.add(checkBox);
+						}
+					}
+					
 				}else{
-					listOut.add(new CheckBox<T>(obje));
+					E out;
+					try {
+						out = set.setData(obje,clazz.newInstance());
+						listOut.add(new CheckBox<E>(out));
+					} catch (InstantiationException | IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 				
 			}
