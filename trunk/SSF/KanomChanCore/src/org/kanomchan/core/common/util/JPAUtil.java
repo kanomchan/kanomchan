@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -85,11 +86,14 @@ public class JPAUtil {
 					Method methodGet = ClassUtil.findGetter(clazz, field.getName());
 					Column column = field.getAnnotation(Column.class);
 					Id id = field.getAnnotation(Id.class);
+					EmbeddedId embeddedId = field.getAnnotation(EmbeddedId.class);
 					JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
 					if (column == null)
 						column = methodGet.getAnnotation(Column.class);
 					if (id == null)
 						id = methodGet.getAnnotation(Id.class);
+					if (embeddedId == null)
+						embeddedId = methodGet.getAnnotation(EmbeddedId.class);
 					if (joinColumn == null)
 						joinColumn = methodGet.getAnnotation(JoinColumn.class);
 					if (column != null) {
@@ -103,6 +107,9 @@ public class JPAUtil {
 							if(id!=null){
 								property.setColumnType(ColumnType.id);
 								classMapper.setPropertyId(property);
+							}else if(embeddedId!=null){
+								property.setColumnType(ColumnType.embeddedId);
+								classMapper.setPropertyId(property);
 							}
 						}
 
@@ -115,7 +122,18 @@ public class JPAUtil {
 						if(id!=null){
 							property.setColumnType(ColumnType.id);
 							classMapper.setPropertyId(property);
+						}else if(embeddedId!=null){
+							property.setColumnType(ColumnType.embeddedId);
+							classMapper.setPropertyId(property);
 						}
+					}else if(embeddedId!=null){
+						Property property = new Property();
+						property.setMethodGet(methodGet);
+						property.setMethodSet(methodSet);
+						property.setColumnName(field.getName());
+						classMapper.getColumn().put(field.getName(), property);
+						property.setColumnType(ColumnType.embeddedId);
+						classMapper.setPropertyId(property);
 					}
 				} catch (NoSuchFieldException | IntrospectionException e) {
 //					e.printStackTrace();

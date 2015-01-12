@@ -392,14 +392,28 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						para.add(value);
 					}
 				}
-//				if(attributeOverrides != null){
-//					Object value = method.invoke(target);
-//					if(value != null){
-//						for (AttributeOverride attributeOverride : attributeOverrides.value()) 
-//							listPkName.add(attributeOverride.column().name());
-//						listPkId.add(value);
-//					}
-//				}
+				
+				if(property.getColumnType() == ColumnType.embeddedId){
+					Object valueEmbeddedId = method.invoke(target);
+					if(valueEmbeddedId!=null){
+						ClassMapper classMapperEmbeddedId= JPAUtil.getClassMapper(method.getReturnType());
+//						classMapperEmbeddedId.getColumn();
+						
+						for (String  embeddedIdColumnName : classMapperEmbeddedId.getColumn().keySet()) {
+							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName);
+							Method embeddedIdMethod = embeddedIdProperty.getMethodGet();
+							Object embeddedIdValue = embeddedIdMethod.invoke(valueEmbeddedId);
+							if(embeddedIdValue != null){
+								listColumnName.add(embeddedIdColumnName);
+								listParaName.add("?");
+								para.add(embeddedIdValue);
+							}
+						}
+						
+					}
+					
+				}
+
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
@@ -589,6 +603,27 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //						listParaName.add("?");
 //						para.add(value);
 					}
+				}
+				
+				if(property.getColumnType() == ColumnType.embeddedId){
+					Object valueEmbeddedId = method.invoke(target);
+					if(valueEmbeddedId!=null){
+						ClassMapper classMapperEmbeddedId= JPAUtil.getClassMapper(method.getReturnType());
+//						classMapperEmbeddedId.getColumn();
+						
+						for (String  embeddedIdColumnName : classMapperEmbeddedId.getColumn().keySet()) {
+							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName);
+							Method embeddedIdMethod = embeddedIdProperty.getMethodGet();
+							Object embeddedIdValue = embeddedIdMethod.invoke(valueEmbeddedId);
+							if(embeddedIdValue != null){
+								listPkName.add(embeddedIdColumnName);
+//								listParaName.add("?");
+								listPkNamePara.add(embeddedIdValue);
+							}
+						}
+						
+					}
+					
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				logger.error("update(T, boolean)", e); //$NON-NLS-1$
