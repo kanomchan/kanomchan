@@ -77,7 +77,7 @@
     <#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
         />
 <label for="${parameters.id?html}-${itemCount}" class="checkboxLabel">${itemValue?html}</label>
-<input type="hidden" id="__checkbox_${parameters.id?html}_${itemCount}" name="__checkbox_${parameters.name?html}"
+<input type="hidden" id="__checkbox_${parameters.id?html}_${itemCount}" name="__checkbox_${parameters.name?html}[${itemCount-1}].check"
        value=""<#rt/><#if parameters.disabled?default(false)>
        disabled="disabled"<#rt/>
 </#if>
