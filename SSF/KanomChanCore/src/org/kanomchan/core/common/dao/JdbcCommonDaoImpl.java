@@ -732,6 +732,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				para.add(listPkNamePara.get(i));
 			}
 		}else{
+			// throw exception not parameter
 			return null;
 		}
 
