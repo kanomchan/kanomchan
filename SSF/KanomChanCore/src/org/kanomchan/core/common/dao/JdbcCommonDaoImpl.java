@@ -731,6 +731,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				sb.append(" = ? ");
 				para.add(listPkNamePara.get(i));
 			}
+		}else{
+			return null;
 		}
 
 		Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
@@ -755,8 +757,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		return target;
 	}
-	
-
 	
 	@Override
 	public <T extends Object> List<T> nativeQuery( String sql, Class<T> class1 ,Object... params){
