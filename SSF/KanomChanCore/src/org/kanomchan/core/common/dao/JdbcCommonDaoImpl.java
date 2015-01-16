@@ -17,6 +17,7 @@ import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import javax.persistence.Table;
 
 import org.kanomchan.core.common.bean.ClassMapper;
@@ -733,7 +734,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 		}else{
 			// throw exception not parameter
-			return null;
+			throw new RollbackException(CommonMessageCode.COM4991.toString());
 		}
 
 		Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
