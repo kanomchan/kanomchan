@@ -10,6 +10,7 @@ import org.kanomchan.core.security.authorize.bean.Menu;
 public interface UserMenuDao {
 
 	public List<Menu> findAll()throws NonRollBackException,RollBackException;
+	public List<Menu> findAllForNavigation()throws NonRollBackException,RollBackException;
 
 	public List<Menu> findAllByAction(Integer actionId)throws NonRollBackException, RollBackException;
 	public List<Menu> findAllByMenuId(Integer menuId)throws NonRollBackException, RollBackException;
