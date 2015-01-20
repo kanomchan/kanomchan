@@ -7,6 +7,7 @@ public class Property {
 	private Method methodSet;
 	private ColumnType columnType;
 	private String columnName;
+	private Property EmbeddedId;
 	public Method getMethodGet() {
 		return methodGet;
 	}
@@ -30,6 +31,12 @@ public class Property {
 	}
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
+	}
+	public Property getEmbeddedId() {
+		return EmbeddedId;
+	}
+	public void setEmbeddedId(Property embeddedId) {
+		EmbeddedId = embeddedId;
 	}
 
 	

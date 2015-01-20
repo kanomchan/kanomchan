@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.bean;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,17 +14,17 @@ public class ClassMapper {
 //	}
 	private String tableName;
 	private Property propertyId;
-	private Map<String, Property> column = new ConcurrentHashMap<String, Property>();
+	private Map<String, List<Property>> column = new ConcurrentHashMap<String, List<Property>>();
 	public Property getPropertyId() {
 		return propertyId;
 	}
 	public void setPropertyId(Property propertyId) {
 		this.propertyId = propertyId;
 	}
-	public Map<String, Property> getColumn() {
+	public Map<String, List<Property>> getColumn() {
 		return column;
 	}
-	public void setColumn(Map<String, Property> column) {
+	public void setColumn(Map<String, List<Property>> column) {
 		this.column = column;
 	}
 	public String getTableName() {

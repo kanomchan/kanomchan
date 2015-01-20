@@ -11,6 +11,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -46,21 +49,24 @@ public class JPAUtil {
 			ClassMapper classMapper = JPAUtil.getClassMapper(clazz);
 			if(classMapper==null)
 				return null;
-			Map<String, Property> column = classMapper.getColumn();
+			Map<String, List<Property>> column = classMapper.getColumn();
 			if(column !=null){
 				
-				for(Entry<String, Property> entry : column.entrySet()) {
+				for(Entry<String, List<Property>> entry : column.entrySet()) {
 				    String key = entry.getKey();
-				    Property property = entry.getValue();
+				    List<Property> propertyList = entry.getValue();
 				    
 				    Object value =null;
-					try {
-						value = property.getMethodGet().invoke(traget);
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				    for (Property property : propertyList) {
+				    	try {
+							value = property.getMethodGet().invoke(traget);
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						}
+					    if(value!=null){
+					    	criterias.add(new Criteria(key, value));
+					    }
 					}
-				    if(value!=null){
-				    	criterias.add(new Criteria(key, value));
-				    }
+					
 				}
 			}
 		}
@@ -69,9 +75,9 @@ public class JPAUtil {
 	}
 	public static ClassMapper getClassMapper(Class<?> clazz){
 		
-		ClassMapper classMapper =mapClass.get(clazz.getName());
+//		ClassMapper classMapper =mapClass.get(clazz.getName());
 		
-//		classMapper = null;
+		ClassMapper classMapper = null;
 //			ClassMapper classMapper = mapClass.get(clazz.getName());
 		if (classMapper == null) {
 			classMapper = new ClassMapper();
@@ -87,6 +93,7 @@ public class JPAUtil {
 					Column column = field.getAnnotation(Column.class);
 					Id id = field.getAnnotation(Id.class);
 					EmbeddedId embeddedId = field.getAnnotation(EmbeddedId.class);
+					AttributeOverrides attributeOverrides  = field.getAnnotation(AttributeOverrides.class);
 					JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
 					if (column == null)
 						column = methodGet.getAnnotation(Column.class);
@@ -94,6 +101,8 @@ public class JPAUtil {
 						id = methodGet.getAnnotation(Id.class);
 					if (embeddedId == null)
 						embeddedId = methodGet.getAnnotation(EmbeddedId.class);
+					if (attributeOverrides == null)
+						attributeOverrides  = methodGet.getAnnotation(AttributeOverrides.class);
 					if (joinColumn == null)
 						joinColumn = methodGet.getAnnotation(JoinColumn.class);
 					if (column != null) {
@@ -103,7 +112,12 @@ public class JPAUtil {
 							property.setMethodSet(methodSet);
 							property.setColumnName(column.name());
 							property.setColumnType(ColumnType.column);
-							classMapper.getColumn().put(column.name(), property);
+//							classMapper.getColumn().put(column.name(), property);//Old version
+							List<Property> properties = classMapper.getColumn().get(column.name());
+							if(properties==null)
+								properties = new ArrayList<Property>();
+							properties.add(property);
+							classMapper.getColumn().put(column.name(), properties);
 							if(id!=null){
 								property.setColumnType(ColumnType.id);
 								classMapper.setPropertyId(property);
@@ -118,7 +132,12 @@ public class JPAUtil {
 						property.setMethodGet(methodGet);
 						property.setMethodSet(methodSet);
 						property.setColumnType(ColumnType.joinColumn);
-						classMapper.getColumn().put(joinColumn.name(), property);
+//						classMapper.getColumn().put(joinColumn.name(), property); // old version
+						List<Property> properties = classMapper.getColumn().get(joinColumn.name());
+						if(properties==null)
+							properties = new ArrayList<Property>();
+						properties.add(property);
+						classMapper.getColumn().put(joinColumn.name(), properties);
 						if(id!=null){
 							property.setColumnType(ColumnType.id);
 							classMapper.setPropertyId(property);
@@ -127,13 +146,49 @@ public class JPAUtil {
 							classMapper.setPropertyId(property);
 						}
 					}else if(embeddedId!=null){
+						
 						Property property = new Property();
 						property.setMethodGet(methodGet);
 						property.setMethodSet(methodSet);
-						property.setColumnName(field.getName());
-						classMapper.getColumn().put(field.getName(), property);
+//						property.setColumnName(field.getName());
+//						List<Property> properties = classMapper.getColumn().get(joinColumn.name());
+//						if(properties==null)
+//							properties = new ArrayList<Property>();
+//						properties.add(property);
+//						classMapper.getColumn().put(field.getName(), properties);
 						property.setColumnType(ColumnType.embeddedId);
 						classMapper.setPropertyId(property);
+						
+						Class<?> returnType = methodGet.getReturnType();
+						if(attributeOverrides!=null){
+							for (AttributeOverride attributeOverride : attributeOverrides.value()) {
+								String name = attributeOverride.name();
+								Field fieldembeddedId = returnType.getDeclaredField(name);
+								Method methodSetembeddedId = ClassUtil.findSetter(returnType, fieldembeddedId.getName());
+								Method methodGetembeddedId = ClassUtil.findGetter(returnType, fieldembeddedId.getName());
+								Column columnEmbeddedId = attributeOverride.column();
+								Property propertyEmbeddedId = new Property();
+								propertyEmbeddedId.setMethodGet(methodGetembeddedId);
+								propertyEmbeddedId.setMethodSet(methodSetembeddedId);
+								propertyEmbeddedId.setColumnName(columnEmbeddedId.name());
+								propertyEmbeddedId.setEmbeddedId(property);
+								propertyEmbeddedId.setColumnType(ColumnType.embeddedId);
+								List<Property> propertiesEmbeddedId = classMapper.getColumn().get(columnEmbeddedId.name());
+								if(propertiesEmbeddedId==null)
+									propertiesEmbeddedId = new ArrayList<Property>();
+								propertiesEmbeddedId.add(propertyEmbeddedId);
+								classMapper.getColumn().put(columnEmbeddedId.name(), propertiesEmbeddedId);
+								
+							}
+						}
+							
+//						Property property = new Property();
+//						property.setMethodGet(methodGet);
+//						property.setMethodSet(methodSet);
+//						property.setColumnName(field.getName());
+//						classMapper.getColumn().put(field.getName(), property);
+//						property.setColumnType(ColumnType.embeddedId);
+//						classMapper.setPropertyId(property);
 					}
 				} catch (NoSuchFieldException | IntrospectionException e) {
 //					e.printStackTrace();
@@ -163,7 +218,8 @@ public class JPAUtil {
 				try {
 					t = clazz.newInstance();
 					ClassMapper classMapper = getClassMapper(clazz);
-					Map<String, Property> columns = classMapper.getColumn();
+//					Map<String, Property> columns = classMapper.getColumn();//oldversion
+					Map<String, List<Property>> columns = classMapper.getColumn();
 					ResultSetMetaData md = rs.getMetaData();
 //					if (md.getColumnCount() < columns.size()) {
 						for (int i = 0; i < md.getColumnCount(); i++) {
@@ -183,16 +239,19 @@ public class JPAUtil {
 							
 							if(!columns.containsKey(columnName))
 								continue;
-							Property property = columns.get(columnName);
-							if(property==null)
-								continue;
-							Method methodSet = property.getMethodSet();
-							if(methodSet==null)
-								continue;
-							try {
-								t = mapRow(rs, rowNum, t, i+1, property);
-							} catch (Exception e) {
-								// TODO: handle exception
+//							Property property = columns.get(columnName);//oldversionn
+							List<Property> properties = columns.get(columnName);
+							for (Property property : properties) {
+								if(property==null)
+									continue;
+								Method methodSet = property.getMethodSet();
+								if(methodSet==null)
+									continue;
+								try {
+									t = mapRow(rs, rowNum, t, i+1, property);
+								} catch (Exception e) {
+									// TODO: handle exception
+								}
 							}
 						}
 //					} else {
@@ -229,15 +288,26 @@ public class JPAUtil {
 					return traget;
 				try {
 					Object objectData = new Object[]{null};
-					if(methodSet.getParameterTypes()[0].isAnnotationPresent(Entity.class)){
-						ClassMapper classMapperId = getClassMapper(methodSet.getParameterTypes()[0]);
-						objectData = methodSet.getParameterTypes()[0].newInstance();
-						Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
-						methodSetId.invoke(objectData,  getObject(rs, columnNum, methodSetId.getParameterTypes()[0]));
+					if(ColumnType.embeddedId == property.getColumnType()){
+						objectData = property.getEmbeddedId().getMethodGet().invoke(traget);
+						if(objectData == null)
+							objectData = property.getEmbeddedId().getMethodSet().getParameterTypes()[0].newInstance();
+						
+						property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
+						
+						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
 					}else{
-						objectData = getObject(rs, columnNum, methodSet.getParameterTypes()[0]);
+						if(methodSet.getParameterTypes()[0].isAnnotationPresent(Entity.class)){
+							ClassMapper classMapperId = getClassMapper(methodSet.getParameterTypes()[0]);
+							objectData = methodSet.getParameterTypes()[0].newInstance();
+							Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
+							methodSetId.invoke(objectData,  getObject(rs, columnNum, methodSetId.getParameterTypes()[0]));
+						}else{
+							objectData = getObject(rs, columnNum, methodSet.getParameterTypes()[0]);
+						}
+						methodSet.invoke(traget, objectData);
 					}
-					methodSet.invoke(traget, objectData);
+					
 				} catch (IllegalArgumentException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 					logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
 				}
