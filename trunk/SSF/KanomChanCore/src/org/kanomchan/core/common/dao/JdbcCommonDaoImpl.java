@@ -313,7 +313,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
-			Property property = classMapper.getColumn().get(columnName);
+			Property property = classMapper.getColumn().get(columnName).get(0);
 			Method method = property.getMethodGet();
 			try {
 //				Column column = method.getAnnotation(Column.class);
@@ -401,7 +401,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //						classMapperEmbeddedId.getColumn();
 						
 						for (String  embeddedIdColumnName : classMapperEmbeddedId.getColumn().keySet()) {
-							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName);
+							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName).get(0);
 							Method embeddedIdMethod = embeddedIdProperty.getMethodGet();
 							Object embeddedIdValue = embeddedIdMethod.invoke(valueEmbeddedId);
 							if(embeddedIdValue != null){
@@ -530,7 +530,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
-			Property property = classMapper.getColumn().get(columnName);
+			Property property = classMapper.getColumn().get(columnName).get(0);
 			Method method = property.getMethodGet();
 			try {
 				if(property.getColumnType() == ColumnType.column){
@@ -613,7 +613,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //						classMapperEmbeddedId.getColumn();
 						
 						for (String  embeddedIdColumnName : classMapperEmbeddedId.getColumn().keySet()) {
-							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName);
+							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName).get(0);
 							Method embeddedIdMethod = embeddedIdProperty.getMethodGet();
 							Object embeddedIdValue = embeddedIdMethod.invoke(valueEmbeddedId);
 							if(embeddedIdValue != null){
@@ -705,7 +705,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
-			Property property = classMapper.getColumn().get(columnName);
+			Property property = classMapper.getColumn().get(columnName).get(0);
 			Method method = property.getMethodGet();
 			try {
 				if(property.getColumnType() == ColumnType.id){
