@@ -10,6 +10,8 @@ public interface ActionDao {
 
 	public ActionBean getActionByMenuId(Integer menuId);
 	
+	public ActionBean getActionByUrl(String url);
+	
 	public ActionBean getActionByNamespaceAndActionName(String namespace, String actionName);
 
 	public void refresh();

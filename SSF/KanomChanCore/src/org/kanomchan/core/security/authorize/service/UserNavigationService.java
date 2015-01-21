@@ -8,7 +8,7 @@ import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.security.authorize.bean.MenuBean;
 
 public interface UserNavigationService {
-	public ServiceResult<List<MenuBean>> generateNavigationList(String namespace, String actionName)throws NonRollBackException , RollBackException;
+	public ServiceResult<List<MenuBean>> generateNavigationList(String namespace, String actionName, String url)throws NonRollBackException , RollBackException;
 
 	public void refresh();
 }
