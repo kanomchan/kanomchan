@@ -57,6 +57,8 @@ public class ConfigServiceImpl implements ConfigService {
 		return pageValidators.get(page);
 	}
 
+	
+	
 	@Override
 	public String getInputResultName(String namespace, String name) {
 		return actionInputResult.get((namespace==null?"":namespace)+"/"+(name==null?"":name));
