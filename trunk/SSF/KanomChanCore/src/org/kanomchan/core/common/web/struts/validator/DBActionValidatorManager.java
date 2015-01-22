@@ -83,7 +83,7 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         }
 		
 //		ConfigService configService = ApplicationContextUtil.getBean(ConfigService.class);
-		
+//            validatorCache.clear();	
 		
 		// get the set of validator configs
         List<ValidatorConfig> cfgs = validatorCache.get(validatorKey);
@@ -103,9 +103,15 @@ public class DBActionValidatorManager implements ActionValidatorManager {
 		return validators;
 	}
 
+	
+	
 	@Override
 	public List<Validator> getValidators(Class clazz, String context) {
 		return getValidators(clazz, context, null);
+	}
+	
+	public void refreshAll(){
+		validatorCache.clear();
 	}
 
 	public void validate(Object object, String context) throws ValidationException {
