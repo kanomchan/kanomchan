@@ -137,9 +137,14 @@ public class DBActionValidatorManager implements ActionValidatorManager {
         	ActionMapping actionMapping = ServletActionContext.getActionMapping();
         	if(actionMapping!=null){
         		String inputResultName = configService.getInputResultName(actionMapping.getNamespace(),actionMapping.getName());
+        		List<Validator> validatorsTemp = getValidators(object.getClass(), context, method);
         		if(inputResultName!=null){
         			baseAction.setInputResultName(inputResultName);
-            		validators = getValidators(object.getClass(), context, method);
+            		validators = validatorsTemp;
+        		}else if(validatorsTemp!=null&&validatorsTemp.size()>0){
+        			if (LOG.isErrorEnabled()) {
+                        LOG.error("Please Check Table Action View InputResult = NULL Running validator.size(): " + validatorsTemp.size() + " actionMapping.getNamespace() " + actionMapping.getNamespace() + " actionMapping.getName() " + actionMapping.getName());
+                    }
         		}
         		
         	}
