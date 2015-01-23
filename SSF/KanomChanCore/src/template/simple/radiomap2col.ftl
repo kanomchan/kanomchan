@@ -60,7 +60,7 @@
  name="${parameters.name?html}"<#rt/>
 </#if>
  id="${parameters.id?html}${itemKeyStr?html}"<#rt/>
-<#if tag.contains(parameters.nameValue?default(''), itemKeyStr)>
+<#if tag.contains(parameters.nameValue?default(''), itemKeyStr)||(parameters.nameValue?default('')?is_collection && parameters.nameValue?contains(itemKeyStr))>
  checked="checked"<#rt/>
 </#if>
 <#if itemKey??>
