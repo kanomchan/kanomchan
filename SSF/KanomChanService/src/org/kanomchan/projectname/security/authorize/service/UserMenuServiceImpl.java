@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.kanomchan.core.common.bean.ActionBean;
+import org.kanomchan.core.common.bean.MenuVO;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
@@ -44,15 +45,15 @@ public class UserMenuServiceImpl implements UserMenuService {
 	}
 	
 	@Override
-	public ServiceResult<List<MenuBean>> generateMenuList(UserBean userBean) throws NonRollBackException, RollBackException {
+	public ServiceResult<MenuVO> generateMenuList(UserBean userBean) throws NonRollBackException, RollBackException {
 		return generateMenuList(userBean.getPrivileges());
 	}
 	@Override
-	public ServiceResult<List<MenuBean>> generateMenuList(Set<String> privileges) throws NonRollBackException, RollBackException {
+	public ServiceResult<MenuVO> generateMenuList(Set<String> privileges) throws NonRollBackException, RollBackException {
 		List<Menu> menuList = userMenuDao.findAll();
 		
-		List<MenuBean> result = new LinkedList<MenuBean>();
-		HashMap<Integer, MenuBean> lookup = new HashMap<Integer, MenuBean>();
+		List<MenuBean> result = new LinkedList<MenuBean>();//output main list
+		HashMap<Integer, MenuBean> lookup = new HashMap<Integer, MenuBean>();//lookup bean parent { for bean chide find bean parent }
 		if(menuList!=null&&menuList.size()!=0){
 //			Set<String> privileges = userBean.getPrivileges();
 			if(privileges!=null){
@@ -73,13 +74,14 @@ public class UserMenuServiceImpl implements UserMenuService {
 						menuBean.setLevel(menu.getLevel());
 						menuBean.setParentId(menu.getParentId());
 						menuBean.setMenuId(menu.getMenuId());
+						menuBean.setType(menu.getMenuType());
 //						menuBean.setUrl(menu.getUrl());
 //						Add menu item to parent
-						if(menu.getParentId()==null){
-//							case root
+						if(menu.getParentId()==null){//
+//							case root or main list
 							result.add(menuBean);
 						}else{
-//							case sub menu
+//							case sub menu create sublist
 							MenuBean parent = lookup.get(menu.getParentId());
 							if (parent!=null) {
 								parent.addChildMenu(menuBean);
@@ -87,16 +89,18 @@ public class UserMenuServiceImpl implements UserMenuService {
 //								ignore case invalid parent m
 							}
 						}
-						lookup.put(menu.getMenuId(), menuBean);
+						lookup.put(menu.getMenuId(), menuBean);// set parent lookup
 					}
 				}
 			}
 		}
-		
-		return new ServiceResult<List<MenuBean>>(result);
+		MenuVO menuVO = new MenuVO();
+		menuVO.setMenuBeans(result);
+		menuVO.setLookupMap(lookup);
+		return new ServiceResult<MenuVO>(menuVO);
 	}
 	@Override
-	public ServiceResult<List<MenuBean>> generateMenuGuest() throws NonRollBackException, RollBackException {
+	public ServiceResult<MenuVO> generateMenuGuest() throws NonRollBackException, RollBackException {
 		Set<String> privileges = userAuthorizeDao.getUserPrivilegesByRoleId("3");
 		return generateMenuList(privileges);
 	}
