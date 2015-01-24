@@ -22,6 +22,7 @@ public interface CommonConstant {
 	public static final String NAVIGATION_BEAN_KEY = "SESSION_NAVIGATION_BEAN_KEY";
 	public static final String NEXT_URL_KEY = "SESSION_NEXT_URL_KEY";
 	public static final String MENU_BEAN_KEY = "SESSION_MENU_BEAN_KEY";
+	public static final String MENU_BEAN_MAP_KEY = "SESSION_MENU_BEAN_MAP_KEY";
 	public static final String LOCATION_BEAN_KEY = "SESSION_LOCATION_BEAN_KEY";
     }
     
