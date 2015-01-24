@@ -2,6 +2,7 @@ package org.kanomchan.projectname.authen.action.web;
 
 import java.util.List;
 
+import org.kanomchan.core.common.bean.MenuVO;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
@@ -45,9 +46,11 @@ public class LoginAction extends BaseAction {
 		
 		if(serviceResult.isSuccess()){
 			UserBean userBean = serviceResult.getResult();
-			ServiceResult<List<MenuBean>> serviceResultMenu = userMenuService.generateMenuList(userBean);
+			ServiceResult<MenuVO> serviceResultMenu = userMenuService.generateMenuList(serviceResult.getResult());
+			
 			if(serviceResultMenu.isSuccess()){
-				session.put(CommonConstant.SESSION.MENU_BEAN_KEY, serviceResultMenu.getMessages());
+				session.put(CommonConstant.SESSION.MENU_BEAN_KEY, serviceResultMenu.getResult().getMenuBeans());
+				session.put(CommonConstant.SESSION.MENU_BEAN_MAP_KEY, serviceResultMenu.getResult().getLookupMap());
 			}
 			session.put(CommonConstant.SESSION.USER_BEAN_KEY, userBean);
 			return "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
