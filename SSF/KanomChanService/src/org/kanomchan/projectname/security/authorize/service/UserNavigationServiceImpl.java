@@ -40,7 +40,7 @@ public class UserNavigationServiceImpl implements UserNavigationService{
 	@Override
 	@Cacheable(cacheName = "generateNavigationList")
 	public ServiceResult<List<MenuBean>> generateNavigationList(
-			String namespace, String actionName) throws NonRollBackException, RollBackException {
+			String namespace, String actionName, String url) throws NonRollBackException, RollBackException {
 		ActionBean currentAction = actionDao.getActionByNamespaceAndActionName(namespace, actionName);
 		if(currentAction!=null){
 			List<Menu> menuList = userMenuDao.findAll();
