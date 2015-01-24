@@ -101,7 +101,7 @@ validateList :[
             }
 			return {errors : errors};
             <#elseif validator.validatorType = "regex">
-            if (continueValidation && fieldValue != null && !fieldValue.match("${validator.regex?js_string}")) {
+            if (continueValidation && !fieldValue.match("${validator.regex?js_string}")) {
                 errors = true;
             }
 			return {errors : errors};
