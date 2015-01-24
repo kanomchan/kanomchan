@@ -3,6 +3,7 @@ package org.kanomchan.core.common.web.struts.interceptor;
 import java.util.List;
 import java.util.Map;
 
+import org.kanomchan.core.common.bean.MenuVO;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.security.authorize.bean.MenuBean;
@@ -33,9 +34,10 @@ public class MenuInterceptor extends AbstractInterceptor {
 		Map<String, Object> session = invocation.getInvocationContext().getSession();
 		try{
 			if(session.get(CommonConstant.SESSION.MENU_BEAN_KEY) == null){
-				ServiceResult<List<MenuBean>> serviceResultMenu = userMenuService.generateMenuGuest();
+				ServiceResult<MenuVO> serviceResultMenu = userMenuService.generateMenuGuest();
 				if(serviceResultMenu.isSuccess()){
-					session.put(CommonConstant.SESSION.MENU_BEAN_KEY, serviceResultMenu.getResult());
+					session.put(CommonConstant.SESSION.MENU_BEAN_KEY, serviceResultMenu.getResult().getMenuBeans());
+					session.put(CommonConstant.SESSION.MENU_BEAN_MAP_KEY, serviceResultMenu.getResult().getLookupMap());
 				}
 			}
 			

@@ -20,6 +20,7 @@ public class MenuBean implements Serializable {
 	private Integer level;
 	private Integer menuId;
 	private Integer parentId;
+	private String type;
 	public String getUrl() {
 		return url;
 	}
@@ -44,45 +45,11 @@ public class MenuBean implements Serializable {
 		this.menuName = menuName;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("MenuBean [");
-		if (url != null) {
-			builder.append("url=");
-			builder.append(url);
-			builder.append(", ");
-		}
-		if (menuName != null) {
-			builder.append("menuName=");
-			builder.append(menuName);
-			builder.append(", ");
-		}
-		if (childMenu != null) {
-			builder.append("childMenu=");
-			builder.append(childMenu);
-			builder.append(", ");
-		}
-		if (level != null) {
-			builder.append("level=");
-			builder.append(level);
-			builder.append(", ");
-		}
-		if (menuId != null) {
-			builder.append("menuId=");
-			builder.append(menuId);
-			builder.append(", ");
-		}
-		if (parentId != null) {
-			builder.append("parentId=");
-			builder.append(parentId);
-		}
-		builder.append("]");
-		return builder.toString();
-	}
+
 	public Integer getLevel() {
 		return level;
 	}
+
 	public void setLevel(Integer level) {
 		this.level = level;
 	}
@@ -98,8 +65,21 @@ public class MenuBean implements Serializable {
 	public void setMenuId(Integer menuId) {
 		this.menuId = menuId;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	
 	
+	
+	@Override
+	public String toString() {
+		return "MenuBean [url=" + url + ", menuName=" + menuName
+				+ ", childMenu=" + childMenu + ", level=" + level + ", menuId="
+				+ menuId + ", parentId=" + parentId + ", type=" + type + "]";
+	}
 
 	
 	

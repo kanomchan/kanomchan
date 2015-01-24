@@ -7,6 +7,7 @@ public class Menu {
 	private String objId;
 	private Integer actionId;
 	private Integer parentId;
+	private String MenuType;
 	
 	public String getMenuName() {
 		return menuName;
@@ -46,5 +47,13 @@ public class Menu {
 	public Integer getLevel() {
 		return level;
 	}
+	public String getMenuType() {
+		return MenuType;
+	}
+	public void setMenuType(String menuType) {
+		MenuType = menuType;
+	}
+	
+	
 
 }
