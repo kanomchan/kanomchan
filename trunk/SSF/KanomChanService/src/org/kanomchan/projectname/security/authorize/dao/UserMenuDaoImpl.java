@@ -56,5 +56,11 @@ public class UserMenuDaoImpl extends JdbcCommonDaoImpl implements UserMenuDao {
 			return menu;
 		}
 	};
+	@Override
+	public List<Menu> findAllForNavigation() throws NonRollBackException,
+			RollBackException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

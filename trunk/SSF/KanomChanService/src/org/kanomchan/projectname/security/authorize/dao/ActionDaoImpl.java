@@ -62,4 +62,10 @@ public class ActionDaoImpl extends JdbcCommonDaoImpl implements ActionDao {
 		
 	}
 
+	@Override
+	public ActionBean getActionByUrl(String url) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
