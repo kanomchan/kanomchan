@@ -151,7 +151,18 @@ public class StrutsUtil {
 			return null;
 		}
 		if(menuBeanOut.getUrl()==null||"".equals(menuBeanOut.getUrl())){
-			menuBeanOut = find(action, menuBeanOut.getMenuId());
+			if(menuBeanOut.getChildMenu()!=null&&menuBeanOut.getChildMenu().size()>0){
+				if(menuBeanOut.getChildMenu().get(0).getUrl()==null||"".equals(menuBeanOut.getChildMenu().get(0).getUrl())){
+					menuBeanOut = find(action, menuBeanOut.getChildMenu().get(0).getMenuId());
+				}else{
+					return menuBeanOut.getChildMenu().get(0);
+				}
+				
+			}else{
+				menuBeanOut = find(action, menuBeanOut.getMenuId());
+			}
+//			menuBeanOut.getChildMenu()
+//			menuBeanOut = find(action, menuBeanOut.getMenuId());
 		}
 		return menuBeanOut;
 	}
