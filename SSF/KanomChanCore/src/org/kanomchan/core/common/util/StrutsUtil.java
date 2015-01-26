@@ -4,10 +4,15 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.kanomchan.core.common.bean.CheckBox;
 import org.kanomchan.core.common.bean.EntityBean;
+import org.kanomchan.core.common.constant.CommonConstant;
+import org.kanomchan.core.security.authorize.bean.MenuBean;
+
+import com.opensymphony.xwork2.ActionContext;
 
 
 public class StrutsUtil {
@@ -119,6 +124,30 @@ public class StrutsUtil {
 			}
 		}
 		return listOut;
+	}
+	
+	public static MenuBean find(String action , int menuId){
+		Map<Integer, MenuBean> mapMenu = (Map<Integer, MenuBean>)ActionContext.getContext().getSession().get(CommonConstant.SESSION.MENU_BEAN_MAP_KEY);
+		MenuBean menuBeanOut = null;
+		MenuBean menuBean = mapMenu.get(menuId);
+		MenuBean menuBeanParent = mapMenu.get(menuBean.getParentId());
+		int index = menuBeanParent.getChildMenu().indexOf(menuBean);
+		if ("previous".equals(action)) {
+			if (index-1 >= 0) {
+				menuBeanOut = menuBeanParent.getChildMenu().get(index-1);
+			} else {
+				menuBeanOut = find(action,menuBeanParent.getMenuId());
+			}
+		} else if ("next".equals(action)) {
+			if (index+1 < menuBeanParent.getChildMenu().size()) {
+				menuBeanOut = menuBeanParent.getChildMenu().get(index+1);
+			}else{
+				menuBeanOut = find(action,menuBeanParent.getMenuId());
+			}
+		} else {
+			menuBeanOut = mapMenu.get(menuId);
+		}
+		return menuBeanOut;
 	}
 
 }
