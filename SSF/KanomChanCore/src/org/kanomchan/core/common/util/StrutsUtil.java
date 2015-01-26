@@ -147,6 +147,12 @@ public class StrutsUtil {
 		} else {
 			menuBeanOut = mapMenu.get(menuId);
 		}
+		if(menuBeanOut == null){
+			return null;
+		}
+		if(menuBeanOut.getUrl()==null||"".equals(menuBeanOut.getUrl())){
+			menuBeanOut = find(action, menuBeanOut.getMenuId());
+		}
 		return menuBeanOut;
 	}
 
