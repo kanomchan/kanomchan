@@ -19,13 +19,12 @@ public class MessageDefault implements Message ,Serializable {
 	private String[] para;
  	private static Map<String, String>  maps = new HashMap<String, String>();
 	public MessageDefault() {
-		maps.put("SUCCESS", "alert-success");
-		maps.put("INFO", "alert-info");
-		maps.put("WARNING", "alert-warning");
-		maps.put("TECH_ERROR", "alert-danger");
-		maps.put("PRO_ERROR", "alert-danger");
+		maps.put("SUCCESS", "success");
+		maps.put("INFO", "information");
+		maps.put("WARNING", "warning");
+		maps.put("TECH_ERROR", "error");
+		maps.put("PRO_ERROR", "error");
 	}
-	
 	public String getMessageCode() {
 		maps.put("", "");
 		return messageCode;
