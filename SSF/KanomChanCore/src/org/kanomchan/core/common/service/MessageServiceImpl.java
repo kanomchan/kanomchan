@@ -42,7 +42,7 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void clearCache() {
-		
+		configDao.clearMessageCache();
 	}
 
 
