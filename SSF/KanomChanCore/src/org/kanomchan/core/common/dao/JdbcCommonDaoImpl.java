@@ -311,112 +311,94 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		List<String> listPkName = new LinkedList<String>();
 //		List<Object> listPkId = new LinkedList<Object>();
 		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+		Method methodGetId = classMapper.getPropertyId().getMethodGet();
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
-			Property property = classMapper.getColumn().get(columnName).get(0);
-			Method method = property.getMethodGet();
-			try {
-//				Column column = method.getAnnotation(Column.class);
-//				Id id = method.getAnnotation(Id.class);
-//				JoinColumn joinColumn = method.getAnnotation(JoinColumn.class);
-//				AttributeOverrides attributeOverrides = method.getAnnotation(AttributeOverrides.class);
-				if(property.getColumnType() == ColumnType.column){
-					Object value = method.invoke(target);
-					if(value != null){
-//						listColumnName.add(columnName);
-//						listParaName.add("?");
-//						para.add(value);
-						if(value instanceof Number){
-							if(includeMinusOne || ((Number)value).intValue() !=-1){
-								listColumnName.add(columnName);
-								listParaName.add("?");
-								if(((Number)value).longValue() == 0)
-									value = null;
-								para.add(value);
+			
+			for (Property property : classMapper.getColumn().get(columnName)) {
+				Method method = property.getMethodGet();
+				try {
+					if(property.getColumnType() == ColumnType.column){
+						Object value = method.invoke(target);
+						if(value != null){
+							if(value instanceof Number){
+								if(includeMinusOne || ((Number)value).intValue() !=-1){
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									if(((Number)value).longValue() == 0)
+										value = null;
+									para.add(value);
+								}
+							}else{
+								if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									para.add(value);
+								}
+									
 							}
-						}else{
-							if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
-								listColumnName.add(columnName);
-								listParaName.add("?");
-								para.add(value);
-							}
-								
 						}
 					}
-				}
-				if(property.getColumnType() == ColumnType.joinColumn){
-					Object value = method.invoke(target);
-					if(value != null){
-						Entity entity = method.getReturnType().getAnnotation(Entity.class);
-						if(entity!=null){
-							ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
-							
-							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-//							if(value!=null){
-//								listColumnName.add(columnName);
-//								listParaName.add("?");
-//								if((Long)value == 0)
-//									value = null;
-//								para.add(value);
-//							}
-							if(value!=null ) {
-								if(value instanceof Number){
-									if(includeMinusOne || ((Number)value).intValue() !=-1){
+					if(property.getColumnType() == ColumnType.joinColumn){
+						Object value = method.invoke(target);
+						if(value != null){
+							Entity entity = method.getReturnType().getAnnotation(Entity.class);
+							if(entity!=null){
+								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+								if(value!=null ) {
+									if(value instanceof Number){
+										if(includeMinusOne || ((Number)value).intValue() !=-1){
+											listColumnName.add(columnName);
+											listParaName.add("?");
+											if((Long)value == 0)
+												value = null;
+											para.add(value);
+										}
+									}else{
 										listColumnName.add(columnName);
 										listParaName.add("?");
 										if((Long)value == 0)
 											value = null;
 										para.add(value);
 									}
-								}else{
-									listColumnName.add(columnName);
-									listParaName.add("?");
-									if((Long)value == 0)
-										value = null;
-									para.add(value);
 								}
+							}else{
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								para.add(value);
 							}
-						}else{
+							
+						}
+					}
+					
+					if(property.getColumnType() == ColumnType.id){
+						Object value = method.invoke(target);
+						if(value != null){
 							listColumnName.add(columnName);
 							listParaName.add("?");
 							para.add(value);
 						}
-						
 					}
-				}
-				
-				if(property.getColumnType() == ColumnType.id){
-					Object value = method.invoke(target);
-					if(value != null){
-						listColumnName.add(columnName);
-						listParaName.add("?");
-						para.add(value);
-					}
-				}
-				
-				if(property.getColumnType() == ColumnType.embeddedId){
-					Object valueEmbeddedId = method.invoke(target);
-					if(valueEmbeddedId!=null){
-						ClassMapper classMapperEmbeddedId= JPAUtil.getClassMapper(method.getReturnType());
-//						classMapperEmbeddedId.getColumn();
-						
-						for (String  embeddedIdColumnName : classMapperEmbeddedId.getColumn().keySet()) {
-							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName).get(0);
-							Method embeddedIdMethod = embeddedIdProperty.getMethodGet();
-							Object embeddedIdValue = embeddedIdMethod.invoke(valueEmbeddedId);
-							if(embeddedIdValue != null){
-								listColumnName.add(embeddedIdColumnName);
+					
+					if(property.getColumnType() == ColumnType.embeddedId){
+						Object embeddedIdObject = methodGetId.invoke(target);
+						if(embeddedIdObject!=null){
+							Object valueEmbeddedId = method.invoke(embeddedIdObject);
+							if(valueEmbeddedId!=null){
+								listColumnName.add(columnName);
 								listParaName.add("?");
-								para.add(embeddedIdValue);
+								para.add(valueEmbeddedId);
 							}
 						}
 						
+						
 					}
-					
-				}
 
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			
 			}
 		}
 		sb.append(" ( ");
@@ -527,111 +509,98 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<Object> listPkNamePara = new LinkedList<Object>();
 		List<String> listColumnName = new LinkedList<String>();
 		List<String> listParaName = new LinkedList<String>();
+
+		Method methodGetId = classMapper.getPropertyId().getMethodGet();
 //		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+
 		
+		sb.append(" UPDATE ");
 		for (String  columnName : classMapper.getColumn().keySet()) {
-			Property property = classMapper.getColumn().get(columnName).get(0);
-			Method method = property.getMethodGet();
-			try {
-				if(property.getColumnType() == ColumnType.column){
-					Object value = method.invoke(target);
-//					if(value != null){
-//						listColumnName.add(columnName);
-//						listParaName.add("?");
-//						para.add(value);
-//					}
-					if(value != null){
-//						listColumnName.add(columnName);
-//						listParaName.add("?");
-//						para.add(value);
-						if(value instanceof Number){
-							if(includeMinusOne || ((Number)value).intValue() !=-1){
-								listColumnName.add(columnName);
-								listParaName.add("?");
-								if(((Number)value).intValue() == 0)
-									value = null;
-								para.add(value);
-							}
-						}else{
-							if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
-								listColumnName.add(columnName);
-								listParaName.add("?");
-								para.add(value);
-							}
-								
-						}
-					}
-				}
-				if(property.getColumnType() == ColumnType.joinColumn){
-					Object value = method.invoke(target);
-					if(value != null){
-						Entity entity = method.getReturnType().getAnnotation(Entity.class);
-						if(entity!=null){
-							ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
-							
-							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-							
-							if(value!=null ) {
-								if(value instanceof Number){
-									if(includeMinusOne || ((Number)value).intValue() !=-1){
-										listColumnName.add(columnName);
-										listParaName.add("?");
-										if(((Number)value).intValue() == 0)
-											value = null;
-										para.add(value);
-									}
-								}else{
+			for(Property property : classMapper.getColumn().get(columnName)){
+				Method method = property.getMethodGet();
+				try {
+					if(property.getColumnType() == ColumnType.column){
+						Object value = method.invoke(target);
+						if(value != null){
+							if(value instanceof Number){
+								if(includeMinusOne || ((Number)value).intValue() !=-1){
 									listColumnName.add(columnName);
 									listParaName.add("?");
-									if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
+									if(((Number)value).intValue() == 0)
 										value = null;
 									para.add(value);
 								}
+							}else{
+								if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									para.add(value);
+								}
+								
 							}
-						}else{
-							listColumnName.add(columnName);
-							listParaName.add("?");
-							para.add(value);
 						}
 					}
-				}
-				if(property.getColumnType() == ColumnType.id){
-					Object value = method.invoke(target);
-					if(value != null){
-						listPkName.add(columnName);
-						listPkNamePara.add(value);
-//						listColumnName.add(columnName);
-//						listParaName.add("?");
-//						para.add(value);
+					if(property.getColumnType() == ColumnType.joinColumn){
+						Object value = method.invoke(target);
+						if(value != null){
+							Entity entity = method.getReturnType().getAnnotation(Entity.class);
+							if(entity!=null){
+								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+								
+								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+								
+								if(value!=null ) {
+									if(value instanceof Number){
+										if(includeMinusOne || ((Number)value).intValue() !=-1){
+											listColumnName.add(columnName);
+											listParaName.add("?");
+											if(((Number)value).intValue() == 0)
+												value = null;
+											para.add(value);
+										}
+									}else{
+										listColumnName.add(columnName);
+										listParaName.add("?");
+										if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
+											value = null;
+										para.add(value);
+									}
+								}
+							}else{
+								listColumnName.add(columnName);
+								listParaName.add("?");
+								para.add(value);
+							}
+						}
 					}
-				}
-				
-				if(property.getColumnType() == ColumnType.embeddedId){
-					Object valueEmbeddedId = method.invoke(target);
-					if(valueEmbeddedId!=null){
-						ClassMapper classMapperEmbeddedId= JPAUtil.getClassMapper(method.getReturnType());
-//						classMapperEmbeddedId.getColumn();
-						
-						for (String  embeddedIdColumnName : classMapperEmbeddedId.getColumn().keySet()) {
-							Property embeddedIdProperty = classMapperEmbeddedId.getColumn().get(columnName).get(0);
-							Method embeddedIdMethod = embeddedIdProperty.getMethodGet();
-							Object embeddedIdValue = embeddedIdMethod.invoke(valueEmbeddedId);
-							if(embeddedIdValue != null){
-								listPkName.add(embeddedIdColumnName);
+					if(property.getColumnType() == ColumnType.id){
+						Object value = method.invoke(target);
+						if(value != null){
+							listPkName.add(columnName);
+							listPkNamePara.add(value);
+						}
+					}
+					
+					if(property.getColumnType() == ColumnType.embeddedId){
+						Object embeddedIdObject = methodGetId.invoke(target);
+						if(embeddedIdObject!=null){
+							Object valueEmbeddedId = method.invoke(embeddedIdObject);
+							if(valueEmbeddedId!=null){
+								listPkName.add(columnName);
 //								listParaName.add("?");
-								listPkNamePara.add(embeddedIdValue);
+								listPkNamePara.add(valueEmbeddedId);
 							}
+							
 						}
+						
 						
 					}
 					
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					logger.error("update(T, boolean)", e); //$NON-NLS-1$
 				}
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				logger.error("update(T, boolean)", e); //$NON-NLS-1$
 			}
 		}
-		
-		sb.append(" UPDATE ");
 		sb.append(table.name());
 		sb.append(" SET ");
 //		sb.append(" ( ");
@@ -650,7 +619,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				sb.append(listPkName.get(i));
 				sb.append(" = ? ");
 				para.add(listPkNamePara.get(i));
-//				sb.append(listPkNamePara.get(i));
 			}
 		}
 		
