@@ -91,21 +91,23 @@ public class JPAUtil {
 					Method methodSet = ClassUtil.findSetter(clazz, field.getName());
 					Method methodGet = ClassUtil.findGetter(clazz, field.getName());
 					Column column = field.getAnnotation(Column.class);
-					Id id = field.getAnnotation(Id.class);
-					EmbeddedId embeddedId = field.getAnnotation(EmbeddedId.class);
-					AttributeOverrides attributeOverrides  = field.getAnnotation(AttributeOverrides.class);
-					JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
 					if (column == null)
 						column = methodGet.getAnnotation(Column.class);
+					Id id = field.getAnnotation(Id.class);
 					if (id == null)
 						id = methodGet.getAnnotation(Id.class);
+					EmbeddedId embeddedId = field.getAnnotation(EmbeddedId.class);
 					if (embeddedId == null)
 						embeddedId = methodGet.getAnnotation(EmbeddedId.class);
+					AttributeOverrides attributeOverrides  = field.getAnnotation(AttributeOverrides.class);
 					if (attributeOverrides == null)
 						attributeOverrides  = methodGet.getAnnotation(AttributeOverrides.class);
+					JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
 					if (joinColumn == null)
 						joinColumn = methodGet.getAnnotation(JoinColumn.class);
+					
 					if (column != null) {
+						// not have this column name in classMapper
 						if (!classMapper.getColumn().containsKey(column.name())) {
 							Property property = new Property();
 							property.setMethodGet(methodGet);
@@ -172,7 +174,7 @@ public class JPAUtil {
 								propertyEmbeddedId.setMethodSet(methodSetembeddedId);
 								propertyEmbeddedId.setColumnName(columnEmbeddedId.name());
 								propertyEmbeddedId.setEmbeddedId(property);
-								propertyEmbeddedId.setColumnType(ColumnType.embeddedId);
+								propertyEmbeddedId.setColumnType(ColumnType.embeddedId);//ColumnType.column
 								List<Property> propertiesEmbeddedId = classMapper.getColumn().get(columnEmbeddedId.name());
 								if(propertiesEmbeddedId==null)
 									propertiesEmbeddedId = new ArrayList<Property>();
