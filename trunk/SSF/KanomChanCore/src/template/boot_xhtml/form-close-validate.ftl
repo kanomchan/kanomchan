@@ -31,7 +31,7 @@ Only the following validators are supported:
 * url validator
 * int validator
 * double validator
-END SNIPPET: supported-validators
+END SNIPPET: supported-validators                                                       
 -->
 <#if ((parameters.validate!false == true) && (parameters.performValidation!false == true))>
 <script type="text/javascript">
@@ -62,7 +62,7 @@ getFieldValue : function(field) {
 validateList :[
     <#list parameters.tagNames as tagName>
     	<#list tag.getValidators("${tagName}") as aValidator>
-{
+{ 
 
 		<#if aValidator.validatorType = "field-visitor">
 			<#assign validator = aValidator.fieldValidator >
@@ -136,7 +136,9 @@ validateList :[
                     errors = true;
                 }
             }
-			return {errors : errors};
+            return {errors : errors};
+            <#else>
+			 return {errors : errors};
             </#if>
             }
 },
