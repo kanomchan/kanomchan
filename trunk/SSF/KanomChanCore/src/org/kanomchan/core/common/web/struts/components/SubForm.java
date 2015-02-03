@@ -77,7 +77,7 @@ import java.util.Set;
     tldTagClass="org.apache.struts2.views.jsp.ui.FormTag",
     description="Renders an input form",
     allowDynamicAttributes=true)
-public class SubForm extends ClosingUIBean {
+public class SubForm extends Form {
     public static final String OPEN_TEMPLATE = "form";
     public static final String TEMPLATE = "form-close";
 
@@ -221,6 +221,7 @@ public class SubForm extends ClosingUIBean {
      * @param namespace the namespace to check for
      * @param actionMethod the method to ckeck for
      */
+    @Override
     protected void evaluateClientSideJsEnablement(String actionName, String namespace, String actionMethod) {
 
         // Only evaluate if Client-Side js is to be enable when validate=true

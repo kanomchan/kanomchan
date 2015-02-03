@@ -2568,7 +2568,7 @@
   <tag>
     <description><![CDATA[Renders an input form]]></description>
     <name>subform</name>
-    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.ui.FormTag</tag-class>
+    <tag-class>org.kanomchan.core.common.web.struts.view.jsp.ui.SubFormTag</tag-class>
 <!--     <tag-class>org.apache.struts2.views.jsp.ui.FormTag</tag-class> -->
     <body-content>JSP</body-content>
     <attribute>
