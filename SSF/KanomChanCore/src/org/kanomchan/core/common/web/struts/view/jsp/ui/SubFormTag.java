@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.components.Component;
 import org.apache.struts2.components.Form;
 import org.apache.struts2.views.jsp.ui.AbstractClosingTag;
+import org.kanomchan.core.common.web.struts.components.SubForm;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
@@ -53,12 +54,12 @@ public class SubFormTag extends AbstractClosingTag {
     protected boolean includeContext = true;
     
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
-        return new Form(stack, req, res);
+        return new SubForm(stack, req, res);
     }
 
     protected void populateParams() {
         super.populateParams();
-        Form form = ((Form) component);
+        SubForm form = ((SubForm) component);
         form.setAction(action);
         form.setTarget(target);
         form.setEnctype(enctype);
