@@ -2,8 +2,7 @@ package org.kanomchan.core.common.web.struts.validator.validators;
 
 import com.opensymphony.xwork2.validator.ValidationException;
 
-
-public class RequiredStringValidator extends com.opensymphony.xwork2.validator.validators.RequiredStringValidator {
+public class IntRangeFieldValidator extends com.opensymphony.xwork2.validator.validators.IntRangeFieldValidator {
 	boolean byPassFront;
 	boolean byPassBack;
 	

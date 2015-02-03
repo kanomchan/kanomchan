@@ -2,8 +2,7 @@ package org.kanomchan.core.common.web.struts.validator.validators;
 
 import com.opensymphony.xwork2.validator.ValidationException;
 
-
-public class RequiredStringValidator extends com.opensymphony.xwork2.validator.validators.RequiredStringValidator {
+public class ConversionErrorFieldValidator extends com.opensymphony.xwork2.validator.validators.ConversionErrorFieldValidator {
 	boolean byPassFront;
 	boolean byPassBack;
 	
@@ -30,6 +29,5 @@ public class RequiredStringValidator extends com.opensymphony.xwork2.validator.v
 	public void setByPassBack(boolean byPassBack) {
 		this.byPassBack = byPassBack;
 	}
-
 
 }
