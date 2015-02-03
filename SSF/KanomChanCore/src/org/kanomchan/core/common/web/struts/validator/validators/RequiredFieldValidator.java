@@ -5,34 +5,33 @@ import com.opensymphony.xwork2.validator.ValidationException;
 
 public class RequiredFieldValidator extends com.opensymphony.xwork2.validator.validators.RequiredFieldValidator {
 	
-	boolean jsOnly;
-	boolean bypassJs;
+	boolean byPassFront;
+	boolean byPassBack;
 	
 	@Override
 	public void validate(Object object) throws ValidationException {
-		if(!jsOnly){
+		if(!byPassBack){
 			super.validate(object);
 		}
+		
 	}
 
-
-	public boolean isJsOnly() {
-		return jsOnly;
+	public boolean isByPassFront() {
+		return byPassFront;
 	}
 
-	public void setJsOnly(boolean jsOnly) {
-		this.jsOnly = jsOnly;
+	public void setByPassFront(boolean byPassFront) {
+		this.byPassFront = byPassFront;
 	}
 
-	public boolean isBypassJs() {
-		return bypassJs;
+	public boolean isByPassBack() {
+		return byPassBack;
 	}
 
-	public void setBypassJs(boolean bypassJs) {
-		this.bypassJs = bypassJs;
+	public void setByPassBack(boolean byPassBack) {
+		this.byPassBack = byPassBack;
 	}
-	
-	
+
 	
 }
 //Long id;
