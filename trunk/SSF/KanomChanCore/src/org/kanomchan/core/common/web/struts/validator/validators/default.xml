@@ -5,8 +5,8 @@
 
 <!-- START SNIPPET: validators-default -->
 <validators>
-    <validator name="required" class="com.opensymphony.xwork2.validator.validators.RequiredFieldValidator"/>
-    <validator name="requiredstring" class="com.opensymphony.xwork2.validator.validators.RequiredStringValidator"/>
+    <validator name="required" class="org.kanomchan.core.common.web.struts.validator.validators.RequiredFieldValidator"/>
+    <validator name="requiredstring" class="org.kanomchan.core.common.web.struts.validator.validators.RequiredStringValidator"/>
     <validator name="int" class="com.opensymphony.xwork2.validator.validators.IntRangeFieldValidator"/>
     <validator name="long" class="com.opensymphony.xwork2.validator.validators.LongRangeFieldValidator"/>
     <validator name="short" class="com.opensymphony.xwork2.validator.validators.ShortRangeFieldValidator"/>
