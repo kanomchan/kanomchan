@@ -20,19 +20,34 @@ public abstract class RollBackException extends Exception implements BaseExcepti
 	}
 	
 	public RollBackException(MessageCode  messageCode) {
-		this(messageCode, null, null);
+		this(messageCode, null,(String) null);
+	}
+	public RollBackException(MessageCode  messageCode,String message) {
+		this(messageCode, null, message);
 	}
 	
 	public RollBackException(MessageCode  messageCode,List<String> para) {
-		this(messageCode, null, para);
+		this(messageCode, para,(String) null);
 	}
-	public RollBackException(MessageCode  messageCode,Throwable throwable,List<String> para) {
+	
+	public RollBackException(MessageCode  messageCode ,List<String> para,String message){
+		super(message);
+		this.messageCode = messageCode;
+		this.para = para;
+		
+	}
+	
+	public RollBackException(MessageCode  messageCode,List<String> para,Throwable throwable) {
+		this(messageCode, para, throwable, null);
+	}
+	public RollBackException(MessageCode  messageCode, Throwable throwable) {
+		this(messageCode, null, throwable, null);
+	}
+	public RollBackException(MessageCode  messageCode ,List<String> para,Throwable throwable,String message) {
+		super(message,throwable);
 		this.messageCode = messageCode;
 		this.para = para;
 		this.throwable = throwable;
-	}
-	public RollBackException(MessageCode  messageCode , Throwable throwable) {
-		this(messageCode, throwable, null);
 	}
 	@Override
 	public MessageCode getMessageCode() {
