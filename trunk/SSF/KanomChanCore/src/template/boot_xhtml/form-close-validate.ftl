@@ -63,14 +63,18 @@ validateList :[
     <#list parameters.tagNames as tagName>
     	<#list tag.getValidators("${tagName}") as aValidator>
 { 
-
 		<#if aValidator.validatorType = "field-visitor">
 			<#assign validator = aValidator.fieldValidator >
         	//visitor validator switched to: ${validator.validatorType}
         <#else>
 			<#assign validator = aValidator >
         </#if>
+
 		name:"${tagName?js_string}",
+		<#-- checkOnSubmit:"${validator.byPassFront?js_string?default(false)}", -->
+		
+		checkOnSubmit: <#if validator.byPassFront?? >${validator.byPassFront?default("false")?js_string}<#else>false</#if>,
+		
 		validatorType:"${validator.validatorType?js_string}",
 		message : "${validator.getMessage(action)?js_string}",
 		fieldName : "${aValidator.fieldName?js_string}",
@@ -169,9 +173,48 @@ var error = new Array();
 			    log.fieldName = validator.fieldName;
 				var field = form.elements[validator.fieldName];
 			    var fieldValue = validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.getFieldValue(field);
-			    if(validator.validate!=undefined && validator.validate(fieldValue,continueValidation).errors){
+			    if(validator.validate!=undefined && validator.validate(fieldValue,continueValidation).errors && validator.checkOnSubmit == false){
 				    if(!validator.continueValidation){
 				    	continueValidation = false;
+				    }
+	            	addError(validator.fieldName, validator.message);
+	                errors = true;
+					error.push(validator);
+			    }
+		    }
+		    
+		}
+        
+
+		}catch(err){
+		log.err = err;
+		//console.log(log);
+		return false;
+		}
+        return !errors;
+    }
+    
+    function validateForm_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}_subform() {
+        <#--
+            In case of multiselect fields return only the first value.
+        -->
+		try{
+
+        form = $("#${parameters.id}")[0];
+        clearErrorLabels(form);
+		var error = new Array();
+		var log ={};
+		var errors = false;
+        var continueValidation = true;
+		for (i = 0; i < validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.validateList.length; i++) { 
+		    validator = validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.validateList[i];
+				if(validator.validate!=undefined){
+			    log.fieldName = validator.fieldName;
+				var field = form.elements[validator.fieldName];
+			    var fieldValue = validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.getFieldValue(field);
+			    if(validator.validate!=undefined && validator.validate(fieldValue,continueValidation).errors && validator.checkOnSubmit == true){
+				    if(!validator.continueValidation){
+				    	cotrueueValidation = false;
 				    }
 	            	addError(validator.fieldName, validator.message);
 	                errors = true;
