@@ -20,13 +20,31 @@ public abstract class NonRollBackException extends Exception implements BaseExce
 	}
 	
 	public NonRollBackException(MessageCode  messageCode) {
-		this(messageCode,null);
+		this(messageCode, null,(String) null);
+	}
+	public NonRollBackException(MessageCode  messageCode,String message) {
+		this(messageCode, null, message);
 	}
 	
 	public NonRollBackException(MessageCode  messageCode,List<String> para) {
-		this(messageCode, null, para);
+		this(messageCode, para,(String) null);
 	}
-	public NonRollBackException(MessageCode  messageCode,Throwable throwable,List<String> para) {
+	
+	public NonRollBackException(MessageCode  messageCode ,List<String> para,String message){
+		super(message);
+		this.messageCode = messageCode;
+		this.para = para;
+		
+	}
+	
+	public NonRollBackException(MessageCode  messageCode,List<String> para,Throwable throwable) {
+		this(messageCode, para, throwable, null);
+	}
+	public NonRollBackException(MessageCode  messageCode, Throwable throwable) {
+		this(messageCode, null, throwable, null);
+	}
+	public NonRollBackException(MessageCode  messageCode ,List<String> para,Throwable throwable,String message) {
+		super(message,throwable);
 		this.messageCode = messageCode;
 		this.para = para;
 		this.throwable = throwable;
