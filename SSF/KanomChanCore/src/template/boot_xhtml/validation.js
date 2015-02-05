@@ -2,39 +2,20 @@ function clearErrorLabelsXHTML(form) {
 	var formFormGroup = $(form).find('.form-group');
 	$(formFormGroup).each(function() {
 		$(this).removeClass('has-error').addClass('has-success');
-		var rowError = $(this).find(".rowError");
-		var errorChild = rowError.children();
-		errorChild.hide();
-		if (errorChild.prop("role") == "alert")
-			errorChild.text("");
-		else
-			errorChild.children().text("");
+//		var rowError = $(this).find(".rowError");
+//		var errorChild = rowError.children();
+//		errorChild.hide();
+//		if (errorChild.prop("role") == "alert")
+//			errorChild.text("");
+//		else
+//			errorChild.children().text("");
+		$(this).find('.message').hide();
+//		if(fieldError.attr("hasLabel") == 'true'){
+//			fieldError.find(".message").slideUp();
+//		}else{
+//			fieldError.text(errorText).slideUp();
+//		}
 	});
-
-	// var i, elements = form.elements;
-	//    
-	// for (i = 0; i < elements.length; i++) {
-	// var parentEl = elements[i];
-	// var field = parentEl;
-	// var divRow = $(field).parent().parent();
-	// var formGroup = divRow.parent();
-	// var rowError = formGroup.attr("errorPosition") == "bottom" ?
-	// divRow.next() : divRow.prev();
-	// var errorChild = rowError.children();
-	// errorChild.hide();
-	// $(field).closest('.form-group').removeClass('has-error').addClass('has-success');
-	//        
-	// $(field).closest('.form-group').removeClass('has-success').addClass('has-error');
-	// var rowError = formGroup.find(".rowError");
-	// var errorChild = rowError.children();
-	// errorChild.hide();
-	// if(errorChild.prop("role") == "alert")
-	// errorChild.text("");
-	// else
-	// errorChild.children().text("");
-	//        
-	// }
-
 }
 
 function clearErrorLabels(form) {
@@ -44,16 +25,13 @@ function clearErrorLabels(form) {
 function addErrorXHTML(e, errorText) {
 	try {
 		var fieldError = $("[name='" + e + "Error']");
-//		var field = (e.type ? e : e[0]);
 		var formGroup = fieldError.closest('.form-group');
-//		var rowError = formGroup.find(".rowError");
-		var errorChild = fieldError.children();
-		errorChild.slideDown();
 		formGroup.removeClass('has-success').addClass('has-error');
-		if (errorChild.prop("role") == "alert")
-			errorChild.text(errorText);
-		else
-			errorChild.children().text(errorText);
+		if(fieldError.attr("hasLabel") == 'true'){
+			fieldError.find(".message").text(errorText).slideDown();
+		}else{
+			fieldError.text(errorText).slideDown();
+		}
 
 	} catch (err) {
 		alert(err);

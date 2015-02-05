@@ -59,7 +59,9 @@ public class MessageValidate extends UIBean {
         if (forAttr != null) {
             addParameter("for", findString(forAttr));
         }
-
+        if (label != null) {
+            addParameter("label", findString(label));
+        }
         // try value, then key, then name (this overrides the default behavior in the superclass)
         if (value != null) {
             addParameter("nameValue", findString(value));
@@ -70,10 +72,12 @@ public class MessageValidate extends UIBean {
                 String providedLabel = TextProviderHelper.getText(key, key, stack);
                 addParameter("nameValue", providedLabel);
             }
-        } else if (name != null) {
+        } 
+        if (name != null) {
             String expr = completeExpressionIfAltSyntax(name);
             addParameter("nameValue", findString(expr));
-        }
+        } 
+
     }
 
     @StrutsTagAttribute(description=" HTML for attribute")
