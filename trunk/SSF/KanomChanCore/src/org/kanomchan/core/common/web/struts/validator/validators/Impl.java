@@ -14,7 +14,8 @@ import com.opensymphony.xwork2.validator.ValidatorContext;
 import com.opensymphony.xwork2.validator.validators.ValidatorSupport;
 
 public class Impl extends ValidatorSupport {
-
+	boolean byPassFront;
+	boolean byPassBack;
 	Long id;
 	List<Long> preCon;
 	List<Long> postCon;
@@ -226,4 +227,21 @@ public class Impl extends ValidatorSupport {
 			validate.validate(object);
 		}
     }
+
+	public boolean isByPassFront() {
+		return byPassFront;
+	}
+
+	public void setByPassFront(boolean byPassFront) {
+		this.byPassFront = byPassFront;
+	}
+
+	public boolean isByPassBack() {
+		return byPassBack;
+	}
+
+	public void setByPassBack(boolean byPassBack) {
+		this.byPassBack = byPassBack;
+	}
+    
 }

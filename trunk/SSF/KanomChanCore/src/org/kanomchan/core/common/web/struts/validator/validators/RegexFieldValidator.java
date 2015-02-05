@@ -3,28 +3,31 @@ package org.kanomchan.core.common.web.struts.validator.validators;
 import com.opensymphony.xwork2.validator.ValidationException;
 
 public class RegexFieldValidator extends com.opensymphony.xwork2.validator.validators.RegexFieldValidator {
-	String byPassFront;
-	String byPassBack;
+	boolean byPassFront;
+	boolean byPassBack;
 	
 	@Override
 	public void validate(Object object) throws ValidationException {
-		if(byPassBack == null || "false".equals(byPassBack)){
+		if(!byPassBack){
 			super.validate(object);
 		}
 		
 	}
 
-	public String getByPassBack() {
-		return byPassBack;
-	}
-	public void setByPassBack(String byPassBack) {
-		this.byPassBack = byPassBack;
-	}
-	public String getByPassFront() {
+	public boolean isByPassFront() {
 		return byPassFront;
 	}
-	public void setByPassFront(String byPassFront) {
+
+	public void setByPassFront(boolean byPassFront) {
 		this.byPassFront = byPassFront;
+	}
+
+	public boolean isByPassBack() {
+		return byPassBack;
+	}
+
+	public void setByPassBack(boolean byPassBack) {
+		this.byPassBack = byPassBack;
 	}
 
 }
