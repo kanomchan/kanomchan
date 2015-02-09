@@ -69,7 +69,7 @@
  name="${parameters.name?html}"<#rt/>
 </#if>
 <#if parameters.nameValue??>
- value="<@s.property value="parameters.nameValue"/>"<#rt/>
+ value="<@s.text name="${parameters.nameValue}"/>"<#rt/>
 </#if>
 <#if parameters.disabled?default(false)>
  disabled="disabled"<#rt/>

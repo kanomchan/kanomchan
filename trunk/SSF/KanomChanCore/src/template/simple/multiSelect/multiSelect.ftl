@@ -86,7 +86,7 @@
 	 <#if checkChoiceKey == "I">
 	 	checked="checked"
  	 </#if>
-	><label for="${parameters.id}-option1" class="">Specific Value</label></div>&nbsp</lt>
+	><label for="${parameters.id}-option1" class=""><@s.text name="MULTI_SELECT_SPECIFIC_VALUE"></@s.text></label></div>&nbsp</lt>
 
 	<div class="radio radio-inline"><input type="radio" 
 	<#if parameters.choiceName??>
@@ -99,7 +99,7 @@
 	 <#if checkChoiceKey == "E">
 	 checked="checked"
 	 </#if>
-	><label for="${parameters.id}-option2" class="">Except Value</label></div></lt>
+	><label for="${parameters.id}-option2" class=""><@s.text name="MULTI_SELECT_EXCEPT_VALUE"></@s.text></label></div></lt>
 	 
 	<div class="radio radio-inline"><input type="radio"
 	<#if parameters.choiceName??>
@@ -112,7 +112,7 @@
  	 <#if checkChoiceKey == "A">
 	 checked="checked"
 	 </#if>
-	><label for="${parameters.id}-option3" class="">All</label></div>&nbsp</lt>
+	><label for="${parameters.id}-option3" class=""><@s.text name="MULTI_SELECT_ALL"></@s.text></label></div>&nbsp</lt>
 
 </#if>
 <select<#rt/>

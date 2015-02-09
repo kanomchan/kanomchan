@@ -2,7 +2,7 @@
 <#if parameters.list??>
 	<div class="checkbox">
 	<label class="checkbox-mobile" for="all${parameters.id?html}">
-		<input type="checkbox" name="all${parameters.id?html}" value="0" id="all${parameters.id?html}"/><label for="all${parameters.id?html}" class="checkboxLabel"> All</label>
+		<input type="checkbox" name="all${parameters.id?html}" value="0" id="all${parameters.id?html}"/><label for="all${parameters.id?html}" class="checkboxLabel"> <@s.text name="CHECKBOX_LIST_WITH_ALL_ALL"/></label>
 	</label><br class="hidden-xs hidden-sm">
 <@s.iterator value="parameters.list">
     <#assign itemCount = itemCount + 1/>
