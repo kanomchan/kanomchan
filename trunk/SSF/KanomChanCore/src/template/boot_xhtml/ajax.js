@@ -40,7 +40,13 @@ function getDataFrom(from){
 	    values[field.name] = field.value;
 	});
 	return values;
-	
+}
+function getDataFromForm(form){
+	var values = {};
+	$.each($(form).serializeArray(), function(i, field) {
+	    values[field.name] = field.value;
+	});
+	return values;
 }
 
 
