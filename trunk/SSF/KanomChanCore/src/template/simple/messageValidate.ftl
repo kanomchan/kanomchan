@@ -28,6 +28,6 @@
 				</div>
 			</div>
 		<#else>
-			<div style="display:none" class="message warning" name="${parameters.name?html}Error" role="alert" <#if parameters.id??> for="${parameters.id}"</#if> ></div>
+			<div style="display:none" class="message warning" <#if parameters.name??> name="${parameters.name?html}Error"</#if> role="alert" <#if parameters.id??> for="${parameters.id}"</#if> ></div>
 		</#if>
 	</#if>
