@@ -1,8 +1,10 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
+
 import org.kanomchan.core.common.constant.MessageCode;
 
-public interface Message {
+public interface Message extends Serializable {
 
 	
 	public String getMessageCode();

@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Required;
 //import com.google.gson.GsonBuilder;
 
 public class MessageServiceImpl implements MessageService {
-    private static final ConcurrentMap<MessageFormatKey, MessageFormat> messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>();
+    private ConcurrentMap<MessageFormatKey, MessageFormat> messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>();
 	private ConfigDao configDao;
 	@Autowired
 	@Required
@@ -42,6 +42,7 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void clearCache() {
+		messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>(); 
 		configDao.clearMessageCache();
 	}
 
@@ -74,8 +75,8 @@ public class MessageServiceImpl implements MessageService {
 	public Message getMessage(String messageCode, String lang,String[] para) {
 		if(lang == null){lang = CommonConstant.DEFAULT_LOCALE.getISO3Language().toUpperCase();}
 		Map<String,Message> messageMap = configDao.getMessageMap();	
-		Message message = messageMap.get(messageCode+"_"+lang);
-		
+		Object objt = org.apache.commons.lang.SerializationUtils.clone(messageMap.get(messageCode+"_"+lang));
+		Message message = (Message) objt;
 		if(para!=null&&para.length>0){
 			MessageFormat mf = buildMessageFormat(message.getDisplayText(), CommonConstant.DEFAULT_LOCALE);
 			String  out = formatWithNullDetection(mf, para);
@@ -142,7 +143,6 @@ public class MessageServiceImpl implements MessageService {
 	}
     private static String formatWithNullDetection(MessageFormat mf, Object[] args) {
     	LinkedList<Object> argList = new LinkedList<Object>(Arrays.asList(args));
-    	argList.addFirst("");
         String message = mf.format(argList.toArray());
         if ("null".equals(message)) {
             return null;
@@ -151,7 +151,7 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 	
-    private static MessageFormat buildMessageFormat(String pattern, Locale locale) {
+    private MessageFormat buildMessageFormat(String pattern, Locale locale) {
         MessageFormatKey key = new MessageFormatKey(pattern, locale);
         MessageFormat format = messageFormats.get(key);
         if (format == null) {
