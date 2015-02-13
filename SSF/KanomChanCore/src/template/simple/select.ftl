@@ -51,7 +51,7 @@
     <#if tag.contains(parameters.nameValue, parameters.headerKey) == true>
     selected="selected"
     </#if>
-    >${parameters.headerValue?html}</option>
+    ><@s.text name="${parameters.headerValue?html}"/></option>
 </#if>
 <#if parameters.emptyOption?default(false)>
     <option value=""></option>
