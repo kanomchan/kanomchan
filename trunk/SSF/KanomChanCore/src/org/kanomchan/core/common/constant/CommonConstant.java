@@ -28,7 +28,7 @@ public interface CommonConstant {
     
     public static interface PARAMETER {
 	// public static final String USER_BEAN = "SESSION_USER_BEAN";
-	public static final String LANG_KEY = "lang";
+	public static final String LANG_KEY = "request_locale";
 	public static final String LOCALE_KEY = "PARAMETER_LOCALE_KEY";
 	public static final String USER_BEAN_KEY = "PARAMETER_USER_BEAN_KEY";
 	public static final String NAVIGATION_BEAN_KEY = "PARAMETER_NAVIGATION_BEAN_KEY";

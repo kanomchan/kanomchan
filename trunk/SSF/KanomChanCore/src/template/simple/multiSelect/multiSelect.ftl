@@ -233,7 +233,7 @@
 <script>
     $("#${parameters.id}").select2({
     	<#if parameters.placeholder??>
-    	placeholder: "${parameters.placeholder}",
+    	placeholder: "<@s.text name='${parameters.placeholder}'/>",
 		</#if>
     })<#if parameters.itemList?? && parameters.nameKey??>.select2("val", 
          [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
