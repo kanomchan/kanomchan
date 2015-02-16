@@ -169,7 +169,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T extends Object>  List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Object... params) {
 //		String countQuery = "Select count(*) from ("+sql+") data";
 		String[] str = sql.toUpperCase().split("FROM");
-		String countQuery = str.length == 2 ? "SELECT count(1) FROM "+str[1] : "Select count(*) from ("+sql+") data";
+		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
 		
 		Long totalRows = simpleJdbcTemplate.queryForLong(countQuery, params);
 		pagingBean.setTotalRows(totalRows);
@@ -207,7 +207,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Map<String, Object> params) {
 //		String countQuery = "Select count(*) from ("+sql+") data";
 		String[] str = sql.toUpperCase().split("FROM");
-		String countQuery = str.length == 2 ? "SELECT count(1) FROM "+str[1] : "Select count(*) from ("+sql+") data";
+		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
 		
 		Long totalRows = simpleJdbcTemplate.queryForLong(countQuery, params);
 		pagingBean.setTotalRows(totalRows);
@@ -245,7 +245,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm) {
 //		String countQuery = "Select count(*) from ("+sql+") data";
 		String[] str = sql.toUpperCase().split("FROM");
-		String countQuery = str.length == 2 ? "SELECT count(1) FROM "+str[1] : "Select count(*) from ("+sql+") data";
+		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
 		
 		Long totalRows = simpleJdbcTemplate.queryForLong(countQuery);
 		pagingBean.setTotalRows(totalRows);
