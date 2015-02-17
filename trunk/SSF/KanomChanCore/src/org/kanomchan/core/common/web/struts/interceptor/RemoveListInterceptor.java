@@ -51,16 +51,19 @@ public class RemoveListInterceptor extends AbstractInterceptor {
             	String name = key.substring("__pushotheronremove_".length());
             	Object value = parameters.get(key);
                 iterator.remove();
-                if(parameters.get(name).getClass().isArray()){
-                	Object[] values = (Object[]) parameters.get(name);
-                	if("-2".equals(values[0])){
-                    	newParams.put(name, value);
-                    }
-                }else{
-                	if("-2".equals(parameters.get(name))){
-                    	newParams.put(name, value);
+                if (!parameters.containsKey(name)) {
+                	if(parameters.get(name).getClass().isArray()){
+                    	Object[] values = (Object[]) parameters.get(name);
+                    	if("-2".equals(values[0])){
+                        	newParams.put(name, value);
+                        }
+                    }else{
+                    	if("-2".equals(parameters.get(name))){
+                        	newParams.put(name, value);
+                        }
                     }
                 }
+                
                 
 //                parameters.get(name);
                 // is this multi-select box submitted?
