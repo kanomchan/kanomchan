@@ -51,7 +51,7 @@ public class RemoveListInterceptor extends AbstractInterceptor {
             	String name = key.substring("__pushotheronremove_".length());
             	Object value = parameters.get(key);
                 iterator.remove();
-                if (!parameters.containsKey(name)) {
+                if (parameters.containsKey(name)) {
                 	if(parameters.get(name).getClass().isArray()){
                     	Object[] values = (Object[]) parameters.get(name);
                     	if("-2".equals(values[0])){
