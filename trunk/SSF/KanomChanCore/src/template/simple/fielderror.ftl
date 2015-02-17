@@ -45,11 +45,14 @@
                         <#if parameters.cssStyle??>
                                 style="${parameters.cssStyle?html}"<#rt/>
                         </#if>
+						
                             >
                         <#assign doneStartUlTag=true><#t/>
                     </#if><#t/>
                     <#list eValue as eEachValue><#t/>
-                        <li><span><#if parameters.escape>${eEachValue!?html}<#else>${eEachValue!}</#if></span></li>
+                        <li><span <#if fieldErrorFieldName??>
+                                fieldErrorFieldName="${fieldErrorFieldName?html}"<#rt/>
+                        </#if> ><#if parameters.escape>${eEachValue!?html}<#else>${eEachValue!}</#if></span></li>
                     </#list><#t/>
                 </#if><#t/>
             </#list><#t/>
