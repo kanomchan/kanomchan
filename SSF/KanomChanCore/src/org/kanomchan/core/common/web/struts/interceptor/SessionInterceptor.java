@@ -68,7 +68,7 @@ public class SessionInterceptor extends ServletConfigInterceptor  {
 		
 		
 			
-		return super.intercept(invocation);
+		return invocation.invoke();
 	}
 	
 	
