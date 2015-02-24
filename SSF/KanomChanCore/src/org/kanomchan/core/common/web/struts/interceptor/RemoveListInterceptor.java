@@ -23,7 +23,7 @@ public class RemoveListInterceptor extends AbstractInterceptor {
         for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
             String key = iterator.next();
 
-            if (key.startsWith("__pushdataonremove_")) {
+             if (key.startsWith("__pushdataonremove_")) {
                 String name = key.substring("__pushdataonremove_".length());
 
                 Object value = parameters.get(key);
