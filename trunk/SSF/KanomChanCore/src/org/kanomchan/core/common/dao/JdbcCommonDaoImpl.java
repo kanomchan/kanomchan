@@ -325,8 +325,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								if(includeMinusOne || ((Number)value).intValue() !=-1){
 									listColumnName.add(columnName);
 									listParaName.add("?");
-									if(((Number)value).longValue() == 0)
-										value = null;
+//									if(((Number)value).longValue() == 0)
+//										value = null;
 									para.add(value);
 								}
 							}else{
@@ -526,8 +526,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								if(includeMinusOne || ((Number)value).intValue() !=-1){
 									listColumnName.add(columnName);
 									listParaName.add("?");
-									if(((Number)value).intValue() == 0)
-										value = null;
+//									if(((Number)value).intValue() == 0)
+//										value = null;
 									para.add(value);
 								}
 							}else{
@@ -662,6 +662,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return target;
 	}
 	public <T extends Object> T updateStatusDelete(T target) {
+		if(target instanceof EntityBean){
+			ProcessContext processContext = CurrentThread.getProcessContext();
+			EntityBean entityBean = (EntityBean) target;
+			entityBean.setUpdateDate(new Date());
+			entityBean.setUpdateUser(processContext.getUserName());
+		}
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
