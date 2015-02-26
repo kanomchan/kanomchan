@@ -98,7 +98,7 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/dynamic-attributes.ftl" />
 /><#rt/>
 <label for="${parameters.id?html}${itemKeyStr?html}"<#include "/${parameters.templateDir}/${parameters.expandTheme}/css.ftl"/> class="radio-label"><#rt/>
-    ${itemValue}<#t/>
+    <@s.text name="${itemValue}"/><#t/>
 </label>
 </div>
 </@s.iterator>
