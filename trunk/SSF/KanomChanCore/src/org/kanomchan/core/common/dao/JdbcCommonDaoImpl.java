@@ -615,7 +615,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		if(listPkName.size() > 0){
 			sb.append(" WHERE ");
 			for (int i = 0; i < listPkName.size(); i++) {
-				sb.append( i > 0 ? ",":"" );
+				sb.append( i > 0 ? " AND ":"" );
 				sb.append(listPkName.get(i));
 				sb.append(" = ? ");
 				para.add(listPkNamePara.get(i));

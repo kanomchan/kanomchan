@@ -1,5 +1,8 @@
 package org.kanomchan.core.common.util;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -165,6 +168,28 @@ public class StrutsUtil {
 //			menuBeanOut = find(action, menuBeanOut.getMenuId());
 		}
 		return menuBeanOut;
+	}
+
+	public static Long getLong(Map<String, String[]> parameters, String key) {
+		try{
+			return Long.parseLong(getString(parameters,key));
+		}catch( Exception E){
+			return null;
+		}
+		
+	}
+	
+	public static String getString(Map<String, String[]> parameters, String key) {
+		try{
+			return parameters.get(key)[0];
+		}catch( Exception E){
+			return null;
+		}
+		
+	}
+	
+	public static List<String> getListString(Map<String, String[]> parameters, String key) {
+		return Arrays.asList(parameters.get(key));
 	}
 
 }
