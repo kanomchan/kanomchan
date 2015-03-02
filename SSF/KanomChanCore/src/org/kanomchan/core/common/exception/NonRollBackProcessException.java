@@ -34,6 +34,9 @@ public class NonRollBackProcessException extends NonRollBackException implements
 	public NonRollBackProcessException(MessageCode  messageCode ,List<String> para,Throwable throwable,String message) {
 		super(messageCode,para,throwable,message);
 	}
+	public NonRollBackProcessException(MessageCode messageCode, String message, Throwable throwable) {
+		super(messageCode,null,throwable,message);
+	}
 
 
 	/**
