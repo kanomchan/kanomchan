@@ -138,8 +138,22 @@ public class StrutsUtil {
 		if ("previous".equals(action)) {
 			if (index-1 >= 0) {
 				menuBeanOut = menuBeanParent.getChildMenu().get(index-1);
+				if(menuBeanOut.getChildMenu()!=null&&menuBeanOut.getChildMenu().size()>0){
+					menuBeanOut = find("previousL",menuBeanOut.getChildMenu().get(menuBeanOut.getChildMenu().size()-1).getMenuId());
+				}
+//				menuBeanOut = menuBeanOut.getChildMenu()
 			} else {
 				menuBeanOut = find(action,menuBeanParent.getMenuId());
+			}
+		} else if ("previousL".equals(action)) {
+			if (index >= 0) {
+				menuBeanOut = menuBeanParent.getChildMenu().get(index);
+				if(menuBeanOut.getChildMenu()!=null&&menuBeanOut.getChildMenu().size()>0){
+					menuBeanOut = find("previousL",menuBeanOut.getChildMenu().get(menuBeanOut.getChildMenu().size()-1).getMenuId());
+				}
+//				menuBeanOut = menuBeanOut.getChildMenu()
+			} else {
+				menuBeanOut = find("previousL",menuBeanParent.getMenuId());
 			}
 		} else if ("next".equals(action)) {
 			if (index+1 < menuBeanParent.getChildMenu().size()) {
