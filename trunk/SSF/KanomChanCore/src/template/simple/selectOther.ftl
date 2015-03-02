@@ -160,7 +160,7 @@ class="form-control"/>
 </@s.textfield>-->
 <script>
 	<#if !((tag.contains(parameters.nameValue, -2) == true) || (!parameters.nameValue?? && check))>
-	$("[name='${name?html}']").hide();
+	$("[name='${name?html}']").parents(".selectOther:first").hide();
 	</#if>
 		
 	$("[name='${parameters.name}']").change( function(i, e){	
@@ -169,10 +169,10 @@ class="form-control"/>
 		var nameId = names[names.length -1];
 		name = name.replace(nameId, "name");
 		if($(this).val() == "-2"){
-			$("[name='" + name + "']").show();
+			$("[name='" + name + "']").parents(".selectOther:first").show();
 			$("[name='" + name + "']").val("");
     	}else{
-			$("[name='" + name + "']").hide();
+			$("[name='" + name + "']").parents(".selectOther:first").hide();
 			$("[name='" + name + "']").val("");
     	}
 	});
