@@ -279,7 +279,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<T> resultList = simpleJdbcTemplate.query(sb.toString(), rm);
 		return resultList;
 	}
-	
+	@Override
 	public <T extends Object> T save(T target){
 		return save(target, true);
 	}
@@ -288,6 +288,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		return save(target, true);
 //	}
 	
+	@Override
 	public <T extends Object> T save(T target, boolean includeMinusOne){
 		
 		if(target instanceof EntityBean){
@@ -439,6 +440,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		}
 		return target;
 	}
+	@Override
 	public <T extends Object> T saveOrUpdate(T t, boolean includeMinusOne){
 		ClassMapper classMapper =JPAUtil.getClassMapper(t.getClass());
 		Object objectId = null;
@@ -461,7 +463,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		return t;
 	}
-	
+	@Override
 	public <T extends Object> T saveOrUpdate(T t){
 		ClassMapper classMapper =JPAUtil.getClassMapper(t.getClass());
 		Object objectId = null;
@@ -487,11 +489,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //	public <T extends Object> T update(T t){
 //		return t;
 //	}
-	
+	@Override
 	public <T extends Object> T update(T target) throws RollBackTechnicalException{
 		return update(target, true);
 	}
-	
+	@Override
 	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackTechnicalException{
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
@@ -657,10 +659,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		
 		return target;
 	}
-	
+	@Override
 	public <T extends Object> T delete(T target){
 		return target;
 	}
+	@Override
 	public <T extends Object> T updateStatusDelete(T target) {
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
@@ -788,10 +791,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return nativeQuery(sql, clazz);
 	}
 	
+	@Override
 	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value) throws RollBackTechnicalException {
 		return findByColumn(clazz, propertyName, value,null);
 	}
 	
+	@Override
 	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackTechnicalException {
 		if(pagingBean==null){
 			try{
@@ -834,6 +839,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 		}
 	}
+	
 	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like){
 		
 		StringBuilder countQueryString = new StringBuilder();
@@ -937,9 +943,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	private static final String ORDER = " order by "; 
 	private static final String AILIAT = " "+CommonDao.ENTITY_MODEL_ALIAS+" "; 
 	
-	public void saveOrUpdateAll(final Collection entities){
-		for (Object entity : entities) {
+	@Override
+	public <T> Collection<T> saveOrUpdateAll(final Collection<T> entities){
+		for (T entity : entities) {
 			saveOrUpdate(entity);
 		}
+		return entities;
 	}
 }
