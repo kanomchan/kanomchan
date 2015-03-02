@@ -103,7 +103,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	@Override
 	public List<T> find(final String queryString, final int firstResult,
 			final int maxResults, final Object... values) {
-		return getHibernateTemplate().executeFind(new HibernateCallback<T>() {
+		return (List<T>) getHibernateTemplate().executeFind(new HibernateCallback<T>() {
 			public T doInHibernate(final Session session) {
 				Query query = session.createQuery(queryString);
 				query.setFirstResult(firstResult);
@@ -190,7 +190,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	public ServiceResult<List<T>> findAndPagingIgnoreCase(final PagingBean pagingBean ,final T example){
 		
 		@SuppressWarnings("unchecked")
-		List<T> list = getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
+		List<T> list = (List<T>) getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
 			public List<T> doInHibernate(final Session session) {
 //				example.setStatus("A");
 				final Example ex = Example.create(example).ignoreCase().enableLike(MatchMode.ANYWHERE);
@@ -225,7 +225,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	public ServiceResult<List<T>> findExampleAndPagingIgnoreCase(final PagingBean pagingBean ,final T example){
 
 		@SuppressWarnings("unchecked")
-		List<T> list = getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
+		List<T> list = (List<T>) getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
 			public List<T> doInHibernate(final Session session) {
 				example.setStatus("A");
 				final Example ex = Example.create(example).ignoreCase().enableLike(MatchMode.ANYWHERE);
@@ -266,7 +266,7 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 	public ServiceResult<List<T>> findExampleAndPaging(final PagingBean pagingBean ,final T example){
 
 		@SuppressWarnings("unchecked")
-		List<T> list = getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
+		List<T> list = (List<T>) getHibernateTemplate().executeFind(new HibernateCallback<List<T>>() {
 			public List<T> doInHibernate(final Session session) {
 				example.setStatus("A");
 				final Example ex = Example.create(example);
