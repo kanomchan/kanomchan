@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletConfigInterceptor;
@@ -26,24 +27,24 @@ public class SessionInterceptor extends ServletConfigInterceptor  {
 	 */
 	private static final long serialVersionUID = -7298251278758717925L;
 
-	private List<String> bypass;
+	private List<String> bypass = new ArrayList<String>();
 	
 	public void setBypass(List<String> bypass) {
 		this.bypass = bypass;
 	}
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
-		if(bypass==null){
-			bypass = new ArrayList<String>();
-			bypass.add("login-");
-		}
-		Map<String, Object> session = ActionContext.getContext().getSession();
+//		if(bypass==null){
+//			bypass = new ArrayList<String>();
+//			bypass.add("login-");
+//		}
+		HttpServletRequest request = ServletActionContext.getRequest();
+		HttpSession session = request.getSession();
 		
 //		 
-		if(session.get(CommonConstant.SESSION.USER_BEAN_KEY)==null){
-			HttpServletRequest request = ServletActionContext.getRequest();
-			
-			String url = request.getRequestURL().toString()+((request.getQueryString()==null||"null".equals(request.getQueryString())||"".equals(request.getQueryString()))?"":"?"+request.getQueryString());
+		if(session.getAttribute(CommonConstant.SESSION.USER_BEAN_KEY)==null){
+			String queryString = request.getQueryString();
+			String url = request.getRequestURL().toString()+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString);
 			boolean f = true;
 			for (String iterable_element :  bypass) {
 				f = url.indexOf(iterable_element) == -1;
@@ -51,7 +52,7 @@ public class SessionInterceptor extends ServletConfigInterceptor  {
 					break;
 			}
 			if(f)
-				session.put(CommonConstant.SESSION.NEXT_URL_KEY, url);
+				session.setAttribute(CommonConstant.SESSION.NEXT_URL_KEY, url);
 			return "FORCE_TO_LOGIN_PAGE";
 		}else{
 //			 UserBean userBean = (UserBean)
