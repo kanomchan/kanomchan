@@ -42,6 +42,8 @@ public class ProcessContextFilter  implements Filter  {
 			
 			String corpId = String.valueOf(httpSession.getAttribute("SESSION_CORP_ID_KEY"));
 			processContext.setString("SESSION_CORP_ID_KEY", corpId);
+			String appId = String.valueOf(httpSession.getAttribute("SESSION_APP_ID_KEY"));
+			processContext.setString("SESSION_APP_ID_KEY", appId);
 			CurrentThread.setProcessContext(processContext);
 			getSession(httpSession,request);
 			getPOS(request);
