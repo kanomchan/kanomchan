@@ -69,16 +69,22 @@ public interface JdbcCommonDao {
 	public <T> List<T> findAll(Class<T> class1);
 
 	public <T> T save(T target);
-
+	
 	public <T> T save(T target, boolean includeMinusOne);
 
-	public <T> T saveOrUpdate(T t, boolean includeMinusOne);
-
+	public <T> T save(T target, boolean includeMinusOne, boolean tableLang,String langCode);
+	
 	public <T> T saveOrUpdate(T t);
 
+	public <T> T saveOrUpdate(T t, boolean includeMinusOne);
+	
+	public <T> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code);
+	
 	public <T> T update(T target) throws RollBackTechnicalException;
 
-	public <T> T update(T target, boolean includeMinusOne)throws RollBackTechnicalException;
+	public <T> T update(T target, boolean includeMinusOne) throws RollBackTechnicalException;
+
+	public <T> T update(T target, boolean includeMinusOne, boolean tableLang,String langCode)throws RollBackTechnicalException;
 
 	public <T> Collection<T> saveOrUpdateAll(Collection<T> entities);
 
@@ -89,5 +95,7 @@ public interface JdbcCommonDao {
 	public <T> T updateStatusDelete(T target);
 
 	public <T> T delete(T target);
+
+
 
 }
