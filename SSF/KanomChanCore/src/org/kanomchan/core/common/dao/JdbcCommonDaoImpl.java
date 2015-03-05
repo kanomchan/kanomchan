@@ -281,15 +281,16 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	@Override
 	public <T extends Object> T save(T target){
-		return save(target, true);
+		return save(target, true, false,null);
 	}
 	
-//	public <T extends EntityBean> T save(T target){
-//		return save(target, true);
-//	}
+	@Override
+	public <T extends Object> T save(T target,boolean includeMinusOne){
+		return save(target, true, false,null);
+	}
 	
 	@Override
-	public <T extends Object> T save(T target, boolean includeMinusOne){
+	public <T extends Object> T save(T target, boolean includeMinusOne, boolean tableLang, String langCode){
 		
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
@@ -303,7 +304,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		Table table = clazz.getAnnotation(Table.class);
 		
 		sb.append(" INSERT INTO  ");
-		sb.append(table.name());
+		if(tableLang)
+			sb.append(table.name()+"_LANG");
+		else
+			sb.append(table.name());
+		
 //		sb.append(" SET ");
 		List<Object> para = new LinkedList<Object>();
 //		Method[] arrmet = clazz.getMethods();
@@ -313,6 +318,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		List<Object> listPkId = new LinkedList<Object>();
 		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		Method methodGetId = classMapper.getPropertyId().getMethodGet();
+		
+		if(langCode != null && !langCode.equals("")){
+			listColumnName.add("LANG_CODE3");
+			listParaName.add("?");
+			para.add(langCode); 
+		}
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
 			
@@ -486,15 +497,43 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		return t;
 	}
+	@Override
+	public <T extends Object> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code){
+		ClassMapper classMapper =JPAUtil.getClassMapper(target.getClass());
+		Object objectId = null;
+		try {
+			objectId = classMapper.getPropertyId().getMethodGet().invoke(target);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			
+		}
+		if(objectId!=null){
+			try{
+				update(target, includeMinusOne,tableLang,code);
+			} catch (Exception e){
+				save(target, includeMinusOne,tableLang ,code);
+			}
+			
+		}
+		else{
+			save(target, includeMinusOne,tableLang ,code);
+		}
+		return target;
+	}
 //	public <T extends Object> T update(T t){
 //		return t;
 //	}
 	@Override
 	public <T extends Object> T update(T target) throws RollBackTechnicalException{
-		return update(target, true);
+		return update(target, true,false,null);
 	}
+	
 	@Override
 	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackTechnicalException{
+		return update(target, true,false,null);
+	}
+	@Override
+	public <T extends Object> T update(T target, boolean includeMinusOne, boolean tableLang, String langCode) throws RollBackTechnicalException{
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			EntityBean entityBean = (EntityBean) target;
@@ -517,6 +556,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 
 		
 		sb.append(" UPDATE ");
+		if(langCode != null && !langCode.equals("")){
+			listColumnName.add("LANG_CODE3");
+			listParaName.add("?");
+			para.add(langCode); 
+		}
 		for (String  columnName : classMapper.getColumn().keySet()) {
 			for(Property property : classMapper.getColumn().get(columnName)){
 				Method method = property.getMethodGet();
@@ -603,7 +647,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				}
 			}
 		}
-		sb.append(table.name());
+		if(tableLang)
+			sb.append(table.name()+"_LANG");
+		else
+			sb.append(table.name());
 		sb.append(" SET ");
 //		sb.append(" ( ");
 		for (int i = 0; i < listColumnName.size(); i++) {
