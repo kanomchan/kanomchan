@@ -75,9 +75,9 @@ public class JPAUtil {
 	}
 	public static ClassMapper getClassMapper(Class<?> clazz){
 		
-//		ClassMapper classMapper =mapClass.get(clazz.getName());
+		ClassMapper classMapper =mapClass.get(clazz.getName());
 		
-		ClassMapper classMapper = null;
+//		ClassMapper classMapper = null;
 //			ClassMapper classMapper = mapClass.get(clazz.getName());
 		if (classMapper == null) {
 			classMapper = new ClassMapper();
