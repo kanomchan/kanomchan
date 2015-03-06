@@ -77,6 +77,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		
 		return simpleJdbcTemplate.update( sql );
 	}
+	
+    /**
+     * this method will return how many rows which affected from the update
+     * method นี้ จะ return จำนวน rows ที่ถูก update
+     */
 	@Override
 	public int executeNativeSQL(String sql, Object... params) {
 		return simpleJdbcTemplate.update( sql, params );
@@ -85,7 +90,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public int executeNativeSQL(String sql, Map<String, Object> params) {
 		return simpleJdbcTemplate.update( sql, params );
 	}
-	
+	/**
+     * this method will return primary key of affected row
+     */
 	@Override
 	public Number executeNativeSQLGetId(String sql, Object... params) {
 		
