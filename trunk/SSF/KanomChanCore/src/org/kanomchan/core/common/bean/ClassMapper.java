@@ -1,8 +1,11 @@
 package org.kanomchan.core.common.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.persistence.OneToMany;
 
 public class ClassMapper {
 	
@@ -15,6 +18,7 @@ public class ClassMapper {
 	private String tableName;
 	private Property propertyId;
 	private Map<String, List<Property>> column = new ConcurrentHashMap<String, List<Property>>();
+	private List<Property> oneToManyList = new ArrayList<Property>(); 
 	public Property getPropertyId() {
 		return propertyId;
 	}
@@ -32,6 +36,12 @@ public class ClassMapper {
 	}
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
+	}
+	public List<Property> getOneToManyList() {
+		return oneToManyList;
+	}
+	public void setOneToManyList(List<Property> oneToManyList) {
+		this.oneToManyList = oneToManyList;
 	}
 	
 //	public void putMethodSet(String name, Method methodSet) {
