@@ -21,6 +21,7 @@ public class UserBeanDefault implements UserBean ,Serializable{
 	private Set<String> privileges;
 	private String status;
 	private String roleName;
+	private String userImagePath;
 	public String getUserId() {
 		return userId;
 	}
@@ -93,6 +94,14 @@ public class UserBeanDefault implements UserBean ,Serializable{
 	@Override
 	public void setRoleName(String userRoleName) {
 		this.roleName = userRoleName;
+	}
+	@Override
+	public String getUserImagePath() {
+		return userImagePath;
+	}
+	@Override
+	public void setUserImagePath(String userImagePath) {
+		this.userImagePath = userImagePath;
 	}
 
 	

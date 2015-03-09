@@ -25,6 +25,10 @@ public interface UserBean {
 	
 	public String getRole();
 	public String getRoleName();
+	
+	public String getUserImagePath();
+	public void setUserImagePath(String userImagePath);
+	
 	public void setRole(String role);
 	
 	public Set<String> getPrivileges();
