@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ParameterAware;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
+import org.kanomchan.core.common.util.StrutsUtil;
 import org.kanomchan.core.security.authorize.bean.MenuBean;
 import org.kanomchan.core.security.authorize.service.UserNavigationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,13 @@ import org.springframework.beans.factory.annotation.Required;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class NavigationInterceptor extends AbstractInterceptor  {
+public class NavigationInterceptor extends AbstractInterceptor implements ParameterAware  {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3069606784491620284L;
-
+	
 	private UserNavigationService userNavigationService;
 	@Autowired
 	@Required
@@ -33,6 +35,12 @@ public class NavigationInterceptor extends AbstractInterceptor  {
 	}
 	List<MenuBean> NavigationList;
 	
+	private Map<String, String[]> parameters;
+	@Override
+	public void setParameters(Map<String, String[]> parameters) {
+		this.parameters = parameters;
+	}
+	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		Map<String, Object> session = invocation.getInvocationContext().getSession();
@@ -41,6 +49,7 @@ public class NavigationInterceptor extends AbstractInterceptor  {
 				String actionName = invocation.getProxy().getActionName();
 				HttpServletRequest request = ServletActionContext.getRequest();
 				String queryString = request.getQueryString();
+				String tableName = StrutsUtil.getString(parameters, "tableName");
 				String url = request.getRequestURL().toString()+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString);
 				
 				ServiceResult<List<MenuBean>> serviceResultNavigation = userNavigationService.generateNavigationList(namespace, actionName,url);
@@ -53,5 +62,7 @@ public class NavigationInterceptor extends AbstractInterceptor  {
 		
 		return invocation.invoke();
 	}
+
+	
 
 }
