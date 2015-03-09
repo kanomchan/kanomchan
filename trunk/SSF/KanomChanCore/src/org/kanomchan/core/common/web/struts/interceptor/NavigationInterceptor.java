@@ -40,7 +40,8 @@ public class NavigationInterceptor extends AbstractInterceptor  {
 				String namespace = invocation.getProxy().getNamespace();
 				String actionName = invocation.getProxy().getActionName();
 				HttpServletRequest request = ServletActionContext.getRequest();
-				String url = request.getRequestURI().substring(request.getContextPath().length())+((request.getQueryString()==null||"null".equals(request.getQueryString())||"".equals(request.getQueryString()))?"":"?"+request.getQueryString()).replaceAll("[?]request_locale=[A-Z]{3}&", "?").replaceAll("[&?]request_locale=[A-Z]{3}", "");
+				String queryString = request.getQueryString();
+				String url = request.getRequestURL().toString()+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString);
 				
 				ServiceResult<List<MenuBean>> serviceResultNavigation = userNavigationService.generateNavigationList(namespace, actionName,url);
 				if(serviceResultNavigation.isSuccess()){
