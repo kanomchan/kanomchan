@@ -2,7 +2,10 @@ package org.kanomchan.core.common.util;
 
 import org.apache.log4j.Logger;
 
+import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,20 +16,29 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.ColumnType;
@@ -74,12 +86,13 @@ public class JPAUtil {
 		return criterias;
 	}
 	public static ClassMapper getClassMapper(Class<?> clazz){
-		
+//		BeanInfo info = Introspector.getBeanInfo(clazz);
 		ClassMapper classMapper =mapClass.get(clazz.getName());
 		
 //		ClassMapper classMapper = null;
 //			ClassMapper classMapper = mapClass.get(clazz.getName());
 		if (classMapper == null) {
+			Set<Method> methods = new HashSet<Method>();
 			classMapper = new ClassMapper();
 			Table table = clazz.getAnnotation(Table.class);
 			if(table!=null)
@@ -88,115 +101,241 @@ public class JPAUtil {
 				classMapper.setTableName(clazz.getSimpleName());
 			for (Field field : clazz.getDeclaredFields()) {
 				try {
+					
+						
 					Method methodSet = ClassUtil.findSetter(clazz, field.getName());
 					Method methodGet = ClassUtil.findGetter(clazz, field.getName());
-					Column column = field.getAnnotation(Column.class);
-					if (column == null)
-						column = methodGet.getAnnotation(Column.class);
-					Id id = field.getAnnotation(Id.class);
-					if (id == null)
-						id = methodGet.getAnnotation(Id.class);
-					EmbeddedId embeddedId = field.getAnnotation(EmbeddedId.class);
-					if (embeddedId == null)
-						embeddedId = methodGet.getAnnotation(EmbeddedId.class);
-					AttributeOverrides attributeOverrides  = field.getAnnotation(AttributeOverrides.class);
-					if (attributeOverrides == null)
-						attributeOverrides  = methodGet.getAnnotation(AttributeOverrides.class);
-					JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
-					if (joinColumn == null)
-						joinColumn = methodGet.getAnnotation(JoinColumn.class);
-					
-					if (column != null) {
-						// not have this column name in classMapper
-						if (!classMapper.getColumn().containsKey(column.name())) {
-							Property property = new Property();
-							property.setMethodGet(methodGet);
-							property.setMethodSet(methodSet);
-							property.setColumnName(column.name());
-							property.setColumnType(ColumnType.column);
-//							classMapper.getColumn().put(column.name(), property);//Old version
-							List<Property> properties = classMapper.getColumn().get(column.name());
-							if(properties==null)
-								properties = new ArrayList<Property>();
-							properties.add(property);
-							classMapper.getColumn().put(column.name(), properties);
-							if(id!=null){
-								property.setColumnType(ColumnType.id);
-								classMapper.setPropertyId(property);
-							}else if(embeddedId!=null){
-								property.setColumnType(ColumnType.embeddedId);
-								classMapper.setPropertyId(property);
-							}
+					methods.add(methodGet);
+//				    for ( PropertyDescriptor pd : info.getPropertyDescriptors() )
+//				        if (name.equals(pd.getName())) return pd.getWriteMethod();
+					Transient transientT = field.getAnnotation(Transient.class);
+					if(transientT==null){
+						transientT = methodGet.getAnnotation(Transient.class);
+						if(transientT!=null){
+							continue;
 						}
-
-					}else if(joinColumn!=null){
-						Property property = new Property();
-						property.setMethodGet(methodGet);
-						property.setMethodSet(methodSet);
-						property.setColumnType(ColumnType.joinColumn);
-//						classMapper.getColumn().put(joinColumn.name(), property); // old version
-						List<Property> properties = classMapper.getColumn().get(joinColumn.name());
-						if(properties==null)
-							properties = new ArrayList<Property>();
-						properties.add(property);
-						classMapper.getColumn().put(joinColumn.name(), properties);
-						if(id!=null){
-							property.setColumnType(ColumnType.id);
-							classMapper.setPropertyId(property);
-						}else if(embeddedId!=null){
-							property.setColumnType(ColumnType.embeddedId);
-							classMapper.setPropertyId(property);
-						}
-					}else if(embeddedId!=null){
-						
-						Property property = new Property();
-						property.setMethodGet(methodGet);
-						property.setMethodSet(methodSet);
-//						property.setColumnName(field.getName());
-//						List<Property> properties = classMapper.getColumn().get(joinColumn.name());
-//						if(properties==null)
-//							properties = new ArrayList<Property>();
-//						properties.add(property);
-//						classMapper.getColumn().put(field.getName(), properties);
-						property.setColumnType(ColumnType.embeddedId);
-						classMapper.setPropertyId(property);
-						
-						Class<?> returnType = methodGet.getReturnType();
-						if(attributeOverrides!=null){
-							for (AttributeOverride attributeOverride : attributeOverrides.value()) {
-								String name = attributeOverride.name();
-								Field fieldembeddedId = returnType.getDeclaredField(name);
-								Method methodSetembeddedId = ClassUtil.findSetter(returnType, fieldembeddedId.getName());
-								Method methodGetembeddedId = ClassUtil.findGetter(returnType, fieldembeddedId.getName());
-								Column columnEmbeddedId = attributeOverride.column();
-								Property propertyEmbeddedId = new Property();
-								propertyEmbeddedId.setMethodGet(methodGetembeddedId);
-								propertyEmbeddedId.setMethodSet(methodSetembeddedId);
-								propertyEmbeddedId.setColumnName(columnEmbeddedId.name());
-								propertyEmbeddedId.setEmbeddedId(property);
-								propertyEmbeddedId.setColumnType(ColumnType.embeddedId);//ColumnType.column
-								List<Property> propertiesEmbeddedId = classMapper.getColumn().get(columnEmbeddedId.name());
-								if(propertiesEmbeddedId==null)
-									propertiesEmbeddedId = new ArrayList<Property>();
-								propertiesEmbeddedId.add(propertyEmbeddedId);
-								classMapper.getColumn().put(columnEmbeddedId.name(), propertiesEmbeddedId);
-								
-							}
-						}
-							
-//						Property property = new Property();
-//						property.setMethodGet(methodGet);
-//						property.setMethodSet(methodSet);
-//						property.setColumnName(field.getName());
-//						classMapper.getColumn().put(field.getName(), property);
-//						property.setColumnType(ColumnType.embeddedId);
-//						classMapper.setPropertyId(property);
 					}
+					classMapper = genClassMapper(classMapper, field, methodGet, methodSet);
+					
 				} catch (NoSuchFieldException | IntrospectionException e) {
 //					e.printStackTrace();
 				}
 			}
+			
+			for (Method methodGet : clazz.getMethods()) {
+				Transient transientT = methodGet.getAnnotation(Transient.class);
+				if(transientT!=null){
+					continue;
+				}
+				if(methods.contains(methodGet))
+					continue;
+				if(methodGet.getReturnType()!=null){
+					if(methodGet.getName().startsWith("get")){
+						try {
+							String filename = methodGet.getName().substring(3,4).toLowerCase()+methodGet.getName().substring(4);
+							Method methodSet = ClassUtil.findSetter(clazz, filename);
+							
+							classMapper = genClassMapper(classMapper, null, methodGet, methodSet);
+						} catch (NoSuchFieldException | IntrospectionException e) {
+//							e.printStackTrace();
+						}
+					}
+					
+					
+				}
+			}
 				mapClass.put(clazz.getName(),classMapper);
+		}
+		return classMapper;
+	}
+	
+	private static ClassMapper genClassMapper(ClassMapper classMapper,Field field,Method methodGet,Method methodSet){
+		try {
+			
+			
+//			Method methodSet = ClassUtil.findSetter(clazz, field.getName());
+//			Method methodGet = ClassUtil.findGetter(clazz, field.getName());
+//			methods.add(methodGet);
+//		    for ( PropertyDescriptor pd : info.getPropertyDescriptors() )
+//		        if (name.equals(pd.getName())) return pd.getWriteMethod();
+			Column column = null ;
+			EmbeddedId embeddedId = null ;
+			Id id = null ;
+			AttributeOverrides attributeOverrides = null  ;
+			JoinColumn joinColumn = null ;
+			Enumerated enumerated = null ;
+			Embedded embedded = null ;
+			OneToMany oneToMany = null;
+			if(field != null){
+				 column = field.getAnnotation(Column.class);
+				 embeddedId = field.getAnnotation(EmbeddedId.class);
+				 id = field.getAnnotation(Id.class);
+				 attributeOverrides  = field.getAnnotation(AttributeOverrides.class);
+				 joinColumn = field.getAnnotation(JoinColumn.class);
+				 enumerated = field.getAnnotation(Enumerated.class);
+				 embedded = field.getAnnotation(Embedded.class);
+				 oneToMany = field.getAnnotation(OneToMany.class);
+			}
+			
+			if (column == null)
+				column = methodGet.getAnnotation(Column.class);
+			if (id == null)
+				id = methodGet.getAnnotation(Id.class);
+			if (embeddedId == null)
+				embeddedId = methodGet.getAnnotation(EmbeddedId.class);
+			if (attributeOverrides == null)
+				attributeOverrides  = methodGet.getAnnotation(AttributeOverrides.class);
+			if (joinColumn == null)
+				joinColumn = methodGet.getAnnotation(JoinColumn.class);
+			if (enumerated == null)
+				enumerated = methodGet.getAnnotation(Enumerated.class);
+			if (embedded == null)
+				embedded = methodGet.getAnnotation(Embedded.class);
+			if (oneToMany == null)
+				oneToMany = methodGet.getAnnotation(OneToMany.class);
+			if (column != null) {
+				// not have this column name in classMapper
+				if (!classMapper.getColumn().containsKey(column.name())) {
+					Property property = new Property();
+					property.setMethodGet(methodGet);
+					property.setMethodSet(methodSet);
+					property.setColumnName(column.name());
+					property.setColumnType(ColumnType.column);
+//					classMapper.getColumn().put(column.name(), property);//Old version
+					List<Property> properties = classMapper.getColumn().get(column.name());
+					if(properties==null)
+						properties = new ArrayList<Property>();
+					properties.add(property);
+					classMapper.getColumn().put(column.name(), properties);
+					if(enumerated!=null)
+						property.setEnumType(enumerated.value());
+					if(id!=null){
+						property.setColumnType(ColumnType.id);
+						classMapper.setPropertyId(property);
+					}else if(embeddedId!=null){
+						property.setColumnType(ColumnType.embeddedId);
+						classMapper.setPropertyId(property);
+					}
+				}
+
+			}else if(joinColumn!=null){
+				Property property = new Property();
+				property.setMethodGet(methodGet);
+				property.setMethodSet(methodSet);
+				property.setColumnType(ColumnType.joinColumn);
+//				classMapper.getColumn().put(joinColumn.name(), property); // old version
+				List<Property> properties = classMapper.getColumn().get(joinColumn.name());
+				if(properties==null)
+					properties = new ArrayList<Property>();
+				properties.add(property);
+				classMapper.getColumn().put(joinColumn.name(), properties);
+				if(id!=null){
+					property.setColumnType(ColumnType.id);
+					classMapper.setPropertyId(property);
+				}else if(embeddedId!=null){
+					property.setColumnType(ColumnType.embeddedId);
+					classMapper.setPropertyId(property);
+				}
+			}else if(embedded!=null){
+				Property property = new Property();
+				property.setMethodGet(methodGet);
+				property.setMethodSet(methodSet);
+				
+				property.setColumnType(ColumnType.embedded);
+				classMapper.setPropertyId(property);
+				
+				Class<?> returnType = methodGet.getReturnType();
+				if(attributeOverrides!=null){
+					for (AttributeOverride attributeOverride : attributeOverrides.value()) {
+						String name = attributeOverride.name();
+						Method methodSetembeddedId= null;
+						Method methodGetembeddedId = null;
+						try{
+							Field fieldembeddedId = returnType.getDeclaredField(name);
+							name = fieldembeddedId.getName();
+//							methodSetembeddedId = ClassUtil.findSetter(returnType, name);
+//							methodGetembeddedId = ClassUtil.findGetter(returnType, fieldembeddedId.getName());
+						}catch(Exception e){
+							
+						}
+						
+						methodSetembeddedId = ClassUtil.findSetter(returnType, name);
+						methodGetembeddedId = ClassUtil.findGetter(returnType, name);
+						Column columnEmbeddedId = attributeOverride.column();
+						Property propertyEmbeddedId = new Property();
+						propertyEmbeddedId.setMethodGet(methodGetembeddedId);
+						propertyEmbeddedId.setMethodSet(methodSetembeddedId);
+						propertyEmbeddedId.setColumnName(columnEmbeddedId.name());
+						propertyEmbeddedId.setEmbeddedId(property);
+						propertyEmbeddedId.setColumnType(ColumnType.embedded);//ColumnType.column
+						List<Property> propertiesEmbeddedId = classMapper.getColumn().get(columnEmbeddedId.name());
+						if(propertiesEmbeddedId==null)
+							propertiesEmbeddedId = new ArrayList<Property>();
+						propertiesEmbeddedId.add(propertyEmbeddedId);
+						classMapper.getColumn().put(columnEmbeddedId.name(), propertiesEmbeddedId);
+						
+					}
+				}
+				
+			}else if(embeddedId!=null){
+				
+				Property property = new Property();
+				property.setMethodGet(methodGet);
+				property.setMethodSet(methodSet);
+//				property.setColumnName(field.getName());
+//				List<Property> properties = classMapper.getColumn().get(joinColumn.name());
+//				if(properties==null)
+//					properties = new ArrayList<Property>();
+//				properties.add(property);
+//				classMapper.getColumn().put(field.getName(), properties);
+				property.setColumnType(ColumnType.embeddedId);
+				classMapper.setPropertyId(property);
+				
+				Class<?> returnType = methodGet.getReturnType();
+				if(attributeOverrides!=null){
+					for (AttributeOverride attributeOverride : attributeOverrides.value()) {
+						String name = attributeOverride.name();
+						Field fieldembeddedId = returnType.getDeclaredField(name);
+						Method methodSetembeddedId = ClassUtil.findSetter(returnType, fieldembeddedId.getName());
+						Method methodGetembeddedId = ClassUtil.findGetter(returnType, fieldembeddedId.getName());
+						Column columnEmbeddedId = attributeOverride.column();
+						Property propertyEmbeddedId = new Property();
+						propertyEmbeddedId.setMethodGet(methodGetembeddedId);
+						propertyEmbeddedId.setMethodSet(methodSetembeddedId);
+						propertyEmbeddedId.setColumnName(columnEmbeddedId.name());
+						propertyEmbeddedId.setEmbeddedId(property);
+						propertyEmbeddedId.setColumnType(ColumnType.embeddedId);//ColumnType.column
+						List<Property> propertiesEmbeddedId = classMapper.getColumn().get(columnEmbeddedId.name());
+						if(propertiesEmbeddedId==null)
+							propertiesEmbeddedId = new ArrayList<Property>();
+						propertiesEmbeddedId.add(propertyEmbeddedId);
+						classMapper.getColumn().put(columnEmbeddedId.name(), propertiesEmbeddedId);
+						
+					}
+				}
+					
+//				Property property = new Property();
+//				property.setMethodGet(methodGet);
+//				property.setMethodSet(methodSet);
+//				property.setColumnName(field.getName());
+//				classMapper.getColumn().put(field.getName(), property);
+//				property.setColumnType(ColumnType.embeddedId);
+//				classMapper.setPropertyId(property);
+			}
+			
+			if(oneToMany!=null){
+				Property property = new Property();
+				property.setMethodGet(methodGet);
+				property.setMethodSet(methodSet);
+				property.setColumnName(oneToMany.mappedBy());
+				if(oneToMany.fetch() == FetchType.LAZY)
+					property.setColumnType(ColumnType.oneToManyLAZY);
+				else
+					property.setColumnType(ColumnType.oneToManyEAGER);
+				classMapper.getOneToManyList().add(property);
+			}
+		} catch (NoSuchFieldException | IntrospectionException e) {
+//			e.printStackTrace();
 		}
 		return classMapper;
 	}
@@ -298,6 +437,14 @@ public class JPAUtil {
 						property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
 						
 						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
+					}else if(ColumnType.embedded == property.getColumnType()){
+						objectData = property.getEmbeddedId().getMethodGet().invoke(traget);
+						if(objectData == null)
+							objectData = property.getEmbeddedId().getMethodSet().getParameterTypes()[0].newInstance();
+						
+						property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
+						
+						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
 					}else{
 						if(methodSet.getParameterTypes()[0].isAnnotationPresent(Entity.class)){
 							ClassMapper classMapperId = getClassMapper(methodSet.getParameterTypes()[0]);
@@ -305,7 +452,24 @@ public class JPAUtil {
 							Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
 							methodSetId.invoke(objectData,  getObject(rs, columnNum, methodSetId.getParameterTypes()[0]));
 						}else{
-							objectData = getObject(rs, columnNum, methodSet.getParameterTypes()[0]);
+							if(property.getEnumType()!=null){
+								if(EnumType.STRING==property.getEnumType()){
+									String EnumValue = getObject(rs, columnNum, String.class);
+									Class<Enum> class1 = (Class<Enum>) methodSet.getParameterTypes()[0];
+									objectData = Enum.valueOf(class1, EnumValue);
+								}else if(EnumType.ORDINAL==property.getEnumType()){
+									Integer EnumValue = getObject(rs, columnNum, Integer.class);
+									Class<Enum> class1 = (Class<Enum>) methodSet.getParameterTypes()[0];
+									objectData = Enum.valueOf(class1, EnumValue+"");
+								}else{
+									String EnumValue = getObject(rs, columnNum, String.class);
+									Class<Enum> class1 = (Class<Enum>) methodSet.getParameterTypes()[0];
+									objectData = Enum.valueOf(class1, EnumValue);
+								}
+							}else{
+								objectData = getObject(rs, columnNum, methodSet.getParameterTypes()[0]);
+							}
+							
 						}
 						methodSet.invoke(traget, objectData);
 					}
