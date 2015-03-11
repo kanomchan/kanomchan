@@ -3,8 +3,10 @@ package org.kanomchan.core.common.dao;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import javax.persistence.Table;
@@ -32,6 +35,7 @@ import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
+import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -1003,5 +1007,46 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			saveOrUpdate(entity);
 		}
 		return entities;
+	}
+	
+	@Override
+	public <T> List<T> findAllEntityOnechild(List<T> list)  {
+
+		if(list !=null){
+			for (T t : list) {
+				try{
+					
+				
+				ClassMapper classMapper = JPAUtil.getClassMapper(t.getClass());
+				for (Property property : classMapper.getOneToManyList()) {
+					ParameterizedType type = (ParameterizedType)  property.getMethodGet().getGenericReturnType();
+					Class<?> classFind = (Class<?>) type.getActualTypeArguments()[0];
+					String mapFieldName =  property.getColumnName();//mappedBy="clientDetails"
+					Field mapField = classFind.getDeclaredField(mapFieldName);
+					Method mapGet = ClassUtil.findGetter(classFind, mapFieldName);
+					JoinColumn joinColumn =mapField.getAnnotation(JoinColumn.class);
+					if(joinColumn==null)
+						joinColumn =mapGet.getAnnotation(JoinColumn.class);
+					String nameJoinColumn = joinColumn.name();
+					
+					List<Property> listProperties = classMapper.getColumn().get(nameJoinColumn);
+					Object mapData = null;
+					if(listProperties!=null){
+						for (Property propertyGetValue : listProperties) {
+							mapData = propertyGetValue.getMethodGet().invoke(t);
+						}
+					}
+					List<?> s = findByColumn(classFind, nameJoinColumn, mapData);
+					
+					property.getMethodSet().invoke(t, s);
+				}
+					}catch(Exception e){
+					
+				}
+				
+			}
+		}
+//		
+		return list;
 	}
 }

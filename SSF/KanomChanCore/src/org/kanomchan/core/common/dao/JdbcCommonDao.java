@@ -96,6 +96,6 @@ public interface JdbcCommonDao {
 
 	public <T> T delete(T target);
 
-
+	public <T> List<T> findAllEntityOnechild(List<T> list);
 
 }
