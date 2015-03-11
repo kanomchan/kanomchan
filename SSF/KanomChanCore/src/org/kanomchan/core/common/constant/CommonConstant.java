@@ -24,6 +24,10 @@ public interface CommonConstant {
 	public static final String MENU_BEAN_KEY = "SESSION_MENU_BEAN_KEY";
 	public static final String MENU_BEAN_MAP_KEY = "SESSION_MENU_BEAN_MAP_KEY";
 	public static final String LOCATION_BEAN_KEY = "SESSION_LOCATION_BEAN_KEY";
+	
+	
+	public static final String URL_REDIRECT_FACEBOOK_KEY = "SESSION_URL_REDIRECT_FACEBOOK_KEY";
+	
     }
     
     public static interface PARAMETER {
