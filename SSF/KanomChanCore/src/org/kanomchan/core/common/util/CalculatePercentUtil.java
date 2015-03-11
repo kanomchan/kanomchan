@@ -50,7 +50,7 @@ public class CalculatePercentUtil {
 		}
 		
 		
-		BigDecimal percent = count.divide(max).multiply(new BigDecimal(100));
+		BigDecimal percent = count.multiply(new BigDecimal(100)).divide(max,2,RoundingMode.DOWN);
 		
 		return percent.longValue();
 	}
