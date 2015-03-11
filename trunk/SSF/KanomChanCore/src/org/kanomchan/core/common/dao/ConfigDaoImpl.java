@@ -32,6 +32,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final Logger logger = Logger.getLogger(ConfigDaoImpl.class);
 	
+	
 	private static final String SQL_QUERY_CONFIG = "SELECT CONFIG_KEY, CONFIG_VALUE FROM SYS_M_CONFIG WHERE STATUS = 'A' ";
 	@Override
 	public Map<String, String> getConfigMap() {
