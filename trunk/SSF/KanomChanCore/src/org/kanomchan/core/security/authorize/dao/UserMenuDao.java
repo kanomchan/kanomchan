@@ -12,6 +12,6 @@ public interface UserMenuDao {
 	public List<Menu> findAll()throws NonRollBackException,RollBackException;
 	public List<Menu> findAllForNavigation()throws NonRollBackException,RollBackException;
 
-	public List<Menu> findAllByAction(Integer actionId)throws NonRollBackException, RollBackException;
-	public List<Menu> findAllByMenuId(Integer menuId)throws NonRollBackException, RollBackException;
+	public List<Menu> findAllByAction(Long actionId)throws NonRollBackException, RollBackException;
+	public List<Menu> findAllByMenuId(Long menuId)throws NonRollBackException, RollBackException;
 }
