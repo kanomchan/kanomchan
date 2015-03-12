@@ -2,11 +2,13 @@ package org.kanomchan.core.common.web.struts.interceptor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.StrutsStatics;
 import org.apache.struts2.interceptor.ParameterAware;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
@@ -35,11 +37,7 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 	}
 	List<MenuBean> NavigationList;
 	
-	private Map<String, String[]> parameters;
-	@Override
-	public void setParameters(Map<String, String[]> parameters) {
-		this.parameters = parameters;
-	}
+
 	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
@@ -47,10 +45,18 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 		try{
 				String namespace = invocation.getProxy().getNamespace();
 				String actionName = invocation.getProxy().getActionName();
+				String tableName = "";
 				HttpServletRequest request = ServletActionContext.getRequest();
-				String queryString = request.getQueryString();
-				String tableName = StrutsUtil.getString(parameters, "tableName");
-				String url = request.getRequestURL().toString()+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString);
+//				String queryString = request.getQueryString();
+				String queryString = "";
+				Map<String, String[]> parameters = request.getParameterMap();
+				for(Map.Entry<String,  String[]> entry : parameters.entrySet()){
+					String[] obje = entry.getValue();
+					if(entry.getKey().equals("tableName") && obje!=null && !"".equals(obje))
+					tableName = entry.getKey() + "=" + obje[0];
+				}
+				queryString += tableName;
+				String url =request.getRequestURI().substring(request.getContextPath().length())+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString).replaceAll("[?]request_locale=[A-Z]{3}&", "?").replaceAll("[&?]request_locale=[A-Z]{3}", "");
 				
 				ServiceResult<List<MenuBean>> serviceResultNavigation = userNavigationService.generateNavigationList(namespace, actionName,url);
 				if(serviceResultNavigation.isSuccess()){
@@ -61,6 +67,14 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 		}
 		
 		return invocation.invoke();
+	}
+
+
+
+	@Override
+	public void setParameters(Map<String, String[]> arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
