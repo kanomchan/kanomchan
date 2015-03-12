@@ -297,7 +297,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public <T extends Object> T save(T target,boolean includeMinusOne){
-		return save(target, true, false,null);
+		return save(target, includeMinusOne, false,null);
 	}
 	
 	@Override
@@ -541,7 +541,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackTechnicalException{
-		return update(target, true,false,null);
+		return update(target, includeMinusOne,false,null);
 	}
 	@Override
 	public <T extends Object> T update(T target, boolean includeMinusOne, boolean tableLang, String langCode) throws RollBackTechnicalException{
