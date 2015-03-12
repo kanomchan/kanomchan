@@ -2,10 +2,10 @@ package org.kanomchan.core.common.bean;
 
 public class ActionBean {
 	
-	private Integer actionId;
+	private Long actionId;
 	private String pageName;
 	private String objId;
-	private Integer menuId;
+	private Long menuId;
 	
 	private String nameSpace;
 	private String actionName;
@@ -24,10 +24,10 @@ public class ActionBean {
 	public void setObjId(String objId) {
 		this.objId = objId;
 	}
-	public Integer getMenuId() {
+	public Long getMenuId() {
 		return menuId;
 	}
-	public void setMenuId(Integer menuId) {
+	public void setMenuId(Long menuId) {
 		this.menuId = menuId;
 	}
 	public String getNameSpace() {
@@ -54,10 +54,10 @@ public class ActionBean {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public Integer getActionId() {
+	public Long getActionId() {
 		return actionId;
 	}
-	public void setActionId(Integer actionId) {
+	public void setActionId(Long actionId) {
 		this.actionId = actionId;
 	}
 	public String getInputResultName() {
