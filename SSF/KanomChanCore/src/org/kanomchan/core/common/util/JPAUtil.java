@@ -242,7 +242,7 @@ public class JPAUtil {
 				property.setMethodSet(methodSet);
 				
 				property.setColumnType(ColumnType.embedded);
-				classMapper.setPropertyId(property);
+//				classMapper.setPropertyId(property);
 				
 				Class<?> returnType = methodGet.getReturnType();
 				if(attributeOverrides!=null){
