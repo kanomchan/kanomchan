@@ -15,7 +15,6 @@ import org.kanomchan.core.common.bean.EntityBean;
 public class CalculatePercentUtil {
 
 	public static Long cal(Object object){
-		
 		BigDecimal max = new BigDecimal(object.getClass().getDeclaredFields().length);
 		BigDecimal count = new BigDecimal(0L);
 		BigDecimal countSkip = new BigDecimal(0L);
@@ -48,11 +47,17 @@ public class CalculatePercentUtil {
 //			countSkip = countSkip.multiply(new BigDecimal(-1));
 			max = max.subtract(countSkip);
 		}
-		
-		
 		BigDecimal percent = count.multiply(new BigDecimal(100)).divide(max,2,RoundingMode.DOWN);
-		
 		return percent.longValue();
+	}
+	
+	public static Long calMultiPercent(long... percent){
+		long len = percent.length;
+		long max = 0l;
+		for (long lg : percent) {
+			max += lg;
+		}
+		return max / len;
 	}
 	
 	private static Set<String> skipName = new HashSet<String>(Arrays.asList("status","createDate","createUser","updateDate","updateUser")); 
