@@ -1,12 +1,21 @@
 
 package org.kanomchan.core.common.web.struts.components;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.validator.FieldValidator;
+import com.opensymphony.xwork2.validator.Validator;
+import com.opensymphony.xwork2.validator.validators.VisitorFieldValidator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.components.Form;
 import org.apache.struts2.components.If;
+import org.apache.struts2.components.Form.FieldVisitorValidatorWrapper;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
 import org.apache.struts2.views.annotations.StrutsTag;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +65,56 @@ public class FormAjax extends Form {
         
         
     }
+    
+    @Override
+    public List getValidators(String name) {
+        Class actionClass = (Class) getParameters().get("actionClass");
+        if (actionClass == null) {
+            return Collections.EMPTY_LIST;
+        }
+
+        String formActionValue = findString(action);
+        ActionMapping mapping = actionMapper.getMappingFromActionName(formActionValue);
+        String actionName = mapping.getName();
+
+        List<Validator> actionValidators = actionValidatorManager.getValidators(actionClass, actionName);
+        List<Validator> validators = new ArrayList<Validator>();
+
+        findFieldValidators(name, actionClass, actionName, actionValidators, validators, "");
+
+        return validators;
+    }
+
+    private void findFieldValidators(String name, Class actionClass, String actionName,
+            List<Validator> validatorList, List<Validator> retultValidators, String prefix) {
+
+        for (Validator validator : validatorList) {
+            if (validator instanceof FieldValidator) {
+                FieldValidator fieldValidator = (FieldValidator) validator;
+
+                if (validator instanceof VisitorFieldValidator) {
+                    VisitorFieldValidator vfValidator = (VisitorFieldValidator) fieldValidator;
+                    Class clazz = getVisitorReturnType(actionClass, vfValidator.getFieldName());
+                    if (clazz == null) {
+                        continue;
+                    }
+
+                    List<Validator> visitorValidators = actionValidatorManager.getValidators(clazz, actionName);
+                    String vPrefix = prefix + (vfValidator.isAppendPrefix() ? vfValidator.getFieldName() + "." : "");
+                    findFieldValidators(name, clazz, actionName, visitorValidators, retultValidators, vPrefix);
+                } else if ((prefix + fieldValidator.getFieldName()).equals(name)) {
+                    if (StringUtils.isNotBlank(prefix)) {
+                        //fixing field name for js side
+                        FieldVisitorValidatorWrapper wrap = new FieldVisitorValidatorWrapper(fieldValidator, prefix);
+                        retultValidators.add(wrap);
+                    } else {
+                        retultValidators.add(fieldValidator);
+                    }
+                }
+            }
+        }
+    }
+
 
     public String getEditview() {
 		return editview;
