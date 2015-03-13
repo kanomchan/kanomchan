@@ -87,11 +87,10 @@ public class LoginServiceImpl implements LoginService {
 	public ServiceResult<LoginIO> performLoginAndPutDataSession(String authorizationCode, String state, Map<String, Object> session) throws NonRollBackException, RollBackException {
 		LoginIO loginIO = new LoginIOBean();
 		ServiceResult<UserBean> serviceResult = openIdClientService.handleAuthorizationCodeResponse(authorizationCode, state, session);
-		
+		serviceResult = userAuthorizeService.addRolesUser(serviceResult.getResult());
 		if(serviceResult.isSuccess()){
 			UserBean userBean = serviceResult.getResult();
 			ServiceResult<MenuVO> serviceResultMenu = userMenuService.generateMenuList(serviceResult.getResult());
-			
 			if(serviceResultMenu.isSuccess()){
 				loginIO.setUserBean(userBean);
 				loginIO.setMenuVO(serviceResultMenu.getResult());

@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.io;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.kanomchan.core.common.bean.MenuVO;
@@ -9,7 +10,7 @@ public class LoginIOBean  implements LoginIO{
 	
 	private UserBean userBean;
 	private MenuVO menuVO;
-	private Map<String, Object> session;
+	private Map<String, Object> session = new HashMap<String, Object>();
 	public UserBean getUserBean() {
 		return userBean;
 	}

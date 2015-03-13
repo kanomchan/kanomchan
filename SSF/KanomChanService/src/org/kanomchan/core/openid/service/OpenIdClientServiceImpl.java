@@ -30,6 +30,7 @@ import org.kanomchan.core.openid.constant.OIMessageCode;
 import org.kanomchan.core.openid.servicecase.DynamicClientRegistrationLoader;
 import org.kanomchan.core.openid.servicecase.IssuerFetcher;
 import org.kanomchan.core.openid.servicecase.OpenIDConnectServiceConfigurationFetcher;
+import org.kanomchan.projectname.usermanament.dao.UserDao;
 import org.mitre.jwt.signer.service.JwtSigningAndValidationService;
 import org.mitre.openid.connect.client.model.IssuerServiceResponse;
 import org.mitre.openid.connect.config.ServerConfiguration;
@@ -75,6 +76,12 @@ public class OpenIdClientServiceImpl implements OpenIdClientService {
 	@Autowired
 	public void setJwkSetCacheService(JWKSetCacheService jwkSetCacheService) {
 		this.jwkSetCacheService = jwkSetCacheService;
+	}
+	
+	private UserDao userDao;
+	@Autowired
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
 	}
 	
 	
@@ -719,11 +726,11 @@ public class OpenIdClientServiceImpl implements OpenIdClientService {
 	
 //				UserInfo userInfo = DefaultUserInfo.fromJson(userInfoJson);
 
-				UserBeanDefault ui = new UserBeanDefault();
+				
+				UserBean ui  = userDao.findUserByIdUser(obj.get("user_id").getAsLong());
 				
 //				ui.setSub(obj.has("sub") ? obj.get("sub").getAsString() : null);
 
-				ui.setFirstName(obj.has("name") ? obj.get("name").getAsString() : null);
 //				ui.setPreferredUsername(obj.has("preferred_username") ? obj.get("preferred_username").getAsString() : null);
 //				ui.setGivenName(obj.has("given_name") ? obj.get("given_name").getAsString() : null);
 //				ui.setFamilyName(obj.has("family_name") ? obj.get("family_name").getAsString() : null);
