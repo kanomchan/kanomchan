@@ -305,5 +305,17 @@ public class User implements java.io.Serializable, EntityBean , UserBean {
 //			List<UserMapAddress> userMapAddresses) {
 //		this.userMapAddresses = userMapAddresses;
 //	}
+
+	@Override
+	public String getUserImagePath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUserImagePath(String userImagePath) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -42,11 +42,11 @@ public class ActionDaoImpl extends JdbcCommonDaoImpl implements ActionDao {
 		@Override
 		public ActionBean mapRow(ResultSet rs, int arg1) throws SQLException {
 			ActionBean actionBean = new ActionBean();
-			actionBean.setActionId(rs.getInt("ID_ACTION"));
+			actionBean.setActionId(rs.getLong("ID_ACTION"));
 			actionBean.setNameSpace(rs.getString("NAME_SPACE"));
 			actionBean.setActionName(rs.getString("ACTION_NAME"));
 			actionBean.setPageName(rs.getString("PAGE_NAME"));
-			actionBean.setMenuId(rs.getInt("ID_MENU"));
+			actionBean.setMenuId(rs.getLong("ID_MENU"));
 			actionBean.setObjId(rs.getString("ID_FUNCTION"));
 			actionBean.setType(rs.getString("TYPE"));
 			actionBean.setUrl(rs.getString("URL"));

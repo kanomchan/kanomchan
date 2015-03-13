@@ -13,23 +13,31 @@ import org.springframework.jdbc.core.RowMapper;
 
 public class UserMenuDaoImpl extends JdbcCommonDaoImpl implements UserMenuDao {
 	private static final String SQL_MENU = 
-			" SELECT ID_MENU ,NAME ,LEVEL ,ID_PARENT ,ID_ACTION ,ID_FUNCTION,SEQ FROM SYS_M_MENU WHERE STATUS = 'A' ORDER BY LEVEL ,SEQ" ;
+			" SELECT ID_MENU ,NAME ,LEVEL ,ID_PARENT ,ID_ACTION ,ID_FUNCTION,SEQ ,MENU_TYPE FROM SYS_M_MENU WHERE STATUS = 'A' AND MENU_TYPE != 'N' ORDER BY LEVEL ,SEQ" ;
+//	AND MENU_TYPE = 'T'
 	@Override
 	public List<Menu> findAll() throws NonRollBackException, RollBackException {
 		return nativeQuery(SQL_MENU, MENU_MAPPER);
 	}
 	
-	private static final String SQL_MENU_ACTION = 
-			" SELECT ID_MENU ,NAME ,LEVEL ,ID_PARENT ,ID_ACTION ,ID_FUNCTION,SEQ FROM SYS_M_MENU WHERE STATUS = 'A' and JOB_N_ID_ACTION = ? ORDER BY LEVEL ,SEQ" ;
+	private static final String SQL_MENU_NAVIGATION = 
+			" SELECT ID_MENU ,NAME ,LEVEL ,ID_PARENT ,ID_ACTION ,ID_FUNCTION,SEQ ,MENU_TYPE FROM SYS_M_MENU WHERE STATUS = 'A' ORDER BY LEVEL ,SEQ" ;
 	@Override
-	public List<Menu> findAllByAction(Integer actionId) throws NonRollBackException, RollBackException {
+	public List<Menu> findAllForNavigation() throws NonRollBackException, RollBackException {
+		return nativeQuery(SQL_MENU_NAVIGATION, MENU_MAPPER);
+	}
+	
+	private static final String SQL_MENU_ACTION = 
+			" SELECT ID_MENU ,NAME ,LEVEL ,ID_PARENT ,ID_ACTION ,ID_FUNCTION,SEQ ,MENU_TYPE FROM SYS_M_MENU WHERE STATUS = 'A' and ID_ACTION = ? ORDER BY LEVEL ,SEQ" ;
+	@Override
+	public List<Menu> findAllByAction(Long actionId) throws NonRollBackException, RollBackException {
 		return nativeQuery(SQL_MENU_ACTION, MENU_MAPPER,actionId);
 	}
 	
 	private static final String SQL_ID = 
-			" SELECT ID_MENU ,NAME ,LEVEL ,ID_PARENT ,ID_ACTION ,ID_FUNCTION,SEQ FROM SYS_M_MENU WHERE STATUS = 'A' and ID_MENU = ? ORDER BY LEVEL ,SEQ" ;
+			" SELECT ID_MENU ,NAME ,LEVEL ,ID_PARENT ,ID_ACTION ,ID_FUNCTION,SEQ ,MENU_TYPE FROM SYS_M_MENU WHERE STATUS = 'A' and ID_MENU = ? ORDER BY LEVEL ,SEQ" ;
 	@Override
-	public List<Menu> findAllByMenuId(Integer menuId)throws NonRollBackException, RollBackException {
+	public List<Menu> findAllByMenuId(Long menuId)throws NonRollBackException, RollBackException {
 		return nativeQuery(SQL_ID, MENU_MAPPER,menuId);
 	}
 	protected static final RowMapper<Menu> MENU_MAPPER = new RowMapper<Menu>() {
@@ -49,6 +57,7 @@ public class UserMenuDaoImpl extends JdbcCommonDaoImpl implements UserMenuDao {
 			}
 			menu.setMenuId(rs.getInt("ID_MENU"));
 			menu.setMenuName(rs.getString("NAME"));
+			menu.setMenuType(rs.getString("MENU_TYPE"));
 			menu.setObjId(rs.getString("ID_FUNCTION"));
 			
 			menu.setActionId(rs.getInt("ID_ACTION"));
@@ -56,11 +65,5 @@ public class UserMenuDaoImpl extends JdbcCommonDaoImpl implements UserMenuDao {
 			return menu;
 		}
 	};
-	@Override
-	public List<Menu> findAllForNavigation() throws NonRollBackException,
-			RollBackException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

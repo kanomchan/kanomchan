@@ -14,7 +14,12 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class HomeAction extends BaseAction {
 
-	
+//	private OpenIdClientService openIdClientService;
+//	@Autowired
+//	@Required
+//	public void setOpenIdClientService(OpenIdClientService openIdClientService) {
+//		this.openIdClientService = openIdClientService;
+//	}
 	private EventNameDao eventNameDao;
 	@Autowired
 	@Required
@@ -22,8 +27,11 @@ public class HomeAction extends BaseAction {
 		this.eventNameDao = eventNameDao;
 	}
 	private List<UserMapRole> list;
+	private String identifier;
 	@Override
 	public String init() throws Exception {
+		
+//		ServiceResult<AuthRequestBean> s = openIdClientService.handleAuthorizationRequest("", identifier);
 		list = eventNameDao.findAll();
 		return "home.init";
 	}
@@ -33,5 +41,13 @@ public class HomeAction extends BaseAction {
 	public void setList(List<UserMapRole> list) {
 		this.list = list;
 	}
+	public String getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+	
+	
 
 }

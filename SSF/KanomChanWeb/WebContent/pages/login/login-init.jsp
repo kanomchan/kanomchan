@@ -28,4 +28,13 @@
 	<s:password name="password" />
 	<s:submit />
 </s:form>
+<s:form namespace="/main" action="login-loginOpenId">
+<s:hidden name="identifier" value="http://localhost:8080/openid-connect-server-webapp/"></s:hidden>
+<s:submit  >wefwef1</s:submit>
+</s:form>
+<s:form namespace="/main" action="login-loginOpenId">
+<s:hidden name="identifier" value="http://localhost:8080/OIWeb/action"></s:hidden>
+<s:submit  >wefwef2</s:submit>
+</s:form>
+<%-- <s:a namespace="/main" action="login-login" value="linke" ><s:param name="identifier" value="http://localhost:8080/openid-connect-server-webapp/"/> </s:a> --%>
 </div>

@@ -37,4 +37,19 @@
 		<property name="dataSource" ref="jmDs"/>
 	</bean> --> 
 	
+	<bean id="jwkSetCacheService" class="org.kanomchan.core.openid.service.JWKSetCacheService" />
+	
+	<bean id="defaultSignerService" class="org.mitre.jwt.signer.service.impl.DefaultJwtSigningAndValidationService">
+		<constructor-arg name="keyStore">
+			<bean id="defaultKeyStore" class="org.mitre.jose.keystore.JWKSetKeyStore">
+				<property name="location" value="classpath:keystore.jwks" />
+			</bean>
+		</constructor-arg>
+		<property name="defaultSignerKeyId" value="rsa1" />
+ 		<property name="defaultSigningAlgorithmName" value="RS256" />
+	</bean>
+	
+	<bean id="authRequestUrlBuilder" class="org.kanomchan.core.openid.service.AuthRequestUrlBuilderImpl"  />
+	<bean id="openIdClientService" class="org.kanomchan.core.openid.service.OpenIdClientServiceImpl"></bean>
+	
 </beans>

@@ -12,7 +12,7 @@
 					<param name="session"></param>
 					<param name="autoCreateSession">true</param>
 				</interceptor-ref>
-				<interceptor-ref name="guestStack" />
+				<interceptor-ref name="prjStack" />
 			</interceptor-stack>
 
 			<interceptor-stack name="homeScopeStack">
@@ -21,7 +21,7 @@
 										</param>
 					<param name="autoCreateSession">true</param>
 				</interceptor-ref>
-				<interceptor-ref name="guestStack" />
+				<interceptor-ref name="prjStack" />
 			</interceptor-stack>
 			
 		</interceptors>
