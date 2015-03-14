@@ -12,6 +12,9 @@ import org.kanomchan.core.common.exception.RollBackProcessException;
 import org.kanomchan.core.common.io.LoginIO;
 import org.kanomchan.core.common.io.LoginIOBean;
 import org.kanomchan.core.common.processhandler.ServiceResult;
+import org.kanomchan.core.common.service.ConfigService;
+import org.kanomchan.core.common.service.LocationService;
+import org.kanomchan.core.openid.bean.AuthRequestBean;
 import org.kanomchan.core.openid.service.OpenIdClientService;
 import org.kanomchan.core.security.authen.service.AuthenService;
 import org.kanomchan.core.security.authen.service.LoginService;
@@ -22,33 +25,19 @@ import org.springframework.beans.factory.annotation.Required;
 
 public class LoginServiceImpl implements LoginService {
 
+	@Autowired
 	private AuthenService authenService;
 	@Autowired
-	@Required
-	public void setAuthenService(AuthenService authenService) {
-		this.authenService = authenService;
-	}
-	
 	private UserAuthorizeService userAuthorizeService;
 	@Autowired
-	@Required
-	public void setUserAuthorizeService(UserAuthorizeService userAuthorizeService) {
-		this.userAuthorizeService = userAuthorizeService;
-	}
-	
 	private UserMenuService userMenuService;
 	@Autowired
-	@Required
-	public void setUserMenuService(UserMenuService userMenuService) {
-		this.userMenuService = userMenuService;
-	}
-	
 	private OpenIdClientService openIdClientService;
 	@Autowired
-	@Required
-	public void setOpenIdClientService(OpenIdClientService openIdClientService) {
-		this.openIdClientService = openIdClientService;
-	}
+	private LocationService locationService;
+	@Autowired
+	private ConfigService configService;
+
 	
 	@Override
 	public ServiceResult<UserBean> performLogin(String username, String password) throws NonRollBackException, RollBackException {
@@ -98,5 +87,20 @@ public class LoginServiceImpl implements LoginService {
 			}
 		}
 		throw new RollBackProcessException(CommonMessageCode.ATC2001);
+	}
+
+	@Override
+	public ServiceResult<AuthRequestBean> startSSO() throws NonRollBackException, RollBackException {
+		return  openIdClientService.handleAuthorizationRequest(configService.get("SSO_REDIRECTURI"), configService.get("SSO_IDENTIFIER"));
+	}
+
+	@Override
+	public ServiceResult<AuthRequestBean> startSSO(String identifier) throws NonRollBackException, RollBackException {
+		return  openIdClientService.handleAuthorizationRequest(configService.get("SSO_REDIRECTURI"), identifier);
+	}
+
+	@Override
+	public ServiceResult<AuthRequestBean> startSSO(String identifier, String redirectUri) throws NonRollBackException, RollBackException {
+		return  openIdClientService.handleAuthorizationRequest(redirectUri, identifier);
 	}
 }
