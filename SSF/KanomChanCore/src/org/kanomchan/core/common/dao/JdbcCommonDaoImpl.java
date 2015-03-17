@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
     /**
      * this method will return how many rows which affected from the update
-     * method นี้ จะ return จำนวน rows ที่ถูก update
+     * method เธ�เธตเน� เธ�เธฐ return เธ�เธณเธ�เธงเธ� rows เธ—เธตเน�เธ–เธนเธ� update
      */
 	@Override
 	public int executeNativeSQL(String sql, Object... params) {
@@ -1048,5 +1049,43 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 //		
 		return list;
+	}
+	@Override
+	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException{
+		if(pagingBean==null){
+			try{
+				
+				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false);
+				Map<String, Object>params = new HashMap<String, Object>();
+				if (criteriaList != null && criteriaList.size() > 0) {
+					for (Criteria criteria : criteriaList) {
+						params.put(criteria.getParam(), criteria.getValue());
+					}
+				}
+				List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+				return resultList1;
+			}catch(RuntimeException e){
+				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
+			}
+			
+		}else{
+			try{
+				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
+				
+				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false);
+				Map<String, Object>params = new HashMap<String, Object>();
+				if (criteriaList != null && criteriaList.size() > 0) {
+					for (Criteria criteria : criteriaList) {
+						params.put(criteria.getParam(), criteria.getValue());
+					}
+				}
+				List<T> resultList1 = simpleJdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
+				
+				return resultList1;
+				
+			}catch (RuntimeException re){
+				throw new RollBackTechnicalException(CommonMessageCode.COM4991, re);
+			}
+		}
 	}
 }

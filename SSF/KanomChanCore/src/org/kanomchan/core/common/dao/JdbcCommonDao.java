@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
@@ -97,5 +98,7 @@ public interface JdbcCommonDao {
 	public <T> T delete(T target);
 
 	public <T> List<T> findAllEntityOnechild(List<T> list);
+
+	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList,PagingBean pagingBean) throws RollBackTechnicalException;
 
 }
