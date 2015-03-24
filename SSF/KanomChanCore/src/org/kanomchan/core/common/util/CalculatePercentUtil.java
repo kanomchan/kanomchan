@@ -15,6 +15,8 @@ import org.kanomchan.core.common.bean.EntityBean;
 public class CalculatePercentUtil {
 
 	public static Long cal(Object object){
+		if(object == null)
+			return 0L;
 		BigDecimal max = new BigDecimal(object.getClass().getDeclaredFields().length);
 		BigDecimal count = new BigDecimal(0L);
 		BigDecimal countSkip = new BigDecimal(0L);
