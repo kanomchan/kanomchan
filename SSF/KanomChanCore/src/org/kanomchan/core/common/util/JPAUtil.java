@@ -368,11 +368,13 @@ public class JPAUtil {
 //							String columnNameMap=null;
 							if(prefix!=null){
 //								if(!columnName.startsWith(prefix)&&!md.getTableName(i+1).equalsIgnoreCase(prefix))
-								if(!columnName.startsWith(prefix)){
+								if(!columnName.startsWith(prefix)&&!columnName.startsWith(prefix+"|")){
 									if(md.getTableName(i+1).equalsIgnoreCase(prefix)){
 									}else{
 										continue;
 									}
+								}else if(columnName.startsWith(prefix+"|")){
+									columnName = columnName.substring(prefix.length()+1);
 								}else{
 									columnName = columnName.substring(prefix.length());
 								}
