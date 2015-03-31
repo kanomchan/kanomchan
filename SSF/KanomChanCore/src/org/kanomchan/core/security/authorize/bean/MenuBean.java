@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.kanomchan.core.common.bean.ActionBean;
+
 public class MenuBean implements Serializable {
 
 	/**
@@ -21,6 +23,7 @@ public class MenuBean implements Serializable {
 	private Integer menuId;
 	private Integer parentId;
 	private String type;
+	private ActionBean actionBean;
 	public String getUrl() {
 		return url;
 	}
@@ -71,15 +74,19 @@ public class MenuBean implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	
-	
+	public ActionBean getActionBean() {
+		return actionBean;
+	}
+	public void setActionBean(ActionBean actionBean) {
+		this.actionBean = actionBean;
+	}
 	@Override
 	public String toString() {
 		return "MenuBean [url=" + url + ", menuName=" + menuName
 				+ ", childMenu=" + childMenu + ", level=" + level + ", menuId="
 				+ menuId + ", parentId=" + parentId + ", type=" + type + "]";
 	}
+	
 
 	
 	
