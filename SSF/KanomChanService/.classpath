@@ -86,5 +86,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/httpclient/httpcore-4.3.3.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/httpclient/httpmime-4.3.4.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/GSON/gson-2.2.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OIClient"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OIClientImpl"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

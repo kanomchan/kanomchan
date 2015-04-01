@@ -12,10 +12,11 @@ import org.kanomchan.core.common.dao.JdbcCommonDaoImpl;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackProcessException;
+import org.kanomchan.core.openid.service.UserOpenDao;
 import org.kanomchan.projectname.usermanament.bean.User;
 import org.springframework.jdbc.core.RowMapper;
 
-public class UserDaoImpl extends JdbcCommonDaoImpl implements UserDao {
+public class UserDaoImpl extends JdbcCommonDaoImpl implements UserDao ,UserOpenDao {
 	
 	@Override
 	public User findUserByUsername(String username) throws NonRollBackException , RollBackException {
