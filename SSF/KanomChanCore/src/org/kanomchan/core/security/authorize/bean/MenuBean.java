@@ -87,6 +87,8 @@ public class MenuBean implements Serializable {
 				+ menuId + ", parentId=" + parentId + ", type=" + type + "]";
 	}
 	
+	
+	
 
 	
 	
