@@ -17,13 +17,14 @@ import org.kanomchan.core.common.service.LocationService;
 import org.kanomchan.core.openid.bean.AuthRequestBean;
 import org.kanomchan.core.openid.service.OpenIdClientService;
 import org.kanomchan.core.security.authen.service.AuthenService;
+import org.kanomchan.core.security.authen.service.LoginSSOService;
 import org.kanomchan.core.security.authen.service.LoginService;
 import org.kanomchan.core.security.authorize.service.UserAuthorizeService;
 import org.kanomchan.core.security.authorize.service.UserMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
-public class LoginServiceImpl implements LoginService {
+public class LoginServiceImpl implements LoginSSOService {
 
 	@Autowired
 	private AuthenService authenService;
@@ -102,5 +103,10 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public ServiceResult<AuthRequestBean> startSSO(String identifier, String redirectUri) throws NonRollBackException, RollBackException {
 		return  openIdClientService.handleAuthorizationRequest(redirectUri, identifier);
+	}
+
+	@Override
+	public ServiceResult<AuthRequestBean> handleAuthorizationRequest(String redirectUri, String identifier) throws NonRollBackException, RollBackException {
+		return openIdClientService.handleAuthorizationRequest(redirectUri, identifier);
 	}
 }
