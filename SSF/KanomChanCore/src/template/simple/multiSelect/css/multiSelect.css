@@ -154,6 +154,7 @@
 }
 .select2-container-multi .select2-choices {
   padding-left: 6px;
+  padding-right: 6px;
   min-height: 34px;
   border: 1px solid #CCC;
   background-image: none;
