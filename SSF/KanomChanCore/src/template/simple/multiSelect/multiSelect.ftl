@@ -295,12 +295,14 @@
 			$("#s2id_${parameters.id?html}").hide();
 		</#if>
 	</#if>
-	<#if checkChoiceKey != "">
-	 	<#else>
-	 	<#if parameters.choiceValue?default("I") == "A">
-			$("#s2id_${parameters.id?html}").hide();
+	<#if checkChoiceKey??>
+		<#if checkChoiceKey != "">
+		 	<#else>
+		 	<#if parameters.choiceValue?default("I") == "A">
+				$("#s2id_${parameters.id?html}").hide();
+			</#if>
 		</#if>
-	 </#if>
+	</#if>
 	</script>
 
 <#if parameters.multiple?default(false)>
