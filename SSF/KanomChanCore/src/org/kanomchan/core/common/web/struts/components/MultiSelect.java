@@ -30,6 +30,7 @@ public class MultiSelect extends ListUIBean {
     protected String fontColor;
     protected String placeholder;
     protected String choiceValue;
+    protected String isChoice;
     protected String choiceName;
 
     public MultiSelect(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
@@ -81,6 +82,9 @@ public class MultiSelect extends ListUIBean {
         if (choiceValue != null) {
         	addParameter("choiceValue", findString(choiceValue));
         }
+        if (isChoice != null) {
+        	addParameter("isChoice", findString(isChoice));
+        }
         if (choiceName != null) {
         	addParameter("choiceName", findString(choiceName));
         }
@@ -99,6 +103,12 @@ public class MultiSelect extends ListUIBean {
 	}
     public void setChoiceName(String choiceName) {
 		this.choiceName = choiceName;
+	}
+    public String getIsChoice() {
+		return isChoice;
+	}
+    public void setIsChoice(String isChoice) {
+		this.isChoice = isChoice;
 	}
     public String getPlaceholder() {
 		return placeholder;

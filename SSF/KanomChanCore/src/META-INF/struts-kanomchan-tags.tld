@@ -590,12 +590,18 @@
     </attribute>
     <attribute>
       <description><![CDATA[if true show choice]]></description>
+      <name>isChoice</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[value of choice]]></description>
       <name>choiceValue</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <description><![CDATA[if true show choice]]></description>
+      <description><![CDATA[name of varieble of choice]]></description>
       <name>choiceName</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>

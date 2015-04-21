@@ -69,11 +69,11 @@
 <#elseif parameters.name??>
 <span class="${parameters.name}">
 </#if>
-<#if parameters.choiceValue?default("true") == "true">
+<#if parameters.isChoice?default("false") == "true">
 	<#if stack.findValue(parameters.choiceName+".choice"+parameters.id)??>
 	<#assign checkChoiceKey = stack.findValue(parameters.choiceName+".choice"+parameters.id)>
 	<#else>
-	<#assign checkChoiceKey = "I">
+	<#assign checkChoiceKey = "">
 	</#if>
 	<div class="radio radio-inline"><input type="radio" 
 	<#if parameters.choiceName??>
@@ -83,9 +83,16 @@
 	</#if>
 	 id="${parameters.id}-option1"
 	 value="I"
-	 <#if checkChoiceKey == "I">
-	 	checked="checked"
- 	 </#if>
+	 <#if checkChoiceKey != "">
+	 	<#if checkChoiceKey == "I">
+		 	checked="checked"
+	 	</#if>
+	 	<#else>
+	 	<#if parameters.choiceValue?default("I") == "I">
+	 		checked="checked"
+	 	</#if>
+	 </#if>
+ 	 
 	><label for="${parameters.id}-option1" class=""><@s.text name="MULTI_SELECT_SPECIFIC_VALUE"></@s.text></label></div>&nbsp</lt>
 
 	<div class="radio radio-inline"><input type="radio" 
@@ -96,8 +103,14 @@
 	</#if>
 	 id="${parameters.id}-option2"
 	 value="E"
-	 <#if checkChoiceKey == "E">
-	 checked="checked"
+	 <#if checkChoiceKey != "">
+		 <#if checkChoiceKey == "E">
+		 	checked="checked"
+		 </#if>
+	 	<#else>
+	 	<#if parameters.choiceValue?default("I") == "E">
+	 		checked="checked"
+	 	</#if>
 	 </#if>
 	><label for="${parameters.id}-option2" class=""><@s.text name="MULTI_SELECT_EXCEPT_VALUE"></@s.text></label></div></lt>
 	 
@@ -109,8 +122,14 @@
 	</#if>
  	id="${parameters.id}-option3"
  	value="A"
- 	 <#if checkChoiceKey == "A">
-	 checked="checked"
+ 	 <#if checkChoiceKey != "">
+ 	 	<#if checkChoiceKey == "A">
+			checked="checked"
+		</#if>
+	 	<#else>
+	 	<#if parameters.choiceValue?default("I") == "A">
+	 		checked="checked"
+	 	</#if>
 	 </#if>
 	><label for="${parameters.id}-option3" class=""><@s.text name="MULTI_SELECT_ALL"></@s.text></label></div>&nbsp</lt>
 
@@ -216,7 +235,7 @@
 
 </select>
 <#--
-<#if parameters.choiceValue?default("true") == "true">
+<#if parameters.isChoice?default("false") == "true">
 <label class="inline pull-right" style="color:#C9C9C9;">* If you want to select all value please leave it blank </label>
 </#if>
 -->
@@ -271,11 +290,17 @@
 	$("#${parameters.id}-option1, #${parameters.id}-option2").click(function() {
 		$("#s2id_${parameters.id?html}").fadeIn(200);
 	});
-	<#if parameters.choiceValue?default("true") == "true">
+	<#if parameters.isChoice?default("false") == "true">
 		<#if checkChoiceKey == "A">
 			$("#s2id_${parameters.id?html}").hide();
 		</#if>
 	</#if>
+	<#if checkChoiceKey != "">
+	 	<#else>
+	 	<#if parameters.choiceValue?default("I") == "A">
+			$("#s2id_${parameters.id?html}").hide();
+		</#if>
+	 </#if>
 	</script>
 
 <#if parameters.multiple?default(false)>
