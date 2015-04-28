@@ -2,6 +2,7 @@ package org.kanomchan.projectname.security.authorize.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.kanomchan.core.common.bean.ActionBean;
 import org.kanomchan.core.common.dao.JdbcCommonDaoImpl;
@@ -9,6 +10,7 @@ import org.kanomchan.core.security.authorize.dao.ActionDao;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
 
 public class ActionDaoImpl extends JdbcCommonDaoImpl implements ActionDao {
 	
@@ -31,11 +33,13 @@ public class ActionDaoImpl extends JdbcCommonDaoImpl implements ActionDao {
 	}
 
 	
-	private static final String SQL_ACTION_ACTION_ID = " SELECT ID_ACTION ,PAGE_NAME ,ACTION_NAME ,NAME_SPACE ,URL ,TYPE ,ID_MENU ,ID_FUNCTION  FROM SYS_M_ACTION WHERE ID_ACTION = ? " ;
+	private static final String SQL_ACTION_ACTION_ID = " SELECT ID_ACTION ,PAGE_NAME ,ACTION_NAME ,NAME_SPACE ,URL ,TYPE ,ID_MENU ,ID_FUNCTION  FROM SYS_M_ACTION WHERE ID_ACTION = ? AND STATUS = 'A' " ;
 	
-	private static final String SQL_ACTION_MENU_ID = " SELECT ID_ACTION ,PAGE_NAME ,ACTION_NAME ,NAME_SPACE ,URL ,TYPE ,ID_MENU ,ID_FUNCTION  FROM SYS_M_ACTION WHERE ID_MENU = ? " ;
+	private static final String SQL_ACTION_MENU_ID = " SELECT ID_ACTION ,PAGE_NAME ,ACTION_NAME ,NAME_SPACE ,URL ,TYPE ,ID_MENU ,ID_FUNCTION  FROM SYS_M_ACTION WHERE ID_MENU = ? AND STATUS = 'A' " ;
 	
-	private static final String SQL_ACTION_NAMESPACE_ACTION_NAME = " SELECT ID_ACTION ,PAGE_NAME ,ACTION_NAME ,NAME_SPACE ,URL ,TYPE ,ID_MENU ,ID_FUNCTION  FROM SYS_M_ACTION WHERE NAME_SPACE = ? and ACTION_NAME = ? " ;
+	private static final String SQL_ACTION_NAMESPACE_ACTION_NAME = " SELECT ID_ACTION ,PAGE_NAME ,ACTION_NAME ,NAME_SPACE ,URL ,TYPE ,ID_MENU ,ID_FUNCTION  FROM SYS_M_ACTION WHERE TYPE = 'A' AND NAME_SPACE = ? and ACTION_NAME = ? AND STATUS = 'A' " ;
+	
+	private static final String SQL_ACTION_URL = " SELECT ID_ACTION ,PAGE_NAME ,ACTION_NAME ,NAME_SPACE ,URL ,TYPE ,ID_MENU ,ID_FUNCTION  FROM SYS_M_ACTION WHERE TYPE = 'U' AND URL = ? AND STATUS = 'A' " ;
 	
 	protected static final RowMapper<ActionBean> ACTION_MAPPER = new RowMapper<ActionBean>() {
 		
@@ -56,7 +60,7 @@ public class ActionDaoImpl extends JdbcCommonDaoImpl implements ActionDao {
 	};
 
 	@Override
-//	@TriggersRemove(cacheName="getActionByActionId", removeAll=true)
+	@TriggersRemove(cacheName="getActionByActionId", removeAll=true)
 	public void refresh() {
 		// TODO Auto-generated method stub
 		
@@ -64,8 +68,17 @@ public class ActionDaoImpl extends JdbcCommonDaoImpl implements ActionDao {
 
 	@Override
 	public ActionBean getActionByUrl(String url) {
-		// TODO Auto-generated method stub
-		return null;
+		return nativeQueryOneRow(SQL_ACTION_URL, ACTION_MAPPER,url);
+	}
+
+	@Override
+	public List<ActionBean> getActionByUrlList(String url) {
+		return nativeQuery(SQL_ACTION_URL, ACTION_MAPPER,url);
+	}
+
+	@Override
+	public List<ActionBean> getActionByNamespaceAndActionNameList(String namespace, String actionName) {
+		return nativeQuery(SQL_ACTION_NAMESPACE_ACTION_NAME, ACTION_MAPPER,namespace,actionName);
 	}
 
 }
