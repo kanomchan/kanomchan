@@ -385,6 +385,36 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							}
 						}
 					}
+					if(property.getColumnType() == ColumnType.joinColumns){
+						Object joinColumnsObject = property.getJoinColumns().getMethodGet().invoke(target);
+						if(joinColumnsObject!=null){
+							if(property.getEmbeddedId()!=null)
+								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
+							Object value = property.getMethodGet().invoke(joinColumnsObject);
+							if(value!=null){
+								if(value instanceof Number){
+									if(includeMinusOne || ((Number)value).intValue() !=-1){
+										listColumnName.add(columnName);
+										listParaName.add("?");
+										if(((Number)value).intValue() == 0)
+											value = null;
+										para.add(value);
+									}
+								}else{
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
+										value = null;
+									para.add(value);
+								}
+							}
+//							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+//							listColumnName.add(columnName);
+//							listParaName.add("?");
+//							para.add(value);
+						}
+						
+					}
 					if(property.getColumnType() == ColumnType.joinColumn){
 						Object value = method.invoke(target);
 						if(value != null){
