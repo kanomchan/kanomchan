@@ -11,6 +11,7 @@ public class Property {
 	private String columnName;
 	private Property EmbeddedId;
 	private EnumType enumType;
+	private Property joinColumns;
 	
 	public Method getMethodGet() {
 		return methodGet;
@@ -48,7 +49,14 @@ public class Property {
 	public void setEnumType(EnumType enumType) {
 		this.enumType = enumType;
 	}
+	public Property getJoinColumns() {
+		return joinColumns;
+	}
+	public void setJoinColumns(Property joinColumns) {
+		this.joinColumns = joinColumns;
+	}
 
+	
 	
 	
 }

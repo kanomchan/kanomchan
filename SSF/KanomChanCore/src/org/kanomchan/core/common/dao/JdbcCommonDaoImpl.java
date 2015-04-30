@@ -78,25 +78,25 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	};
 	
 	protected static final String SQL_COUNTY_LEFT_JOIN = new StringBuilder()
-		.append(" LEFT JOIN SYS_M_COUNTY COUNTY ON ")
-			.append(" COUNTY.ID_COUNTY = {prefix}.ID_COUNTY{subfix} ")
-			.append(" AND COUNTY.ID_CITY = {prefix}.ID_CITY{subfix} ")
-			.append(" AND COUNTY.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
-			.append(" AND COUNTY.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
-		.append(" LEFT JOIN SYS_M_CITY CITY ON  ")
-			.append(" CITY.ID_CITY = COUNTY.ID_CITY  ")
-			.append(" AND CITY.ID_PROVINCE = COUNTY.ID_PROVINCE ")
-			.append(" AND CITY.ID_COUNTRY = COUNTY.ID_COUNTRY ")
-		.append(" LEFT JOIN SYS_M_PROVINCE PROVINCE ON   ")
-			.append(" CITY.ID_PROVINCE = COUNTY.ID_PROVINCE ")
-			.append(" AND CITY.ID_COUNTRY = COUNTY.ID_COUNTRY ")
-		.append(" LEFT JOIN SYS_M_COUNTRY COUNTRY  ON ")
-			.append("CITY.ID_COUNTRY = COUNTY.ID_COUNTRY ")
+		.append(" LEFT JOIN SYS_M_COUNTY COUNTY{map} ON ")
+			.append(" COUNTY{map}.ID_COUNTY = {prefix}.ID_COUNTY{subfix} ")
+			.append(" AND COUNTY{map}.ID_CITY = {prefix}.ID_CITY{subfix} ")
+			.append(" AND COUNTY{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
+			.append(" AND COUNTY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
+		.append(" LEFT JOIN SYS_M_CITY CITY{map} ON  ")
+			.append(" CITY{map}.ID_CITY = COUNTY{map}.ID_CITY  ")
+			.append(" AND CITY{map}.ID_PROVINCE = COUNTY{map}.ID_PROVINCE ")
+			.append(" AND CITY{map}.ID_COUNTRY = COUNTY{map}.ID_COUNTRY ")
+		.append(" LEFT JOIN SYS_M_PROVINCE PROVINCE{map} ON   ")
+			.append(" PROVINCE{map}.ID_PROVINCE = COUNTY{map}.ID_PROVINCE ")
+			.append(" AND PROVINCE{map}.ID_COUNTRY = COUNTY{map}.ID_COUNTRY ")
+		.append(" LEFT JOIN SYS_M_COUNTRY COUNTRY{map}  ON ")
+			.append("COUNTRY{map}.ID_COUNTRY = COUNTY{map}.ID_COUNTRY ")
 		.toString();
 	
 	protected static final String SQL_COUNTY_SELECT = ",COUNTRY.* ,PROVINCE.*,CITY.* , COUNTY.* ";
-	protected static String GEN_SQL_COUNTY_LEFT_JOIN(String prefix,String subfix){
-		return new StringBuilder(SQL_COUNTY_LEFT_JOIN).toString().replaceAll("\\{prefix\\}", prefix).replaceAll("\\{subfix\\}", subfix);
+	protected static String GEN_SQL_COUNTY_LEFT_JOIN(String prefix,String subfix,String map){
+		return new StringBuilder(SQL_COUNTY_LEFT_JOIN).toString().replaceAll("\\{prefix\\}", prefix).replaceAll("\\{subfix\\}", subfix).replaceAll("\\{map\\}", map);
 	}
 //	executeNativeSQL
 	@Override
@@ -620,6 +620,36 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							}
 						}
 					}
+					if(property.getColumnType() == ColumnType.joinColumns){
+						Object joinColumnsObject = property.getJoinColumns().getMethodGet().invoke(target);
+						if(joinColumnsObject!=null){
+							if(property.getEmbeddedId()!=null)
+								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
+							Object value = property.getMethodGet().invoke(joinColumnsObject);
+							if(value!=null){
+								if(value instanceof Number){
+									if(includeMinusOne || ((Number)value).intValue() !=-1){
+										listColumnName.add(columnName);
+										listParaName.add("?");
+										if(((Number)value).intValue() == 0)
+											value = null;
+										para.add(value);
+									}
+								}else{
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
+										value = null;
+									para.add(value);
+								}
+							}
+//							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+//							listColumnName.add(columnName);
+//							listParaName.add("?");
+//							para.add(value);
+						}
+						
+					}
 					if(property.getColumnType() == ColumnType.joinColumn){
 						Object value = method.invoke(target);
 						if(value != null){
@@ -662,7 +692,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					}
 					
 					if(property.getColumnType() == ColumnType.embeddedId){
-						Object embeddedIdObject = methodGetId.invoke(target);
+						Object embeddedIdObject = property.getEmbeddedId().getMethodGet().invoke(target);
 						if(embeddedIdObject!=null){
 							Object valueEmbeddedId = method.invoke(embeddedIdObject);
 							if(valueEmbeddedId!=null){
@@ -739,6 +769,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		
 		return target;
+	}
+	
+	private Object getData(Method method,Object target){
+		return null;
 	}
 	@Override
 	public <T extends Object> T delete(T target){

@@ -36,6 +36,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -163,6 +164,7 @@ public class JPAUtil {
 			Id id = null ;
 			AttributeOverrides attributeOverrides = null  ;
 			JoinColumn joinColumn = null ;
+			JoinColumns joinColumns = null ;
 			Enumerated enumerated = null ;
 			Embedded embedded = null ;
 			OneToMany oneToMany = null;
@@ -172,6 +174,7 @@ public class JPAUtil {
 				 id = field.getAnnotation(Id.class);
 				 attributeOverrides  = field.getAnnotation(AttributeOverrides.class);
 				 joinColumn = field.getAnnotation(JoinColumn.class);
+				 joinColumns = field.getAnnotation(JoinColumns.class);
 				 enumerated = field.getAnnotation(Enumerated.class);
 				 embedded = field.getAnnotation(Embedded.class);
 				 oneToMany = field.getAnnotation(OneToMany.class);
@@ -187,6 +190,8 @@ public class JPAUtil {
 				attributeOverrides  = methodGet.getAnnotation(AttributeOverrides.class);
 			if (joinColumn == null)
 				joinColumn = methodGet.getAnnotation(JoinColumn.class);
+			if (joinColumns == null)
+				joinColumns = methodGet.getAnnotation(JoinColumns.class);
 			if (enumerated == null)
 				enumerated = methodGet.getAnnotation(Enumerated.class);
 			if (embedded == null)
@@ -218,6 +223,40 @@ public class JPAUtil {
 					}
 				}
 
+			}else if(joinColumns!=null){
+				Property property = new Property();
+				property.setMethodGet(methodGet);
+				property.setMethodSet(methodSet);
+				property.setColumnType(ColumnType.joinColumns);
+//				classMapper.getColumn().put(joinColumn.name(), property); // old version
+				JoinColumn[] ls = joinColumns.value();
+				if(ls!=null&&ls.length>0){
+					for (JoinColumn joinColumnMuti : ls) {
+						List<Property> properties = classMapper.getColumn().get(joinColumnMuti.name());
+						if(properties==null)
+							properties = new ArrayList<Property>();
+//						joinColumn2
+						String joinColumnMutiName = joinColumnMuti.referencedColumnName();
+						List<Property> properties2 = getClassMapper(methodGet.getReturnType()).getColumn().get(joinColumnMutiName);
+						if(properties2!=null){
+							for (Property property2 : properties2) {
+									Property propertyjoinColumnMuti = new Property();
+									propertyjoinColumnMuti.setMethodGet(property2.getMethodGet());
+									propertyjoinColumnMuti.setMethodSet(property2.getMethodSet());
+									propertyjoinColumnMuti.setColumnName(joinColumnMuti.name());
+									propertyjoinColumnMuti.setEmbeddedId(property2.getEmbeddedId());
+									propertyjoinColumnMuti.setJoinColumns(property);
+									propertyjoinColumnMuti.setColumnType(ColumnType.joinColumns);
+									properties.add(propertyjoinColumnMuti);
+							}
+							
+							classMapper.getColumn().put(joinColumnMuti.name(), properties);
+							
+						}
+						
+					}
+				}
+				
 			}else if(joinColumn!=null){
 				Property property = new Property();
 				property.setMethodGet(methodGet);
@@ -439,6 +478,27 @@ public class JPAUtil {
 						property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
 						
 						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
+					}else if(ColumnType.joinColumns == property.getColumnType()){
+						objectData = property.getJoinColumns().getMethodGet().invoke(traget);
+						if(objectData == null){
+							objectData = property.getJoinColumns().getMethodSet().getParameterTypes()[0].newInstance();
+							property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
+						}
+							
+						if(property.getEmbeddedId()!=null){
+							Object objectDataEm = property.getEmbeddedId().getMethodGet().invoke(objectData);
+							if(objectDataEm==null){
+								objectDataEm = property.getEmbeddedId().getMethodSet().getParameterTypes()[0].newInstance();
+								property.getEmbeddedId().getMethodSet().invoke(objectData,objectDataEm);
+								objectData = objectDataEm;
+							}
+								
+								
+						}
+							
+						property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
+						
+//						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
 					}else if(ColumnType.embedded == property.getColumnType()){
 						objectData = property.getEmbeddedId().getMethodGet().invoke(traget);
 						if(objectData == null)
