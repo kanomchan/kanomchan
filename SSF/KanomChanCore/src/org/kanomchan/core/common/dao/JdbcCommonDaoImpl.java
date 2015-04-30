@@ -76,6 +76,28 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			return resultSet.getString(1);
 		}
 	};
+	
+	protected static final String SQL_COUNTY_LEFT_JOIN = new StringBuilder()
+		.append(" LEFT JOIN SYS_M_COUNTY COUNTY ON ")
+			.append(" COUNTY.ID_COUNTY = {prefix}.ID_COUNTY{subfix} ")
+			.append(" AND COUNTY.ID_CITY = {prefix}.ID_CITY{subfix} ")
+			.append(" AND COUNTY.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
+			.append(" AND COUNTY.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
+		.append(" LEFT JOIN SYS_M_CITY CITY ON  ")
+			.append(" CITY.ID_CITY = COUNTY.ID_CITY  ")
+			.append(" AND CITY.ID_PROVINCE = COUNTY.ID_PROVINCE ")
+			.append(" AND CITY.ID_COUNTRY = COUNTY.ID_COUNTRY ")
+		.append(" LEFT JOIN SYS_M_PROVINCE PROVINCE ON   ")
+			.append(" CITY.ID_PROVINCE = COUNTY.ID_PROVINCE ")
+			.append(" AND CITY.ID_COUNTRY = COUNTY.ID_COUNTRY ")
+		.append(" LEFT JOIN SYS_M_COUNTRY COUNTRY  ON ")
+			.append("CITY.ID_COUNTRY = COUNTY.ID_COUNTRY ")
+		.toString();
+	
+	protected static final String SQL_COUNTY_SELECT = ",COUNTRY.* ,PROVINCE.*,CITY.* , COUNTY.* ";
+	protected static String GEN_SQL_COUNTY_LEFT_JOIN(String prefix,String subfix){
+		return new StringBuilder(SQL_COUNTY_LEFT_JOIN).toString().replaceAll("\\{prefix\\}", prefix).replaceAll("\\{subfix\\}", subfix);
+	}
 //	executeNativeSQL
 	@Override
 	public int executeNativeSQL(String sql) {
