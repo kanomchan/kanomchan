@@ -48,19 +48,19 @@ public class UserMenuDaoImpl extends JdbcCommonDaoImpl implements UserMenuDao {
 			if(rs.getObject("ID_PARENT") == null){
 				menu.setParentId(null);
 			}else{
-				menu.setParentId(rs.getInt("ID_PARENT"));
+				menu.setParentId(rs.getLong("ID_PARENT"));
 			}
 			if(rs.getObject("LEVEL") == null){
 				menu.setLevel(null);
 			}else{
-				menu.setLevel(rs.getInt("LEVEL"));
+				menu.setLevel(rs.getLong("LEVEL"));
 			}
-			menu.setMenuId(rs.getInt("ID_MENU"));
+			menu.setMenuId(rs.getLong("ID_MENU"));
 			menu.setMenuName(rs.getString("NAME"));
 			menu.setMenuType(rs.getString("MENU_TYPE"));
 			menu.setObjId(rs.getString("ID_FUNCTION"));
 			
-			menu.setActionId(rs.getInt("ID_ACTION"));
+			menu.setActionId(rs.getLong("ID_ACTION"));
 		
 			return menu;
 		}

@@ -16,13 +16,13 @@ public class ActionDaoImpl extends JdbcCommonDaoImpl implements ActionDao {
 	
 
 	@Override
-	public ActionBean getActionByMenuId(Integer menuId) {
+	public ActionBean getActionByMenuId(Long menuId) {
 		return nativeQueryOneRow(SQL_ACTION_MENU_ID, ACTION_MAPPER,menuId);
 	}
 	
 	@Override
 	@Cacheable(cacheName = "getActionByActionId")
-	public ActionBean getActionByActionId(Integer actionId) {
+	public ActionBean getActionByActionId(Long actionId) {
 		return nativeQueryOneRow(SQL_ACTION_ACTION_ID, ACTION_MAPPER,actionId);
 	}
 

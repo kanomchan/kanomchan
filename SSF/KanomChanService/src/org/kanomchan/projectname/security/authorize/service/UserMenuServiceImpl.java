@@ -53,7 +53,7 @@ public class UserMenuServiceImpl implements UserMenuService {
 		List<Menu> menuList = userMenuDao.findAll();
 		
 		List<MenuBean> result = new LinkedList<MenuBean>();//output main list
-		HashMap<Integer, MenuBean> lookup = new HashMap<Integer, MenuBean>();//lookup bean parent { for bean chide find bean parent }
+		HashMap<Long, MenuBean> lookup = new HashMap<Long, MenuBean>();//lookup bean parent { for bean chide find bean parent }
 		if(menuList!=null&&menuList.size()!=0){
 //			Set<String> privileges = userBean.getPrivileges();
 			if(privileges!=null){

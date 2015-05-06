@@ -45,9 +45,9 @@ public class UserNavigationServiceImpl implements UserNavigationService{
 		if(currentAction!=null){
 			List<Menu> menuList = userMenuDao.findAll();
 			List<Menu> currentMenuList = userMenuDao.findAllByAction(currentAction.getActionId());
-			Integer parent = currentMenuList.get(0).getParentId();
+			Long parent = currentMenuList.get(0).getParentId();
 			LinkedList<MenuBean> result = new LinkedList<MenuBean>();
-			HashMap<Integer, MenuBean> lookup = new HashMap<Integer, MenuBean>();
+			HashMap<Long, MenuBean> lookup = new HashMap<Long, MenuBean>();
 			if(menuList!=null&&menuList.size()!=0){
 				for (Menu menu : menuList) {
 					MenuBean menuBean = new MenuBean();

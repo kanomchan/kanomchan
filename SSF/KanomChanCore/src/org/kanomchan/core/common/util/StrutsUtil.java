@@ -129,7 +129,7 @@ public class StrutsUtil {
 		return listOut;
 	}
 	
-	public static MenuBean find(String action , int menuId){
+	public static MenuBean find(String action , Long menuId){
 		Map<Integer, MenuBean> mapMenu = (Map<Integer, MenuBean>)ActionContext.getContext().getSession().get(CommonConstant.SESSION.MENU_BEAN_MAP_KEY);
 		MenuBean menuBeanOut = null;
 		MenuBean menuBean = mapMenu.get(menuId);

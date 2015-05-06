@@ -8,17 +8,17 @@ import org.kanomchan.core.security.authorize.bean.MenuBean;
 public class MenuVO {
 	
 	private List<MenuBean> menuBeans;
-	private Map<Integer, MenuBean> lookupMap;
+	private Map<Long, MenuBean> lookupMap;
 	public List<MenuBean> getMenuBeans() {
 		return menuBeans;
 	}
 	public void setMenuBeans(List<MenuBean> menuBeans) {
 		this.menuBeans = menuBeans;
 	}
-	public Map<Integer, MenuBean> getLookupMap() {
+	public Map<Long, MenuBean> getLookupMap() {
 		return lookupMap;
 	}
-	public void setLookupMap(Map<Integer, MenuBean> lookupMap) {
+	public void setLookupMap(Map<Long, MenuBean> lookupMap) {
 		this.lookupMap = lookupMap;
 	}
 	

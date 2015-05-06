@@ -8,9 +8,9 @@ public interface ActionDao {
 	
 //	public ActionBean getAction(Integer menuId);
 
-	public ActionBean getActionByActionId(Integer actionId);
+	public ActionBean getActionByActionId(Long actionId);
 
-	public ActionBean getActionByMenuId(Integer menuId);
+	public ActionBean getActionByMenuId(Long menuId);
 	
 	public ActionBean getActionByUrl(String url);
 	
