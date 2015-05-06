@@ -1,12 +1,12 @@
 package org.kanomchan.core.security.authorize.bean;
 
 public class Menu {
-	private Integer menuId;
+	private Long menuId;
 	private String menuName;
-	private Integer level;
+	private Long level;
 	private String objId;
-	private Integer actionId;
-	private Integer parentId;
+	private Long actionId;
+	private Long parentId;
 	private String MenuType;
 	
 	public String getMenuName() {
@@ -22,29 +22,29 @@ public class Menu {
 		this.objId = objId;
 	}
 
-	public Integer getActionId() {
+	public Long getActionId() {
 		return actionId;
 	}
-	public void setActionId(Integer actionId) {
+	public void setActionId(Long actionId) {
 		this.actionId = actionId;
 	}
-	public Integer getParentId() {
+	public Long getParentId() {
 		return parentId;
 	}
-	public void setParentId(Integer parentId) {
+	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
-	public Integer getMenuId() {
+	public Long getMenuId() {
 		return menuId;
 	}
-	public void setMenuId(Integer menuId) {
+	public void setMenuId(Long menuId) {
 		this.menuId = menuId;
 	}
 	
-	public void setLevel(Integer level) {
+	public void setLevel(Long level) {
 		this.level = level;
 	}
-	public Integer getLevel() {
+	public Long getLevel() {
 		return level;
 	}
 	public String getMenuType() {
