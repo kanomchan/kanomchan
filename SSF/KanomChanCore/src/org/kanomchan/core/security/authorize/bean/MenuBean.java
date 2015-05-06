@@ -19,9 +19,9 @@ public class MenuBean implements Serializable {
 	private String url;
 	private String menuName;
 	private List<MenuBean> childMenu;
-	private Integer level;
-	private Integer menuId;
-	private Integer parentId;
+	private Long level;
+	private Long menuId;
+	private Long parentId;
 	private String type;
 	private ActionBean actionBean;
 	public String getUrl() {
@@ -49,23 +49,23 @@ public class MenuBean implements Serializable {
 	}
 
 
-	public Integer getLevel() {
+	public Long getLevel() {
 		return level;
 	}
 
-	public void setLevel(Integer level) {
+	public void setLevel(Long level) {
 		this.level = level;
 	}
-	public Integer getParentId() {
+	public Long getParentId() {
 		return parentId;
 	}
-	public void setParentId(Integer parentId) {
+	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
-	public Integer getMenuId() {
+	public Long getMenuId() {
 		return menuId;
 	}
-	public void setMenuId(Integer menuId) {
+	public void setMenuId(Long menuId) {
 		this.menuId = menuId;
 	}
 	public String getType() {
