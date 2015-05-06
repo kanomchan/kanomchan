@@ -48,6 +48,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected String dynamicParameterValue;
 	protected String dynamicParameterName;
 	protected String inputResultName;
+	protected String action;
+	protected String namespace;
 	
 	protected String expression;
 	
@@ -236,7 +238,21 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 		this.dynamicParameterName = dynamicParameterName;
 	}
 	
-	
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
 	
 	
 	
