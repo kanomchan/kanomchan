@@ -147,12 +147,13 @@ public class CommonDaoImpl implements CommonDao {
 	
 	
 	@Override
-	public void save(Object entity) throws RollBackTechnicalException {
+	public <T> T save(T entity) throws RollBackTechnicalException {
 		try {
-			entityManager.persist(entity);
+			 entityManager.persist(entity);
 			if (logger.isDebugEnabled()) {
 				logger.debug( entity.getClass().getSimpleName() + " persist successful"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
+			return entity;
 		} catch (RuntimeException re) {
 			logger.error("persist failed", re); //$NON-NLS-1$
 			throw new RollBackTechnicalException(CommonMessageCode.COM4994, re);
@@ -209,13 +210,14 @@ public class CommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public void delete(Object entity) throws RollBackTechnicalException {
+	public <T> T delete(T entity) throws RollBackTechnicalException {
 		try{
 			entity = entityManager.merge(entity);
 			entityManager.remove(entity);
 			if(logger.isDebugEnabled()){
 				logger.debug(entity.getClass().getSimpleName()+ " remove successful");
 			}
+			return entity;
 		}catch(RuntimeException re){
 			logger.error("remove failed", re);
 			throw new RollBackTechnicalException(CommonMessageCode.COM4992, re);
@@ -277,46 +279,46 @@ public class CommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> List<T> findByExample(Object example) throws RollBackTechnicalException {
+	public <T> List<T> findByExample(T example) throws RollBackTechnicalException {
 		return findByExample(example, null, null);
 	}
 
 	@Override
-	public <T> List<T> findByExample(Object example, String extraWhereClause) throws RollBackTechnicalException {
+	public <T> List<T> findByExample(T example, String extraWhereClause) throws RollBackTechnicalException {
 		return findByExample(example, null, extraWhereClause);
 	}
 
 	@Override
-	public <T> List<T> findByExample(Object example, PagingBean pagingBean) throws RollBackTechnicalException {
+	public <T> List<T> findByExample(T example, PagingBean pagingBean) throws RollBackTechnicalException {
 		return findByExample(example,pagingBean,null);
 	}
 
 	@Override
-	public <T> List<T> findByExample(Object example, PagingBean pagingBean, String extraWhereClause) throws RollBackTechnicalException {
+	public <T> List<T> findByExample(T example, PagingBean pagingBean, String extraWhereClause) throws RollBackTechnicalException {
 		return findByExampleLike(example, pagingBean, extraWhereClause, false);
 	}
 
 	@Override
-	public <T> List<T> findByExampleLike(Object example) throws RollBackTechnicalException {
+	public <T> List<T> findByExampleLike(T example) throws RollBackTechnicalException {
 		return findByExampleLike(example, null, null);
 	}
 
 	@Override
-	public <T> List<T> findByExampleLike(Object example, String extraWhereClause) throws RollBackTechnicalException {
+	public <T> List<T> findByExampleLike(T example, String extraWhereClause) throws RollBackTechnicalException {
 		return findByExampleLike(example, null, extraWhereClause);
 	}
 
 	@Override
-	public <T> List<T> findByExampleLike(Object example, PagingBean pagingBean) throws RollBackTechnicalException {
+	public <T> List<T> findByExampleLike(T example, PagingBean pagingBean) throws RollBackTechnicalException {
 		return findByExampleLike(example, pagingBean, null);
 	}
 
 	@Override
-	public <T> List<T> findByExampleLike(Object example, PagingBean pagingBean, String extraWhereClause) throws RollBackTechnicalException {
+	public <T> List<T> findByExampleLike(T example, PagingBean pagingBean, String extraWhereClause) throws RollBackTechnicalException {
 		return findByExampleLike(example, pagingBean, extraWhereClause, true);
 	}
 	
-	public <T> List<T> findByExampleLike(Object example, PagingBean pagingBean, String extraWhereClause,boolean like) throws RollBackTechnicalException {
+	public <T> List<T> findByExampleLike(T example, PagingBean pagingBean, String extraWhereClause,boolean like) throws RollBackTechnicalException {
 		if(pagingBean==null){
 			List<Criteria> criterias =  JPAUtil.beanToParamterList(example);
 			String queryString  = genQueryStringByExample(example.getClass(), criterias, null, extraWhereClause, like);
@@ -350,40 +352,36 @@ public class CommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T> List<T> findAll(Class<T> clazz, PagingBean pagingBean) throws RollBackTechnicalException {
-		if(pagingBean == null){
-			
-		}
-		
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> List<T> query(String jpql) throws RollBackTechnicalException {
+	public <T> List<T> query(String jpql, Class<T> clazz) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> List<T> query(String jpql, Object... params) throws RollBackTechnicalException {
+	public <T> List<T> query(String jpql, Class<T> clazz, Object... params) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> List<T> query(String jpql, String jpqlCount, PagingBean pagingBean, Object... params) throws RollBackTechnicalException {
+	public <T> List<T> query(String jpql, Class<T> clazz, String jpqlCount, PagingBean pagingBean, Object... params) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object querySingleResult(String jpql) throws RollBackTechnicalException {
+	public <T> T querySingleResult(String jpql, Class<T> clazz) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object querySingleResult(String jpql, Object... params) throws RollBackTechnicalException {
+	public <T> T querySingleResult(String jpql, Class<T> clazz, Object... params) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -404,18 +402,6 @@ public class CommonDaoImpl implements CommonDao {
 	public int executeNativeSQL(String sql, Object... params) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public <T> List<T> nativeQuery(String sql) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T> List<T> nativeQuery(String sql, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -443,13 +429,13 @@ public class CommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public Object nativeQuerySingleResult(String sql) throws RollBackTechnicalException {
+	public <T> Object nativeQuerySingleResult(String sql, Class<T> clazz) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object nativeQuerySingleResult(String sql, Object... params) throws RollBackTechnicalException {
+	public <T> Object nativeQuerySingleResult(String sql, Class<T> clazz, Object... params) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -457,13 +443,13 @@ public class CommonDaoImpl implements CommonDao {
 	@Override
 	public void flush() throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void refresh(Object entity) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

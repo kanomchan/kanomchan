@@ -15,7 +15,7 @@ public interface CommonDao {
 	 * @param entity - Entity object.
 	 * @throws RollBackTechnicalException
 	 */
-	public void save(Object entity) throws RollBackTechnicalException;
+	public <T> T save(T target) throws RollBackTechnicalException;
 	
 	/**
 	 * Update method that merge the state of the given entity into the current persistence context.  <br/>
@@ -24,7 +24,7 @@ public interface CommonDao {
 	 * @return The instance that the state was merged to .
 	 * @throws TechnicalException
 	 */
-	public Object update(Object entity) throws RollBackTechnicalException;
+	public <T> T update(T entity) throws RollBackTechnicalException;
 	
 	/**
 	 * Execute Update with JPQL
@@ -47,7 +47,7 @@ public interface CommonDao {
 	 * @param entity - Instant of an entity.
 	 * @throws RollBackTechnicalException
 	 */
-	public void delete(Object entity) throws RollBackTechnicalException;
+	public <T> T delete(T entity) throws RollBackTechnicalException;
 	
 	/**
 	 * Find by primary key. 
@@ -77,7 +77,7 @@ public interface CommonDao {
 	 * @return List of Objects return by the query
 	 * @throws RollBackTechnicalException
 	 */
-	public <T extends Object > List<T> findByExample(final Object example) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExample(final T example) throws RollBackTechnicalException;
 	
 	/**
 	 * Execute a query based on the given example entity object.
@@ -89,7 +89,7 @@ public interface CommonDao {
 	 * @return List of Objects return by the query
 	 * @throws RollBackTechnicalException
 	 */
-	public <T extends Object > List<T> findByExample(final Object example, final String extraWhereClause) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExample(final T example, final String extraWhereClause) throws RollBackTechnicalException;
 	
 	/**
 	 * Execute a query based on the given example entity object. Control paging by pagingBean.  
@@ -99,7 +99,7 @@ public interface CommonDao {
 	 * @return List of Objects return by the query
 	 * @throws RollBackTechnicalException
 	 */
-	public <T extends Object > List<T> findByExample(final Object example, PagingBean pagingBean) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExample(final T example, PagingBean pagingBean) throws RollBackTechnicalException;
 	
 	/**
 	 * Execute a query based on the given example entity object. Control paging by pagingBean. <br/>
@@ -112,18 +112,18 @@ public interface CommonDao {
 	 * @return List of Objects return by the query
 	 * @throws RollBackTechnicalException
 	 */
-	public <T extends Object > List<T> findByExample(final Object example, PagingBean pagingBean, final String extraWhereClause) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExample(final T example, PagingBean pagingBean, final String extraWhereClause) throws RollBackTechnicalException;
 	
 	/**
 	 * Same as findByExample() but use 'LIKE' to compare
 	 */
-	public <T extends Object > List<T> findByExampleLike( final Object example ) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExampleLike( final T example ) throws RollBackTechnicalException;
 
-	public <T extends Object > List<T> findByExampleLike( final Object example, final String extraWhereClause ) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExampleLike( final T example, final String extraWhereClause ) throws RollBackTechnicalException;
 
-	public <T extends Object > List<T> findByExampleLike( final Object example, PagingBean pagingBean ) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExampleLike( final T example, PagingBean pagingBean ) throws RollBackTechnicalException;
 
-	public <T extends Object > List<T> findByExampleLike( final Object example, PagingBean pagingBean, final String extraWhereClause ) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByExampleLike( final T example, PagingBean pagingBean, final String extraWhereClause ) throws RollBackTechnicalException;
 	
 	/**
 	 * Get list of all Objects( Records ) of the Class( Table ). <br/>
@@ -148,7 +148,7 @@ public interface CommonDao {
 	 * @param jpql - JPQL to query.
 	 * @return List of Objects return by the query
 	 */
-	public <T extends Object > List<T> query(String jpql) throws RollBackTechnicalException ;
+	public <T extends Object > List<T> query(String jpql, Class<T> clazz) throws RollBackTechnicalException ;
 	
 	/**
 	 * Query with JPQL
@@ -156,7 +156,7 @@ public interface CommonDao {
 	 * @param params - Objects to be used as parameter in JPQL.
 	 * @return List of Objects return by the query
 	 */
-	public <T extends Object > List<T> query(String jpql, final Object... params)throws RollBackTechnicalException;
+	public <T extends Object > List<T> query(String jpql, Class<T> clazz, final Object... params)throws RollBackTechnicalException;
 	
 	/**
 	 * Query with JPQL
@@ -166,7 +166,7 @@ public interface CommonDao {
 	 * @param params - Objects to be used as parameter in JPQL.
 	 * @return List of Objects return by the query
 	 */
-	public <T extends Object > List<T> query(String jpql, String jpqlCount, PagingBean pagingBean, Object... params)throws RollBackTechnicalException;
+	public <T extends Object > List<T> query(String jpql, Class<T> clazz, String jpqlCount, PagingBean pagingBean, Object... params)throws RollBackTechnicalException;
 
 	/**
 	 * Query with JPQL
@@ -188,9 +188,9 @@ public interface CommonDao {
 	 * @param jpql - JPQL to query.
 	 * @return Single Result Object
 	 */
-	public Object querySingleResult(String jpql)throws RollBackTechnicalException;
+	public <T extends Object> T querySingleResult(String jpql, Class<T> clazz)throws RollBackTechnicalException;
 	
-	public Object querySingleResult(String jpql, Object... params)throws RollBackTechnicalException;
+	public <T extends Object> T querySingleResult(String jpql, Class<T> clazz, Object... params)throws RollBackTechnicalException;
 	
 //	public Object querySingleResult(String jpql, final List<Criteria> list)throws RollBackTechnicalException;
 	
@@ -212,25 +212,25 @@ public interface CommonDao {
 	
 	public int executeNativeSQL(String sql, Object... params)throws RollBackTechnicalException;
 	
-	/**
-	 * Execute Native SQL for Query <br/>
-	 * Result as List<Object[]> ( So not easy to using the result ) <br/>
-	 *  <br/>
-	 * Example : <br/>
-	 * 	List<Object[]> result = (List<Object[]>) commonDAO.nativeQuery("SELECT * FROM AGI_USER") throws RollBackTechnicalException ; <br/>
-	 * 	for (Object[] objects : result) {			 <br/>
-	 * 		System.out.println( objects[0] + " : " + objects[1] ) throws RollBackTechnicalException ; <br/>
-	 * 	} <br/>
-	 *  <br/>
-	 * WARNING : Using Native SQL will may cause losing Database vendor migration ability <br/>
-	 * avoid specific vendor SQL Command as possible
-	 * @param sql - Native SQL 
-	 * @return Result as List<Object[]> ( So not easy to using the result )
-	 * @throws RollBackTechnicalException 
-	 */
-	public <T extends Object >  List<T> nativeQuery(String sql) throws RollBackTechnicalException ;
-
-	public <T extends Object >  List<T> nativeQuery(String sql, Object... params) throws RollBackTechnicalException ;
+//	/**
+//	 * Execute Native SQL for Query <br/>
+//	 * Result as List<Object[]> ( So not easy to using the result ) <br/>
+//	 *  <br/>
+//	 * Example : <br/>
+//	 * 	List<Object[]> result = (List<Object[]>) commonDAO.nativeQuery("SELECT * FROM AGI_USER") throws RollBackTechnicalException ; <br/>
+//	 * 	for (Object[] objects : result) {			 <br/>
+//	 * 		System.out.println( objects[0] + " : " + objects[1] ) throws RollBackTechnicalException ; <br/>
+//	 * 	} <br/>
+//	 *  <br/>
+//	 * WARNING : Using Native SQL will may cause losing Database vendor migration ability <br/>
+//	 * avoid specific vendor SQL Command as possible
+//	 * @param sql - Native SQL 
+//	 * @return Result as List<Object[]> ( So not easy to using the result )
+//	 * @throws RollBackTechnicalException 
+//	 */
+//	public <T extends Object >  List<T> nativeQuery(String sql) throws RollBackTechnicalException ;
+//
+//	public <T extends Object >  List<T> nativeQuery(String sql, Object... params) throws RollBackTechnicalException ;
 	
 	/**
 	 * Execute Native SQL for Query with Mapping Class <br/>
@@ -264,9 +264,9 @@ public interface CommonDao {
 	 * @param sql - Native SQL 
 	 * @return Single Result Object
 	 */
-	public Object nativeQuerySingleResult(String sql) throws RollBackTechnicalException ;
+	public <T extends Object > Object nativeQuerySingleResult(String sql, Class<T> clazz) throws RollBackTechnicalException ;
 	
-	public Object nativeQuerySingleResult(String sql, Object... params) throws RollBackTechnicalException ;
+	public <T extends Object > Object nativeQuerySingleResult(String sql, Class<T> clazz, Object... params) throws RollBackTechnicalException ;
 	
 	/**
 	 * 	Synchronize the persistence context to the underlying database. 
