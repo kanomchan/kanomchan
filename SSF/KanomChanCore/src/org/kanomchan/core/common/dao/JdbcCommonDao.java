@@ -66,6 +66,10 @@ public interface JdbcCommonDao {
 	public <T> T updateOnlyNotNullBasic(T target) throws RollBackTechnicalException;
 	
 	public <T> T get(Serializable target,  Class<T> clazz);
+	
+	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Long pkValue);
+	
+	public <T> List<T> getListByStatusAndPkValue(Class<T> clazz, String status, Long pkValue);
 
 	public <T> List<T> findAll(Class<T> class1);
 

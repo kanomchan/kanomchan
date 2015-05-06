@@ -929,6 +929,28 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		String sql = "select * from " + classMapper.getTableName() + " where " + property.getColumnName() + " = ?";
 		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
 	}
+	@Override
+	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Long pkValue){
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		Property property = classMapper.getPropertyId();
+		String sql = "select * from " + classMapper.getTableName() + " where STATUS = ? and " + property.getColumnName() + " = ? ";
+		if(status == null || "".equals(status))
+			return null;
+		if(pkValue == null || "".equals(pkValue))
+			return null;
+		return nativeQueryOneRow(sql, clazz, status, pkValue);
+	}
+	@Override
+	public <T> List<T> getListByStatusAndPkValue(Class<T> clazz, String status, Long pkValue){
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		Property property = classMapper.getPropertyId();
+		String sql = "select * from " + classMapper.getTableName() + " where STATUS = ? and " + property.getColumnName() + " = ? ";
+		if(status == null || "".equals(status))
+			return null;
+		if(pkValue == null || "".equals(pkValue))
+			return null;
+		return nativeQuery(sql, clazz, status, pkValue);
+	}
 //	@Override
 	public <T> List<T> findAll(Class<T> clazz) {
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
