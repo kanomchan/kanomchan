@@ -84,14 +84,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			.append(" AND COUNTY{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
 			.append(" AND COUNTY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
 		.append(" LEFT JOIN SYS_M_CITY CITY{map} ON  ")
-			.append(" CITY{map}.ID_CITY = COUNTY{map}.ID_CITY  ")
-			.append(" AND CITY{map}.ID_PROVINCE = COUNTY{map}.ID_PROVINCE ")
-			.append(" AND CITY{map}.ID_COUNTRY = COUNTY{map}.ID_COUNTRY ")
+			.append(" CITY{map}.ID_CITY = {prefix}.ID_CITY{subfix}  ")
+			.append(" AND CITY{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
+			.append(" AND CITY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
 		.append(" LEFT JOIN SYS_M_PROVINCE PROVINCE{map} ON   ")
-			.append(" PROVINCE{map}.ID_PROVINCE = COUNTY{map}.ID_PROVINCE ")
-			.append(" AND PROVINCE{map}.ID_COUNTRY = COUNTY{map}.ID_COUNTRY ")
+			.append(" PROVINCE{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
+			.append(" AND PROVINCE{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
 		.append(" LEFT JOIN SYS_M_COUNTRY COUNTRY{map}  ON ")
-			.append("COUNTRY{map}.ID_COUNTRY = COUNTY{map}.ID_COUNTRY ")
+			.append("COUNTRY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
 		.toString();
 	
 	protected static final String SQL_COUNTY_SELECT = ",COUNTRY.* ,PROVINCE.*,CITY.* , COUNTY.* ";
