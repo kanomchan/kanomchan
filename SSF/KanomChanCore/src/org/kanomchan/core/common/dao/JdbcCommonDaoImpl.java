@@ -930,7 +930,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
 	}
 	@Override
-	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Long pkValue){
+	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Serializable pkValue){
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		Property property = classMapper.getPropertyId();
 		String sql = "select * from " + classMapper.getTableName() + " where STATUS = ? and " + property.getColumnName() + " = ? ";
@@ -941,7 +941,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return nativeQueryOneRow(sql, clazz, status, pkValue);
 	}
 	@Override
-	public <T> List<T> getListByStatusAndPkValue(Class<T> clazz, String status, Long pkValue){
+	public <T> List<T> getListByStatusAndPkValue(Class<T> clazz, String status, Serializable pkValue){
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		Property property = classMapper.getPropertyId();
 		String sql = "select * from " + classMapper.getTableName() + " where STATUS = ? and " + property.getColumnName() + " = ? ";
