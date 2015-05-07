@@ -67,9 +67,9 @@ public interface JdbcCommonDao {
 	
 	public <T> T get(Serializable target,  Class<T> clazz);
 	
-	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Long pkValue);
+	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Serializable pkValue);
 	
-	public <T> List<T> getListByStatusAndPkValue(Class<T> clazz, String status, Long pkValue);
+	public <T> List<T> getListByStatusAndPkValue(Class<T> clazz, String status, Serializable pkValue);
 
 	public <T> List<T> findAll(Class<T> class1);
 
