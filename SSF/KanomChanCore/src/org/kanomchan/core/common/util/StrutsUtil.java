@@ -47,13 +47,15 @@ public class StrutsUtil {
 		List<T> list = new LinkedList<T>();
 		if(checkBoxs !=null){
 			for (CheckBox<T> checkBox : checkBoxs) {
-				if (checkBox.isCheck()) { //Status True
-					checkBox.getValue().setStatus(statusTrue);
-					list.add(checkBox.getValue());
-				}
-				if (!checkBox.isCheck()) { //Status False
-					checkBox.getValue().setStatus(statusFalse);
-					list.add(checkBox.getValue());
+				if(checkBox!=null){
+					if (checkBox.isCheck()) { //Status True
+						checkBox.getValue().setStatus(statusTrue);
+						list.add(checkBox.getValue());
+					}
+					else if(!checkBox.isCheck()) { //Status False
+						checkBox.getValue().setStatus(statusFalse);
+						list.add(checkBox.getValue());
+					}
 				}
 			}
 		}
