@@ -16,6 +16,7 @@ public interface CommonDao {
 	 * @throws RollBackTechnicalException
 	 */
 	public <T> T save(T target) throws RollBackTechnicalException;
+	public <T> T save(T target,String langCode3) throws RollBackTechnicalException;
 	
 	/**
 	 * Update method that merge the state of the given entity into the current persistence context.  <br/>
@@ -25,6 +26,7 @@ public interface CommonDao {
 	 * @throws TechnicalException
 	 */
 	public <T> T update(T entity) throws RollBackTechnicalException;
+	public <T> T update(T entity,String langCode3) throws RollBackTechnicalException;
 	
 	/**
 	 * Execute Update with JPQL
@@ -48,6 +50,7 @@ public interface CommonDao {
 	 * @throws RollBackTechnicalException
 	 */
 	public <T> T delete(T entity) throws RollBackTechnicalException;
+	public <T> T delete(T entity,String langCode3) throws RollBackTechnicalException;
 	
 	/**
 	 * Find by primary key. 

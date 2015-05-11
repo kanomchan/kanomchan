@@ -452,4 +452,22 @@ public class CommonDaoImpl implements CommonDao {
 		
 	}
 
+	@Override
+	public <T> T save(T target, String langCode3) throws RollBackTechnicalException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T update(T entity, String langCode3) throws RollBackTechnicalException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T delete(T entity, String langCode3) throws RollBackTechnicalException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
