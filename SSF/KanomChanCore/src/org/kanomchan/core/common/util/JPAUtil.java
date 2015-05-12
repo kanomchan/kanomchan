@@ -88,9 +88,9 @@ public class JPAUtil {
 	}
 	public static ClassMapper getClassMapper(Class<?> clazz){
 //		BeanInfo info = Introspector.getBeanInfo(clazz);
-		ClassMapper classMapper =mapClass.get(clazz.getName());
+//		ClassMapper classMapper =mapClass.get(clazz.getName());
 		
-//		ClassMapper classMapper = null;
+		ClassMapper classMapper = null;
 //			ClassMapper classMapper = mapClass.get(clazz.getName());
 		if (classMapper == null) {
 			Set<Method> methods = new HashSet<Method>();
@@ -229,34 +229,35 @@ public class JPAUtil {
 				joinColumnsProperty.setMethodSet(methodSet);
 				joinColumnsProperty.setColumnType(ColumnType.joinColumns);
 //				classMapper.getColumn().put(joinColumn.name(), property); // old version
-				JoinColumn[] ls = joinColumns.value();
-				if(ls!=null&&ls.length>0){
-					for (JoinColumn joinColumnMuti : ls) {
-						List<Property> properties = classMapper.getColumn().get(joinColumnMuti.name());
+				JoinColumn[] joinColumnsInJoinColumns = joinColumns.value();
+				if(joinColumnsInJoinColumns!=null&&joinColumnsInJoinColumns.length>0){
+					for (JoinColumn joinColumnNodeInJoinColumns : joinColumnsInJoinColumns) {
+						List<Property> properties = classMapper.getColumn().get(joinColumnNodeInJoinColumns.name());
 						if(properties==null)
 							properties = new ArrayList<Property>();
 //						joinColumn2
-						String joinColumnMutiName = joinColumnMuti.referencedColumnName();
-						List<Property> properties2 = getClassMapper(methodGet.getReturnType()).getColumn().get(joinColumnMutiName);
-						if(properties2!=null){
-							for (Property property2 : properties2) {
-								if(property2.getEmbeddedId()!=null &&property2.getEmbeddedId().getMethodSet().getGenericParameterTypes()[0].getClass().equals(methodGet.getGenericReturnType().getClass())){
+						String referencedColumnName = joinColumnNodeInJoinColumns.referencedColumnName();
+						List<Property> referencedPropertiesList = getClassMapper(methodGet.getReturnType()).getColumn().get(referencedColumnName);
+						if(referencedPropertiesList!=null){
+							for (Property referencedProperties : referencedPropertiesList) {
+								Property embeddedIdProperty = referencedProperties.getEmbeddedId();
+								if(embeddedIdProperty!=null 
+										&&!embeddedIdProperty.getMethodGet().getReturnType().getClass().equals(methodGet.getGenericReturnType().getClass())){
 									continue;
-								}
-								if(property2.getMethodSet()!=null &&property2.getMethodSet().getGenericParameterTypes()[0].getClass().equals(methodGet.getGenericReturnType().getClass())){
+								}else if(!referencedProperties.getMethodGet().getReturnType().getClass().equals(methodGet.getGenericReturnType().getClass())){
 									continue;
 								}
 									Property propertyjoinColumnMuti = new Property();
-									propertyjoinColumnMuti.setMethodGet(property2.getMethodGet());
-									propertyjoinColumnMuti.setMethodSet(property2.getMethodSet());
-									propertyjoinColumnMuti.setColumnName(joinColumnMuti.name());
-									propertyjoinColumnMuti.setEmbeddedId(property2.getEmbeddedId());
+									propertyjoinColumnMuti.setMethodGet(referencedProperties.getMethodGet());
+									propertyjoinColumnMuti.setMethodSet(referencedProperties.getMethodSet());
+									propertyjoinColumnMuti.setColumnName(joinColumnNodeInJoinColumns.name());
+									propertyjoinColumnMuti.setEmbeddedId(referencedProperties.getEmbeddedId());
 									propertyjoinColumnMuti.setJoinColumns(joinColumnsProperty);
 									propertyjoinColumnMuti.setColumnType(ColumnType.joinColumns);
 									properties.add(propertyjoinColumnMuti);
 							}
 							
-							classMapper.getColumn().put(joinColumnMuti.name(), properties);
+							classMapper.getColumn().put(joinColumnNodeInJoinColumns.name(), properties);
 							
 						}
 						
