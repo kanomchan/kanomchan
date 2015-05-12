@@ -2,6 +2,7 @@ package org.kanomchan.core.common.dao;
 
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -226,7 +227,7 @@ public class CommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> T findById(Class<T> clazz, Object id) throws RollBackTechnicalException {
+	public <T> T findById(Class<T> clazz, Serializable id) throws RollBackTechnicalException {
 		try{
 			T instance = entityManager.find(clazz, id);
 			return instance;
@@ -472,6 +473,12 @@ public class CommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T findById(Class<T> class1, Serializable id, String lang) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
