@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -75,9 +76,12 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return 0;
 	}
 	@Override
-	public <T> T findById(Class<T> clazz, Object id) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> T findById(Class<T> clazz, Serializable id) throws RollBackTechnicalException {
+		return get(id, clazz);
+	}
+	@Override
+	public <T> T findById(Class<T> clazz, Serializable id,String lang) throws RollBackTechnicalException {
+		return get(id,lang, clazz);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value) throws RollBackTechnicalException {

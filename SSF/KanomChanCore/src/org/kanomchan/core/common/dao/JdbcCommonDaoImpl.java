@@ -930,6 +930,13 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
 	}
 	@Override
+	public <T> T get(Serializable target,String lang,  Class<T> clazz) {
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		Property property = classMapper.getPropertyId();
+		String sql = "select * from " + classMapper.getTableName()+"_LANG " + " where " + property.getColumnName() + " = ? and STATUS = 'A' and LANG_CODE3 = ? ";
+		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target,lang);
+	}
+	@Override
 	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Serializable pkValue){
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		Property property = classMapper.getPropertyId();

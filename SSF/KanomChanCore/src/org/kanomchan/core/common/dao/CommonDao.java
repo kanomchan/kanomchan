@@ -1,10 +1,12 @@
 package org.kanomchan.core.common.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
+import org.kanomchan.core.common.exception.TechnicalException;
 
 public interface CommonDao {
 
@@ -60,7 +62,8 @@ public interface CommonDao {
 	 * @return The found entity instance or null if the entity does not exist 
 	 * @throws RollBackTechnicalException
 	 */
-	public <T extends Object > T findById(Class<T> clazz, Object id) throws RollBackTechnicalException;
+	public <T extends Object > T findById(Class<T> clazz, Serializable id) throws RollBackTechnicalException;
+	public <T extends Object > T findById(Class<T> class1, Serializable id, String lang) throws RollBackTechnicalException;
 	
 	/**
 	 * Find by property name.  <br/>
