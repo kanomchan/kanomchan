@@ -2,6 +2,7 @@ package org.kanomchan.core.common.dao;
 
 import java.util.List;
 
+import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 
@@ -280,4 +281,5 @@ public interface CommonDao {
 	 * 	Refresh the state of the instance from the database, overwriting changes made to the entity, if any. 
 	 */
 	public void refresh(Object entity) throws RollBackTechnicalException ;
+	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException;
 }

@@ -3,6 +3,7 @@ package org.kanomchan.core.common.dao;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.util.JPAUtil;
@@ -82,6 +83,10 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException {
+		return findByColumns(clazz, criteriaList, pagingBean);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackTechnicalException {
