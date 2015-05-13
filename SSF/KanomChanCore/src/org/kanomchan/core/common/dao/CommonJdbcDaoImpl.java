@@ -85,8 +85,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
-		return null;
+		return findByColumn(clazz, propertyName, value);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException {
