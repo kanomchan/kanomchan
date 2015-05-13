@@ -241,12 +241,16 @@ public class JPAUtil {
 						if(referencedPropertiesList!=null){
 							for (Property referencedProperties : referencedPropertiesList) {
 								Property embeddedIdProperty = referencedProperties.getEmbeddedId();
-								if(embeddedIdProperty!=null 
-										&&!embeddedIdProperty.getMethodGet().getReturnType().getClass().equals(methodGet.getGenericReturnType().getClass())){
-									continue;
-								}else if(!referencedProperties.getMethodGet().getReturnType().getClass().equals(methodGet.getGenericReturnType().getClass())){
-									continue;
+								if(embeddedIdProperty!=null){
+									if(!embeddedIdProperty.getMethodGet().getDeclaringClass().equals(methodGet.getReturnType())){
+										continue;
+									}
+								}else{
+									if(!referencedProperties.getMethodGet().getDeclaringClass().equals(methodGet.getReturnType())){
+										continue;
+									} 
 								}
+								
 									Property propertyjoinColumnMuti = new Property();
 									propertyjoinColumnMuti.setMethodGet(referencedProperties.getMethodGet());
 									propertyjoinColumnMuti.setMethodSet(referencedProperties.getMethodSet());
@@ -405,15 +409,11 @@ public class JPAUtil {
 				try {
 					t = clazz.newInstance();
 					ClassMapper classMapper = getClassMapper(clazz);
-//					Map<String, Property> columns = classMapper.getColumn();//oldversion
 					Map<String, List<Property>> columns = classMapper.getColumn();
 					ResultSetMetaData md = rs.getMetaData();
-//					if (md.getColumnCount() < columns.size()) {
 						for (int i = 0; i < md.getColumnCount(); i++) {
 							String columnName = md.getColumnName(i+1);
-//							String columnNameMap=null;
 							if(prefix!=null){
-//								if(!columnName.startsWith(prefix)&&!md.getTableName(i+1).equalsIgnoreCase(prefix))
 								if(!columnName.startsWith(prefix)&&!columnName.startsWith(prefix+"|")){
 									if(md.getTableName(i+1).equalsIgnoreCase(prefix)){
 									}else{
@@ -428,7 +428,6 @@ public class JPAUtil {
 							
 							if(!columns.containsKey(columnName))
 								continue;
-//							Property property = columns.get(columnName);//oldversionn
 							List<Property> properties = columns.get(columnName);
 							for (Property property : properties) {
 								if(property==null)
@@ -443,24 +442,6 @@ public class JPAUtil {
 								}
 							}
 						}
-//					} else {
-//						for ( Entry<String, Property> column : columns.entrySet()) {
-//							try {
-//								String columnName=null;
-//								if (prefix!=null) {
-//									columnName = prefix+ column.getKey();
-//								} else {
-//									columnName = column.getKey();
-//								}
-//								
-//								rs.findColumn(columnName);
-//								t = mapRow(rs, rowNum, t, columnName, column.getValue());
-//							} catch (Exception e) {
-//								// TODO: handle exception
-//							}
-//						}
-//					}
-
 					
 					
 				} catch (InstantiationException | IllegalAccessException e) {
@@ -479,12 +460,12 @@ public class JPAUtil {
 					Object objectData = new Object[]{null};
 					if(ColumnType.embeddedId == property.getColumnType()){
 						objectData = property.getEmbeddedId().getMethodGet().invoke(traget);
-						if(objectData == null)
+						if(objectData == null){
 							objectData = property.getEmbeddedId().getMethodSet().getParameterTypes()[0].newInstance();
+							property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
+						}
+						putData(rs, columnNum, property, objectData);
 						
-						property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
-						
-						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
 					}else if(ColumnType.joinColumns == property.getColumnType()){
 						objectData = property.getJoinColumns().getMethodGet().invoke(traget);
 						if(objectData == null){
@@ -499,56 +480,59 @@ public class JPAUtil {
 									objectDataEm = property.getEmbeddedId().getMethodSet().getParameterTypes()[0].newInstance();
 									property.getEmbeddedId().getMethodSet().invoke(objectData,objectDataEm);
 								}
-								property.getMethodSet().invoke(objectDataEm, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
+								putData(rs, columnNum, property, objectDataEm);
 							}
 						}else{
-							property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
+							putData(rs, columnNum, property, objectData);
 						}
-							
-						
-						
-//						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
 					}else if(ColumnType.embedded == property.getColumnType()){
 						objectData = property.getEmbeddedId().getMethodGet().invoke(traget);
-						if(objectData == null)
+						if(objectData == null){
 							objectData = property.getEmbeddedId().getMethodSet().getParameterTypes()[0].newInstance();
-						
-						property.getMethodSet().invoke(objectData, getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]));
-						
-						property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
-					}else{
-						if(methodSet.getParameterTypes()[0].isAnnotationPresent(Entity.class)){
-							ClassMapper classMapperId = getClassMapper(methodSet.getParameterTypes()[0]);
-							objectData = methodSet.getParameterTypes()[0].newInstance();
-							Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
-							methodSetId.invoke(objectData,  getObject(rs, columnNum, methodSetId.getParameterTypes()[0]));
-						}else{
-							if(property.getEnumType()!=null){
-								if(EnumType.STRING==property.getEnumType()){
-									String EnumValue = getObject(rs, columnNum, String.class);
-									Class<Enum> class1 = (Class<Enum>) methodSet.getParameterTypes()[0];
-									objectData = Enum.valueOf(class1, EnumValue);
-								}else if(EnumType.ORDINAL==property.getEnumType()){
-									Integer EnumValue = getObject(rs, columnNum, Integer.class);
-									Class<Enum> class1 = (Class<Enum>) methodSet.getParameterTypes()[0];
-									objectData = Enum.valueOf(class1, EnumValue+"");
-								}else{
-									String EnumValue = getObject(rs, columnNum, String.class);
-									Class<Enum> class1 = (Class<Enum>) methodSet.getParameterTypes()[0];
-									objectData = Enum.valueOf(class1, EnumValue);
-								}
-							}else{
-								objectData = getObject(rs, columnNum, methodSet.getParameterTypes()[0]);
-							}
-							
+							property.getEmbeddedId().getMethodSet().invoke(traget, objectData);
 						}
-						methodSet.invoke(traget, objectData);
+						
+						putData(rs, columnNum, property, objectData);
+						
+						
+					}else{
+						putData(rs, columnNum, property, traget);
 					}
 					
 				} catch (IllegalArgumentException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 					logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
 				}
 				return traget;
+			}
+			
+			private void putData(ResultSet rs,int  columnNum ,Property property, Object traget ) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException{
+				Object objectData = new Object[]{null};
+				if(property.getMethodSet().getParameterTypes()[0].isAnnotationPresent(Entity.class)){
+					ClassMapper classMapperId = getClassMapper(property.getMethodSet().getParameterTypes()[0]);
+					objectData = property.getMethodSet().getParameterTypes()[0].newInstance();
+					Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
+					methodSetId.invoke(objectData,  getObject(rs, columnNum, methodSetId.getParameterTypes()[0]));
+				}else{
+					if(property.getEnumType()!=null){
+						if(EnumType.STRING==property.getEnumType()){
+							String EnumValue = getObject(rs, columnNum, String.class);
+							Class<Enum> class1 = (Class<Enum>) property.getMethodSet().getParameterTypes()[0];
+							objectData = Enum.valueOf(class1, EnumValue);
+						}else if(EnumType.ORDINAL==property.getEnumType()){
+							Integer EnumValue = getObject(rs, columnNum, Integer.class);
+							Class<Enum> class1 = (Class<Enum>) property.getMethodSet().getParameterTypes()[0];
+							objectData = Enum.valueOf(class1, EnumValue+"");
+						}else{
+							String EnumValue = getObject(rs, columnNum, String.class);
+							Class<Enum> class1 = (Class<Enum>) property.getMethodSet().getParameterTypes()[0];
+							objectData = Enum.valueOf(class1, EnumValue);
+						}
+					}else{
+						objectData = getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]);
+					}
+					
+				}
+				property.getMethodSet().invoke(traget, objectData);
 			}
 			
 			private <T> T getObject(ResultSet rs,int  columnNum ,Class<T> clazz ){
