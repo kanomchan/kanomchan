@@ -90,8 +90,8 @@ public class JPAUtil {
 //		BeanInfo info = Introspector.getBeanInfo(clazz);
 //		ClassMapper classMapper =mapClass.get(clazz.getName());
 		
-		ClassMapper classMapper = null;
-//			ClassMapper classMapper = mapClass.get(clazz.getName());
+//		ClassMapper classMapper = null;
+		ClassMapper classMapper = mapClass.get(clazz.getName());
 		if (classMapper == null) {
 			Set<Method> methods = new HashSet<Method>();
 			classMapper = new ClassMapper();
