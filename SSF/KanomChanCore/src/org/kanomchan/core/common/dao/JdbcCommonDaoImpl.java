@@ -1203,4 +1203,22 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 		}
 	}
+	
+	
+	public <T> T findByColumn(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException{
+		try{
+			
+			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false);
+			Map<String, Object>params = new HashMap<String, Object>();
+			if (criteriaList != null && criteriaList.size() > 0) {
+				for (Criteria criteria : criteriaList) {
+					params.put(criteria.getParam(), criteria.getValue());
+				}
+			}
+			T result = nativeQueryOneRow(queryString, JPAUtil.getRm(clazz), params);
+			return result;
+		}catch(RuntimeException e){
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
+		}
+	}
 }
