@@ -1014,6 +1014,59 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 	}
 	
+	@Override
+	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap) throws RollBackTechnicalException {
+		return findByColumnMap(clazz, columnMap, null);
+	}
+	
+	@Override
+	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap, PagingBean pagingBean) throws RollBackTechnicalException {
+		List<Criteria> criteriaList = new LinkedList<Criteria>();
+		Iterator iterator = columnMap.entrySet().iterator();
+		
+		while (iterator.hasNext()) {
+			Map.Entry column = (Map.Entry) iterator.next();
+			criteriaList.add(new Criteria(column.getKey().toString(), column.getValue()));
+//			if(column.getValue() instanceof List){
+//				
+//			}
+		}
+		
+		if(pagingBean==null){
+			try{
+				String queryString = genQueryStringByExample(clazz, criteriaList, null, null, false);
+				Map<String, Object>params = new HashMap<String, Object>();
+				if (criteriaList != null && criteriaList.size() > 0) {
+					for (Criteria criteria : criteriaList) {
+						params.put(criteria.getParam(), criteria.getValue());
+					}
+				}
+				List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+				return resultList1;
+			}catch(RuntimeException e){
+				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
+			}
+		}else{
+			try{
+				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
+				
+				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false);
+				Map<String, Object>params = new HashMap<String, Object>();
+				if (criteriaList != null && criteriaList.size() > 0) {
+					for (Criteria criteria : criteriaList) {
+						params.put(criteria.getParam(), criteria.getValue());
+					}
+				}
+				List<T> resultList1 = simpleJdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
+				
+				return resultList1;
+				
+			}catch (RuntimeException re){
+				throw new RollBackTechnicalException(CommonMessageCode.COM4991, re);
+			}
+		}
+	}
+	
 	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like){
 		
 		StringBuilder countQueryString = new StringBuilder();

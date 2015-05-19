@@ -88,6 +88,10 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return findByColumn(clazz, propertyName, value);
 	}
 	@Override
+	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException {
+		return findByColumns(clazz, criteriaList, null);
+	}
+	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException {
 		return findByColumns(clazz, criteriaList, pagingBean);
 	}

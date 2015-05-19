@@ -284,5 +284,6 @@ public interface CommonDao {
 	 * 	Refresh the state of the instance from the database, overwriting changes made to the entity, if any. 
 	 */
 	public void refresh(Object entity) throws RollBackTechnicalException ;
+	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException;
 	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException;
 }

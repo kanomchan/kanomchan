@@ -96,6 +96,10 @@ public interface JdbcCommonDao {
 	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value)throws RollBackTechnicalException;
 
 	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value,PagingBean pagingBean) throws RollBackTechnicalException;
+	
+	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String, Object> columnMap) throws RollBackTechnicalException;
+	
+	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String, Object> columnMap, PagingBean pagingBean) throws RollBackTechnicalException;
 
 	public <T> T updateStatusDelete(T target);
 
@@ -106,5 +110,6 @@ public interface JdbcCommonDao {
 	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList,PagingBean pagingBean) throws RollBackTechnicalException;
 
 	public <T> T get(Serializable target, String lang, Class<T> clazz)throws RollBackTechnicalException;
+
 
 }
