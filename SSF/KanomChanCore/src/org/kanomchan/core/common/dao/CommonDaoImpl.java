@@ -483,4 +483,10 @@ public abstract class CommonDaoImpl implements CommonDao {
 		return null;
 	}
 
+	@Override
+	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
