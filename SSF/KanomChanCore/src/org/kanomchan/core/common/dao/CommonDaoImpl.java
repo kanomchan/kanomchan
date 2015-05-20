@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.dao.DataIntegrityViolationException;
 
-public class CommonDaoImpl implements CommonDao {
+public abstract class CommonDaoImpl implements CommonDao {
 	/**
 	 * Logger for this class
 	 */
