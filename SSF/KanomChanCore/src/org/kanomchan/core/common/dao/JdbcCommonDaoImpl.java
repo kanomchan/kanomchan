@@ -641,12 +641,16 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 									para.add(value);
 								}
 							}else{
-								if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
+								if(value.equals("NULL") && "NULL".equals(value)){
+									listColumnName.add(columnName);
+									listParaName.add(" NULL ");
+//									para.add(null);
+								}
+								else if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
 									listColumnName.add(columnName);
 									listParaName.add("?");
 									para.add(value);
-								}
-								
+								} 
 							}
 						}
 					}
@@ -730,10 +734,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //								listParaName.add("?");
 								listPkNamePara.add(valueEmbeddedId);
 							}
-							
 						}
-						
-						
 					}
 					
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
