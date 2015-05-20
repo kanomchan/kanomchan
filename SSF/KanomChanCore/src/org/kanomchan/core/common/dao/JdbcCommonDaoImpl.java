@@ -95,8 +95,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		.toString();
 	
 	protected static final String SQL_COUNTY_SELECT = ",COUNTRY.* ,PROVINCE.*,CITY.* , COUNTY.* ";
-	protected static String GEN_SQL_COUNTY_LEFT_JOIN(String prefix,String subfix,String map){
-		return new StringBuilder(SQL_COUNTY_LEFT_JOIN).toString().replaceAll("\\{prefix\\}", prefix).replaceAll("\\{subfix\\}", subfix).replaceAll("\\{map\\}", map);
+	protected static String GEN_SQL_COUNTY_LEFT_JOIN(String mapTable,String colunmSubfix,String countySubfix){
+		return new StringBuilder(SQL_COUNTY_LEFT_JOIN).toString().replaceAll("\\{prefix\\}", mapTable).replaceAll("\\{subfix\\}", colunmSubfix).replaceAll("\\{map\\}", countySubfix);
 	}
 //	executeNativeSQL
 	@Override
