@@ -1,6 +1,8 @@
 package org.kanomchan.core.common.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -86,6 +88,13 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value) throws RollBackTechnicalException {
 		return findByColumn(clazz, propertyName, value);
+	}
+	@Override
+	public <T> List<T> findByPropertyWithStatus(Class<T> clazz, String propertyName, Object value, String status) throws RollBackTechnicalException {
+		List<Criteria> criteria = new LinkedList<Criteria>();
+		criteria.add(new Criteria(propertyName, value));
+		criteria.add(new Criteria("STATUS", status));
+		return findByProperty(clazz, criteria,null);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException {

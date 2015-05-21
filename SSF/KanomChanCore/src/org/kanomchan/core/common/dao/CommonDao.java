@@ -75,6 +75,7 @@ public interface CommonDao {
 	 * @throws RollBackTechnicalException
 	 */
 	public <T extends Object > List<T> findByProperty( Class<T> clazz, final String propertyName, final Object value ) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByPropertyWithStatus( Class<T> clazz, final String propertyName, final Object value, String status ) throws RollBackTechnicalException;
 	public <T extends Object > List<T> findByProperty( Class<T> clazz, String propertyName, final Object value, PagingBean pagingBean ) throws RollBackTechnicalException;
 	
 	/**
