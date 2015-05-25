@@ -14,6 +14,7 @@ import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.common.util.StrutsUtil;
 import org.kanomchan.core.security.authorize.bean.MenuBean;
+import org.kanomchan.core.security.authorize.io.NavigationBean;
 import org.kanomchan.core.security.authorize.service.UserNavigationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -58,9 +59,10 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 				queryString += tableName;
 				String url =request.getRequestURI().substring(request.getContextPath().length())+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString).replaceAll("[?]request_locale=[A-Z]{3}&", "?").replaceAll("[&?]request_locale=[A-Z]{3}", "");
 				
-				ServiceResult<List<MenuBean>> serviceResultNavigation = userNavigationService.generateNavigationList(namespace, actionName,url);
+				ServiceResult<NavigationBean> serviceResultNavigation = userNavigationService.generateNavigationList(namespace, actionName,url);
 				if(serviceResultNavigation.isSuccess()){
-					session.put(CommonConstant.SESSION.NAVIGATION_BEAN_KEY, serviceResultNavigation.getResult());
+					session.put(CommonConstant.SESSION.NAVIGATION_BEAN_KEY, serviceResultNavigation.getResult().getNavigationMenuList());
+					session.put(CommonConstant.SESSION.CURRENT_ACTION, serviceResultNavigation.getResult().getCurrentAction());
 				}else session.put(CommonConstant.SESSION.NAVIGATION_BEAN_KEY, null);
 		}catch(Exception e){
 			

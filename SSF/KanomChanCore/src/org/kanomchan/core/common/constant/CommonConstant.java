@@ -27,6 +27,7 @@ public interface CommonConstant {
 	
 	
 	public static final String URL_REDIRECT_FACEBOOK_KEY = "SESSION_URL_REDIRECT_FACEBOOK_KEY";
+	public static final String CURRENT_ACTION = "SESSION_CURRENT_ACTION";
 	
     }
     
