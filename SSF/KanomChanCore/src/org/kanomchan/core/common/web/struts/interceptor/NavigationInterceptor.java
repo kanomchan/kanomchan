@@ -61,13 +61,15 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 				
 				ServiceResult<NavigationBean> serviceResultNavigation = userNavigationService.generateNavigationList(namespace, actionName,url);
 				if(serviceResultNavigation.isSuccess()){
+					if(serviceResultNavigation.getResult().getNavigationMenuList()!=null)
 					session.put(CommonConstant.SESSION.NAVIGATION_BEAN_KEY, serviceResultNavigation.getResult().getNavigationMenuList());
-					session.put(CommonConstant.SESSION.CURRENT_ACTION, serviceResultNavigation.getResult().getCurrentAction());
+					if(serviceResultNavigation.getResult().getCurrentAction()!=null){
+						session.put(CommonConstant.SESSION.ACT_CUR_KEY, serviceResultNavigation.getResult().getCurrentAction().getActionName());
+					}
 				}else session.put(CommonConstant.SESSION.NAVIGATION_BEAN_KEY, null);
 		}catch(Exception e){
 			
 		}
-		
 		return invocation.invoke();
 	}
 
