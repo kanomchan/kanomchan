@@ -208,4 +208,8 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	public <T extends Object > T saveOrUpdate(T target) {
 		return super.saveOrUpdate(target);
 	}
+	@Override
+	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) {
+		return super.saveOrUpdate(target,includeMinusOne);
+	}
 }

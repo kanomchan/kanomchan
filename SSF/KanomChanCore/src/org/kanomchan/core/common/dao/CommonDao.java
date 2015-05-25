@@ -288,4 +288,5 @@ public interface CommonDao {
 	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException;
 	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException;
 	public <T extends Object > T saveOrUpdate(T target) throws RollBackTechnicalException;
+	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) throws RollBackTechnicalException;
 }

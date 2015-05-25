@@ -525,16 +525,19 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				| InvocationTargetException e) {
 			
 		}
+		ProcessContext processContext = CurrentThread.getProcessContext();
 		if(objectId!=null){
 			try{
 				update(t, includeMinusOne);
+				processContext.addMessage(CommonMessageCode.COM0002,"");
 			} catch (Exception e){
 				save(t, includeMinusOne);
+				processContext.addMessage(CommonMessageCode.COM0001,"");
 			}
-			
 		}
 		else{
 			save(t, includeMinusOne);
+			processContext.addMessage(CommonMessageCode.COM0001,"");
 		}
 		return t;
 	}
@@ -552,7 +555,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		if(objectId!=null){
 			try{
 				update(t, true);
-				
 				processContext.addMessage(CommonMessageCode.COM0002,"");
 			} catch (Exception e){
 				save(t, true);
