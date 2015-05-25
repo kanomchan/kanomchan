@@ -204,4 +204,8 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public <T extends Object > T saveOrUpdate(T target) {
+		return super.saveOrUpdate(target);
+	}
 }
