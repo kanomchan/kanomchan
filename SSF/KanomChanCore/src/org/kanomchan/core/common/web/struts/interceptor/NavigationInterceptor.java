@@ -64,7 +64,7 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 					if(serviceResultNavigation.getResult().getNavigationMenuList()!=null)
 					session.put(CommonConstant.SESSION.NAVIGATION_BEAN_KEY, serviceResultNavigation.getResult().getNavigationMenuList());
 					if(serviceResultNavigation.getResult().getCurrentAction()!=null){
-						session.put(CommonConstant.SESSION.ACT_CUR_KEY, serviceResultNavigation.getResult().getCurrentAction().getActionName());
+						session.put(CommonConstant.SESSION.ACT_CUR_KEY, serviceResultNavigation.getResult().getCurrentAction().getPageName());
 					}
 				}else session.put(CommonConstant.SESSION.NAVIGATION_BEAN_KEY, null);
 		}catch(Exception e){
