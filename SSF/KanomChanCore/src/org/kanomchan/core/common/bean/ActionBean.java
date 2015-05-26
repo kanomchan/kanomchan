@@ -1,6 +1,8 @@
 package org.kanomchan.core.common.bean;
 
-public class ActionBean {
+import java.io.Serializable;
+
+public class ActionBean implements Serializable {
 	
 	private Long actionId;
 	private String pageName;
