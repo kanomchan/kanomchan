@@ -16,5 +16,6 @@ public interface LoginService {
 //	public ServiceResult<AuthRequestBean> startSSO()throws NonRollBackException,RollBackException;
 //	public ServiceResult<AuthRequestBean> startSSO(String identifier)throws NonRollBackException,RollBackException;
 //	public ServiceResult<AuthRequestBean> startSSO(String identifier,String redirectUri)throws NonRollBackException,RollBackException;
+	public ServiceResult<LoginIO> performLoginWithOutPasswordAndPutDataSession(String username) throws NonRollBackException, RollBackException;
 
 }
