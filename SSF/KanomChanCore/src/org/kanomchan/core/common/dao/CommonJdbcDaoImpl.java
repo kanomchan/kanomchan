@@ -212,4 +212,10 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) {
 		return super.saveOrUpdate(target,includeMinusOne);
 	}
+
+	@Override
+	public <T> List<T> getListIfNotNull(Class<T> clazz, List<T> list) throws RollBackTechnicalException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
