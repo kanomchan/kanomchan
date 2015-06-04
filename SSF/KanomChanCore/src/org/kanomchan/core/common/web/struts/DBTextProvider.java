@@ -13,8 +13,10 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.context.ApplicationContextUtil;
+import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.service.LabelService;
 import org.kanomchan.core.common.service.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.TextProvider;
@@ -149,6 +151,9 @@ public class DBTextProvider implements TextProvider {
 //    		
 //    		messageCache.put(locale.getISO3Language().toUpperCase(), messageService.getMessageMap(locale.getISO3Language().toUpperCase()));
 //    	}
+    	
+    	
+    	ConfigService configService= ApplicationContextUtil.getBean(ConfigService.class);
     	MessageService messageService= ApplicationContextUtil.getBean(MessageService.class);
     	Map<String, Message> message = messageService.getMessageMap(locale.getISO3Language().toUpperCase());//  messageCache.get(locale.getISO3Language().toUpperCase());
         if (message == null) {
@@ -158,7 +163,18 @@ public class DBTextProvider implements TextProvider {
         if(message.get(aTextName)!=null)
         out = message.get(aTextName).getDisplayText();
         if(out!=null){
-        	return out;
+        	StringBuilder sb = new StringBuilder();
+            if(configService.get("TRANSLATE_LABEL").equals("true")){
+            	sb.append("<span>");
+            	sb.append(out);
+            	sb.append("</span>");
+            	sb.append("<translateLabel value='");
+            	sb.append(aTextName);
+            	sb.append("'></translateLabel>");
+            }else{
+            	sb.append(out);
+            }
+        	return sb.toString();
         }
         
     	
@@ -174,7 +190,18 @@ public class DBTextProvider implements TextProvider {
             return null;
         }
         
-        return lable.get(aTextName);
+        StringBuilder sb = new StringBuilder();
+        if(configService.get("TRANSLATE_LABEL").equals("true")){
+        	sb.append("<span>");
+        	sb.append(lable.get(aTextName));
+        	sb.append("</span>");
+        	sb.append("<translateLabel value='");
+        	sb.append(aTextName);
+        	sb.append("'></translateLabel>");
+        }else{
+        	sb.append(lable.get(aTextName));
+        }
+    	return sb.toString();
     }
     
     private static String formatWithNullDetection(MessageFormat mf, Object[] args) {
