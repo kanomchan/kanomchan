@@ -82,7 +82,7 @@
 			><#if parameters.required?default(false) && parameters.requiredPosition?default("right") != 'right'>
         		<span class="required">*</span>
 			</#if> 
-			<@s.property value="parameters.label" /> 
+			<@s.property value="parameters.label" escapeHtml="fasle" /> 
 			<#if parameters.required?default(false) && parameters.requiredPosition?default("right") == 'right'>
 		        <span class="required">*</span>
 			</#if>

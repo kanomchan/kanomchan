@@ -48,7 +48,7 @@
 <#if parameters.src??>
  src="${parameters.src?html}"<#rt/>
 </#if>
-/><#else><#if parameters.label??><@s.property value="parameters.label"/><#rt/></#if></#if></button>
+/><#else><#if parameters.label??><@s.property value="parameters.label" escapeHtml="fasle"/><#rt/></#if></#if></button>
 <#else>
 <input type="reset"<#rt/>
 <#if parameters.name??>
