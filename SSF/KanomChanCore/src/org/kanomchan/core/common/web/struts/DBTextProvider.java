@@ -164,13 +164,13 @@ public class DBTextProvider implements TextProvider {
         out = message.get(aTextName).getDisplayText();
         if(out!=null){
         	StringBuilder sb = new StringBuilder();
-            if("true".equals(configService.get("TRANSLATE_LABEL"))){
+            if("true".equals(configService.get("TRANSLATE_LABEL_TEST"))){
             	sb.append("<span>");
             	sb.append(out);
             	sb.append("</span>");
-            	sb.append("<translateLabel value='");
+            	sb.append("<translateLabel value=\"");
             	sb.append(aTextName);
-            	sb.append("'></translateLabel>");
+            	sb.append("\"></translateLabel>");
             }else{
             	sb.append(out);
             }
@@ -191,13 +191,13 @@ public class DBTextProvider implements TextProvider {
         }
         
         StringBuilder sb = new StringBuilder();
-        if("true".equals(configService.get("TRANSLATE_LABEL"))){
+        if("true".equals(configService.get("TRANSLATE_LABEL_TEST"))){
         	sb.append("<span>");
         	sb.append(lable.get(aTextName));
         	sb.append("</span>");
-        	sb.append("<translateLabel value='");
+        	sb.append("<translateLabel value=\"");
         	sb.append(aTextName);
-        	sb.append("'></translateLabel>");
+        	sb.append("\"></translateLabel>");
         }else{
         	sb.append(lable.get(aTextName));
         }
