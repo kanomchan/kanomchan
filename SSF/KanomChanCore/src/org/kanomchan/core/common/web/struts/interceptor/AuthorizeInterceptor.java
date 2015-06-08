@@ -9,7 +9,9 @@ import java.util.Set;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.service.ActionService;
+import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.security.authorize.Authorize;
+import org.kanomchan.core.security.authorize.dao.UserAuthorizeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -31,11 +33,32 @@ public class AuthorizeInterceptor extends AbstractInterceptor {
 		this.actionService = actionService;
 	}
 	
+	private UserAuthorizeDao userAuthorizeDao;
+	@Autowired
+	@Required
+	public void setUserAuthorizeDao(UserAuthorizeDao userAuthorizeDao) {
+		this.userAuthorizeDao = userAuthorizeDao;
+	}
+	@Autowired
+	private ConfigService configService;
+	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		Map<String, Object> session = ActionContext.getContext().getSession();
 		UserBean userBean = (UserBean) session.get(CommonConstant.SESSION.USER_BEAN_KEY);
-		Set<String> privileges = userBean.getPrivileges();
+		Set<String> privileges;
+		if(userBean != null){
+			privileges = userBean.getPrivileges();
+		}else{
+			String idGuest = "7";
+			try{
+				idGuest = configService.get("GUEST_ID");
+			}catch(Exception e){
+				
+			}
+			privileges = userAuthorizeDao.getUserPrivilegesByRoleId(idGuest);
+		}
+		
 		String methodStr = invocation.getProxy().getMethod();
 		String actionName = invocation.getProxy().getActionName();
 		if(methodStr==null||"".equals(methodStr)){
