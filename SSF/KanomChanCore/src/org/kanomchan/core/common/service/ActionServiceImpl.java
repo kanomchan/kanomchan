@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.kanomchan.core.common.bean.ActionBean;
-import org.kanomchan.core.common.dao.ActionDao;
+import org.kanomchan.core.security.authorize.dao.ActionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 

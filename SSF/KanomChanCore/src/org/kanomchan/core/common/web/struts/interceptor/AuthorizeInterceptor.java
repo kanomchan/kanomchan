@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.struts2.interceptor.ServletConfigInterceptor;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.service.ActionService;
@@ -19,7 +20,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class AuthorizeInterceptor extends AbstractInterceptor {
+public class AuthorizeInterceptor extends ServletConfigInterceptor {
 	
 	
 	/**

@@ -22,5 +22,8 @@ public interface ActionDao {
 
 	public List<ActionBean> getActionByNamespaceAndActionNameList(String namespace,
 			String actionName);
+	
+	public List<String> getAuthorizeCodeByAction(String namespace, String actionName);
 
+	public ActionBean findAction(String namespace, String actionName);
 }
