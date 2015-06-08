@@ -70,7 +70,9 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 		Set<String> c = actionService.getAuthorizeCodeByAction(namespace, actionName);
 		codes.addAll(c);
 		if (!privileges.containsAll(codes)) {
-			return "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
+			if(userBean != null){
+				return "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
+			}else return "FORCE_TO_LOGIN_PAGE";
 		}
 		return invocation.invoke();
 	}
