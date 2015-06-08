@@ -164,7 +164,7 @@ public class DBTextProvider implements TextProvider {
         out = message.get(aTextName).getDisplayText();
         if(out!=null){
         	StringBuilder sb = new StringBuilder();
-            if("true".equals(configService.get("TRANSLATE_LABEL_TEST"))){
+            if("true".equals(configService.get("TRANSLATE_LABEL"))){
             	sb.append("<span>");
             	sb.append(out);
             	sb.append("</span>");
@@ -191,7 +191,7 @@ public class DBTextProvider implements TextProvider {
         }
         
         StringBuilder sb = new StringBuilder();
-        if("true".equals(configService.get("TRANSLATE_LABEL_TEST"))){
+        if("true".equals(configService.get("TRANSLATE_LABEL"))){
         	sb.append("<span>");
         	sb.append(lable.get(aTextName));
         	sb.append("</span>");
