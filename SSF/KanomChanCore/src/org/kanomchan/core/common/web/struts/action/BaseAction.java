@@ -19,6 +19,7 @@ import org.kanomchan.core.common.bean.Message;
 import org.springframework.beans.factory.BeanNameAware;
 import org.kanomchan.core.common.bean.JSONResult;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.interceptor.ValidationWorkflowAware;
 
@@ -95,10 +96,11 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	
 	
 	public void clearSessionValue(){
-		for (Enumeration<String> e = httpServletRequest.getSession().getAttributeNames();e.hasMoreElements();) {
+		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get("com.opensymphony.xwork2.dispatcher.HttpServletRequest");
+		for (Enumeration<String> e = request.getSession().getAttributeNames();e.hasMoreElements();) {
 			String key = e.nextElement();
 			if(key.indexOf("class")>=0){
-				httpServletRequest.getSession().removeAttribute(key);
+				request.getSession().removeAttribute(key);
 			}
 		}
 	}
