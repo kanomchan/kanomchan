@@ -1,6 +1,7 @@
 package org.kanomchan.core.common.processhandler;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -49,6 +50,11 @@ public class ProcessContextFilter  implements Filter  {
 			getPOS(request);
 		}
 		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
+		MDC.put(CommonConstant.LOG.SERVER_NAME, request.getServerName());
+		MDC.put(CommonConstant.LOG.SERVER_PORT, request.getServerPort());
+		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_SERVER_NAME, InetAddress.getLocalHost().getHostName());
+		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_NAME, System.getProperty("com.sun.aas.instanceName"));
+		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_IP, InetAddress.getLocalHost().getHostAddress());
 		MDC.put(CommonConstant.LOG.SESSION_ID, ((HttpServletRequest) request).getSession().getId());
 		MDC.put(CommonConstant.LOG.USER_ID, processContext.userBean==null?"guest":processContext.userBean.getUserId()==null?"":processContext.userBean.getUserId());
 		MDC.put(CommonConstant.LOG.USER_NAME, processContext.userBean==null?"guest":processContext.userBean.getUserName()==null?"":processContext.userBean.getUserName());
