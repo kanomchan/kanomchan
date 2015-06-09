@@ -45,6 +45,12 @@ public interface CommonConstant {
 	public static final String CONTEXT_PATH = "CONTEXT_PATH";
 	public static final String USER_ID = "USER_ID";
 	public static final String USER_NAME = "USER_NAME";
+	public static final String SERVER_NAME = "SERVER_NAME";
+	public static final String SERVER_PORT = "SERVER_PORT";
+	public static final String SERVER_INSTANCE_IP = "SERVER_INSTANCE_IP";
+	public static final String SERVER_INSTANCE_NAME = "SERVER_INSTANCE_NAME";
+	public static final String SERVER_INSTANCE_SERVER_NAME = "SERVER_INSTANCE_SERVER_NAME";
+	
     }
     
 
