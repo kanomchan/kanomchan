@@ -411,6 +411,7 @@ public class JPAUtil {
 					ClassMapper classMapper = getClassMapper(clazz);
 					Map<String, List<Property>> columns = classMapper.getColumn();
 					ResultSetMetaData md = rs.getMetaData();
+					String langName="";
 						for (int i = 0; i < md.getColumnCount(); i++) {
 							String columnName = md.getColumnName(i+1);
 							if(prefix!=null){
@@ -425,22 +426,38 @@ public class JPAUtil {
 									columnName = columnName.substring(prefix.length());
 								}
 							}
-							
-							if(!columns.containsKey(columnName))
+							List<Property> properties = null;
+							if(langName.equals(columnName))
 								continue;
-							List<Property> properties = columns.get(columnName);
-							for (Property property : properties) {
-								if(property==null)
+							if(columnName.endsWith("_LANG")){
+								langName = columnName.substring(0, columnName.length()-5);
+								if(!columns.containsKey(langName))
 									continue;
-								Method methodSet = property.getMethodSet();
-								if(methodSet==null)
+								properties = columns.get(langName);
+							}else{
+								if(!columns.containsKey(columnName))
 									continue;
-								try {
-									t = mapRow(rs, rowNum, t, i+1, property);
-								} catch (Exception e) {
-									// TODO: handle exception
+								properties = columns.get(columnName);
+							}
+							
+//							if(!columns.containsKey(columnName))
+//								continue;
+//							List<Property> properties = columns.get(columnName);
+							if(properties!=null){
+								for (Property property : properties) {
+									if(property==null)
+										continue;
+									Method methodSet = property.getMethodSet();
+									if(methodSet==null)
+										continue;
+									try {
+										t = mapRow(rs, rowNum, t, i+1, property);
+									} catch (Exception e) {
+										// TODO: handle exception
+									}
 								}
 							}
+							
 						}
 					
 					

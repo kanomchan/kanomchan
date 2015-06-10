@@ -727,8 +727,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					if(property.getColumnType() == ColumnType.id){
 						Object value = method.invoke(target);
 						if(value != null){
-							listPkName.add(columnName);
-							listPkNamePara.add(value);
+							if(tableLang){
+								listPkName.add(columnName + "_LANG");
+								listPkNamePara.add(value);
+							}else{
+								listPkName.add(columnName);
+								listPkNamePara.add(value);
+							}
+							
 						}
 					}
 					
@@ -737,9 +743,16 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						if(embeddedIdObject!=null){
 							Object valueEmbeddedId = method.invoke(embeddedIdObject);
 							if(valueEmbeddedId!=null){
-								listPkName.add(columnName+"_LANG");
-//								listParaName.add("?");
-								listPkNamePara.add(valueEmbeddedId);
+								if(tableLang){
+									listPkName.add(columnName+"_LANG");
+//									listParaName.add("?");
+									listPkNamePara.add(valueEmbeddedId);
+								}else{
+									listPkName.add(columnName);
+//									listParaName.add("?");
+									listPkNamePara.add(valueEmbeddedId);
+								}
+								
 							}
 						}
 					}
@@ -771,6 +784,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				sb.append(" = ? ");
 				para.add(listPkNamePara.get(i));
 			}
+		}
+		
+		if(langCode != null && !langCode.equals("")){
+			sb.append(" AND LANG_CODE3 = ? ");
+			para.add(langCode); 
 		}
 		
 		if(listColumnName.size() > 0&&listPkName.size() > 0){
