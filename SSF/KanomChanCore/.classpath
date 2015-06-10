@@ -76,6 +76,6 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-webmvc-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/log4j2/log4j-1.2-api-2.3.jar" sourcepath="C:/Users/JM/.m2/repository/org/apache/logging/log4j/log4j-1.2-api/2.3/log4j-1.2-api-2.3-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/log4j2/log4j-core-2.3.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/log4j2/log4j-api-2.3.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/log4j2/log4j-api-2.3.jar" sourcepath="C:/Users/JM/.m2/repository/org/apache/logging/log4j/log4j-api/2.3/log4j-api-2.3-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
