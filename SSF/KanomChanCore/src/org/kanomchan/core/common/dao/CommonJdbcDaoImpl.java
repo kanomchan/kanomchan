@@ -94,11 +94,15 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		List<Criteria> criteria = new LinkedList<Criteria>();
 		criteria.add(new Criteria(propertyName, value));
 		criteria.add(new Criteria("STATUS", status));
-		return findByProperty(clazz, criteria,null);
+		return findByProperty(clazz, criteria,(PagingBean)null);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException {
-		return findByColumns(clazz, criteriaList, null);
+		return findByColumns(clazz, criteriaList, (PagingBean)null);
+	}
+	@Override
+	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, String langCode) throws RollBackTechnicalException {
+		return findByColumns(clazz, criteriaList, langCode);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException {
@@ -218,4 +222,5 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

@@ -984,14 +984,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			try{
 				List<Criteria> criteriaList = new LinkedList<Criteria>();
 				criteriaList.add(new Criteria(propertyName, value));
-				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false);
+				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
 					for (Criteria criteria : criteriaList) {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params, null);
 				return resultList1;
 			}catch(RuntimeException e){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
@@ -1005,14 +1005,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				
 				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
 				
-				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false);
+				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
 					for (Criteria criteria : criteriaList) {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = simpleJdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 = simpleJdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params, null);
 				
 				return resultList1;
 				
@@ -1042,7 +1042,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		
 		if(pagingBean==null){
 			try{
-				String queryString = genQueryStringByExample(clazz, criteriaList, null, null, false);
+				String queryString = genQueryStringByExample(clazz, criteriaList, null, null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
 					for (Criteria criteria : criteriaList) {
@@ -1058,7 +1058,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			try{
 				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
 				
-				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false);
+				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
 					for (Criteria criteria : criteriaList) {
@@ -1075,14 +1075,21 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 	}
 	
-	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like){
+	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like, String langCode3){
 		
 		StringBuilder countQueryString = new StringBuilder();
 		countQueryString.append(FROM);
-		countQueryString.append(JPAUtil.getClassMapper(clazz).getTableName());
+		countQueryString.append(JPAUtil.getClassMapper(clazz).getTableName() + (langCode3 != null && !"".equals(langCode3) ? "_LANG" : ""));
 		countQueryString.append(AILIAT);
-		
+				
 		countQueryString.append(genQueryWhereStringByECriteria(criteriaList, extraWhereClause, like));
+
+		if(langCode3 != null && !"".equals(langCode3)){
+			countQueryString.append(" and ");
+			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
+			countQueryString.append(".LANG_CODE3 = '");
+			countQueryString.append(langCode3 + "' ");
+		}
 		
 //		sb.append(sql);
 		if(pagingBean !=null){
@@ -1231,7 +1238,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		if(pagingBean==null){
 			try{
 				
-				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false);
+				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
 					for (Criteria criteria : criteriaList) {
@@ -1248,7 +1255,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			try{
 				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
 				
-				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false);
+				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
 					for (Criteria criteria : criteriaList) {
@@ -1265,11 +1272,28 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 	}
 	
+	@Override
+	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, String langCode3) throws RollBackTechnicalException{
+		try{
+			
+			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, langCode3);
+			Map<String, Object>params = new HashMap<String, Object>();
+			if (criteriaList != null && criteriaList.size() > 0) {
+				for (Criteria criteria : criteriaList) {
+					params.put(criteria.getParam(), criteria.getValue());
+				}
+			}
+			List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+			return resultList1;
+		}catch(RuntimeException e){
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
+		}
+	}
 	
 	public <T> T findByColumn(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException{
 		try{
 			
-			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false);
+			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
 			Map<String, Object>params = new HashMap<String, Object>();
 			if (criteriaList != null && criteriaList.size() > 0) {
 				for (Criteria criteria : criteriaList) {

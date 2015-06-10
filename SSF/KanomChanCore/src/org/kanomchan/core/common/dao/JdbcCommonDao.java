@@ -111,5 +111,7 @@ public interface JdbcCommonDao {
 
 	public <T> T get(Serializable target, String lang, Class<T> clazz)throws RollBackTechnicalException;
 
+	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, String langCode3) throws RollBackTechnicalException;
+
 
 }
