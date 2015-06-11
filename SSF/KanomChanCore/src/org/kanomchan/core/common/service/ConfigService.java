@@ -4,17 +4,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.kanomchan.core.common.bean.FieldValidatorBean;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 
 
 public interface ConfigService {
 	
 	public String get(String key);
 
-	public void refreshConfig();
+	public void refreshConfig()throws RollBackException ,NonRollBackException;
 	
-	public Map<String, List<FieldValidatorBean>> getFieldValidators(String page);
+	public Map<String, List<FieldValidatorBean>> getFieldValidators(String page)throws RollBackException ,NonRollBackException;
 
-	public void initConfig();
+	public void initConfig()throws RollBackException ,NonRollBackException;
 
 	public List<FieldValidatorBean> getPageValidators(String page);
 

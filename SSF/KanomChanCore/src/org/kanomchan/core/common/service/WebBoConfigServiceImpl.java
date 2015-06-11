@@ -6,6 +6,8 @@ import java.util.Map;
 import org.kanomchan.core.common.bean.*;
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.dao.WebBoConfigDao;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
 
 public class WebBoConfigServiceImpl implements WebBoConfigService {
@@ -37,8 +39,7 @@ public class WebBoConfigServiceImpl implements WebBoConfigService {
 	}
 
 	@Override
-	public boolean getIsDisplay(Long idRegion, Long idCountry, Long idZone,
-		Long idProvince, Long idCity, String page, String field){
+	public boolean getIsDisplay(Long idRegion, Long idCountry, Long idZone,Long idProvince, Long idCity, String page, String field)throws RollBackException ,NonRollBackException{
 		Long idWebBoConfigGeography = webBoConfigDao.getWebBoConfigGeography(idRegion, idCountry, idZone, idProvince, idCity).getIdWebBoConfigGeography();
 		Long idWebBoConfigPageModule = webBoConfigDao.getWebBoConfigPageModule(page, field).getIdWebBoConfigPageModule();
 		WebBoConfig webBoConfig = webBoConfigDao.getWebBoConfig(idWebBoConfigGeography, idWebBoConfigPageModule);

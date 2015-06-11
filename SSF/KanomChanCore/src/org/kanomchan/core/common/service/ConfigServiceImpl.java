@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.service;
 
+import org.apache.log4j.Logger;
+
 import java.util.List;
 import java.util.Map;
 
@@ -7,15 +9,21 @@ import javax.annotation.PostConstruct;
 
 import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.dao.ConfigDao;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 public class ConfigServiceImpl implements ConfigService {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(ConfigServiceImpl.class);
 
 	private ConfigDao configDao;
 	@Autowired
 	@Required
-	public void setConfigDao(ConfigDao configDao) {
+	public void setConfigDao(ConfigDao configDao)throws RollBackException ,NonRollBackException {
 		this.configDao = configDao;
 	}
 	
@@ -27,7 +35,7 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	@Override
 	@PostConstruct
-	public synchronized void initConfig(){
+	public synchronized void initConfig()throws RollBackException ,NonRollBackException{
 		config = configDao.getConfigMap();
 		pageFieldValidatorBeans = configDao.getPageFieldValidators();
 		pageValidators = configDao.getPageValidators();
@@ -35,7 +43,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
-	public void refreshConfig(){
+	public void refreshConfig()throws RollBackException ,NonRollBackException{
 		config = configDao.getConfigMap();
 		config = configDao.getConfigMap();
 		pageFieldValidatorBeans = configDao.getPageFieldValidators();
@@ -45,11 +53,17 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	@Override
 	public String get(String key) {
-		return config.get(key);
+		try{
+			String returnString = config.get(key);
+			return returnString;
+		}catch(Exception e){
+			logger.error("get(String)", e);
+		}
+		return null;
 	}
 
 	@Override
-	public Map<String, List<FieldValidatorBean>> getFieldValidators(String page) {
+	public Map<String, List<FieldValidatorBean>> getFieldValidators(String page)throws RollBackException ,NonRollBackException {
 		return pageFieldValidatorBeans.get(page);
 	}
 	@Override

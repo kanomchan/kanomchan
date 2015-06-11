@@ -64,17 +64,17 @@ public class Div extends org.apache.struts2.components.Div {
     
     private boolean checkDisplayKey (String displayKey) throws RollbackException, NonRollBackException
     {
-    	ProcessContext processContext = CurrentThread.getProcessContext();
-    	
-    	Long idRegion = processContext.getRegion();
-    	Long idCountry = processContext.getCountry();
-    	Long idZone = processContext.getZone();
-    	Long idProvince = processContext.getProvince();
-    	Long idCity = processContext.getCity();
-    	String page = "";
-    	String field = "";
-    	boolean isDisplay = webBoConfigService.getIsDisplay(idRegion, idCountry, idZone, idProvince, idCity, page, field);
-    	return isDisplay;
+//    	ProcessContext processContext = CurrentThread.getProcessContext();
+//    	
+//    	Long idRegion = processContext.getRegion();
+//    	Long idCountry = processContext.getCountry();
+//    	Long idZone = processContext.getZone();
+//    	Long idProvince = processContext.getProvince();
+//    	Long idCity = processContext.getCity();
+//    	String page = "";
+//    	String field = "";
+//    	boolean isDisplay = webBoConfigService.getIsDisplay(idRegion, idCountry, idZone, idProvince, idCity, page, field);
+    	return true;
     }
     
     @StrutsTagAttribute(description="The value that is assigned to the variable named <i>name</i>")

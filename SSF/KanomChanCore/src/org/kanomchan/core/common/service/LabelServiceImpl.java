@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kanomchan.core.common.dao.ConfigDao;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -24,7 +26,7 @@ public class LabelServiceImpl implements LabelService  {
 		return labelMap.get(lang);
 	}
 	@Override
-	public void refresh() {
+	public void refresh()throws RollBackException ,NonRollBackException {
 		labelMap = configDao.getLabelStrMap();
 	}
 

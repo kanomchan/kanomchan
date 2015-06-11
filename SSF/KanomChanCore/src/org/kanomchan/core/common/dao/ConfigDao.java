@@ -6,27 +6,19 @@ import java.util.Map;
 import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.Message;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 
 public interface ConfigDao {
-	public Map<String,String> getConfigMap();
-	
-	
-	public Map<String,Message> getMessageMap();
-	public List<Message> getMessageList( String messageType, String messageLang );
-	
-	public List<Label> getLabelList();
-	public Map<String,List<Label>> getLabelMap();
-	public Map<String, Map<String, String>> getLabelStrMap();
-	
-	public void clearConfigCache();
-	public void clearMessageCache();
-
-
-	public Map<String, Map<String, List<FieldValidatorBean>>> getPageFieldValidators();
-
-
-	public Map<String, List<FieldValidatorBean>> getPageValidators();
-
-
-	public Map<String, String> getActionInputResult();
+	public Map<String,String> getConfigMap()throws RollBackException ,NonRollBackException;
+	public Map<String,Message> getMessageMap()throws RollBackException ,NonRollBackException;
+	public List<Message> getMessageList( String messageType, String messageLang )throws RollBackException ,NonRollBackException;
+	public List<Label> getLabelList()throws RollBackException ,NonRollBackException;
+	public Map<String,List<Label>> getLabelMap()throws RollBackException ,NonRollBackException;
+	public Map<String, Map<String, String>> getLabelStrMap()throws RollBackException ,NonRollBackException;
+	public void clearConfigCache()throws RollBackException ,NonRollBackException;
+	public void clearMessageCache()throws RollBackException ,NonRollBackException;
+	public Map<String, Map<String, List<FieldValidatorBean>>> getPageFieldValidators()throws RollBackException ,NonRollBackException;
+	public Map<String, List<FieldValidatorBean>> getPageValidators()throws RollBackException ,NonRollBackException;
+	public Map<String, String> getActionInputResult()throws RollBackException ,NonRollBackException;
 }

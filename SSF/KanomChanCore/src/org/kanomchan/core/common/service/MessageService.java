@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.constant.MessageCode;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 
 public interface MessageService {
 

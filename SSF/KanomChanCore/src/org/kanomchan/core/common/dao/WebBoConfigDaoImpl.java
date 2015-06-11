@@ -17,6 +17,8 @@ import org.kanomchan.core.common.bean.WebBoConfigGeographyDefault;
 import org.kanomchan.core.common.bean.WebBoConfigPageModule;
 import org.kanomchan.core.common.bean.WebBoConfigPageModuleDefault;
 import org.kanomchan.core.common.dao.ConfigDaoImpl.LabelMapper;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
@@ -24,7 +26,7 @@ import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
 public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfigDao {
 	
 	private static final LabelMapper<Label> LABEL_MAPPER = new LabelMapper<Label>();
-	public static final class LabelMapper<T extends Label> implements RowMapper<Label> {
+	private static final class LabelMapper<T extends Label> implements RowMapper<Label> {
 	    public Label mapRow(ResultSet rs, int num)throws SQLException {
 	    	LabelDefault label = new LabelDefault(); 
 	    	label.setLabel(rs.getString("LABEL"));
@@ -40,7 +42,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 			" FROM SYS_M_LABEL ";
 	
 	@Override
-	public List<Label> getLabelList() {
+	public List<Label> getLabelList()throws RollBackException ,NonRollBackException {
 		
 		List<Label> labelList = nativeQuery(SQL_QUERY_LABEL, LABEL_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
 		
@@ -48,7 +50,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	}
 
 	@Override
-	public Map<String, List<Label>> getLabelMap() {
+	public Map<String, List<Label>> getLabelMap()throws RollBackException ,NonRollBackException {
 		Map<String, List<Label>> messageMap = new ConcurrentHashMap<String, List<Label>>();
 		List<Label> labelList = nativeQuery(SQL_QUERY_LABEL, LABEL_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
 		
@@ -65,7 +67,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	}
 	
 	@Override
-	public Map<String, Map<String, String>> getLabelStrMap() {
+	public Map<String, Map<String, String>> getLabelStrMap()throws RollBackException ,NonRollBackException {
 		
 		Map<String, Map<String, String>> messageStringMap = new ConcurrentHashMap<String, Map<String, String>>();
 
@@ -113,7 +115,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 			" FROM JOB_N_WEB_BO_CONFIG ";
 	
 	@Override
-	public List<WebBoConfig> getWebBoConfigList() {
+	public List<WebBoConfig> getWebBoConfigList()throws RollBackException ,NonRollBackException {
 		List<WebBoConfig> webBoConfigList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG, WEB_BO_CONFIG_MAPPER);
 		return webBoConfigList;
 	}
@@ -136,7 +138,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 			" SELECT ID_WEB_BO_CONFIG_GEOGRAPHY, ID_REGION, ID_COUNTRY, ID_ZONE, ID_PROVINCE, ID_CITY" +
 			" FROM JOB_N_WEB_BO_CONFIG ";
 	@Override
-	public List<WebBoConfigGeography> getWebBoConfigGeographyList() {
+	public List<WebBoConfigGeography> getWebBoConfigGeographyList()throws RollBackException ,NonRollBackException {
 		List<WebBoConfigGeography> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_GEOGRAPHY, WEB_BO_CONFIG_GEOGRAPHY_MAPPER);
 		return webBoConfigGeographyList;
 	}
@@ -157,28 +159,13 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 			" SELECT ID_WEB_BO_CONFIG_PAGE_MODULE, PAGE, MODULE, FIELD " +
 			" FROM JOB_N_WEB_BO_CONFIG_PAGE_MODULE ";
 	@Override
-	public List<WebBoConfigPageModule> getWebBoConfigPageModuleList() {
+	public List<WebBoConfigPageModule> getWebBoConfigPageModuleList()throws RollBackException ,NonRollBackException {
 		List<WebBoConfigPageModule> webBoConfigGeographyList = nativeQuery(SQL_QUERY_WEB_BO_CONFIG_PAGE_MODULE, WEB_BO_CONFIG_PAGE_MODULE_MAPPER);
 		return webBoConfigGeographyList;
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	@Override
-	public Map<Object, List<Object>> getObjectMap() {
+	public Map<Object, List<Object>> getObjectMap()throws RollBackException ,NonRollBackException {
 		Map<String, Map<String, String>> messageStringMap = new ConcurrentHashMap<String, Map<String, String>>();
 
 		Map<String, List<Label>> messageMap   = getLabelMap();
@@ -205,37 +192,37 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 
 	@Override
 	public WebBoConfigGeography getWebBoConfigGeography(Long idRegion, Long idCountry,
-			Long idZone, Long idProvince, Long idCity) {
+			Long idZone, Long idProvince, Long idCity)throws RollBackException ,NonRollBackException {
 		return null;
 	}
 
 	@Override
-	public WebBoConfigPageModule getWebBoConfigPageModule(String page, String field) {
+	public WebBoConfigPageModule getWebBoConfigPageModule(String page, String field)throws RollBackException ,NonRollBackException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public WebBoConfig getWebBoConfig(Long idWebBoConfigGeography,
-			Long idWebBoConfigPageModule) {
+			Long idWebBoConfigPageModule) throws RollBackException ,NonRollBackException{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<Long, Long> getLongMap() {
+	public Map<Long, Long> getLongMap() throws RollBackException ,NonRollBackException{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<Object, Object> objectMap() {
+	public Map<Object, Object> objectMap() throws RollBackException ,NonRollBackException{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyMap() {
+	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyMap()throws RollBackException ,NonRollBackException {
 		
 		Map<Long, List<WebBoConfigGeography>> messageMap = new ConcurrentHashMap<Long, List<WebBoConfigGeography>>();
 		List<WebBoConfigGeography> webBoConfigGeographieList = getWebBoConfigGeographyList();
@@ -252,7 +239,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	}
 
 	@Override
-	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyRegionMap() {
+	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyRegionMap()throws RollBackException ,NonRollBackException {
 		
 		Map<Long, List<WebBoConfigGeography>> messageMap = new ConcurrentHashMap<Long, List<WebBoConfigGeography>>();
 		List<WebBoConfigGeography> webBoConfigGeographieList = getWebBoConfigGeographyList();
@@ -273,7 +260,7 @@ public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfig
 	public List<WebBoConfigPageModule> webBoConfigPageModuleList;
 	
 	@Override
-	public boolean getWebBoConfigDefault() {
+	public boolean getWebBoConfigDefault()throws RollBackException ,NonRollBackException {
 		webBoConfigList = getWebBoConfigList();
 		webBoConfigGeographyList = getWebBoConfigGeographyList();
 		webBoConfigPageModuleList = getWebBoConfigPageModuleList();

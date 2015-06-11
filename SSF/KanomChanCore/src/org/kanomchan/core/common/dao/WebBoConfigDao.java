@@ -7,28 +7,30 @@ import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.WebBoConfig;
 import org.kanomchan.core.common.bean.WebBoConfigGeography;
 import org.kanomchan.core.common.bean.WebBoConfigPageModule;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 
 public interface WebBoConfigDao {
-	public List<Label> getLabelList();
-	public Map<String,List<Label>> getLabelMap();
-	public Map<String, Map<String, String>> getLabelStrMap();
+	public List<Label> getLabelList()throws RollBackException ,NonRollBackException;
+	public Map<String,List<Label>> getLabelMap()throws RollBackException ,NonRollBackException;
+	public Map<String, Map<String, String>> getLabelStrMap()throws RollBackException ,NonRollBackException;
 	
-	public boolean getWebBoConfigDefault();
+	public boolean getWebBoConfigDefault()throws RollBackException ,NonRollBackException;
 	
-	public List<WebBoConfigGeography> getWebBoConfigGeographyList();
-	public List<WebBoConfigPageModule> getWebBoConfigPageModuleList();
-	public List<WebBoConfig> getWebBoConfigList();
+	public List<WebBoConfigGeography> getWebBoConfigGeographyList()throws RollBackException ,NonRollBackException;
+	public List<WebBoConfigPageModule> getWebBoConfigPageModuleList()throws RollBackException ,NonRollBackException;
+	public List<WebBoConfig> getWebBoConfigList()throws RollBackException ,NonRollBackException;
 	
-	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyMap();
-	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyRegionMap();
+	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyMap()throws RollBackException ,NonRollBackException;
+	public Map<Long, List<WebBoConfigGeography>> getWebBoConfigGeographyRegionMap()throws RollBackException ,NonRollBackException;
 	
-	public Map<Long, Long> getLongMap();
-	public Map<Object, Object> objectMap();
-	public Map<Object,List<Object>> getObjectMap();
+	public Map<Long, Long> getLongMap()throws RollBackException ,NonRollBackException;
+	public Map<Object, Object> objectMap()throws RollBackException ,NonRollBackException;
+	public Map<Object,List<Object>> getObjectMap()throws RollBackException ,NonRollBackException;
 		
-	public WebBoConfigGeography getWebBoConfigGeography(Long idRegion, Long idCountry, Long idZone, Long idProvince, Long idCity);
-	public WebBoConfigPageModule getWebBoConfigPageModule(String page, String field);
-	public WebBoConfig getWebBoConfig(Long idWebBoConfigGeography, Long idWebBoConfigPageModule);
+	public WebBoConfigGeography getWebBoConfigGeography(Long idRegion, Long idCountry, Long idZone, Long idProvince, Long idCity)throws RollBackException ,NonRollBackException;
+	public WebBoConfigPageModule getWebBoConfigPageModule(String page, String field)throws RollBackException ,NonRollBackException;
+	public WebBoConfig getWebBoConfig(Long idWebBoConfigGeography, Long idWebBoConfigPageModule)throws RollBackException ,NonRollBackException;
 	
 	
 	

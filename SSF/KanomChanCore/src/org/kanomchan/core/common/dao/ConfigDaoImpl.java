@@ -23,6 +23,8 @@ import org.kanomchan.core.common.bean.Label;
 import org.kanomchan.core.common.bean.LabelDefault;
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.bean.MessageDefault;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.googlecode.ehcache.annotations.Cacheable;
@@ -35,7 +37,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final String SQL_QUERY_CONFIG = "SELECT CONFIG_KEY, CONFIG_VALUE FROM SYS_M_CONFIG WHERE STATUS = 'A' ";
 	@Override
-	public Map<String, String> getConfigMap() {
+	public Map<String, String> getConfigMap() throws RollBackException ,NonRollBackException {
 		Map<String, String> configMap = new ConcurrentHashMap<String, String>();
 		
 		List<Config> configList = nativeQuery(SQL_QUERY_CONFIG, CONFIG_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
@@ -51,6 +53,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final ConfigMapper<Config> CONFIG_MAPPER = new ConfigMapper<Config>();
 	public static final class ConfigMapper<T extends Config> implements RowMapper<Config> {
+		/**
+		 * Logger for this class
+		 */
+		private static final Logger logger = Logger.getLogger(ConfigMapper.class);
+
 	    public Config mapRow(ResultSet rs, int num)throws SQLException {
 	    	ConfigDefault configDefault = new ConfigDefault();
 	    	configDefault.setKey( rs.getString("CONFIG_KEY"));
@@ -68,7 +75,13 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	public Map<String, Message> getMessageMap() {
 		Map<String, Message> messageMap = new ConcurrentHashMap<String, Message>();
 		
-		List<Message> messageList = nativeQuery(SQL_QUERY_MESSAGE, MESSAGE_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
+		List<Message> messageList;
+		try {
+			messageList = nativeQuery(SQL_QUERY_MESSAGE, MESSAGE_MAPPER);
+		} catch (RollBackException | NonRollBackException e) {
+			messageList = new ArrayList<Message>();
+			logger.error("getMessageMap()", e);
+		}//(SQL_QUERY_CONFIG, new configMapper());
 		
 		for (Message message : messageList) {
 			if (logger.isInfoEnabled()) {
@@ -81,6 +94,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final MessageMapper<Message> MESSAGE_MAPPER = new MessageMapper<Message>();
 	public static final class MessageMapper<T extends Message> implements RowMapper<Message> {
+		/**
+		 * Logger for this class
+		 */
+		private static final Logger logger = Logger.getLogger(MessageMapper.class);
+
 	    public Message mapRow(ResultSet rs, int num)throws SQLException {
 	    	MessageDefault message = new MessageDefault(); 
 	    	message.setMessageCode(rs.getString("MESSAGE_CODE"));
@@ -95,6 +113,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final LabelMapper<Label> LABEL_MAPPER = new LabelMapper<Label>();
 	public static final class LabelMapper<T extends Label> implements RowMapper<Label> {
+		/**
+		 * Logger for this class
+		 */
+		private static final Logger logger = Logger.getLogger(LabelMapper.class);
+
 	    public Label mapRow(ResultSet rs, int num)throws SQLException {
 	    	LabelDefault label = new LabelDefault(); 
 	    	label.setLabel(rs.getString("LABEL"));
@@ -105,7 +128,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	    }
     }
 	@Override
-	public List<Message> getMessageList(String messageType, String messageLang) {
+	public List<Message> getMessageList(String messageType, String messageLang)throws RollBackException ,NonRollBackException {
 		
 		StringBuilder whereClause = new StringBuilder();
 		Map<String,Object> params = new ConcurrentHashMap<String, Object>();
@@ -127,7 +150,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 			" FROM SYS_M_LABEL  WHERE STATUS = 'A' ";
 	
 	@Override
-	public List<Label> getLabelList() {
+	public List<Label> getLabelList() throws RollBackException ,NonRollBackException{
 		
 		List<Label> labelList = nativeQuery(SQL_QUERY_LABEL, LABEL_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
 		
@@ -135,7 +158,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	}
 
 	@Override
-	public Map<String, List<Label>> getLabelMap() {
+	public Map<String, List<Label>> getLabelMap()throws RollBackException ,NonRollBackException {
 		Map<String, List<Label>> messageMap = new ConcurrentHashMap<String, List<Label>>();
 		List<Label> labelList = nativeQuery(SQL_QUERY_LABEL, LABEL_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
 		
@@ -152,7 +175,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	}
 	
 	@Override
-	public Map<String, Map<String, String>> getLabelStrMap() {
+	public Map<String, Map<String, String>> getLabelStrMap() throws RollBackException ,NonRollBackException{
 		
 		Map<String, Map<String, String>> messageStringMap = new ConcurrentHashMap<String, Map<String, String>>();
 
@@ -177,14 +200,14 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	@Override
 	@TriggersRemove(cacheName="getActionByActionId", removeAll=true)
-	public void clearConfigCache() {
+	public void clearConfigCache() throws RollBackException ,NonRollBackException{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	@TriggersRemove(cacheName="getMessageMap", removeAll=true)
-	public void clearMessageCache() {
+	public void clearMessageCache() throws RollBackException ,NonRollBackException{
 		// TODO Auto-generated method stub
 		
 	}
@@ -195,6 +218,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 			" FROM JOB_N_DISPLAY_FIELD  WHERE STATUS = 'A' ";
 	private static final DisplayFieldMapper<DisplayField> DISPLAY_FIELD_MAPPER = new DisplayFieldMapper<DisplayField>();
 	public static final class DisplayFieldMapper<T extends DisplayField> implements RowMapper<DisplayField> {
+		/**
+		 * Logger for this class
+		 */
+		private static final Logger logger = Logger.getLogger(DisplayFieldMapper.class);
+
 	    public DisplayField mapRow(ResultSet rs, int num)throws SQLException {
 	    	DisplayFieldDefault displayFiled = new DisplayFieldDefault(); 
 	    	displayFiled.setIdCountry(Long.parseLong(rs.getString("ID_COUNTRY")));
@@ -211,6 +239,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final FieldValidatorBeanMapper<FieldValidatorBean> DISPLAY_FIELD_VALIDATOR = new FieldValidatorBeanMapper<FieldValidatorBean>();
 	public static final class FieldValidatorBeanMapper<T extends FieldValidatorBean> implements RowMapper<FieldValidatorBean> {
+		/**
+		 * Logger for this class
+		 */
+		private static final Logger logger = Logger.getLogger(FieldValidatorBeanMapper.class);
+
 	    public FieldValidatorBean mapRow(ResultSet rs, int num)throws SQLException {
 	    	FieldValidatorDefault displayFiled = new FieldValidatorDefault();
 	    	displayFiled.setId(rs.getLong("ID_FIELD_VALIDATOR"));
@@ -227,7 +260,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	    }
     }
 	@Override
-	public Map<String, Map<String, List<FieldValidatorBean>>> getPageFieldValidators() {
+	public Map<String, Map<String, List<FieldValidatorBean>>> getPageFieldValidators()throws RollBackException ,NonRollBackException {
 		Map<String, Map<String, List<FieldValidatorBean>>> page = new ConcurrentHashMap<String, Map<String, List<FieldValidatorBean>>>();
 		List<FieldValidatorBean> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
 		
@@ -251,7 +284,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	}
 	
 	@Override
-	public Map<String, List<FieldValidatorBean>> getPageValidators() {
+	public Map<String, List<FieldValidatorBean>> getPageValidators()throws RollBackException ,NonRollBackException {
 		Map<String, List<FieldValidatorBean>> page = new ConcurrentHashMap<String,  List<FieldValidatorBean>>();
 		List<FieldValidatorBean> fieldValidatorsqu = nativeQuery(SQL_QUERY_PAGE_FIELD_VALIDATORS, DISPLAY_FIELD_VALIDATOR);//(SQL_QUERY_CONFIG, new configMapper());
 		
@@ -276,7 +309,7 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	}
 
 	@Override
-	public Map<String, String> getActionInputResult() {
+	public Map<String, String> getActionInputResult() throws RollBackException ,NonRollBackException{
 		Map<String, String> actionInputResult = new ConcurrentHashMap<String, String>();
 		List<ActionBean> actionBeans = nativeQuery(SQL_QUERY_ACTION_INPUT_RESULT,ACTION_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
 		
@@ -290,6 +323,11 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final ActionMapper<ActionBean> ACTION_MAPPER = new ActionMapper<ActionBean>();
 	public static final class ActionMapper<T extends ActionBean> implements RowMapper<ActionBean> {
+		/**
+		 * Logger for this class
+		 */
+		private static final Logger logger = Logger.getLogger(ActionMapper.class);
+
 	    public ActionBean mapRow(ResultSet rs, int num)throws SQLException {
 	    	ActionBean displayFiled = new ActionBean();
 	    	displayFiled.setActionName(rs.getString("ACTION_NAME"));

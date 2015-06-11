@@ -1,7 +1,10 @@
 package org.kanomchan.core.common.service;
 
+import org.apache.log4j.Logger;
+
 import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,6 +20,8 @@ import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.constant.MessageCode;
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.dao.ConfigDao;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -25,6 +30,11 @@ import org.springframework.beans.factory.annotation.Required;
 //import com.google.gson.GsonBuilder;
 
 public class MessageServiceImpl implements MessageService {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(MessageServiceImpl.class);
+
     private ConcurrentMap<MessageFormatKey, MessageFormat> messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>();
 	private ConfigDao configDao;
 	@Autowired
@@ -37,13 +47,23 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void load() {
-		configDao.getMessageMap();
+		try {
+			configDao.getMessageMap();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("load()", e);
+		}
 	}
 
 	@Override
 	public void clearCache() {
 		messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>(); 
-		configDao.clearMessageCache();
+		try {
+			configDao.clearMessageCache();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("clearCache()", e);
+		}
 	}
 
 
@@ -61,7 +81,13 @@ public class MessageServiceImpl implements MessageService {
 	
 	@Override
 	public List<Message> getMessageList(String lang, String messageType) {
-		return configDao.getMessageList(messageType, lang);
+		try {
+			return configDao.getMessageList(messageType, lang);
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("getMessageList(String, String)", e);
+		}
+		return new ArrayList<Message>();
 	}
 	
 	
@@ -72,9 +98,16 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Message getMessage(String messageCode, String lang,String[] para) {
+	public Message getMessage(String messageCode, String lang,String[] para){
 		if(lang == null){lang = CommonConstant.DEFAULT_LOCALE.getISO3Language().toUpperCase();}
-		Map<String,Message> messageMap = configDao.getMessageMap();	
+		Map<String, Message> messageMap;
+		try {
+			messageMap = configDao.getMessageMap();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			messageMap = new  HashMap<String, Message>();
+			logger.error("getMessage(String, String, String[])", e);
+		}
 		Object objt = org.apache.commons.lang.SerializationUtils.clone(messageMap.get(messageCode+"_"+lang));
 		Message message = (Message) objt;
 		if(para!=null&&para.length>0){
@@ -131,7 +164,8 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public Map<String, Message> getMessageMap(String lang) {
-		List<Message> list = getMessageList(lang);
+		List<Message> list;
+		list = getMessageList(lang);
 		HashMap<String, Message> map = new HashMap<String, Message>();
 		if(list!=null){
 			for (Message message : list) {
@@ -165,6 +199,11 @@ public class MessageServiceImpl implements MessageService {
     }
     
     static class MessageFormatKey {
+		/**
+		 * Logger for this class
+		 */
+		private static final Logger logger = Logger.getLogger(MessageFormatKey.class);
+
         String pattern;
         Locale locale;
 
