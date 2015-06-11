@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.kanomchan.core.common.bean.ActionBean;
+import org.kanomchan.core.common.exception.NonRollBackException;
+import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.security.authorize.dao.ActionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -18,12 +20,12 @@ public class ActionServiceImpl implements ActionService {
 	}
 	
 	@Override
-	public Set<String> getAuthorizeCodeByAction(String namespace, String actionName) {
+	public Set<String> getAuthorizeCodeByAction(String namespace, String actionName) throws RollBackException, NonRollBackException {
 		return new HashSet<String>(actionDao.getAuthorizeCodeByAction(namespace,actionName));
 	}
 
 	@Override
-	public ActionBean findAction(String namespace, String actionName) {
+	public ActionBean findAction(String namespace, String actionName) throws RollBackException, NonRollBackException {
 		return actionDao.findAction(namespace,actionName);
 	}
 
