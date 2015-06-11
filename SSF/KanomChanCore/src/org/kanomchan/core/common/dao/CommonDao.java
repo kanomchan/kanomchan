@@ -76,8 +76,9 @@ public interface CommonDao {
 	 */
 	public <T extends Object > List<T> findByProperty( Class<T> clazz, final String propertyName, final Object value ) throws RollBackTechnicalException;
 	public <T extends Object > List<T> findByPropertyWithStatus( Class<T> clazz, final String propertyName, final Object value, String status ) throws RollBackTechnicalException;
+	public <T extends Object > List<T> findByPropertyWithStatusAndLang(Class<T> clazz, final String propertyName, final Object value, final String status, final String langCode) throws RollBackTechnicalException;
 	public <T extends Object > List<T> findByProperty( Class<T> clazz, String propertyName, final Object value, PagingBean pagingBean ) throws RollBackTechnicalException;
-	
+
 	/**
 	 * Execute a query based on the given example entity object. <br/>
 	 * ( use '=' to compare ) 
@@ -290,6 +291,7 @@ public interface CommonDao {
 	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException;
 	public <T extends Object > T saveOrUpdate(T target) throws RollBackTechnicalException;
 	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) throws RollBackTechnicalException;
+	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang, String code) throws RollBackTechnicalException;
 	
 	public <T extends Object > List<T> getListIfNotNull(Class<T> clazz, List<T> list) throws RollBackTechnicalException;
 	

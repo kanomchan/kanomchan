@@ -97,6 +97,13 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return findByProperty(clazz, criteria,(PagingBean)null);
 	}
 	@Override
+	public <T> List<T> findByPropertyWithStatusAndLang(Class<T> clazz, String propertyName, Object value, String status, String LangCode3) throws RollBackTechnicalException {
+		List<Criteria> criteria = new LinkedList<Criteria>();
+		criteria.add(new Criteria(propertyName, value));
+		criteria.add(new Criteria("STATUS", status));
+		return findByColumns(clazz, criteria, LangCode3);
+	}
+	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException {
 		return findByColumns(clazz, criteriaList, (PagingBean)null);
 	}
@@ -215,6 +222,10 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	@Override
 	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) {
 		return super.saveOrUpdate(target,includeMinusOne);
+	}
+	@Override
+	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang, String code) {
+		return super.saveOrUpdate(target, includeMinusOne, tableLang, code);
 	}
 
 	@Override
