@@ -35,11 +35,31 @@ public class ConfigServiceImpl implements ConfigService {
 	
 	@Override
 	@PostConstruct
-	public synchronized void initConfig()throws RollBackException ,NonRollBackException{
-		config = configDao.getConfigMap();
-		pageFieldValidatorBeans = configDao.getPageFieldValidators();
-		pageValidators = configDao.getPageValidators();
-		actionInputResult = configDao.getActionInputResult();
+	public synchronized void initConfig(){
+		try {
+			config = configDao.getConfigMap();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("initConfig()", e);
+		}
+		try {
+			pageFieldValidatorBeans = configDao.getPageFieldValidators();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("initConfig()", e);
+		}
+		try {
+			pageValidators = configDao.getPageValidators();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("initConfig()", e);
+		}
+		try {
+			actionInputResult = configDao.getActionInputResult();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("initConfig()", e);
+		}
 	}
 	
 	@Override

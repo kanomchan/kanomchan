@@ -16,7 +16,7 @@ public interface ConfigService {
 	
 	public Map<String, List<FieldValidatorBean>> getFieldValidators(String page)throws RollBackException ,NonRollBackException;
 
-	public void initConfig()throws RollBackException ,NonRollBackException;
+	public void initConfig();
 
 	public List<FieldValidatorBean> getPageValidators(String page);
 
