@@ -1,6 +1,8 @@
 package org.kanomchan.core.common.bean;
 
-public class LocationBean {
+import java.io.Serializable;
+
+public class LocationBean implements Serializable {
 	private String lang;
 	private Long zone;
 	private Long country;
