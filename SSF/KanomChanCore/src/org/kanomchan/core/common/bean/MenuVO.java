@@ -1,12 +1,17 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import org.kanomchan.core.security.authorize.bean.MenuBean;
 
-public class MenuVO {
+public class MenuVO implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8621079534551775788L;
 	private List<MenuBean> menuBeans;
 	private Map<Long, MenuBean> lookupMap;
 	public List<MenuBean> getMenuBeans() {

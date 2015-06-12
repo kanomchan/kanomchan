@@ -3,6 +3,10 @@ package org.kanomchan.core.common.bean;
 import java.io.Serializable;
 
 public class LocationBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6802648441588381722L;
 	private String lang;
 	private Long zone;
 	private Long country;
