@@ -1,11 +1,14 @@
 package org.kanomchan.core.common.dao;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
@@ -232,4 +235,94 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return null;
 	}
 
+	@Override
+	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
+		return saveMergeList(clazz, newList, oldList, null);
+	}
+
+	@Override
+	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String SubListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
+		List<T> resultList = new LinkedList<T>();
+		ClassMapper classMapper = JPAUtil.getClassMapper(clazz);
+		Method methodGet = classMapper.getPropertyId().getMethodGet();
+		Method methodSetStatus = classMapper.getColumn().get("STATUS").get(0).getMethodSet();
+		
+		Method methodGetSubDetail = null;
+		Method methodSetSubDetail = null;
+		if(SubListColumnName != null){
+			methodGetSubDetail = classMapper.getColumn().get(SubListColumnName).get(0).getMethodGet();
+			methodSetSubDetail = classMapper.getColumn().get(SubListColumnName).get(0).getMethodSet();
+		}
+		if(newList != null && newList.size() > 0 && oldList != null && oldList.size() > 0){
+			for (T neww : newList) {
+				if(neww != null){
+					Long idNew = (Long) methodGet.invoke(neww);
+					if(idNew != null && idNew > 0){
+						for (T old : oldList) {
+							Long idOld = (Long) methodGet.invoke(neww);
+							if(idOld != null && idOld > 0){
+								if(idNew == idOld){
+									if(SubListColumnName != null){
+										Object subDetail = methodGetSubDetail.invoke(neww);
+										Object resultSubDetail = this.saveOrUpdate(subDetail);
+										methodSetSubDetail.invoke(neww, resultSubDetail);
+									}
+									resultList.add((T) this.update(neww));
+								}
+							}
+						}
+					}else{
+						if(SubListColumnName != null){
+							Object subDetail = methodGetSubDetail.invoke(neww);
+							Object resultSubDetail = this.save(subDetail);
+							methodSetSubDetail.invoke(neww, resultSubDetail);
+						}
+						resultList.add(this.save(neww));
+					}
+				}
+			}
+			for (T old : oldList) {
+				if(old != null){
+					Long idOld = (Long) methodGet.invoke(old);
+					boolean have = false;
+					if(idOld != null && idOld > 0){
+						for (T neww : newList) {
+							Long idNew = (Long) methodGet.invoke(neww);
+							if(idNew != null && idNew > 0){
+								if(idNew == idOld){
+									have = true;
+									continue;
+								}
+							}
+						}
+					}
+					if (have == false) {
+						methodSetStatus.invoke(old, "I");
+						this.update(old);
+					}
+				}
+			}
+		}else if(newList != null && newList.size() > 0){
+			for (T neww : newList) {
+				if(neww != null){
+					if(SubListColumnName != null){
+						Object subDetail = methodGetSubDetail.invoke(neww);
+						Object resultSubDetail = this.save(subDetail);
+						methodSetSubDetail.invoke(neww, resultSubDetail);
+					}
+					resultList.add(this.save(neww));
+				}
+			}
+		}else if(oldList != null && oldList.size() > 0){
+			for (T old : oldList) {
+				if(old != null){
+					methodSetStatus.invoke(old, "I");
+					resultList.add((T) this.update(old));
+				}
+			}
+		}
+		return resultList;
+	}
 }
