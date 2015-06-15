@@ -1,28 +1,10 @@
 package org.kanomchan.core.common.processhandler;
 
-import java.beans.IntrospectionException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.Id;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.hibernate.collection.PersistentCollection;
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
-import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.HibernateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -73,10 +55,10 @@ public class BasicTransactionHandler  implements TransactionHandler{
 			}
 		} 
 		catch (SecurityException e) {
-			e.printStackTrace();
+			logger.error("isTxnProcess(ProceedingJoinPoint)", e);
 		} 
 		catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			logger.error("isTxnProcess(ProceedingJoinPoint)", e);
 		}
 		
 		//if targetClass and targetMethod have no @Transactional -> return false	
@@ -87,7 +69,9 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	public void beginTxn(ProcessContext processContext) {
 		try {
 			if( processContext.txnStatus == null ){
-				System.out.println("beginTxn");
+				if (logger.isDebugEnabled()) {
+					logger.debug("beginTxn(ProcessContext) - beginTxn");
+				}
 				TransactionDefinition txnDefinition = new DefaultTransactionDefinition(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
 				TransactionStatus txnStatus = platformTransactionManager.getTransaction(txnDefinition);	
 //				logger.debug("TransactionStatus.isCompleted "+txnStatus.isCompleted());
@@ -104,7 +88,9 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		TransactionStatus txnStatus = processContext.txnStatus;
 		if( txnStatus != null ){
 			processContext.txnStatus = (null);
-			System.out.println("commitTxn");
+			if (logger.isDebugEnabled()) {
+				logger.debug("commitTxn(ProcessContext) - commitTxn");
+			}
 			platformTransactionManager.commit(txnStatus);
 			
 		}
@@ -138,7 +124,9 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		TransactionStatus txnStatus = processContext.txnStatus;
 		if( txnStatus != null ){
 			processContext.txnStatus = (null);
-			System.out.println("rollback");
+			if (logger.isDebugEnabled()) {
+				logger.debug("rollbackTxn(ProcessContext) - rollback");
+			}
 			platformTransactionManager.rollback(txnStatus);
 		}
 		
