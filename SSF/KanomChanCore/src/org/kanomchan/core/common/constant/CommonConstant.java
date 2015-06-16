@@ -27,6 +27,8 @@ public interface CommonConstant {
 	public static final String ACT_CUR_KEY = "SESSION_ACT_CUR_KEY";
 	
 	public static final String URL_REDIRECT_FACEBOOK_KEY = "SESSION_URL_REDIRECT_FACEBOOK_KEY";
+	public static final String USER_ID = "SESSION_USER_ID";
+	public static final String USER_NAME = "SESSION_USER_NAME";
 	
     }
     
