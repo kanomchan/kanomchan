@@ -44,8 +44,8 @@ public class ProcessContextFilter  implements Filter  {
 		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_NAME, System.getProperty("com.sun.aas.instanceName"));
 		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_IP, InetAddress.getLocalHost().getHostAddress());
 		MDC.put(CommonConstant.LOG.SESSION_ID, ((HttpServletRequest) request).getSession().getId());
-		MDC.put(CommonConstant.LOG.USER_ID, httpSession.getAttribute(CommonConstant.SESSION.USER_ID)==null?"guest"+request.getRemoteAddr():httpSession.getAttribute(CommonConstant.SESSION.USER_ID));
-		MDC.put(CommonConstant.LOG.USER_NAME, httpSession.getAttribute(CommonConstant.SESSION.USER_NAME)==null?"guest"+request.getRemoteAddr():httpSession.getAttribute(CommonConstant.SESSION.USER_NAME));
+		MDC.put(CommonConstant.LOG.USER_ID, httpSession.getAttribute(CommonConstant.SESSION.USER_ID)==null?"guest"+getRealIp(request):httpSession.getAttribute(CommonConstant.SESSION.USER_ID));
+		MDC.put(CommonConstant.LOG.USER_NAME, httpSession.getAttribute(CommonConstant.SESSION.USER_NAME)==null?"guest"+getRealIp(request):httpSession.getAttribute(CommonConstant.SESSION.USER_NAME));
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug("[RequestURI Start]\t" + httpServletRequest.getRequestURI());
@@ -62,8 +62,8 @@ public class ProcessContextFilter  implements Filter  {
 			String appId = String.valueOf(httpSession.getAttribute("SESSION_APP_ID_KEY"));
 			processContext.setString("SESSION_APP_ID_KEY", appId);
 			CurrentThread.setProcessContext(processContext);
-			String userId = processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId()==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId();
-			String userName = processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName()==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName();
+			String userId = processContext.userBean==null?"guest"+getRealIp(request):processContext.userBean.getUserId()==null?"guest"+getRealIp(request):processContext.userBean.getUserId();
+			String userName = processContext.userBean==null?"guest"+getRealIp(request):processContext.userBean.getUserName()==null?"guest"+getRealIp(request):processContext.userBean.getUserName();
 			httpSession.setAttribute(CommonConstant.SESSION.USER_ID, userId);
 			httpSession.setAttribute(CommonConstant.SESSION.USER_NAME, userName);
 			MDC.put(CommonConstant.LOG.USER_ID, userId);
@@ -105,10 +105,10 @@ public class ProcessContextFilter  implements Filter  {
 	
 	private void getPOS(ServletRequest request){
 		
-		String ipAddress = ((HttpServletRequest) request).getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
-			ipAddress = request.getRemoteAddr();
-		}
+		String ipAddress = getRealIp(request);
+//		if (ipAddress == null) {
+//			ipAddress = request.getRemoteAddr();
+//		}
 
 			
 				try {
@@ -136,6 +136,14 @@ public class ProcessContextFilter  implements Filter  {
 	}
 
 
+	private String getRealIp(ServletRequest request){
+		
+		String ipAddress = ((HttpServletRequest) request).getHeader("X-FORWARDED-FOR");
+		if (ipAddress == null) {
+			ipAddress = request.getRemoteAddr();
+		}
+		return ipAddress;
+	}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
