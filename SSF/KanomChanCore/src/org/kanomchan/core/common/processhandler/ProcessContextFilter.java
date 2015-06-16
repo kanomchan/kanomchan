@@ -56,7 +56,7 @@ public class ProcessContextFilter  implements Filter  {
 			String appId = String.valueOf(httpSession.getAttribute("SESSION_APP_ID_KEY"));
 			processContext.setString("SESSION_APP_ID_KEY", appId);
 			CurrentThread.setProcessContext(processContext);
-			getSession(httpSession,request);
+			
 //			getPOS(request);
 		}
 		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
@@ -68,6 +68,8 @@ public class ProcessContextFilter  implements Filter  {
 		MDC.put(CommonConstant.LOG.SESSION_ID, ((HttpServletRequest) request).getSession().getId());
 		MDC.put(CommonConstant.LOG.USER_ID, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId()==null?"":processContext.userBean.getUserId());
 		MDC.put(CommonConstant.LOG.USER_NAME, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName()==null?"":processContext.userBean.getUserName());
+		HttpSession httpSession = httpServletRequest.getSession(true);
+		getSession(httpSession,request);
 		chain.doFilter(request,response);
 		if (logger.isInfoEnabled()) {
 			logger.info("[RequestURI End  ]\t" + httpServletRequest.getRequestURI());
