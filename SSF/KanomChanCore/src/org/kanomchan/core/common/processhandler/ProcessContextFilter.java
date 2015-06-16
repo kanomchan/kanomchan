@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.processhandler;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -23,6 +25,10 @@ import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.service.LocationService;
 
 public class ProcessContextFilter  implements Filter  {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(ProcessContextFilter.class);
 
 
 
@@ -117,7 +123,8 @@ public class ProcessContextFilter  implements Filter  {
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
+		ProcessContext processContext = CurrentThread.getProcessContext();
+		logger.info("session destroy by user Id :"+processContext.getUserId());
 		
 	}
 
