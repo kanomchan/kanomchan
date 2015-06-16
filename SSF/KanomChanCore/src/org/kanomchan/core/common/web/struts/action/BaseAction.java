@@ -118,7 +118,9 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	public JSONResult<Object> getResults() {
 		return results;
 	}
-	
+	public void setMessageList(List<Message> messageList) {
+		this.messageList = messageList;
+	}
 	public List<Message> getMessageList() {
 		return messageList;
 	}

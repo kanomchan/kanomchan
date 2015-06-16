@@ -1,16 +1,23 @@
 package org.kanomchan.core.common.web.struts.interceptor;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.struts2.interceptor.ServletConfigInterceptor;
+import org.kanomchan.core.common.bean.Button;
+import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
+import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.service.ActionService;
 import org.kanomchan.core.common.service.ConfigService;
+import org.kanomchan.core.common.service.MessageService;
+import org.kanomchan.core.common.web.struts.action.BaseAction;
 import org.kanomchan.core.security.authorize.Authorize;
 import org.kanomchan.core.security.authorize.dao.UserAuthorizeDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +34,13 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 	 * 
 	 */
 	private static final long serialVersionUID = -3298276170229094546L;
+	private MessageService messageService;
+	@Autowired
+	@Required
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
+	}
+	
 	private ActionService actionService;
 	@Autowired
 	@Required
@@ -42,6 +56,8 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 	}
 	@Autowired
 	private ConfigService configService;
+	
+	protected static final String MESSAGE = "message";
 	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
@@ -60,6 +76,7 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 			privileges = userAuthorizeDao.getUserPrivilegesByRoleId(idGuest);
 		}
 		
+		
 		String methodStr = invocation.getProxy().getMethod();
 		String actionName = invocation.getProxy().getActionName();
 		if(methodStr==null||"".equals(methodStr)){
@@ -71,8 +88,42 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 		codes.addAll(c);
 		if (!privileges.containsAll(codes)) {
 			if(userBean != null){
-				return "FORCE_TO_LOGGEDIN_WELCOME_PAGE";
-			}else return "FORCE_TO_LOGIN_PAGE";
+				if(invocation.getAction() instanceof BaseAction){
+					BaseAction baseAction = (BaseAction) invocation.getAction();
+					Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
+					List<Message> messageList = new ArrayList<Message>();
+					List<Button> buttonList = new ArrayList<Button>();
+					messageList.add(message);
+					baseAction.setMessageList(messageList);
+					Button e = new Button();
+					e.setAction("home-end");
+					e.setNamespace("/home");
+					e.setName("OK");
+					buttonList.add(e);
+					baseAction.setButtonList(buttonList);
+					return MESSAGE;
+				}else{
+					return "FORCE_TO_LOGIN_WELCOME_PAGE";
+				}
+			}else{
+				if(invocation.getAction() instanceof BaseAction){
+					BaseAction baseAction = (BaseAction) invocation.getAction();
+					Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
+					List<Message> messageList = new ArrayList<Message>();
+					List<Button> buttonList = new ArrayList<Button>();
+					messageList.add(message);
+					baseAction.setMessageList(messageList);
+					Button e = new Button();
+					e.setAction("login-end");
+					e.setNamespace("/login");
+					e.setName("OK");
+					buttonList.add(e);
+					baseAction.setButtonList(buttonList);
+					return MESSAGE;
+				}else{
+					return "FORCE_TO_LOGIN_PAGE";
+				}
+			}
 		}
 		return invocation.invoke();
 	}
