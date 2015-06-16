@@ -242,7 +242,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String SubListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException,
+	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String subListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		List<T> resultList = new LinkedList<T>();
 		ClassMapper classMapper = JPAUtil.getClassMapper(clazz);
@@ -251,63 +251,71 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		
 		Method methodGetSubDetail = null;
 		Method methodSetSubDetail = null;
-		if(SubListColumnName != null){
-			methodGetSubDetail = classMapper.getColumn().get(SubListColumnName).get(0).getMethodGet();
-			methodSetSubDetail = classMapper.getColumn().get(SubListColumnName).get(0).getMethodSet();
+//		Method methodSetStatusSubDetail = null;
+		if(subListColumnName != null){
+			methodGetSubDetail = classMapper.getColumn().get(subListColumnName).get(0).getMethodGet();
+			methodSetSubDetail = classMapper.getColumn().get(subListColumnName).get(0).getMethodSet();
 		}
 		if(newList != null && newList.size() > 0 && oldList != null && oldList.size() > 0){
-			for (T neww : newList) {
-				if(neww != null){
-					Long idNew = (Long) methodGet.invoke(neww);
-					if(idNew != null && idNew > 0){
-						for (T old : oldList) {
-							Long idOld = (Long) methodGet.invoke(neww);
-							if(idOld != null && idOld > 0){
-								if(idNew == idOld){
-									if(SubListColumnName != null){
-										Object subDetail = methodGetSubDetail.invoke(neww);
-										Object resultSubDetail = this.saveOrUpdate(subDetail);
-										methodSetSubDetail.invoke(neww, resultSubDetail);
-									}
-									resultList.add((T) this.update(neww));
-								}
-							}
-						}
-					}else{
-						if(SubListColumnName != null){
-							Object subDetail = methodGetSubDetail.invoke(neww);
-							Object resultSubDetail = this.save(subDetail);
-							methodSetSubDetail.invoke(neww, resultSubDetail);
-						}
-						resultList.add(this.save(neww));
-					}
-				}
-			}
 			for (T old : oldList) {
 				if(old != null){
-					Long idOld = (Long) methodGet.invoke(old);
 					boolean have = false;
+					Long idOld = (Long) methodGet.invoke(old);
 					if(idOld != null && idOld > 0){
 						for (T neww : newList) {
+							if(neww == null)
+								continue;
 							Long idNew = (Long) methodGet.invoke(neww);
 							if(idNew != null && idNew > 0){
 								if(idNew == idOld){
 									have = true;
-									continue;
 								}
 							}
 						}
 					}
 					if (have == false) {
+//						if(subListColumnName != null){
+//							Object subDetail = methodGetSubDetail.invoke(old);
+//							Object resultSubDetail = this.saveOrUpdate(subDetail);
+//							methodSetSubDetail.invoke(old, resultSubDetail);
+//						}
 						methodSetStatus.invoke(old, "I");
 						this.update(old);
 					}
 				}
 			}
+			for (T neww : newList) {
+				if(neww == null)
+					continue;
+				Long idNew = (Long) methodGet.invoke(neww);
+				if(idNew != null && idNew > 0){
+					for (T old : oldList) {
+						Long idOld = (Long) methodGet.invoke(old);
+						if(idOld != null && idOld > 0){
+							if(idNew == idOld){
+								if(subListColumnName != null){
+									Object subDetail = methodGetSubDetail.invoke(neww);
+									Object resultSubDetail = this.saveOrUpdate(subDetail);
+									methodSetSubDetail.invoke(neww, resultSubDetail);
+								}
+								resultList.add((T) this.update(neww));
+							}
+						}
+					}
+				}else{
+					if(subListColumnName != null){
+						Object subDetail = methodGetSubDetail.invoke(neww);
+						Object resultSubDetail = this.save(subDetail);
+						methodSetSubDetail.invoke(neww, resultSubDetail);
+					}
+					resultList.add(this.save(neww));
+				}
+
+			}
 		}else if(newList != null && newList.size() > 0){
 			for (T neww : newList) {
 				if(neww != null){
-					if(SubListColumnName != null){
+					if(subListColumnName != null){
 						Object subDetail = methodGetSubDetail.invoke(neww);
 						Object resultSubDetail = this.save(subDetail);
 						methodSetSubDetail.invoke(neww, resultSubDetail);
