@@ -36,7 +36,13 @@ public class ProcessContextFilter  implements Filter  {
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		
+		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
+		MDC.put(CommonConstant.LOG.SERVER_NAME, request.getServerName());
+		MDC.put(CommonConstant.LOG.SERVER_PORT, request.getServerPort());
+		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_SERVER_NAME, InetAddress.getLocalHost().getHostName());
+		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_NAME, System.getProperty("com.sun.aas.instanceName"));
+		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_IP, InetAddress.getLocalHost().getHostAddress());
+		MDC.put(CommonConstant.LOG.SESSION_ID, ((HttpServletRequest) request).getSession().getId());
 		if (logger.isInfoEnabled()) {
 			logger.info("[RequestURI Start]\t" + httpServletRequest.getRequestURI());
 		}
@@ -59,13 +65,7 @@ public class ProcessContextFilter  implements Filter  {
 			
 //			getPOS(request);
 		}
-		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
-		MDC.put(CommonConstant.LOG.SERVER_NAME, request.getServerName());
-		MDC.put(CommonConstant.LOG.SERVER_PORT, request.getServerPort());
-		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_SERVER_NAME, InetAddress.getLocalHost().getHostName());
-		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_NAME, System.getProperty("com.sun.aas.instanceName"));
-		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_IP, InetAddress.getLocalHost().getHostAddress());
-		MDC.put(CommonConstant.LOG.SESSION_ID, ((HttpServletRequest) request).getSession().getId());
+
 		MDC.put(CommonConstant.LOG.USER_ID, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId()==null?"":processContext.userBean.getUserId());
 		MDC.put(CommonConstant.LOG.USER_NAME, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName()==null?"":processContext.userBean.getUserName());
 		HttpSession httpSession = httpServletRequest.getSession(true);
