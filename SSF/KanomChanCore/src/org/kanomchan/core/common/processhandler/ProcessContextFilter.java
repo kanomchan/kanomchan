@@ -36,6 +36,7 @@ public class ProcessContextFilter  implements Filter  {
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		HttpSession httpSession = httpServletRequest.getSession(true);
 		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
 		MDC.put(CommonConstant.LOG.SERVER_NAME, request.getServerName());
 		MDC.put(CommonConstant.LOG.SERVER_PORT, request.getServerPort());
@@ -43,36 +44,37 @@ public class ProcessContextFilter  implements Filter  {
 		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_NAME, System.getProperty("com.sun.aas.instanceName"));
 		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_IP, InetAddress.getLocalHost().getHostAddress());
 		MDC.put(CommonConstant.LOG.SESSION_ID, ((HttpServletRequest) request).getSession().getId());
-		if (logger.isInfoEnabled()) {
-			logger.info("[RequestURI Start]\t" + httpServletRequest.getRequestURI());
+		MDC.put(CommonConstant.LOG.USER_ID, httpSession.getAttribute(CommonConstant.SESSION.USER_ID)==null?"guest"+request.getRemoteAddr():httpSession.getAttribute(CommonConstant.SESSION.USER_ID));
+		MDC.put(CommonConstant.LOG.USER_NAME, httpSession.getAttribute(CommonConstant.SESSION.USER_NAME)==null?"guest"+request.getRemoteAddr():httpSession.getAttribute(CommonConstant.SESSION.USER_NAME));
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("[RequestURI Start]\t" + httpServletRequest.getRequestURI());
 		}
-//		Gson gson = new Gson();
-//		System.out.println(gson.toJson(request.getParameterMap()));
 		if(processContext == null){
 
 			processContext = new ProcessContext();
-			HttpSession httpSession = httpServletRequest.getSession(true);
+			
 			UserBean userBean = (UserBean) httpSession.getAttribute(CommonConstant.SESSION.USER_BEAN_KEY);
-//			Locale locale = (Locale) httpSession.getAttribute(CommonConstant.SESSION.LOCALE_KEY);
 			processContext.userBean = (userBean);
-//			serviceContext.setLocale(locale);
 			
 			String corpId = String.valueOf(httpSession.getAttribute("SESSION_CORP_ID_KEY"));
 			processContext.setString("SESSION_CORP_ID_KEY", corpId);
 			String appId = String.valueOf(httpSession.getAttribute("SESSION_APP_ID_KEY"));
 			processContext.setString("SESSION_APP_ID_KEY", appId);
 			CurrentThread.setProcessContext(processContext);
+			String userId = processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId()==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId();
+			String userName = processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName()==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName();
+			httpSession.setAttribute(CommonConstant.SESSION.USER_ID, userId);
+			httpSession.setAttribute(CommonConstant.SESSION.USER_NAME, userName);
+			MDC.put(CommonConstant.LOG.USER_ID, userId);
+			MDC.put(CommonConstant.LOG.USER_NAME, userName);
 			
-//			getPOS(request);
 		}
 
-		MDC.put(CommonConstant.LOG.USER_ID, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId()==null?"":processContext.userBean.getUserId());
-		MDC.put(CommonConstant.LOG.USER_NAME, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName()==null?"":processContext.userBean.getUserName());
-		HttpSession httpSession = httpServletRequest.getSession(true);
 		getSession(httpSession,request);
 		chain.doFilter(request,response);
-		if (logger.isInfoEnabled()) {
-			logger.info("[RequestURI End  ]\t" + httpServletRequest.getRequestURI());
+		if (logger.isDebugEnabled()) {
+			logger.debug("[RequestURI End  ]\t" + httpServletRequest.getRequestURI());
 		}
 		CurrentThread.remove();
 	}
@@ -119,13 +121,8 @@ public class ProcessContextFilter  implements Filter  {
 					}else{
 						processContext.setLocation("THA",0L,0L,0L,0L,0L,0L,0L,0L,0L);
 					}
-//					CurrentThread.setProcessContext(processContext);
 				} catch (RollBackException | NonRollBackException  e) {
-					// TODO Auto-generated catch block
-//					e.printStackTrace();
 				} catch (Exception e) {
-					// TODO: handle exception
-//					e.printStackTrace();
 				}
 	}
 
@@ -142,7 +139,6 @@ public class ProcessContextFilter  implements Filter  {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
 		
 	}
 }
