@@ -258,30 +258,25 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		}
 		if(newList != null && newList.size() > 0 && oldList != null && oldList.size() > 0){
 			for (T old : oldList) {
-				if(old != null){
-					boolean have = false;
-					Long idOld = (Long) methodGet.invoke(old);
-					if(idOld != null && idOld > 0){
-						for (T neww : newList) {
-							if(neww == null)
-								continue;
-							Long idNew = (Long) methodGet.invoke(neww);
-							if(idNew != null && idNew > 0){
-								if(idNew == idOld){
-									have = true;
-								}
+				if(old == null)
+					continue;
+				boolean have = false;
+				Long idOld = (Long) methodGet.invoke(old);
+				if(idOld != null && idOld > 0){
+					for (T neww : newList) {
+						if(neww == null)
+							continue;
+						Long idNew = (Long) methodGet.invoke(neww);
+						if(idNew != null && idNew > 0){
+							if(idNew == idOld){
+								have = true;
 							}
 						}
 					}
-					if (have == false) {
-//						if(subListColumnName != null){
-//							Object subDetail = methodGetSubDetail.invoke(old);
-//							Object resultSubDetail = this.saveOrUpdate(subDetail);
-//							methodSetSubDetail.invoke(old, resultSubDetail);
-//						}
-						methodSetStatus.invoke(old, "I");
-						this.update(old);
-					}
+				}
+				if (have == false) {
+					methodSetStatus.invoke(old, "I");
+					this.update(old, false);
 				}
 			}
 			for (T neww : newList) {
@@ -295,20 +290,20 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 							if(idNew == idOld){
 								if(subListColumnName != null){
 									Object subDetail = methodGetSubDetail.invoke(neww);
-									Object resultSubDetail = this.saveOrUpdate(subDetail);
+									Object resultSubDetail = this.saveOrUpdate(subDetail, false);
 									methodSetSubDetail.invoke(neww, resultSubDetail);
 								}
-								resultList.add((T) this.update(neww));
+								resultList.add(this.update(neww, false));
 							}
 						}
 					}
 				}else{
 					if(subListColumnName != null){
 						Object subDetail = methodGetSubDetail.invoke(neww);
-						Object resultSubDetail = this.save(subDetail);
+						Object resultSubDetail = this.save(subDetail, false);
 						methodSetSubDetail.invoke(neww, resultSubDetail);
 					}
-					resultList.add(this.save(neww));
+					resultList.add(this.save(neww, false));
 				}
 
 			}
@@ -317,17 +312,17 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 				if(neww != null){
 					if(subListColumnName != null){
 						Object subDetail = methodGetSubDetail.invoke(neww);
-						Object resultSubDetail = this.save(subDetail);
+						Object resultSubDetail = this.save(subDetail, false);
 						methodSetSubDetail.invoke(neww, resultSubDetail);
 					}
-					resultList.add(this.save(neww));
+					resultList.add(this.save(neww, false));
 				}
 			}
 		}else if(oldList != null && oldList.size() > 0){
 			for (T old : oldList) {
 				if(old != null){
 					methodSetStatus.invoke(old, "I");
-					resultList.add((T) this.update(old));
+					resultList.add(this.update(old, false));
 				}
 			}
 		}
