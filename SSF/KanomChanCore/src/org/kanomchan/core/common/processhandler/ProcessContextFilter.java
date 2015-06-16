@@ -137,11 +137,13 @@ public class ProcessContextFilter  implements Filter  {
 
 
 	private String getRealIp(ServletRequest request){
-		
-		String ipAddress = ((HttpServletRequest) request).getHeader("X-FORWARDED-FOR");
-		if (ipAddress == null) {
+		String ipAddress = null;
+		ipAddress = ((HttpServletRequest) request).getHeader("X-FORWARDED-FOR");
+		if (ipAddress == null)
+			ipAddress = ((HttpServletRequest) request).getHeader("HTTP_X_FORWARDED_FOR");
+		if (ipAddress == null)
 			ipAddress = request.getRemoteAddr();
-		}
+		
 		return ipAddress;
 	}
 
