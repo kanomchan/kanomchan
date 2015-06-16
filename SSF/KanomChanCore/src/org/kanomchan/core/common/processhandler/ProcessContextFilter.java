@@ -36,6 +36,10 @@ public class ProcessContextFilter  implements Filter  {
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		
+		if (logger.isInfoEnabled()) {
+			logger.info("[RequestURI Start]\t" + httpServletRequest.getRequestURI());
+		}
 //		Gson gson = new Gson();
 //		System.out.println(gson.toJson(request.getParameterMap()));
 		if(processContext == null){
@@ -65,6 +69,9 @@ public class ProcessContextFilter  implements Filter  {
 		MDC.put(CommonConstant.LOG.USER_ID, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserId()==null?"":processContext.userBean.getUserId());
 		MDC.put(CommonConstant.LOG.USER_NAME, processContext.userBean==null?"guest"+request.getRemoteAddr():processContext.userBean.getUserName()==null?"":processContext.userBean.getUserName());
 		chain.doFilter(request,response);
+		if (logger.isInfoEnabled()) {
+			logger.info("[RequestURI End  ]\t" + httpServletRequest.getRequestURI());
+		}
 		CurrentThread.remove();
 	}
 
