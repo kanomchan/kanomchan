@@ -57,7 +57,7 @@ public class ProcessContextFilter  implements Filter  {
 			processContext.setString("SESSION_APP_ID_KEY", appId);
 			CurrentThread.setProcessContext(processContext);
 			getSession(httpSession,request);
-			getPOS(request);
+//			getPOS(request);
 		}
 		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
 		MDC.put(CommonConstant.LOG.SERVER_NAME, request.getServerName());
@@ -113,10 +113,11 @@ public class ProcessContextFilter  implements Filter  {
 					ServiceResult<LocationBean> serviceResult = locationService.getLocation(ipAddress);
 					if(serviceResult.isSuccess()){
 						processContext.setLocationBean(serviceResult.getResult());
+						((HttpServletRequest) request).getSession().setAttribute(CommonConstant.SESSION.LOCATION_BEAN_KEY,serviceResult.getResult());
 					}else{
 						processContext.setLocation("THA",0L,0L,0L,0L,0L,0L,0L,0L,0L);
 					}
-					CurrentThread.setProcessContext(processContext);
+//					CurrentThread.setProcessContext(processContext);
 				} catch (RollBackException | NonRollBackException  e) {
 					// TODO Auto-generated catch block
 //					e.printStackTrace();
