@@ -295,8 +295,6 @@ public interface CommonDao {
 	public <T extends Object > T saveOrUpdate(T target) throws RollBackException ,NonRollBackException;
 	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) throws RollBackException ,NonRollBackException;
 	
-	public <T extends Object > List<T> getListIfNotNull(Class<T> clazz, List<T> list) throws RollBackException ,NonRollBackException;
-	
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String SubListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 

@@ -230,12 +230,6 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> List<T> getListIfNotNull(Class<T> clazz, List<T> list) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException {
 		return saveMergeList(clazz, newList, oldList, null);
@@ -268,7 +262,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 							continue;
 						Long idNew = (Long) methodGet.invoke(neww);
 						if(idNew != null && idNew > 0){
-							if(idNew == idOld){
+							if(idNew.equals(idOld)){
 								have = true;
 							}
 						}
@@ -287,7 +281,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 					for (T old : oldList) {
 						Long idOld = (Long) methodGet.invoke(old);
 						if(idOld != null && idOld > 0){
-							if(idNew == idOld){
+							if(idNew.equals(idOld)){
 								if(subListColumnName != null){
 									Object subDetail = methodGetSubDetail.invoke(neww);
 									Object resultSubDetail = this.saveOrUpdate(subDetail, false);
