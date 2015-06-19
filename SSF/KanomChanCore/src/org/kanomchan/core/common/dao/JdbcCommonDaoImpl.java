@@ -1183,7 +1183,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		countQueryString.append(genQueryWhereStringByECriteria(criteriaList, extraWhereClause, like));
 
 		if(langCode3 != null && !"".equals(langCode3)){
-			countQueryString.append(" and ");
+			if(criteriaList == null || criteriaList.size() == 0)
+				countQueryString.append(WHERE);
+			else
+				countQueryString.append(" and ");
 			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
 			countQueryString.append(".LANG_CODE3 = '");
 			countQueryString.append(langCode3 + "' ");
