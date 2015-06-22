@@ -1085,7 +1085,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params, null);
+				List<T> resultList1 = simpleJdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
 				return resultList1;
 			}catch(RuntimeException e){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
@@ -1106,7 +1106,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = simpleJdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params, null);
+				List<T> resultList1 = simpleJdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
 				
 				return resultList1;
 				
