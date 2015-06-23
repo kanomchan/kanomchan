@@ -131,7 +131,7 @@ public class ProcessContextFilter  implements Filter  {
 	@Override
 	public void destroy() {
 		ProcessContext processContext = CurrentThread.getProcessContext();
-		logger.info("session destroy by user Id :"+processContext.getUserId());
+		logger.info("session destroy by user Id :"+processContext==null?null:processContext.getUserId());
 		
 	}
 
