@@ -34,8 +34,8 @@ public class Authen extends Component {
 	}
 
     public boolean start(Writer writer) {
-    	ProcessContext pageContext  = CurrentThread.getProcessContext();
-    	UserBean userBean =pageContext.getUserBean();
+    	Map<String, Object> session = ActionContext.getContext().getSession();
+		UserBean userBean = (UserBean) session.get(CommonConstant.SESSION.USER_BEAN_KEY);
     	ConfigService configService = ApplicationContextUtil.getBean("configService", ConfigService.class);
     	UserAuthorizeDao userAuthorizeDao = ApplicationContextUtil.getBean("userAuthorizeDao", UserAuthorizeDao.class);
 		Set<String> privileges;
