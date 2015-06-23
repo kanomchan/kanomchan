@@ -48,7 +48,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/openid/req/json-smart-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/openid/req/nimbus-jose-jwt-3.2.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/openid/openid-connect-client-1.1.12.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/openid/openid-connect-common-1.1.12.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/openid/openid-connect-common-1.1.12.jar" sourcepath="C:/Users/JM/.m2/repository/org/mitre/openid-connect-common/1.1.12/openid-connect-common-1.1.12-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/hibernate-core-3.6.10.Final.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aop-4.1.4.RELEASE.jar" sourcepath="C:/Users/JM/.m2/repository/org/springframework/spring-aop/4.1.4.RELEASE/spring-aop-4.1.4.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aspects-4.1.4.RELEASE.jar"/>
@@ -57,7 +57,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-context-support-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-core-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-expression-4.1.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-jdbc-4.1.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-jdbc-4.1.4.RELEASE.jar" sourcepath="C:/Users/JM/.m2/repository/org/springframework/spring-jdbc/4.1.4.RELEASE/spring-jdbc-4.1.4.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-orm-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-security-core-3.2.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-security-oauth2-2.0.6.RELEASE.jar"/>
@@ -72,7 +72,7 @@
 			<attribute name="owner.project.facets" value="jst.utility"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_80">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
