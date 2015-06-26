@@ -1108,7 +1108,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = jdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 				return resultList1;
 			}catch(RuntimeException e){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
