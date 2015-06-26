@@ -17,7 +17,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.Query;
@@ -37,6 +39,7 @@ import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
+import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +74,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		this.simpleJdbcTemplate = simpleJdbcTemplate;
 	}
 	
+	@Autowired
+	private ConfigService configService;
 	protected static final RowMapper<String> STRING_MAPPER = new RowMapper<String>() {
 		
 		@Override
@@ -415,6 +420,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(property.getEmbeddedId()!=null)
 								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 							Object value = property.getMethodGet().invoke(joinColumnsObject);
+							if(configService.checkTable(columnName) && ( value == null  || ((Number)value).intValue() ==-1)){
+								continue;
+							}
 							if(value!=null){
 								if(value instanceof Number){
 									if(includeMinusOne || ((Number)value).intValue() !=-1){
@@ -446,6 +454,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(entity!=null){
 								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+								if(configService.checkTable(columnName) && ((Number)value).intValue() ==-1){
+									continue;
+								}
 								if(value!=null ) {
 									if(value instanceof Number){
 										if(includeMinusOne || ((Number)value).intValue() !=-1){
@@ -699,6 +710,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(property.getEmbeddedId()!=null)
 								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 							Object value = property.getMethodGet().invoke(joinColumnsObject);
+							if(configService.checkTable(columnName) && ((Number)value).intValue() ==-1){
+								continue;
+							}
 							if(value!=null){
 								if(value instanceof Number){
 									if(includeMinusOne || ((Number)value).intValue() !=-1){
@@ -731,6 +745,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 								
 								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+								
+								if(configService.checkTable(columnName) && ((Number)value).intValue() ==-1){
+									continue;
+								}
 								
 								if(value!=null ) {
 									if(value instanceof Number){
