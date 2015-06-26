@@ -2,9 +2,6 @@ package org.kanomchan.core.common.exception;
 
 import java.util.List;
 
-import javax.mail.MessagingException;
-
-import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.constant.MessageCode;
 
 public class RollBackProcessException extends RollBackException implements ProcessException {

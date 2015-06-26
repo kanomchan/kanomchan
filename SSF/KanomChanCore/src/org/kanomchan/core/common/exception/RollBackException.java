@@ -2,7 +2,6 @@ package org.kanomchan.core.common.exception;
 
 import java.util.List;
 
-import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.constant.MessageCode;
 
 public abstract class RollBackException extends Exception implements BaseException {
