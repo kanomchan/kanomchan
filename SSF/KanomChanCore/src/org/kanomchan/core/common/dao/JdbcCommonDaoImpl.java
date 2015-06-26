@@ -15,9 +15,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
@@ -1151,14 +1150,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	@Override
 	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap, PagingBean pagingBean) throws RollBackException, NonRollBackException {
 		List<Criteria> criteriaList = new LinkedList<Criteria>();
-		Iterator iterator = columnMap.entrySet().iterator();
+		Iterator<Entry<String, Object>> iterator = columnMap.entrySet().iterator();
 		
 		while (iterator.hasNext()) {
-			Map.Entry column = (Map.Entry) iterator.next();
+			Map.Entry<String,Object> column = iterator.next();
 			criteriaList.add(new Criteria(column.getKey().toString(), column.getValue()));
-//			if(column.getValue() instanceof List){
-//				
-//			}
 		}
 		
 		if(pagingBean==null){
@@ -1170,7 +1166,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = jdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 				return resultList1;
 			}catch(RuntimeException e){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
@@ -1186,7 +1182,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = jdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 = nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
 				
 				return resultList1;
 				
