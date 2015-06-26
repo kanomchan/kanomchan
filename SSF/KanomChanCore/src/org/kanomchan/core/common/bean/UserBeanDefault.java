@@ -20,7 +20,7 @@ public class UserBeanDefault implements UserBean ,Serializable{
 	private Set<String> roles;
 	private Set<String> privileges;
 	private String status;
-	private String roleName;
+//	private String roleName;
 	private String userImagePath;
 	public String getUserId() {
 		return userId;
@@ -93,7 +93,7 @@ public class UserBeanDefault implements UserBean ,Serializable{
 	
 	@Override
 	public void setRoleName(String userRoleName) {
-		this.roleName = userRoleName;
+//		this.rolesName = userRoleName;
 	}
 	@Override
 	public String getUserImagePath() {
