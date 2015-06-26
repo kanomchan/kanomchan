@@ -2,8 +2,11 @@ package org.kanomchan.core.common.service;
 
 import org.apache.log4j.Logger;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -13,6 +16,10 @@ import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class ConfigServiceImpl implements ConfigService {
 	/**
@@ -65,7 +72,6 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public void refreshConfig()throws RollBackException ,NonRollBackException{
 		config = configDao.getConfigMap();
-		config = configDao.getConfigMap();
 		pageFieldValidatorBeans = configDao.getPageFieldValidators();
 		pageValidators = configDao.getPageValidators();
 		actionInputResult = configDao.getActionInputResult();
@@ -98,6 +104,13 @@ public class ConfigServiceImpl implements ConfigService {
 		return actionInputResult.get((namespace==null?"":namespace)+"/"+(name==null?"":name));
 	}
 	
-	
+	@Override
+	public boolean checkTable(String name) {
+		String text   = config.get("NEEDLE_LIST");
+		Gson gson = new GsonBuilder().create();
+		Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
+		Set<String> setKey = gson.fromJson(text, typeOfSrc );
+		return setKey.contains(name);
+	}
 
 }
