@@ -16,12 +16,9 @@ import org.kanomchan.core.common.bean.WebBoConfigGeography;
 import org.kanomchan.core.common.bean.WebBoConfigGeographyDefault;
 import org.kanomchan.core.common.bean.WebBoConfigPageModule;
 import org.kanomchan.core.common.bean.WebBoConfigPageModuleDefault;
-import org.kanomchan.core.common.dao.ConfigDaoImpl.LabelMapper;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.jdbc.core.RowMapper;
-
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
 
 public class WebBoConfigDaoImpl extends JdbcCommonDaoImpl implements WebBoConfigDao {
 	
