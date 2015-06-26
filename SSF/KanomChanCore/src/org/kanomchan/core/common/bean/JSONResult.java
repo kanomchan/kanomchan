@@ -4,13 +4,15 @@ package org.kanomchan.core.common.bean;
 import java.io.Serializable;
 import java.util.List;
 
-import org.kanomchan.core.common.bean.Message;
-import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 
 public class JSONResult<T extends Object> implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3287524195892843408L;
 	private T result;
 	private String status;
 	private List<Message> messages;
@@ -25,7 +27,7 @@ public class JSONResult<T extends Object> implements Serializable {
 	public JSONResult() {
 	}
 	
-	public JSONResult(ServiceResult serviceResult ) {
+	public JSONResult(ServiceResult<T> serviceResult ) {
 		messages = serviceResult.getMessages();
 		status = serviceResult.getStatus();
 		result = (T) serviceResult.getResult();
@@ -34,7 +36,7 @@ public class JSONResult<T extends Object> implements Serializable {
 	
 	public JSONResult(T r,PagingBean pagingBean ) {
 		result = (T) r;
-		pagingBean = pagingBean;
+		this.pagingBean = pagingBean;
 	}
 	
 	public T getResult() {
