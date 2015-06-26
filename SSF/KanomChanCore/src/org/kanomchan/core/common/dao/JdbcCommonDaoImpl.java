@@ -1123,7 +1123,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = jdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 =nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
 				
 				return resultList1;
 				
@@ -1232,7 +1232,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				params.put(criteria.getParam(), criteria.getValue());
 			}
 		}
-		Long totalRows = jdbcTemplate.queryForObject(countQueryString.toString(),Long.class, params);
+		Long totalRows = namedParameterJdbcTemplate.queryForObject(countQueryString.toString(), params,Long.class);
 		return totalRows;
 	}
 	
