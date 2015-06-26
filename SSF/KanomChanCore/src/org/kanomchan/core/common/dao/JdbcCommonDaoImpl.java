@@ -49,6 +49,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -74,8 +75,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-//	@Autowired
-//	protected  NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	@Autowired
+	protected  NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	@Autowired
 	private ConfigService configService;
@@ -188,7 +189,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	@Override
 	public <T extends Object> List<T> nativeQuery( String sql, RowMapper<T> rm ,Map<String, Object> params) throws RollBackException, NonRollBackException {
 		try {
-			return jdbcTemplate.query(sql, rm, params);
+			
+			return namedParameterJdbcTemplate.query(sql, params,rm );
 		} catch (BadSqlGrammarException ba) {
 			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
 		}
@@ -205,7 +207,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	@Override
 	public <T extends Object> T nativeQueryOneRow( String sql, RowMapper<T> rm ,Map<String, Object> params) throws RollBackException, NonRollBackException {
-		List<T> resultList = jdbcTemplate.query(sql, rm, params);
+		List<T> resultList = namedParameterJdbcTemplate.query(sql, params,rm );
 		T result = null;
 		if (resultList != null && resultList.size() > 0){
 			result = resultList.get(0);
@@ -267,7 +269,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		String[] str = sql.toUpperCase().split("FROM");
 		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
 		
-		Long totalRows = jdbcTemplate.queryForObject(countQuery,Long.class, params);
+		Long totalRows = namedParameterJdbcTemplate.queryForObject(countQuery,params,Long.class);
 		pagingBean.setTotalRows(totalRows);
 		
 		StringBuilder sb = new StringBuilder();
@@ -296,7 +298,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(" , ");
 		sb.append(pagingBean.getRowsPerPage());
 		
-		List<T> resultList = jdbcTemplate.query(sb.toString(), rm, params);
+		List<T> resultList = namedParameterJdbcTemplate.query(sb.toString(), params, rm);
 		return resultList;
 	}
 	@Override
