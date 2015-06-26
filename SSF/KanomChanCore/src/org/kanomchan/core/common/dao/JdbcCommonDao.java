@@ -5,14 +5,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-
-
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
-import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.springframework.jdbc.core.RowMapper;
 
 public interface JdbcCommonDao {

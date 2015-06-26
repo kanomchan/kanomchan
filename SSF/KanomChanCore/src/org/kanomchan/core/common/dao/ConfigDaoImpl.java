@@ -15,8 +15,6 @@ import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.ActionBean;
 import org.kanomchan.core.common.bean.Config;
 import org.kanomchan.core.common.bean.ConfigDefault;
-import org.kanomchan.core.common.bean.DisplayField;
-import org.kanomchan.core.common.bean.DisplayFieldDefault;
 import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.bean.FieldValidatorDefault;
 import org.kanomchan.core.common.bean.Label;
@@ -53,10 +51,6 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final ConfigMapper<Config> CONFIG_MAPPER = new ConfigMapper<Config>();
 	public static final class ConfigMapper<T extends Config> implements RowMapper<Config> {
-		/**
-		 * Logger for this class
-		 */
-		private static final Logger logger = Logger.getLogger(ConfigMapper.class);
 
 	    public Config mapRow(ResultSet rs, int num)throws SQLException {
 	    	ConfigDefault configDefault = new ConfigDefault();
@@ -94,10 +88,6 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final MessageMapper<Message> MESSAGE_MAPPER = new MessageMapper<Message>();
 	public static final class MessageMapper<T extends Message> implements RowMapper<Message> {
-		/**
-		 * Logger for this class
-		 */
-		private static final Logger logger = Logger.getLogger(MessageMapper.class);
 
 	    public Message mapRow(ResultSet rs, int num)throws SQLException {
 	    	MessageDefault message = new MessageDefault(); 
@@ -113,10 +103,6 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final LabelMapper<Label> LABEL_MAPPER = new LabelMapper<Label>();
 	public static final class LabelMapper<T extends Label> implements RowMapper<Label> {
-		/**
-		 * Logger for this class
-		 */
-		private static final Logger logger = Logger.getLogger(LabelMapper.class);
 
 	    public Label mapRow(ResultSet rs, int num)throws SQLException {
 	    	LabelDefault label = new LabelDefault(); 
@@ -212,25 +198,25 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 		
 	}
 	
-	public static final String SQL_QUERY_DISPLAY_FIELD = 
-//			" ID_DISPLAY_FIELD ,ID_REGION ,ID_COUNTRY ,ID_ZONE ,ID_PROVINE ,ID_CITY ,MODULE ,PAGE ,FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
-			" ID_DISPLAY_FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
-			" FROM JOB_N_DISPLAY_FIELD  WHERE STATUS = 'A' ";
-	private static final DisplayFieldMapper<DisplayField> DISPLAY_FIELD_MAPPER = new DisplayFieldMapper<DisplayField>();
-	public static final class DisplayFieldMapper<T extends DisplayField> implements RowMapper<DisplayField> {
-		/**
-		 * Logger for this class
-		 */
-		private static final Logger logger = Logger.getLogger(DisplayFieldMapper.class);
-
-	    public DisplayField mapRow(ResultSet rs, int num)throws SQLException {
-	    	DisplayFieldDefault displayFiled = new DisplayFieldDefault(); 
-	    	displayFiled.setIdCountry(Long.parseLong(rs.getString("ID_COUNTRY")));
-	    	displayFiled.setPage(rs.getString("PAGE"));
-	    	displayFiled.setIsDisplay(rs.getString("DISPLAY_TEXT"));
-	        return displayFiled;
-	    }
-    }
+//	public static final String SQL_QUERY_DISPLAY_FIELD = 
+////			" ID_DISPLAY_FIELD ,ID_REGION ,ID_COUNTRY ,ID_ZONE ,ID_PROVINE ,ID_CITY ,MODULE ,PAGE ,FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
+//			" ID_DISPLAY_FIELD ,IS_MANDATORY ,IS_MATCH ,IS_WEIGHT ,WEIGHT_PERCENT ,IS_DISPLAY ,DESCRIPTION ,STATUS " +
+//			" FROM JOB_N_DISPLAY_FIELD  WHERE STATUS = 'A' ";
+//	private static final DisplayFieldMapper<DisplayField> DISPLAY_FIELD_MAPPER = new DisplayFieldMapper<DisplayField>();
+//	public static final class DisplayFieldMapper<T extends DisplayField> implements RowMapper<DisplayField> {
+//		/**
+//		 * Logger for this class
+//		 */
+//		private static final Logger logger = Logger.getLogger(DisplayFieldMapper.class);
+//
+//	    public DisplayField mapRow(ResultSet rs, int num)throws SQLException {
+//	    	DisplayFieldDefault displayFiled = new DisplayFieldDefault(); 
+//	    	displayFiled.setIdCountry(Long.parseLong(rs.getString("ID_COUNTRY")));
+//	    	displayFiled.setPage(rs.getString("PAGE"));
+//	    	displayFiled.setIsDisplay(rs.getString("DISPLAY_TEXT"));
+//	        return displayFiled;
+//	    }
+//    }
 	
 	public static final String SQL_QUERY_PAGE_FIELD_VALIDATORS = 
 			" SELECT * " +
@@ -239,10 +225,6 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final FieldValidatorBeanMapper<FieldValidatorBean> DISPLAY_FIELD_VALIDATOR = new FieldValidatorBeanMapper<FieldValidatorBean>();
 	public static final class FieldValidatorBeanMapper<T extends FieldValidatorBean> implements RowMapper<FieldValidatorBean> {
-		/**
-		 * Logger for this class
-		 */
-		private static final Logger logger = Logger.getLogger(FieldValidatorBeanMapper.class);
 
 	    public FieldValidatorBean mapRow(ResultSet rs, int num)throws SQLException {
 	    	FieldValidatorDefault displayFiled = new FieldValidatorDefault();
@@ -323,10 +305,6 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	
 	private static final ActionMapper<ActionBean> ACTION_MAPPER = new ActionMapper<ActionBean>();
 	public static final class ActionMapper<T extends ActionBean> implements RowMapper<ActionBean> {
-		/**
-		 * Logger for this class
-		 */
-		private static final Logger logger = Logger.getLogger(ActionMapper.class);
 
 	    public ActionBean mapRow(ResultSet rs, int num)throws SQLException {
 	    	ActionBean displayFiled = new ActionBean();

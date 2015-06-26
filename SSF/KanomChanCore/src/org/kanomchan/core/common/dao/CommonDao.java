@@ -8,7 +8,6 @@ import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
-import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.exception.TechnicalException;
 
 public interface CommonDao {
