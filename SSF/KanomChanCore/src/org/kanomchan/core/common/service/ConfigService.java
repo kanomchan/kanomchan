@@ -21,4 +21,6 @@ public interface ConfigService {
 	public List<FieldValidatorBean> getPageValidators(String page);
 
 	public String getInputResultName(String namespace, String name);
+	
+	public boolean checkTable(String name);
 }
