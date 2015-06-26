@@ -126,7 +126,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	@Override
 	public int executeNativeSQL(String sql, Map<String, Object> params) throws RollBackException, NonRollBackException {
-		return jdbcTemplate.update( sql, params );
+		return namedParameterJdbcTemplate.update( sql, params );
 	}
 	/**
      * this method will return primary key of affected row
@@ -163,7 +163,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource sd = new MapSqlParameterSource(params);
-		jdbcTemplate.update(sql, sd , keyHolder);
+		namedParameterJdbcTemplate.update(sql, sd , keyHolder);
 		return keyHolder.getKey();
 //		return jdbcTemplate.update( sql, params );
 	}
@@ -298,7 +298,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(" , ");
 		sb.append(pagingBean.getRowsPerPage());
 		
-		List<T> resultList = namedParameterJdbcTemplate.query(sb.toString(), params, rm);
+		List<T> resultList = nativeQuery(sb.toString(), rm, params);
 		return resultList;
 	}
 	@Override
@@ -1369,7 +1369,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = jdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 				return resultList1;
 			}catch(RuntimeException e){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
@@ -1386,7 +1386,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						params.put(criteria.getParam(), criteria.getValue());
 					}
 				}
-				List<T> resultList1 = jdbcTemplate.query(qureyString, JPAUtil.getRm(clazz), params);
+				List<T> resultList1 = nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
 				
 				return resultList1;
 				
@@ -1407,7 +1407,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					params.put(criteria.getParam(), criteria.getValue());
 				}
 			}
-			List<T> resultList1 = jdbcTemplate.query(queryString, JPAUtil.getRm(clazz), params);
+			List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 			return resultList1;
 		}catch(RuntimeException e){
 			throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
