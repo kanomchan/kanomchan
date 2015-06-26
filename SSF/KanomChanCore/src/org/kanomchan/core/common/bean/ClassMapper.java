@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.persistence.OneToMany;
-
 public class ClassMapper {
 	
 //	private Map<String, Property> mapCol = new ConcurrentHashMap<String, Property>();
