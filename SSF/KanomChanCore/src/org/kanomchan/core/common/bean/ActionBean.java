@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class ActionBean implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6993028621528181250L;
 	private Long actionId;
 	private String pageName;
 	private String objId;

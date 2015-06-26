@@ -7,7 +7,7 @@ import java.util.ListIterator;
 
 public class ListCheckBox<T> implements List<CheckBox<T>>{
 
-	private List<CheckBox<T>> list;
+//	private List<CheckBox<T>> list;
 	
 	public ListCheckBox(List<T> list) {
 		// TODO Auto-generated constructor stub
@@ -42,8 +42,9 @@ public class ListCheckBox<T> implements List<CheckBox<T>>{
 		return null;
 	}
 
+	@SuppressWarnings("hiding")
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <T extends Object> T[] toArray(T[] a) {
 		// TODO Auto-generated method stub
 		return null;
 	}
