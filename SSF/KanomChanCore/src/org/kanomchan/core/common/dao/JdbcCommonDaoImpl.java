@@ -511,7 +511,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					}
 
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
+					logger.error("save(T, boolean, boolean, String)", e); //$NON-NLS-1$
 				}
 			
 			}
@@ -541,14 +541,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						}else if(type == Double.class){
 							methodSetId.invoke(target, idNumber.doubleValue());
 						}
-
-						
-							
-						
 					}
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				logger.error("save(T, boolean, boolean, String)", e); //$NON-NLS-1$
 				}
 			}
 //		}
