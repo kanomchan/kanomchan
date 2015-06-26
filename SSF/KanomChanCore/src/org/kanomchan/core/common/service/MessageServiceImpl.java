@@ -1,8 +1,5 @@
 package org.kanomchan.core.common.service;
 
-import org.apache.log4j.Logger;
-
-import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +11,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.kanomchan.core.common.bean.MessageDefault;
+import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.Message;
+import org.kanomchan.core.common.bean.MessageDefault;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.constant.MessageCode;
 import org.kanomchan.core.common.context.CurrentThread;
@@ -199,10 +197,6 @@ public class MessageServiceImpl implements MessageService {
     }
     
     static class MessageFormatKey {
-		/**
-		 * Logger for this class
-		 */
-		private static final Logger logger = Logger.getLogger(MessageFormatKey.class);
 
         String pattern;
         Locale locale;

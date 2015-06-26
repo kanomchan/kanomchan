@@ -1,12 +1,8 @@
 package org.kanomchan.core.common.test;
 
-import java.beans.IntrospectionException;
-
-import org.kanomchan.core.common.bean.UserBeanDefault;
-import org.kanomchan.core.common.util.ClassUtil;
-
 //import org.kanomchan.core.common.proxy.ProxyEntity;
 import java.util.Properties;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;

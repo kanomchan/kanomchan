@@ -1,14 +1,11 @@
 package org.kanomchan.core.common.service;
 
-import java.util.List;
 import java.util.Map;
 
-import org.kanomchan.core.common.bean.*;
-import org.kanomchan.core.common.context.CurrentThread;
+import org.kanomchan.core.common.bean.WebBoConfig;
 import org.kanomchan.core.common.dao.WebBoConfigDao;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
-import org.kanomchan.core.common.processhandler.ProcessContext;
 
 public class WebBoConfigServiceImpl implements WebBoConfigService {
 	

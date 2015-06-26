@@ -5,10 +5,10 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
-
+@SuppressWarnings("rawtypes")
 public class ClassUtil {
 
-	public static String findGetterName(Class clazz, String name) throws IntrospectionException, NoSuchFieldException, NoSuchMethodException {
+	public static String findGetterName( Class clazz, String name) throws IntrospectionException, NoSuchFieldException, NoSuchMethodException {
 	    Method getter = findGetter(clazz, name);
 	    if (getter == null) throw new NoSuchMethodException(clazz+" has no "+name+" getter");
 	    return getter.getName();

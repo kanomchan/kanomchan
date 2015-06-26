@@ -1,15 +1,13 @@
 package org.kanomchan.core.common.service;
 
-import org.apache.log4j.Logger;
-
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.dao.ConfigDao;
 import org.kanomchan.core.common.exception.NonRollBackException;

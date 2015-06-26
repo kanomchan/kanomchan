@@ -1,11 +1,6 @@
 package org.kanomchan.core.common.util;
 
-import org.apache.log4j.Logger;
-
-import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.AttributeOverride;
@@ -41,6 +35,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.ColumnType;
 import org.kanomchan.core.common.bean.Criteria;
@@ -522,6 +517,7 @@ public class JPAUtil {
 				return traget;
 			}
 			
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			private void putData(ResultSet rs,int  columnNum ,Property property, Object traget ) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException{
 				Object objectData = new Object[]{null};
 				if(property.getMethodSet().getParameterTypes()[0].isAnnotationPresent(Entity.class)){
@@ -552,7 +548,8 @@ public class JPAUtil {
 				property.getMethodSet().invoke(traget, objectData);
 			}
 			
-			private <T> T getObject(ResultSet rs,int  columnNum ,Class<T> clazz ){
+			@SuppressWarnings({ "hiding", "unchecked" })
+			private <T extends Object> T getObject(ResultSet rs,int  columnNum ,Class<T> clazz ){
 				Object objectData = new Object[]{null};
 				try{
 					if(clazz.equals(Date.class)){

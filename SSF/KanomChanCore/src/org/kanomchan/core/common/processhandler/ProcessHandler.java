@@ -16,7 +16,6 @@ import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.exception.TechnicalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.transaction.annotation.Transactional;
 
 @Aspect
 public class ProcessHandler {
@@ -121,6 +120,7 @@ public class ProcessHandler {
 	}
 
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Object afterProcess(Object returnValue,ProcessContext processContext, boolean isTxnProcess,boolean fristProcess) {
 		if(isTxnProcess){
 			transactionHandler.commitTxn(processContext);

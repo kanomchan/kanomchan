@@ -7,21 +7,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
 import org.kanomchan.core.common.bean.LocationBean;
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.bean.MessageDefault;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.bean.UserBeanDefault;
 import org.kanomchan.core.common.constant.MessageCode;
-import org.kanomchan.core.common.context.ApplicationContextUtil;
-import org.kanomchan.core.common.service.LocationService;
 import org.springframework.transaction.TransactionStatus;
-
-import com.maxmind.geoip.Location;
-import com.maxmind.geoip.LookupService;
 
 public class ProcessContext {
 	

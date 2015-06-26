@@ -1,24 +1,15 @@
 package org.kanomchan.core.common.service;
 
-import java.io.IOException;
-
 import javax.annotation.PostConstruct;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.kanomchan.core.common.bean.LocationBean;
 import org.kanomchan.core.common.bean.UserBean;
-import org.kanomchan.core.common.context.ApplicationContextUtil;
 import org.kanomchan.core.common.dao.LocationDao;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.ehcache.annotations.Cacheable;

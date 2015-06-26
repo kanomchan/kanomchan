@@ -1,9 +1,6 @@
 package org.kanomchan.core.common.util;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,6 +128,7 @@ public class StrutsUtil {
 		return listOut;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static MenuBean find(String action , Long menuId){
 		Map<Integer, MenuBean> mapMenu = (Map<Integer, MenuBean>)ActionContext.getContext().getSession().get(CommonConstant.SESSION.MENU_BEAN_MAP_KEY);
 		MenuBean menuBeanOut = null;
