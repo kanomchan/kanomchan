@@ -913,7 +913,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+				logger.error("updateStatusDelete(T)", e); //$NON-NLS-1$
 			}
 		}
 		
@@ -951,7 +951,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+				logger.error("updateStatusDelete(T)", e); //$NON-NLS-1$
 			}
 		}
 		return target;
