@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.kanomchan.core.common.util.HibernateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -100,19 +99,19 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	
 	@Override
 	public  <T> T unProxy(T returnValue, boolean isTxnProcess){
-		if(returnValue!=null &&returnValue instanceof ServiceResult){
-			
-			if(isTxnProcess){
-				ServiceResult serviceResult = (ServiceResult) returnValue;
-				serviceResult.setResult(HibernateUtil.clearUnproxy(serviceResult.getResult()));
-			}
-			
-		}else{
-			
-			if(isTxnProcess){
-				returnValue = HibernateUtil.clearUnproxy(returnValue);
-			}
-		}
+//		if(returnValue!=null &&returnValue instanceof ServiceResult){
+//			
+//			if(isTxnProcess){
+//				ServiceResult serviceResult = (ServiceResult) returnValue;
+//				serviceResult.setResult(HibernateUtil.clearUnproxy(serviceResult.getResult()));
+//			}
+//			
+//		}else{
+//			
+//			if(isTxnProcess){
+//				returnValue = HibernateUtil.clearUnproxy(returnValue);
+//			}
+//		}
 		return returnValue;
 	}
 	
