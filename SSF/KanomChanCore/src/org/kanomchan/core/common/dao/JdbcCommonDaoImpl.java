@@ -225,7 +225,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	@Override
-	public <T extends Object>  List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Object... params) {
+	public <T extends Object>  List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Object... params)throws RollBackException, NonRollBackException {
 //		String countQuery = "Select count(*) from ("+sql+") data";
 		String[] str = sql.toUpperCase().split("FROM");
 		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
@@ -262,6 +262,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<T> resultList = jdbcTemplate.query(sb.toString(), rm, params);
 		return resultList;
 	}
+	
+	@Override
+	public <T extends Object> T nativeQueryOneRowForObject(String sql, Class<T> requiredType, Object... args)throws RollBackException, NonRollBackException{
+		return jdbcTemplate.queryForObject(sql,requiredType, args);
+	}
+	
 	@Override
 	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Map<String, Object> params) throws RollBackException, NonRollBackException {
 //		String countQuery = "Select count(*) from ("+sql+") data";
