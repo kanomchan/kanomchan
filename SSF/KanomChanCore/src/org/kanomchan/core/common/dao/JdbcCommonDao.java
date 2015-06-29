@@ -114,5 +114,7 @@ public interface JdbcCommonDao {
 
 	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, String langCode3) throws RollBackException, NonRollBackException;
 
+	public <T> T nativeQueryOneRowForObject(String sql, Class<T> requiredType, Object... args)throws RollBackException, NonRollBackException;
+
 
 }
