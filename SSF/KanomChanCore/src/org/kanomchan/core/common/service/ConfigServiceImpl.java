@@ -108,7 +108,7 @@ public class ConfigServiceImpl implements ConfigService {
 		Gson gson = new GsonBuilder().create();
 		Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
 		Set<String> setKey = gson.fromJson(text, typeOfSrc );
-		return setKey.contains(name);
+		return setKey==null?false:setKey.contains(name);
 	}
 
 }
