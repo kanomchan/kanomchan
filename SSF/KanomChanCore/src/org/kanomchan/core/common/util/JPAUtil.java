@@ -41,6 +41,7 @@ import org.kanomchan.core.common.bean.ColumnType;
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.Property;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.JdbcUtils;
 
 public class JPAUtil {
 	/**
@@ -518,138 +519,139 @@ public class JPAUtil {
 			}
 			
 			@SuppressWarnings({ "rawtypes", "unchecked" })
-			private void putData(ResultSet rs,int  columnNum ,Property property, Object traget ) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException{
+			private void putData(ResultSet rs,int  columnNum ,Property property, Object traget ) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException{
 				Object objectData = new Object[]{null};
 				if(property.getMethodSet().getParameterTypes()[0].isAnnotationPresent(Entity.class)){
 					ClassMapper classMapperId = getClassMapper(property.getMethodSet().getParameterTypes()[0]);
 					objectData = property.getMethodSet().getParameterTypes()[0].newInstance();
 					Method methodSetId  = classMapperId.getPropertyId().getMethodSet();
-					methodSetId.invoke(objectData,  getObject(rs, columnNum, methodSetId.getParameterTypes()[0]));
+					methodSetId.invoke(objectData,  JdbcUtils.getResultSetValue(rs, columnNum, methodSetId.getParameterTypes()[0]));
 				}else{
 					if(property.getEnumType()!=null){
 						if(EnumType.STRING==property.getEnumType()){
-							String EnumValue = getObject(rs, columnNum, String.class);
+							String EnumValue = (String) JdbcUtils.getResultSetValue(rs, columnNum, String.class);
 							Class<Enum> class1 = (Class<Enum>) property.getMethodSet().getParameterTypes()[0];
 							objectData = Enum.valueOf(class1, EnumValue);
 						}else if(EnumType.ORDINAL==property.getEnumType()){
-							Integer EnumValue = getObject(rs, columnNum, Integer.class);
+							Integer EnumValue = (Integer) JdbcUtils.getResultSetValue(rs, columnNum, Integer.class);
 							Class<Enum> class1 = (Class<Enum>) property.getMethodSet().getParameterTypes()[0];
 							objectData = Enum.valueOf(class1, EnumValue+"");
 						}else{
-							String EnumValue = getObject(rs, columnNum, String.class);
+							String EnumValue = (String) JdbcUtils.getResultSetValue(rs, columnNum, String.class);
 							Class<Enum> class1 = (Class<Enum>) property.getMethodSet().getParameterTypes()[0];
 							objectData = Enum.valueOf(class1, EnumValue);
 						}
 					}else{
-						objectData = getObject(rs, columnNum, property.getMethodSet().getParameterTypes()[0]);
+						objectData = JdbcUtils.getResultSetValue(rs, columnNum, property.getMethodSet().getParameterTypes()[0]);
 					}
 					
 				}
 				property.getMethodSet().invoke(traget, objectData);
 			}
 			
-			@SuppressWarnings({ "hiding", "unchecked" })
-			private <T extends Object> T getObject(ResultSet rs,int  columnNum ,Class<T> clazz ){
-				Object objectData = new Object[]{null};
-				try{
-					if(clazz.equals(Date.class)){
-						objectData = new Date(rs.getTimestamp(columnNum).getTime());
-					}else
-					objectData = rs.getObject(columnNum, clazz);
-				}catch(Exception e){
-					if(clazz.equals(Integer.class)){
-						try {
-							objectData =  rs.getInt(columnNum);
-						} catch (SQLException e1) {
-//							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Integer Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Integer Error", e2);
-							}
-						}
-					}else if(clazz.equals(Short.class)){
-						try {
-							objectData =  rs.getShort(columnNum);
-						} catch (SQLException e1) {
-//							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Short Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Short Error", e2);
-							}
-						}
-					}else if(clazz.equals(Long.class)){
-						try {
-							objectData =  rs.getLong(columnNum);
-						} catch (SQLException e1) {
-//							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Long Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Long Error", e2);
-							}
-						}
-					}else if(clazz.equals(Double.class)){
-						try {
-							objectData =  rs.getDouble(columnNum);
-						} catch (SQLException e1) {
-//							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Double Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Double Error", e2);
-							}
-						}
-					}else if(clazz.equals(String.class)){
-						try {
-							objectData =  rs.getString(columnNum);
-						} catch (SQLException e1) {
-//							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: String Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: String Error", e2);
-							}
-						}
-					}else if(clazz.equals(Date.class)){
-						try {
-							objectData =  rs.getDate(columnNum);
-						} catch (SQLException e1) {
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Date Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Date Error", e2);
-							}
-						}
-					}else if(clazz.equals(Time.class)){
-						try {
-							objectData =  rs.getTime(columnNum);
-						} catch (SQLException e1) {
-//							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Time Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Time Error", e2);
-							}
-						}
-					}else if(clazz.equals(Timestamp.class)){
-						try {
-							objectData =  rs.getTimestamp(columnNum);
-						} catch (SQLException e1) {
-//							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
-							try {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Timestamp Error"+rs.getMetaData().getColumnName(columnNum), e1);
-							} catch (SQLException e2) {
-								logger.error("getObject(ResultSet, String, Class<T>) Type: Timestamp Error", e2);
-							}
-						}
-					}else{
-						logger.error("column :"+columnNum+" type: "+clazz.getSimpleName());
-					}
-				}
-				return (T) objectData;
-			}
+//			move to use JdbcUtils
+//			@SuppressWarnings({ "hiding", "unchecked" })move to use JdbcUtils
+//			private <T extends Object> T getObject(ResultSet rs,int  columnNum ,Class<T> clazz ){
+//				Object objectData = new Object[]{null};
+//				try{
+//					if(clazz.equals(Date.class)){
+//						objectData = new Date(rs.getTimestamp(columnNum).getTime());
+//					}else
+//					objectData = rs.getObject(columnNum, clazz);
+//				}catch(Exception e){
+//					if(clazz.equals(Integer.class)){
+//						try {
+//							objectData =  rs.getInt(columnNum);
+//						} catch (SQLException e1) {
+////							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Integer Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Integer Error", e2);
+//							}
+//						}
+//					}else if(clazz.equals(Short.class)){
+//						try {
+//							objectData =  rs.getShort(columnNum);
+//						} catch (SQLException e1) {
+////							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Short Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Short Error", e2);
+//							}
+//						}
+//					}else if(clazz.equals(Long.class)){
+//						try {
+//							objectData =  rs.getLong(columnNum);
+//						} catch (SQLException e1) {
+////							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Long Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Long Error", e2);
+//							}
+//						}
+//					}else if(clazz.equals(Double.class)){
+//						try {
+//							objectData =  rs.getDouble(columnNum);
+//						} catch (SQLException e1) {
+////							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Double Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Double Error", e2);
+//							}
+//						}
+//					}else if(clazz.equals(String.class)){
+//						try {
+//							objectData =  rs.getString(columnNum);
+//						} catch (SQLException e1) {
+////							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: String Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: String Error", e2);
+//							}
+//						}
+//					}else if(clazz.equals(Date.class)){
+//						try {
+//							objectData =  rs.getDate(columnNum);
+//						} catch (SQLException e1) {
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Date Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Date Error", e2);
+//							}
+//						}
+//					}else if(clazz.equals(Time.class)){
+//						try {
+//							objectData =  rs.getTime(columnNum);
+//						} catch (SQLException e1) {
+////							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Time Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Time Error", e2);
+//							}
+//						}
+//					}else if(clazz.equals(Timestamp.class)){
+//						try {
+//							objectData =  rs.getTimestamp(columnNum);
+//						} catch (SQLException e1) {
+////							logger.error("getObject(ResultSet, String, Class<T>)", e1); //$NON-NLS-1$
+//							try {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Timestamp Error"+rs.getMetaData().getColumnName(columnNum), e1);
+//							} catch (SQLException e2) {
+//								logger.error("getObject(ResultSet, String, Class<T>) Type: Timestamp Error", e2);
+//							}
+//						}
+//					}else{
+//						logger.error("column :"+columnNum+" type: "+clazz.getSimpleName());
+//					}
+//				}
+//				return (T) objectData;
+//			}
 
 		};
 	}
