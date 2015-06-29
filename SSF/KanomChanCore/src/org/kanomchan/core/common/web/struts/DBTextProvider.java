@@ -16,7 +16,6 @@ import org.kanomchan.core.common.context.ApplicationContextUtil;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.service.LabelService;
 import org.kanomchan.core.common.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.TextProvider;
