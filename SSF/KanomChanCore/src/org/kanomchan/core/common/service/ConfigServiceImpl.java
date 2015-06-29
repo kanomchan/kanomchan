@@ -32,7 +32,7 @@ public class ConfigServiceImpl implements ConfigService {
 		this.configDao = configDao;
 	}
 	
-	private Map<String, String> config;
+	private static Map<String, String> config;
 	
 	private Map<String, Map<String, List<FieldValidatorBean>>> pageFieldValidatorBeans;
 	private Map<String, List<FieldValidatorBean>> pageValidators;
