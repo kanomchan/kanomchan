@@ -66,19 +66,19 @@ public class ProcessHandler {
 			if(e instanceof TechnicalException){
 				TechnicalException te = (TechnicalException) e;
 				if(logger.isDebugEnabled())
-					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode(), te.getThrowable());
+					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode()+"messageText :"+te.getMessage(), te.getThrowable());
 				else
-					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode());
+					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode()+"messageText :"+te.getMessage());
 				
 			}else if(e instanceof ProcessException){
 				ProcessException se =  (ProcessException) e;
 				if(logger.isDebugEnabled())
-					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode(), se.getThrowable());
+					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode()+"messageText :"+se.getMessage(), se.getThrowable());
 				else
-					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode());
+					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode()+"messageText :"+se.getMessage());
 				
 			}else{
-				logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " :", e);
+				logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " : "+e.getMessage(), e);
 			}
 			processContext = onException(e, processContext, isTxnProcess);
 			if (fristProcess&&ServiceResult.class.equals(targetInterfaceMethod.getReturnType())) {

@@ -561,13 +561,13 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		if(objectId!=null){
-			try{
+//			try{
 				update(t, includeMinusOne);
 				processContext.addMessage(CommonMessageCode.COM0002,"");
-			} catch (Exception e){
-				save(t, includeMinusOne);
-				processContext.addMessage(CommonMessageCode.COM0001,"");
-			}
+//			} catch (Exception e){
+//				save(t, includeMinusOne);
+//				processContext.addMessage(CommonMessageCode.COM0001,"");
+//			}
 		}
 		else{
 			save(t, includeMinusOne);
@@ -587,14 +587,15 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		if(objectId!=null){
-			try{
+//			try{
 				update(t, true);
 				processContext.addMessage(CommonMessageCode.COM0002,"");
-			} catch (Exception e){
-				save(t, true);
-				processContext.addMessage(CommonMessageCode.COM0001,"");
-			}
-			
+//			} catch (Exception e){
+//				throw new RollBackTechnicalException(CommonMessageCode.COM4993,e);
+////				save(t, true);
+////				processContext.addMessage(CommonMessageCode.COM0001,"");
+//			}
+//			
 		}
 		else{
 			save(t, true);
@@ -613,11 +614,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			
 		}
 		if(objectId!=null){
-			try{
+//			try{
 				update(target, includeMinusOne,tableLang,code);
-			} catch (Exception e){
-				save(target, includeMinusOne,tableLang ,code);
-			}
+//			} catch (Exception e){
+//				save(target, includeMinusOne,tableLang ,code);
+//			}
 			
 		}
 		else{
@@ -642,7 +643,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try {
 			return update(target, includeMinusOne,false,null);
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4993,ba);
 		}
 	}
 	@Override
@@ -843,7 +844,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		if(listColumnName.size() > 0&&listPkName.size() > 0){
 			int row = executeNativeSQL(sb.toString(),para.toArray());
 			if(row == 0){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4993);
+				throw new RollBackTechnicalException(CommonMessageCode.COM4993," Row Update 0");
 			}
 //			System.out.println(idNumber);
 //			if(methodSetId !=null&&idNumber!=null){
@@ -869,7 +870,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			if (logger.isDebugEnabled()) {
 				logger.debug("update(T, boolean) - column size 0"); //$NON-NLS-1$
 			}
-			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4993,"pk size 0");
 
 		}
 		

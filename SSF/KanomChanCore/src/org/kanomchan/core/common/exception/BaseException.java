@@ -10,5 +10,6 @@ public interface BaseException {
 	public MessageCode getMessageCode();
 	public List<String> getPara();
 	public Throwable getThrowable();
+	public String getMessage();
 	
 }
