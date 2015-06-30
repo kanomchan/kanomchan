@@ -23,6 +23,7 @@ public class ProcessHandler {
 	 * Logger for this class
 	 */
 	private static final Logger logger = Logger.getLogger(ProcessHandler.class);
+	private static final Logger logger2 = Logger.getLogger("org.kanomchan.core.common.processhandler.ProcessHandler.error.view.level");
 	
 	private TransactionHandler transactionHandler;
 	@Autowired
@@ -65,20 +66,20 @@ public class ProcessHandler {
 		} catch (Throwable e) {
 			if(e instanceof TechnicalException){
 				TechnicalException te = (TechnicalException) e;
-				if(logger.isDebugEnabled())
-					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode()+"messageText :"+te.getMessage(), te.getThrowable());
+				if(logger2.isDebugEnabled())
+					logger2.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode()+"messageText :"+te.getMessage(), te.getThrowable());
 				else
-					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode()+"messageText :"+te.getMessage());
+					logger2.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+te.getMessageCode()+"messageText :"+te.getMessage());
 				
 			}else if(e instanceof ProcessException){
 				ProcessException se =  (ProcessException) e;
-				if(logger.isDebugEnabled())
-					logger.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode()+"messageText :"+se.getMessage(), se.getThrowable());
+				if(logger2.isDebugEnabled())
+					logger2.debug("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode()+"messageText :"+se.getMessage(), se.getThrowable());
 				else
-					logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode()+"messageText :"+se.getMessage());
+					logger2.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " messageCode : "+se.getMessageCode()+"messageText :"+se.getMessage());
 				
 			}else{
-				logger.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " : "+e.getMessage(), e);
+				logger2.error("[Service Error]\tcall:" + proceedingJoinPoint.getSignature().toShortString() + " : "+e.getMessage(), e);
 			}
 			processContext = onException(e, processContext, isTxnProcess);
 			if (fristProcess&&ServiceResult.class.equals(targetInterfaceMethod.getReturnType())) {
