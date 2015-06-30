@@ -9,9 +9,12 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.FieldValidatorBean;
+import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.dao.ConfigDao;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
+import org.kanomchan.core.common.exception.RollBackProcessException;
+import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -95,20 +98,23 @@ public class ConfigServiceImpl implements ConfigService {
 		return pageValidators.get(page);
 	}
 
-	
-	
 	@Override
 	public String getInputResultName(String namespace, String name) {
 		return actionInputResult.get((namespace==null?"":namespace)+"/"+(name==null?"":name));
 	}
 	
 	@Override
-	public boolean checkTable(String name) {
-		String text   = config.get("NEEDLE_LIST");
-		Gson gson = new GsonBuilder().create();
-		Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
-		Set<String> setKey = gson.fromJson(text, typeOfSrc );
-		return setKey==null?false:setKey.contains(name);
+	public boolean checkTable(String name) throws RollBackException ,NonRollBackException{
+		try {
+			String text = config.get("NEEDLE_LIST");
+			Gson gson = new GsonBuilder().create();
+			Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
+			Set<String> setKey = gson.fromJson(text, typeOfSrc );
+			return setKey==null?false:setKey.contains(name);
+		}catch (Exception e) {
+			logger.error("checkTable", e);
+			throw new RollBackProcessException(CommonMessageCode.COM4998, e);
+		}
 	}
 
 }

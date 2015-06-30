@@ -22,5 +22,5 @@ public interface ConfigService {
 
 	public String getInputResultName(String namespace, String name);
 	
-	public boolean checkTable(String name);
+	public boolean checkTable(String name) throws RollBackException, NonRollBackException;
 }
