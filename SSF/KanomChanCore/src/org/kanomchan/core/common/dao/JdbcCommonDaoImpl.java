@@ -430,7 +430,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(property.getEmbeddedId()!=null)
 								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 							Object value = property.getMethodGet().invoke(joinColumnsObject);
-							if(configService.checkTable(columnName) && ( value == null  || ((Number)value).intValue() ==-1)){
+							if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
 								continue;
 							}
 							if(value!=null){
@@ -464,7 +464,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(entity!=null){
 								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-								if(configService.checkTable(columnName) && ((Number)value).intValue() ==-1){
+								if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
 									continue;
 								}
 								if(value!=null ) {
@@ -716,7 +716,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(property.getEmbeddedId()!=null)
 								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 							Object value = property.getMethodGet().invoke(joinColumnsObject);
-							if(configService.checkTable(columnName) && ((Number)value).intValue() ==-1){
+							if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
 								continue;
 							}
 							if(value!=null){
@@ -752,7 +752,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								
 								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
 								
-								if(configService.checkTable(columnName) && ((Number)value).intValue() ==-1){
+								if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
 									continue;
 								}
 								
