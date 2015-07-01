@@ -27,6 +27,9 @@ public class JSONResult<T> implements Serializable {
 	private JSONResult() {
 	}
 	
+	public JSONResult(String s) {
+	}
+	
 	public JSONResult(ServiceResult serviceResult ) {
 		messages = serviceResult.getMessages();
 		status = serviceResult.getStatus();
