@@ -116,5 +116,7 @@ public interface JdbcCommonDao {
 
 	public <T> T nativeQueryOneRowForObject(String sql, Class<T> requiredType, Object... args)throws RollBackException, NonRollBackException;
 
+	public <T> T nativeQueryOneRowForObject(String sql, Class<T> requiredType,Map<String, Object> args) throws RollBackException, NonRollBackException;
+
 
 }

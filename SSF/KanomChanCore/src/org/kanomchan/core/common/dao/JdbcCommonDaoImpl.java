@@ -108,10 +108,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	protected static String GEN_SQL_COUNTY_LEFT_JOIN(String mapTable,String colunmSubfix,String countySubfix){
 		return new StringBuilder(SQL_COUNTY_LEFT_JOIN).toString().replaceAll("\\{prefix\\}", mapTable).replaceAll("\\{subfix\\}", colunmSubfix).replaceAll("\\{map\\}", countySubfix);
 	}
-//	executeNativeSQL
 	@Override
 	public int executeNativeSQL(String sql) throws RollBackException, NonRollBackException {
-		
 		return jdbcTemplate.update( sql );
 	}
 	
@@ -132,7 +130,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
      */
 	@Override
 	public Number executeNativeSQLGetId(String sql, Object... params) throws RollBackException, NonRollBackException {
-		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		List<SqlParameter> types = new ArrayList<SqlParameter>();
 		for (Object object : params) {
@@ -149,12 +146,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public Number executeNativeSQLGetId(String sql, EntityBean params) throws RollBackException, NonRollBackException {
-		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource sd = new BeanPropertySqlParameterSource(params);
 		jdbcTemplate.update(sql, sd , keyHolder);
 		return keyHolder.getKey();
-//		return jdbcTemplate.update( sql, params );
 	}
 	
 	@Override
@@ -164,13 +159,16 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		SqlParameterSource sd = new MapSqlParameterSource(params);
 		namedParameterJdbcTemplate.update(sql, sd , keyHolder);
 		return keyHolder.getKey();
-//		return jdbcTemplate.update( sql, params );
 	}
 	
-//	executeNativeSQL
 	@Override
 	public <T extends Object> List<T> nativeQuery( String sql, RowMapper<T> rm ) throws RollBackException, NonRollBackException {
-		return jdbcTemplate.query(sql, rm);
+		try {
+			return jdbcTemplate.query(sql, rm);
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+		}
+		
 	}
 	
 	
@@ -196,23 +194,31 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	@Override
 	public <T extends Object> T nativeQueryOneRow( String sql, RowMapper<T> rm ,Object... params) throws RollBackException, NonRollBackException {
-		List<T> resultList = jdbcTemplate.query(sql, rm, params);
+		List<T> resultList = null;
+		try {
+			resultList = jdbcTemplate.query(sql, rm, params);
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+		}
 		T result = null;
 		if (resultList != null && resultList.size() > 0){
 			result = resultList.get(0);
 		}
 		return result;
-//		return jdbcTemplate.queryForObject(sql, rm, params);
 	}
 	@Override
 	public <T extends Object> T nativeQueryOneRow( String sql, RowMapper<T> rm ,Map<String, Object> params) throws RollBackException, NonRollBackException {
-		List<T> resultList = namedParameterJdbcTemplate.query(sql, params,rm );
+		List<T> resultList = null;
+		try {
+			resultList = namedParameterJdbcTemplate.query(sql, params,rm );
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+		}
 		T result = null;
 		if (resultList != null && resultList.size() > 0){
 			result = resultList.get(0);
 		}
 		return result;
-//		return jdbcTemplate.queryForObject(sql, rm, params);
 	}
 
 	@Override
@@ -225,12 +231,30 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	@Override
+	public <T extends Object> T nativeQueryOneRowForObject(String sql, Class<T> requiredType, Object... args)throws RollBackException, NonRollBackException{
+		try{
+			return jdbcTemplate.queryForObject(sql,requiredType, args);
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+		}
+	}
+	@Override
+	public <T extends Object> T nativeQueryOneRowForObject(String sql, Class<T> requiredType,Map<String, Object> args)throws RollBackException, NonRollBackException{
+		try{
+			return namedParameterJdbcTemplate.queryForObject(sql, args,requiredType);
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+		}
+	}
+	
+	
+	@Override
 	public <T extends Object>  List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Object... params)throws RollBackException, NonRollBackException {
 //		String countQuery = "Select count(*) from ("+sql+") data";
 		String[] str = sql.toUpperCase().split("FROM");
 		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
 		
-		Long totalRows = jdbcTemplate.queryForObject(countQuery,Long.class, params);
+		Long totalRows = nativeQueryOneRowForObject(countQuery,Long.class, params);
 		pagingBean.setTotalRows(totalRows);
 		
 		StringBuilder sb = new StringBuilder();
@@ -259,22 +283,18 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(" , ");
 		sb.append(pagingBean.getRowsPerPage());
 		
-		List<T> resultList = jdbcTemplate.query(sb.toString(), rm, params);
+		List<T> resultList = nativeQuery(sb.toString(), rm, params);
 		return resultList;
 	}
 	
-	@Override
-	public <T extends Object> T nativeQueryOneRowForObject(String sql, Class<T> requiredType, Object... args)throws RollBackException, NonRollBackException{
-		return jdbcTemplate.queryForObject(sql,requiredType, args);
-	}
-	
+
 	@Override
 	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Map<String, Object> params) throws RollBackException, NonRollBackException {
 //		String countQuery = "Select count(*) from ("+sql+") data";
 		String[] str = sql.toUpperCase().split("FROM");
 		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
 		
-		Long totalRows = namedParameterJdbcTemplate.queryForObject(countQuery,params,Long.class);
+		Long totalRows = nativeQueryOneRowForObject(countQuery,Long.class,params);
 		pagingBean.setTotalRows(totalRows);
 		
 		StringBuilder sb = new StringBuilder();
@@ -312,7 +332,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		String[] str = sql.toUpperCase().split("FROM");
 		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
 		
-		Long totalRows = jdbcTemplate.queryForObject(countQuery,Long.class);
+		Long totalRows = nativeQueryOneRowForObject(countQuery,Long.class);
 		pagingBean.setTotalRows(totalRows);
 		
 		StringBuilder sb = new StringBuilder();
@@ -340,26 +360,22 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(pagingBean.getOffsetBegin());
 		sb.append(" , ");
 		sb.append(pagingBean.getRowsPerPage());
-		
-		List<T> resultList = jdbcTemplate.query(sb.toString(), rm);
+		List<T> resultList;
+		try{
+			resultList = nativeQuery(sb.toString(), rm);
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+		}
 		return resultList;
 	}
 	@Override
 	public <T extends Object> T save(T target) throws RollBackException, NonRollBackException {
-		try {
-			return save(target, true, false,null);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4994);
-		}
+		return save(target, true, false,null);
 	}
 	
 	@Override
 	public <T extends Object> T save(T target,boolean includeMinusOne) throws RollBackException, NonRollBackException {
-		try {
-			return save(target, includeMinusOne, false,null);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4994);
-		}
+		return save(target, includeMinusOne, false,null);
 	}
 	
 	@Override
@@ -532,7 +548,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //			sb.append(Joiner.on(" AND ").skipNulls().join(listPkName));
 //			for (Object id : listPkId) 
 //				para.add(id);
-			Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+		Number idNumber;
+		try{
+			idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4994);
+		}
 			if(methodSetId !=null&&idNumber!=null){
 				try {
 					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
@@ -557,57 +578,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	@Override
 	public <T extends Object> T saveOrUpdate(T t, boolean includeMinusOne) throws RollBackException, NonRollBackException {
-		ClassMapper classMapper =JPAUtil.getClassMapper(t.getClass());
-		Object objectId = null;
-		try {
-			objectId = classMapper.getPropertyId().getMethodGet().invoke(t);
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			
-		}
-		ProcessContext processContext = CurrentThread.getProcessContext();
-		if(objectId!=null){
-//			try{
-				update(t, includeMinusOne);
-				processContext.addMessage(CommonMessageCode.COM0002,"");
-//			} catch (Exception e){
-//				save(t, includeMinusOne);
-//				processContext.addMessage(CommonMessageCode.COM0001,"");
-//			}
-		}
-		else{
-			save(t, includeMinusOne);
-			processContext.addMessage(CommonMessageCode.COM0001,"");
-		}
-		return t;
+		return saveOrUpdate(t, includeMinusOne,false,null);
 	}
 	@Override
 	public <T extends Object> T saveOrUpdate(T t) throws RollBackException, NonRollBackException {
-		ClassMapper classMapper =JPAUtil.getClassMapper(t.getClass());
-		Object objectId = null;
-		try {
-			objectId = classMapper.getPropertyId().getMethodGet().invoke(t);
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			
-		}
-		ProcessContext processContext = CurrentThread.getProcessContext();
-		if(objectId!=null){
-//			try{
-				update(t, true);
-				processContext.addMessage(CommonMessageCode.COM0002,"");
-//			} catch (Exception e){
-//				throw new RollBackTechnicalException(CommonMessageCode.COM4993,e);
-////				save(t, true);
-////				processContext.addMessage(CommonMessageCode.COM0001,"");
-//			}
-//			
-		}
-		else{
-			save(t, true);
-			processContext.addMessage(CommonMessageCode.COM0001,"");
-		}
-		return t;
+		return saveOrUpdate(t, true,false,null);
 	}
 	@Override
 	public <T extends Object> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code) throws RollBackException, NonRollBackException {
@@ -620,37 +595,29 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			
 		}
 		if(objectId!=null){
-//			try{
-				update(target, includeMinusOne,tableLang,code);
-//			} catch (Exception e){
-//				save(target, includeMinusOne,tableLang ,code);
-//			}
+			try{
+			return update(target, includeMinusOne,tableLang,code);
+			} catch (Exception e){
+				logger.error("saveOrUpdate message ", e);
+				return save(target, includeMinusOne,tableLang ,code);
+			}
 			
 		}
 		else{
-			save(target, includeMinusOne,tableLang ,code);
+			return save(target, includeMinusOne,tableLang ,code);
 		}
-		return target;
 	}
 //	public <T extends Object> T update(T t) throws RollBackException, NonRollBackException {
 //		return t;
 //	}
 	@Override
 	public <T extends Object> T update(T target) throws RollBackException, NonRollBackException{
-		try {
-			return update(target, true,false,null);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
-		}
+		return update(target, true,false,null);
 	}
 	
 	@Override
 	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackException, NonRollBackException{
-		try {
-			return update(target, includeMinusOne,false,null);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4993,ba);
-		}
+		return update(target, includeMinusOne,false,null);
 	}
 	@Override
 	public <T extends Object> T update(T target, boolean includeMinusOne, boolean tableLang, String langCode) throws RollBackException, NonRollBackException{
@@ -848,7 +815,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		
 		if(listColumnName.size() > 0&&listPkName.size() > 0){
-			int row = executeNativeSQL(sb.toString(),para.toArray());
+			int row = 0;
+			try{
+				row = executeNativeSQL(sb.toString(),para.toArray());
+			} catch (BadSqlGrammarException ba) {
+				throw new RollBackTechnicalException(CommonMessageCode.COM4993,ba);
+			}
 			if(row == 0){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4993," Row Update 0");
 			}
@@ -940,8 +912,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			// throw exception not parameter
 			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
 		}
-
-		Number idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+		Number idNumber =null;
+		try{
+			idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+		}catch(Exception e){
+			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
+		}
 		if(methodSetId !=null&&idNumber!=null){
 			try {
 				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
@@ -966,83 +942,44 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public <T extends Object> List<T> nativeQuery( String sql, Class<T> class1 ,Object... params) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQuery(sql, JPAUtil.getRm(class1), params);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQuery(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> T nativeQueryOneRow(String sql, Class<T> class1, Map<String, Object> params) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQueryOneRow(sql, JPAUtil.getRm(class1), params);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQueryOneRow(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> T nativeQueryOneRow(String sql, Class<T> class1, Object... params) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQueryOneRow(sql, JPAUtil.getRm(class1), params);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQueryOneRow(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> T nativeQueryOneRow(String sql, Class<T> class1) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQueryOneRow(sql, JPAUtil.getRm(class1));
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQueryOneRow(sql, JPAUtil.getRm(class1));
+
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> class1, Map<String, Object> params) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQuery(sql, JPAUtil.getRm(class1), params);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQuery(sql, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> class1) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQuery(sql, JPAUtil.getRm(class1));
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQuery(sql, JPAUtil.getRm(class1));
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Object... params) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1), params);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1, Map<String, Object> params) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1), params);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1), params);
 	}
 	@Override
 	public <T> List<T> nativeQuery(String sql, PagingBean pagingBean, Class<T> class1) throws RollBackException, NonRollBackException {
-		try {
-			return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1));
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return nativeQuery(sql, pagingBean, JPAUtil.getRm(class1));
 	}
 	@Override
 	public <T> T updateOnlyNotNullBasic(T target) throws RollBackException, NonRollBackException {
-		try {
-			return update(target);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
-		}
+		return update(target);
 	}
 	@Override
 	public <T> T get(Serializable target,  Class<T> clazz) throws RollBackException, NonRollBackException {
@@ -1089,11 +1026,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value) throws RollBackException, NonRollBackException {
-		try {
 			return findByColumn(clazz, propertyName, value,null);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
 	}
 	
 	@Override
@@ -1142,11 +1075,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap) throws RollBackException, NonRollBackException {
-		try {
-			return findByColumnMap(clazz, columnMap, null);
-		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
-		}
+		return findByColumnMap(clazz, columnMap, null);
 	}
 	
 	@Override
@@ -1160,7 +1089,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		
 		if(pagingBean==null){
-			try{
 				String queryString = genQueryStringByExample(clazz, criteriaList, null, null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
@@ -1170,11 +1098,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				}
 				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 				return resultList1;
-			}catch(RuntimeException e){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
-			}
 		}else{
-			try{
 				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
 				
 				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
@@ -1188,9 +1112,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				
 				return resultList1;
 				
-			}catch (RuntimeException re){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4991, re);
-			}
 		}
 	}
 	
@@ -1239,7 +1160,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				params.put(criteria.getParam(), criteria.getValue());
 			}
 		}
-		Long totalRows = namedParameterJdbcTemplate.queryForObject(countQueryString.toString(), params,Long.class);
+		Long totalRows = nativeQueryOneRowForObject(countQueryString.toString(),Long.class, params);
 		return totalRows;
 	}
 	
@@ -1323,31 +1244,31 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				try{
 					
 				
-				ClassMapper classMapper = JPAUtil.getClassMapper(t.getClass());
-				for (Property property : classMapper.getOneToManyList()) {
-					ParameterizedType type = (ParameterizedType)  property.getMethodGet().getGenericReturnType();
-					Class<?> classFind = (Class<?>) type.getActualTypeArguments()[0];
-					String mapFieldName =  property.getColumnName();//mappedBy="clientDetails"
-					Field mapField = classFind.getDeclaredField(mapFieldName);
-					Method mapGet = ClassUtil.findGetter(classFind, mapFieldName);
-					JoinColumn joinColumn =mapField.getAnnotation(JoinColumn.class);
-					if(joinColumn==null)
-						joinColumn =mapGet.getAnnotation(JoinColumn.class);
-					String nameJoinColumn = joinColumn.name();
-					
-					List<Property> listProperties = classMapper.getColumn().get(nameJoinColumn);
-					Object mapData = null;
-					if(listProperties!=null){
-						for (Property propertyGetValue : listProperties) {
-							mapData = propertyGetValue.getMethodGet().invoke(t);
+					ClassMapper classMapper = JPAUtil.getClassMapper(t.getClass());
+					for (Property property : classMapper.getOneToManyList()) {
+						ParameterizedType type = (ParameterizedType)  property.getMethodGet().getGenericReturnType();
+						Class<?> classFind = (Class<?>) type.getActualTypeArguments()[0];
+						String mapFieldName =  property.getColumnName();//mappedBy="clientDetails"
+						Field mapField = classFind.getDeclaredField(mapFieldName);
+						Method mapGet = ClassUtil.findGetter(classFind, mapFieldName);
+						JoinColumn joinColumn =mapField.getAnnotation(JoinColumn.class);
+						if(joinColumn==null)
+							joinColumn =mapGet.getAnnotation(JoinColumn.class);
+						String nameJoinColumn = joinColumn.name();
+						
+						List<Property> listProperties = classMapper.getColumn().get(nameJoinColumn);
+						Object mapData = null;
+						if(listProperties!=null){
+							for (Property propertyGetValue : listProperties) {
+								mapData = propertyGetValue.getMethodGet().invoke(t);
+							}
 						}
+						List<?> s = findByColumn(classFind, nameJoinColumn, mapData);
+						
+						property.getMethodSet().invoke(t, s);
 					}
-					List<?> s = findByColumn(classFind, nameJoinColumn, mapData);
-					
-					property.getMethodSet().invoke(t, s);
-				}
 					}catch(Exception e){
-					
+						
 				}
 				
 			}
@@ -1358,8 +1279,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	@Override
 	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackException, NonRollBackException{
 		if(pagingBean==null){
-			try{
-				
 				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
 				Map<String, Object>params = new HashMap<String, Object>();
 				if (criteriaList != null && criteriaList.size() > 0) {
@@ -1369,12 +1288,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				}
 				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 				return resultList1;
-			}catch(RuntimeException e){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
-			}
 			
 		}else{
-			try{
 				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
 				
 				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
@@ -1385,19 +1300,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					}
 				}
 				List<T> resultList1 = nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
-				
 				return resultList1;
-				
-			}catch (RuntimeException re){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4991, re);
-			}
 		}
 	}
 	
 	@Override
 	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, String langCode3) throws RollBackException, NonRollBackException{
-		try{
-			
 			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, langCode3);
 			Map<String, Object>params = new HashMap<String, Object>();
 			if (criteriaList != null && criteriaList.size() > 0) {
@@ -1407,14 +1315,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 			List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 			return resultList1;
-		}catch(RuntimeException e){
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
-		}
 	}
 	
 	public <T> T findByColumn(Class<T> clazz, List<Criteria> criteriaList) throws RollBackException, NonRollBackException{
-		try{
-			
 			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
 			Map<String, Object>params = new HashMap<String, Object>();
 			if (criteriaList != null && criteriaList.size() > 0) {
@@ -1424,8 +1327,5 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 			T result = nativeQueryOneRow(queryString, JPAUtil.getRm(clazz), params);
 			return result;
-		}catch(RuntimeException e){
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
-		}
 	}
 }
