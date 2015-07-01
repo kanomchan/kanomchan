@@ -7,7 +7,7 @@ import java.util.List;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 
-public class JSONResult<T extends Object> implements Serializable {
+public class JSONResult<T> implements Serializable {
 
 	/**
 	 * 
@@ -24,10 +24,10 @@ public class JSONResult<T extends Object> implements Serializable {
 	public Long getiTotalRecords() {
 		return pagingBean ==null ?null:pagingBean.getTotalRows();
 	}
-	public JSONResult() {
+	private JSONResult() {
 	}
 	
-	public JSONResult(ServiceResult<T> serviceResult ) {
+	public JSONResult(ServiceResult serviceResult ) {
 		messages = serviceResult.getMessages();
 		status = serviceResult.getStatus();
 		result = (T) serviceResult.getResult();
