@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.ActionBean;
 import org.kanomchan.core.common.bean.Config;
+import org.kanomchan.core.common.bean.ConfigByCountry;
 import org.kanomchan.core.common.bean.ConfigDefault;
 import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.bean.FieldValidatorDefault;
@@ -57,6 +58,36 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	    	configDefault.setKey( rs.getString("CONFIG_KEY"));
 	    	configDefault.setValue( rs.getString("CONFIG_VALUE"));
 	        return configDefault;
+	    }
+    }
+	
+	private static final String SQL_QUERY_CONFIG_BY_COUNTRY = "SELECT CONFIG_KEY, CONFIG_VALUE, CONFIG_CODE FROM SYS_M_CONFIG_BY_CODE WHERE STATUS = 'A' ";
+	@Override
+	public Map<Long,Map<String, String>> getConfigCountryMap() throws RollBackException ,NonRollBackException {
+		Map<Long,Map<String, String>> configMap = new ConcurrentHashMap<Long,Map<String, String>>();
+		Map<String, String> configByCountryMap = new ConcurrentHashMap<String, String>();
+		
+		List<ConfigByCountry> configList = nativeQuery(SQL_QUERY_CONFIG_BY_COUNTRY, CONFIG_BY_COUNTRY_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
+		
+		for (ConfigByCountry systemConfig : configList) {
+			if (logger.isInfoEnabled()) {
+				logger.info("Config loading... " + systemConfig);
+			}	
+			configByCountryMap.put(systemConfig.getKey(), systemConfig.getValue());
+			configMap.put(systemConfig.getIdCountry(), configByCountryMap);
+		}
+		return configMap;
+	}
+	
+	private static final ConfigByCountryMapper<ConfigByCountry> CONFIG_BY_COUNTRY_MAPPER = new ConfigByCountryMapper<ConfigByCountry>();
+	public static final class ConfigByCountryMapper<T extends ConfigByCountry> implements RowMapper<ConfigByCountry> {
+
+	    public ConfigByCountry mapRow(ResultSet rs, int num)throws SQLException {
+	    	ConfigByCountry configByCountry = new ConfigByCountry();
+	    	configByCountry.setKey( rs.getString("CONFIG_KEY"));
+	    	configByCountry.setValue( rs.getString("CONFIG_VALUE"));
+	    	configByCountry.setIdCountry(Long.parseLong(rs.getString("CONFIG_CODE")));
+	        return configByCountry;
 	    }
     }
 

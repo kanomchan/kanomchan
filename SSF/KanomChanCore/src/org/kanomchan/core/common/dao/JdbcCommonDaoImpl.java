@@ -822,7 +822,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				throw new RollBackTechnicalException(CommonMessageCode.COM4993,ba);
 			}
 			if(row == 0){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4993," Row Update 0");
+				throw new RollBackTechnicalException(CommonMessageCode.COM4993," Row Update 0 SQL:" + sb.toString());
 			}
 //			System.out.println(idNumber);
 //			if(methodSetId !=null&&idNumber!=null){

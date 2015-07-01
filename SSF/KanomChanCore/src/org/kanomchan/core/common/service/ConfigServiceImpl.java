@@ -36,6 +36,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	private static Map<String, String> config;
+	private Map<Long, Map<String, String>> configByCountry;
 	
 	private Map<String, Map<String, List<FieldValidatorBean>>> pageFieldValidatorBeans;
 	private Map<String, List<FieldValidatorBean>> pageValidators;
@@ -46,6 +47,12 @@ public class ConfigServiceImpl implements ConfigService {
 	public synchronized void initConfig(){
 		try {
 			config = configDao.getConfigMap();
+		} catch (RollBackException | NonRollBackException e) {
+			// TODO Auto-generated catch block
+			logger.error("initConfig()", e);
+		}
+		try {
+			configByCountry = configDao.getConfigCountryMap();
 		} catch (RollBackException | NonRollBackException e) {
 			// TODO Auto-generated catch block
 			logger.error("initConfig()", e);
@@ -73,6 +80,7 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public void refreshConfig()throws RollBackException ,NonRollBackException{
 		config = configDao.getConfigMap();
+		configByCountry = configDao.getConfigCountryMap();
 		pageFieldValidatorBeans = configDao.getPageFieldValidators();
 		pageValidators = configDao.getPageValidators();
 		actionInputResult = configDao.getActionInputResult();
@@ -82,6 +90,17 @@ public class ConfigServiceImpl implements ConfigService {
 	public String get(String key) {
 		try{
 			String returnString = config.get(key);
+			return returnString;
+		}catch(Exception e){
+			logger.error("get(String)", e);
+		}
+		return null;
+	}
+	@Override
+	public String getByCountryId(String key, Long idCountry){
+		try{
+			Map<String,String> mapReturnString = configByCountry.get(idCountry);
+			String returnString = mapReturnString.get(key);
 			return returnString;
 		}catch(Exception e){
 			logger.error("get(String)", e);

@@ -11,6 +11,8 @@ import org.kanomchan.core.common.exception.RollBackException;
 public interface ConfigService {
 	
 	public String get(String key);
+	
+	public String getByCountryId(String key, Long idCountry);
 
 	public void refreshConfig()throws RollBackException ,NonRollBackException;
 	
