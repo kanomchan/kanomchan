@@ -1129,8 +1129,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				countQueryString.append(WHERE);
 			else
 				countQueryString.append(" and ");
-			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
-			countQueryString.append(".LANG_CODE3 = '");
+//			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
+			countQueryString.append("LANG_CODE3 = '");
 			countQueryString.append(langCode3 + "' ");
 		}
 		
@@ -1220,13 +1220,13 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	
 	private static final String LIKE = ") like :"; 
-	private static final String NON = CommonDao.ENTITY_MODEL_ALIAS+"."; 
-	private static final String UPPER = " UPPER("+CommonDao.ENTITY_MODEL_ALIAS+"."; 
+	private static final String NON = ""; 
+	private static final String UPPER = " UPPER( "; 
 	private static final String EQU = " = :"; 
 	private static final String WHERE = " where "; 
-	private static final String FROM = "select "+CommonDao.ENTITY_MODEL_ALIAS+".* from "; 
+	private static final String FROM = "select * from "; 
 	private static final String ORDER = " order by "; 
-	private static final String AILIAT = " "+CommonDao.ENTITY_MODEL_ALIAS+" "; 
+	private static final String AILIAT = "  "; 
 	
 	@Override
 	public <T> Collection<T> saveOrUpdateAll(final Collection<T> entities) throws RollBackException, NonRollBackException {

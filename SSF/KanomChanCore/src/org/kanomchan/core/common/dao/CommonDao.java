@@ -13,7 +13,7 @@ import org.kanomchan.core.common.exception.TechnicalException;
 public interface CommonDao {
 
 
-	public static final String ENTITY_MODEL_ALIAS = "model";
+//	public static final String ENTITY_MODEL_ALIAS = "model";
 	/**
 	 * Save method that make an entity instance managed and persistent. <br/>
 	 * ( finally : insert into DB ) 

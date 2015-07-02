@@ -103,13 +103,13 @@ public abstract class CommonDaoImpl implements CommonDao {
 	}
 	
 	private static final String LIKE = ") like :"; 
-	private static final String AND = " and "+CommonDao.ENTITY_MODEL_ALIAS+"."; 
-	private static final String AND_UPPER = " and UPPER("+CommonDao.ENTITY_MODEL_ALIAS+"."; 
+	private static final String AND = " and "; 
+	private static final String AND_UPPER = " and UPPER("; 
 	private static final String EQU = " = :"; 
 	private static final String WHERE = " where 1=1 "; 
-	private static final String FROM = "select "+CommonDao.ENTITY_MODEL_ALIAS+" from "; 
+	private static final String FROM = "select * from "; 
 	private static final String ORDER = " order by "; 
-	private static final String AILIAT = " "+CommonDao.ENTITY_MODEL_ALIAS+" "; 
+	private static final String AILIAT = " "; 
 	
 	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList, List<Order> orderList,String extraWhereClause,boolean like) {
 		StringBuilder queryString = new StringBuilder();
@@ -143,7 +143,7 @@ public abstract class CommonDaoImpl implements CommonDao {
 			queryString.append(ORDER);
 			for (int i = 0; i < orderList.size(); i++) {
 				Order order = orderList.get(i);
-				queryString.append(CommonDao.ENTITY_MODEL_ALIAS+"."+order.getOrderBy()+" "+order.getOrderMode()+",");
+				queryString.append(" "+order.getOrderBy()+" "+order.getOrderMode()+",");
 				queryString.deleteCharAt(queryString.length()-1);
 			}
 		}
