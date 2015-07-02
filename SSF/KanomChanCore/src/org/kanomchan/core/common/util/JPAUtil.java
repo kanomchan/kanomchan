@@ -395,9 +395,9 @@ public class JPAUtil {
 		return getRm(null ,clazz, prefix);
 	}
 	
-	public static <T extends Object> RowMapper<T> getRm(final CaseMetaData caseMetaData,final Class<T> clazz,final String prefix  ){
+	public static <T extends Object> RowMapper<T> getRm(final CacheMetaData cacheMetaData,final Class<T> clazz,final String prefix  ){
 		return new RowMapper<T>() {
-//			private Map<String, List<Integer>> caseListTable;
+//			private Map<String, List<Integer>> cacheListTable;
 
 			@Override
 			public T mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -414,14 +414,14 @@ public class JPAUtil {
 					}
 //					ResultSetMetaData md = rs.getMetaData();
 //					String langName="";
-					CaseMetaData localcaseMetaData;
-					if(caseMetaData!=null){
-						localcaseMetaData = caseMetaData;
+					CacheMetaData localcacheMetaData;
+					if(cacheMetaData!=null){
+						localcacheMetaData = cacheMetaData;
 					}else{
-						localcaseMetaData = new CaseMetaData(rs);
+						localcacheMetaData = new CacheMetaData(rs);
 					}
 					
-					Map<String, Integer> mapCloum = localcaseMetaData.getMapCloumByTable(tableName);
+					Map<String, Integer> mapCloum = localcacheMetaData.getMapCloumByTable(tableName);
 					if(mapCloum !=null){
 						for(Entry<String, Integer> entry : mapCloum.entrySet()) {
 						    String columnName = entry.getKey();
@@ -455,7 +455,7 @@ public class JPAUtil {
 					}
 					
 					//Old Loop
-//					caseListTable = new HashMap<String, List<Integer>>();
+//					cacheListTable = new HashMap<String, List<Integer>>();
 //						for (int i = 0; i < md.getColumnCount(); i++) {
 //							String columnName = md.getColumnName(i+1);
 //							if(prefix!=null){

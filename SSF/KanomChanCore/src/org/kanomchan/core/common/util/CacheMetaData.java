@@ -6,20 +6,20 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CaseMetaData {
+public class CacheMetaData {
 
-	private Map<String, Map<String, Integer>> caseTable= new HashMap<String, Map<String,Integer>>();
-	private Map<String, Map<String, Integer>> caseBean= new HashMap<String, Map<String,Integer>>();
-	private Map<String,Integer> casecColumn= new HashMap<String,Integer>();
+	private Map<String, Map<String, Integer>> cacheTable= new HashMap<String, Map<String,Integer>>();
+	private Map<String, Map<String, Integer>> cacheBean= new HashMap<String, Map<String,Integer>>();
+	private Map<String,Integer> cacheColumn= new HashMap<String,Integer>();
 	
-	public CaseMetaData(ResultSet rs) throws SQLException {
+	public CacheMetaData(ResultSet rs) throws SQLException {
 		ResultSetMetaData md = rs.getMetaData();
 		for (int i = 0; i < md.getColumnCount(); i++) {
 			String tableName = md.getTableName(i+1);
-			Map<String, Integer> cloumMap = caseTable.get(tableName);
+			Map<String, Integer> cloumMap = cacheTable.get(tableName);
 			if(cloumMap == null){
 				cloumMap = new HashMap<String, Integer>();
-				caseTable.put(tableName, cloumMap);
+				cacheTable.put(tableName, cloumMap);
 			}
 			String columnName = md.getColumnName(i+1);
 			
@@ -28,37 +28,37 @@ public class CaseMetaData {
 			if(columnName.indexOf("|")!=-1){
 				String prefixName = columnName.substring(columnName.indexOf("|"));
 				String columnNameOption = columnName.substring(columnName.indexOf("|"), columnName.length());
-				Map<String, Integer> columnNameOptionMap = caseBean.get(prefixName);
+				Map<String, Integer> columnNameOptionMap = cacheBean.get(prefixName);
 				if(columnNameOptionMap==null){
 					columnNameOptionMap = new HashMap<String, Integer>();
-					caseBean.put(prefixName, columnNameOptionMap);
+					cacheBean.put(prefixName, columnNameOptionMap);
 				}
 				columnNameOptionMap.put(columnNameOption, i+1);
 			}else{
 				cloumMap.put(columnName, i+1);
 			}
 			
-			casecColumn.put(columnName, i+1);
+			cacheColumn.put(columnName, i+1);
 		}
 	}
 	
 	public Map<String, Integer> getMapCloumByTable(String tableName){
-		return caseTable.get(tableName);
+		return cacheTable.get(tableName);
 	}
 	
 	public Integer getFindCloumIndexByTableNameAndCloum(String tableName,String cloumName){
-		if(!caseTable.containsKey(tableName))
+		if(!cacheTable.containsKey(tableName))
 			return null;
-		Map<String, Integer> cloumMap = caseTable.get(tableName);
+		Map<String, Integer> cloumMap = cacheTable.get(tableName);
 		if(!cloumMap.containsKey(cloumName))
 			return null;
 		return cloumMap.get(cloumName);
 	}
 	
 	public Integer getFindCloumIndexByBeanNameAndCloum(String asName,String cloumName){
-		if(!caseBean.containsKey(asName))
+		if(!cacheBean.containsKey(asName))
 			return null;
-		Map<String, Integer> cloumMap = caseBean.get(asName);
+		Map<String, Integer> cloumMap = cacheBean.get(asName);
 		if(!cloumMap.containsKey(cloumName))
 			return null;
 		return cloumMap.get(cloumName);
