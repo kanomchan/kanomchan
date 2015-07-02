@@ -7,10 +7,7 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -391,13 +388,16 @@ public class JPAUtil {
 	private static Map<String, ClassMapper > mapClass = new ConcurrentHashMap<String,ClassMapper>();
 	
 	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz){
-		return getRm(clazz, null);
+		return getRm(null,clazz, null);
 	}
 	
-	
-	
 	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz,final String prefix){
+		return getRm(null ,clazz, prefix);
+	}
+	
+	public static <T extends Object> RowMapper<T> getRm(final CaseMetaData caseMetaData,final Class<T> clazz,final String prefix  ){
 		return new RowMapper<T>() {
+//			private Map<String, List<Integer>> caseListTable;
 
 			@Override
 			public T mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -406,27 +406,29 @@ public class JPAUtil {
 					t = clazz.newInstance();
 					ClassMapper classMapper = getClassMapper(clazz);
 					Map<String, List<Property>> columns = classMapper.getColumn();
-					ResultSetMetaData md = rs.getMetaData();
-					String langName="";
-						for (int i = 0; i < md.getColumnCount(); i++) {
-							String columnName = md.getColumnName(i+1);
-							if(prefix!=null){
-								if(!columnName.startsWith(prefix)&&!columnName.startsWith(prefix+"|")){
-									if(md.getTableName(i+1).equalsIgnoreCase(prefix)){
-									}else{
-										continue;
-									}
-								}else if(columnName.startsWith(prefix+"|")){
-									columnName = columnName.substring(prefix.length()+1);
-								}else{
-									columnName = columnName.substring(prefix.length());
-								}
-							}
-							List<Property> properties = null;
-							if(langName.equals(columnName))
-								continue;
-							if(columnName.endsWith("_LANG")){
-								langName = columnName.substring(0, columnName.length()-5);
+					String tableName;
+					if(prefix!=null){
+						tableName = prefix;
+					}else{
+						tableName = classMapper.getTableName();
+					}
+//					ResultSetMetaData md = rs.getMetaData();
+//					String langName="";
+					CaseMetaData localcaseMetaData;
+					if(caseMetaData!=null){
+						localcaseMetaData = caseMetaData;
+					}else{
+						localcaseMetaData = new CaseMetaData(rs);
+					}
+					
+					Map<String, Integer> mapCloum = localcaseMetaData.getMapCloumByTable(tableName);
+					if(mapCloum !=null){
+						for(Entry<String, Integer> entry : mapCloum.entrySet()) {
+						    String columnName = entry.getKey();
+						    Integer index = entry.getValue();
+						    List<Property> properties = null;
+						    if(columnName.endsWith("_LANG")){
+						    	String langName = columnName.substring(0, columnName.length()-5);
 								if(!columns.containsKey(langName))
 									continue;
 								properties = columns.get(langName);
@@ -435,11 +437,7 @@ public class JPAUtil {
 									continue;
 								properties = columns.get(columnName);
 							}
-							
-//							if(!columns.containsKey(columnName))
-//								continue;
-//							List<Property> properties = columns.get(columnName);
-							if(properties!=null){
+						    if(properties!=null){
 								for (Property property : properties) {
 									if(property==null)
 										continue;
@@ -447,14 +445,64 @@ public class JPAUtil {
 									if(methodSet==null)
 										continue;
 									try {
-										t = mapRow(rs, rowNum, t, i+1, property);
+										t = mapRow(rs, rowNum, t, index, property);
 									} catch (Exception e) {
 										// TODO: handle exception
 									}
 								}
 							}
-							
 						}
+					}
+					
+					//Old Loop
+//					caseListTable = new HashMap<String, List<Integer>>();
+//						for (int i = 0; i < md.getColumnCount(); i++) {
+//							String columnName = md.getColumnName(i+1);
+//							if(prefix!=null){
+//								if(!columnName.startsWith(prefix)&&!columnName.startsWith(prefix+"|")){
+//									if(md.getTableName(i+1).equalsIgnoreCase(prefix)){
+//									}else{
+//										continue;
+//									}
+//								}else if(columnName.startsWith(prefix+"|")){
+//									columnName = columnName.substring(prefix.length()+1);
+//								}else{
+//									columnName = columnName.substring(prefix.length());
+//								}
+//							}
+//							List<Property> properties = null;
+//							if(langName.equals(columnName))
+//								continue;
+//							if(columnName.endsWith("_LANG")){
+//								langName = columnName.substring(0, columnName.length()-5);
+//								if(!columns.containsKey(langName))
+//									continue;
+//								properties = columns.get(langName);
+//							}else{
+//								if(!columns.containsKey(columnName))
+//									continue;
+//								properties = columns.get(columnName);
+//							}
+//							
+////							if(!columns.containsKey(columnName))
+////								continue;
+////							List<Property> properties = columns.get(columnName);
+//							if(properties!=null){
+//								for (Property property : properties) {
+//									if(property==null)
+//										continue;
+//									Method methodSet = property.getMethodSet();
+//									if(methodSet==null)
+//										continue;
+//									try {
+//										t = mapRow(rs, rowNum, t, i+1, property);
+//									} catch (Exception e) {
+//										// TODO: handle exception
+//									}
+//								}
+//							}
+//							
+//						}
 					
 					
 				} catch (InstantiationException | IllegalAccessException e) {
