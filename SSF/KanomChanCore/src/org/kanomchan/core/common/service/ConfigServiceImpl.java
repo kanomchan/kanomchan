@@ -48,31 +48,26 @@ public class ConfigServiceImpl implements ConfigService {
 		try {
 			config = configDao.getConfigMap();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("initConfig()", e);
 		}
 		try {
 			configByCountry = configDao.getConfigCountryMap();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("initConfig()", e);
 		}
 		try {
 			pageFieldValidatorBeans = configDao.getPageFieldValidators();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("initConfig()", e);
 		}
 		try {
 			pageValidators = configDao.getPageValidators();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("initConfig()", e);
 		}
 		try {
 			actionInputResult = configDao.getActionInputResult();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("initConfig()", e);
 		}
 	}
