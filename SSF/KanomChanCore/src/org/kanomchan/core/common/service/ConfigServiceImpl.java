@@ -14,7 +14,6 @@ import org.kanomchan.core.common.dao.ConfigDao;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackProcessException;
-import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
