@@ -422,6 +422,8 @@ public class JPAUtil {
 					}
 					
 					Map<String, Integer> mapCloum = localcacheMetaData.getMapCloumByTable(tableName);
+					if(mapCloum ==null)
+						mapCloum = localcacheMetaData.getCacheColumn();
 					if(mapCloum !=null){
 						for(Entry<String, Integer> entry : mapCloum.entrySet()) {
 						    String columnName = entry.getKey();
@@ -452,6 +454,9 @@ public class JPAUtil {
 								}
 							}
 						}
+					}else{
+						if(logger.isWarnEnabled())
+						logger.warn("Table Name :"+tableName);
 					}
 					
 					//Old Loop

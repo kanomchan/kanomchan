@@ -9,7 +9,6 @@ import java.util.Map;
 public class CacheMetaData {
 
 	private Map<String, Map<String, Integer>> cacheTable= new HashMap<String, Map<String,Integer>>();
-//	private Map<String, Map<String, Integer>> cacheBean= new HashMap<String, Map<String,Integer>>();
 	private Map<String,Integer> cacheColumn= new HashMap<String,Integer>();
 	
 	public CacheMetaData(ResultSet rs) throws SQLException {
@@ -53,12 +52,7 @@ public class CacheMetaData {
 		return cloumMap.get(cloumName);
 	}
 	
-//	public Integer getFindCloumIndexByBeanNameAndCloum(String asName,String cloumName){
-//		if(!cacheBean.containsKey(asName))
-//			return null;
-//		Map<String, Integer> cloumMap = cacheBean.get(asName);
-//		if(!cloumMap.containsKey(cloumName))
-//			return null;
-//		return cloumMap.get(cloumName);
-//	}
+	public Map<String, Integer> getCacheColumn() {
+		return cacheColumn;
+	}
 }
