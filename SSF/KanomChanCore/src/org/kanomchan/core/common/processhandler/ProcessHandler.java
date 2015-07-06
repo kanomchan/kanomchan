@@ -4,6 +4,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Set;
 
+import javax.json.Json;
+import javax.persistence.JoinTable;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,6 +24,7 @@ import org.kanomchan.core.common.exception.TechnicalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.google.common.base.Joiner;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -47,21 +51,21 @@ public class ProcessHandler {
 	public void setMessageHandler(MessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
 	}
-	private final Gson gson = new GsonBuilder().create();
-	private final Gson gson2 = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-		@Override
-		public boolean shouldSkipField(FieldAttributes fa) {
-			String text = "[\"username\",\"password\",\"email\"]";
-			Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
-			Set<String> setKey = gson.fromJson(text, typeOfSrc );
-			return setKey!=null && setKey.contains(fa.getName()) ? false: true;
+//	private final Gson gson = new GsonBuilder().create();
+//	private final Gson gson2 = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+//		@Override
+//		public boolean shouldSkipField(FieldAttributes fa) {
+//			String text = "[\"username\",\"password\",\"email\"]";
+//			Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
+//			Set<String> setKey = gson.fromJson(text, typeOfSrc );
+//			return setKey!=null && setKey.contains(fa.getName()) ? false: true;
+////			return true;
+//		}
+//		@Override
+//		public boolean shouldSkipClass(Class<?> arg0) {
 //			return true;
-		}
-		@Override
-		public boolean shouldSkipClass(Class<?> arg0) {
-			return true;
-		}
-	}  ).create();
+//		}
+//	}  ).create();
 	
 	public Object doAspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		logger.info("[Service Start]\tcall:" +proceedingJoinPoint.getSignature().toShortString() );
@@ -70,18 +74,13 @@ public class ProcessHandler {
 		MethodSignature methodSignature = (MethodSignature)proceedingJoinPoint.getSignature();
 		Method targetInterfaceMethod = methodSignature.getMethod();
 		
-		if(logger.isDebugEnabled()){
-			Method method = methodSignature.getMethod();
-//			Object[] objs = proceedingJoinPoint.getArgs();
-//			for (Object obj : objs) {
-//				gson.toJson(obj);
-//			}
-//			Object[] aaa = proceedingJoinPoint.getArgs();
-//			for (Object object : aaa) {
-//				String sss = (String)object;
-//			}
-			logger.debug("[Service debug] method Name: " + method.getName() + " Parameter Type:" + method.getParameterTypes() + " Parameter Value:" + gson.toJson(proceedingJoinPoint.getArgs()));
-		}
+//		if(logger2.isDebugEnabled()){
+//			Method method = methodSignature.getMethod();
+//			String paraType = Joiner.on(", ").join(method.getParameterTypes());
+//			String paraValue= Joiner.on(", ").skipNulls().join(proceedingJoinPoint.getArgs());
+//			logger2.debug("[Service debug] method Name: "+method.getDeclaringClass().getSimpleName()+"." + method.getName() + " Parameter Type:[" + Joiner.on(", ").join(method.getParameterTypes()).getClass().getSimpleName() + "] Parameter Value:[" + gson.toJson(proceedingJoinPoint.getArgs())+"]");
+//			logger2.debug("[Service debug] method Name: "+method.getDeclaringClass().getSimpleName()+"." + method.getName() + " Parameter :["+paraType+"] Value ["+paraValue+"]");
+//		}
 		
 		boolean fristProcess = false;
 		boolean isTxnProcess = false;
