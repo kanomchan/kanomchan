@@ -403,7 +403,7 @@ public class JPAUtil {
 			public T mapRow(ResultSet rs, int rowNum) throws SQLException {
 				T t = null;
 				try {
-					t = clazz.newInstance();
+					
 					ClassMapper classMapper = getClassMapper(clazz);
 					Map<String, List<Property>> columns = classMapper.getColumn();
 					String tableName;
@@ -425,6 +425,7 @@ public class JPAUtil {
 					if(mapCloum ==null)
 						mapCloum = localcacheMetaData.getCacheColumn();
 					if(mapCloum !=null){
+						t = clazz.newInstance();
 						for(Entry<String, Integer> entry : mapCloum.entrySet()) {
 						    String columnName = entry.getKey();
 						    Integer index = entry.getValue();
