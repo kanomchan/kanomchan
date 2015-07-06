@@ -17,8 +17,8 @@ public class CacheMetaData {
 			String columnName = md.getColumnName(i+1);
 			//option |
 			if(columnName.indexOf("|")!=-1){
-				String prefixName = columnName.substring(columnName.indexOf("|"));
-				String columnNameOption = columnName.substring(columnName.indexOf("|"), columnName.length());
+				String prefixName = columnName.substring(0,columnName.indexOf("|"));
+				String columnNameOption = columnName.substring(columnName.indexOf("|")+1, columnName.length());
 				Map<String, Integer> columnNameOptionMap = cacheTable.get(prefixName);
 				if(columnNameOptionMap==null){
 					columnNameOptionMap = new HashMap<String, Integer>();
