@@ -177,7 +177,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try {
 			return jdbcTemplate.query(sql, rm, params);
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 		
 		
@@ -189,7 +189,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			
 			return namedParameterJdbcTemplate.query(sql, params,rm );
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 	}
 	@Override
@@ -198,7 +198,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try {
 			resultList = jdbcTemplate.query(sql, rm, params);
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 		T result = null;
 		if (resultList != null && resultList.size() > 0){
@@ -212,7 +212,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try {
 			resultList = namedParameterJdbcTemplate.query(sql, params,rm );
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 		T result = null;
 		if (resultList != null && resultList.size() > 0){
@@ -226,7 +226,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try {
 			return jdbcTemplate.queryForObject(sql, rm);
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 	}
 	
@@ -235,7 +235,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try{
 			return jdbcTemplate.queryForObject(sql,requiredType, args);
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 	}
 	@Override
@@ -243,7 +243,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try{
 			return namedParameterJdbcTemplate.queryForObject(sql, args,requiredType);
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 	}
 	
@@ -1130,7 +1130,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			else
 				countQueryString.append(" and ");
 //			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
-			countQueryString.append("LANG_CODE3 = '");
+			countQueryString.append(" LANG_CODE3 = '");
 			countQueryString.append(langCode3 + "' ");
 		}
 		
@@ -1138,7 +1138,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		if(pagingBean !=null){
 			countQueryString.append(genQueryOrderStringByOrders(pagingBean.getOrderList()));
 //			
-			countQueryString.append("LIMIT ");
+			countQueryString.append(" LIMIT ");
 			countQueryString.append(pagingBean.getOffsetBegin());
 			countQueryString.append(" , ");
 			countQueryString.append(pagingBean.getRowsPerPage());
@@ -1220,7 +1220,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	
 	private static final String LIKE = ") like :"; 
-	private static final String NON = ""; 
+	private static final String NON = " "; 
 	private static final String UPPER = " UPPER( "; 
 	private static final String EQU = " = :"; 
 	private static final String WHERE = " where "; 
