@@ -1,7 +1,10 @@
 package org.kanomchan.core.common.processhandler;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Set;
 
+import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,10 +15,17 @@ import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.BaseException;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.ProcessException;
+import org.kanomchan.core.common.exception.RollBackProcessException;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.exception.TechnicalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 @Aspect
 public class ProcessHandler {
@@ -37,6 +47,21 @@ public class ProcessHandler {
 	public void setMessageHandler(MessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
 	}
+	private final Gson gson = new GsonBuilder().create();
+	private final Gson gson2 = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+		@Override
+		public boolean shouldSkipField(FieldAttributes fa) {
+			String text = "[\"username\",\"password\",\"email\"]";
+			Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
+			Set<String> setKey = gson.fromJson(text, typeOfSrc );
+			return setKey!=null && setKey.contains(fa.getName()) ? false: true;
+//			return true;
+		}
+		@Override
+		public boolean shouldSkipClass(Class<?> arg0) {
+			return true;
+		}
+	}  ).create();
 	
 	public Object doAspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		logger.info("[Service Start]\tcall:" +proceedingJoinPoint.getSignature().toShortString() );
@@ -44,6 +69,20 @@ public class ProcessHandler {
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		MethodSignature methodSignature = (MethodSignature)proceedingJoinPoint.getSignature();
 		Method targetInterfaceMethod = methodSignature.getMethod();
+		
+		if(logger2.isDebugEnabled()){
+			Method method = methodSignature.getMethod();
+//			Object[] objs = proceedingJoinPoint.getArgs();
+//			for (Object obj : objs) {
+//				gson.toJson(obj);
+//			}
+//			Object[] aaa = proceedingJoinPoint.getArgs();
+//			for (Object object : aaa) {
+//				String sss = (String)object;
+//			}
+			logger2.debug("[Service debug] method Name: " + method.getName() + " Parameter Type:" + method.getParameterTypes() + " Parameter Value:" + gson.toJson(proceedingJoinPoint.getArgs()));
+		}
+		
 		boolean fristProcess = false;
 		boolean isTxnProcess = false;
 		if(processContext!=null&&!processContext.startProcess&&ServiceResult.class.equals(targetInterfaceMethod.getReturnType())){
