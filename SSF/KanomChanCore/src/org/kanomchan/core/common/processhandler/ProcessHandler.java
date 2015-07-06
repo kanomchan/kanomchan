@@ -70,7 +70,7 @@ public class ProcessHandler {
 		MethodSignature methodSignature = (MethodSignature)proceedingJoinPoint.getSignature();
 		Method targetInterfaceMethod = methodSignature.getMethod();
 		
-		if(logger2.isDebugEnabled()){
+		if(logger.isDebugEnabled()){
 			Method method = methodSignature.getMethod();
 //			Object[] objs = proceedingJoinPoint.getArgs();
 //			for (Object obj : objs) {
@@ -80,7 +80,7 @@ public class ProcessHandler {
 //			for (Object object : aaa) {
 //				String sss = (String)object;
 //			}
-			logger2.debug("[Service debug] method Name: " + method.getName() + " Parameter Type:" + method.getParameterTypes() + " Parameter Value:" + gson.toJson(proceedingJoinPoint.getArgs()));
+			logger.debug("[Service debug] method Name: " + method.getName() + " Parameter Type:" + method.getParameterTypes() + " Parameter Value:" + gson.toJson(proceedingJoinPoint.getArgs()));
 		}
 		
 		boolean fristProcess = false;
