@@ -166,7 +166,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try {
 			return jdbcTemplate.query(sql, rm);
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4991,ba);
 		}
 		
 	}
