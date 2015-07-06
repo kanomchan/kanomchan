@@ -15,15 +15,7 @@ public class CacheMetaData {
 	public CacheMetaData(ResultSet rs) throws SQLException {
 		ResultSetMetaData md = rs.getMetaData();
 		for (int i = 0; i < md.getColumnCount(); i++) {
-			String tableName = md.getTableName(i+1);
-			Map<String, Integer> cloumMap = cacheTable.get(tableName);
-			if(cloumMap == null){
-				cloumMap = new HashMap<String, Integer>();
-				cacheTable.put(tableName, cloumMap);
-			}
 			String columnName = md.getColumnName(i+1);
-			
-			
 			//option |
 			if(columnName.indexOf("|")!=-1){
 				String prefixName = columnName.substring(columnName.indexOf("|"));
@@ -35,6 +27,12 @@ public class CacheMetaData {
 				}
 				columnNameOptionMap.put(columnNameOption, i+1);
 			}else{
+				String tableName = md.getTableName(i+1);
+				Map<String, Integer> cloumMap = cacheTable.get(tableName);
+				if(cloumMap == null){
+					cloumMap = new HashMap<String, Integer>();
+					cacheTable.put(tableName, cloumMap);
+				}
 				cloumMap.put(columnName, i+1);
 			}
 			
