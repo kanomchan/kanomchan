@@ -9,7 +9,7 @@ import java.util.Map;
 public class CacheMetaData {
 
 	private Map<String, Map<String, Integer>> cacheTable= new HashMap<String, Map<String,Integer>>();
-	private Map<String, Map<String, Integer>> cacheBean= new HashMap<String, Map<String,Integer>>();
+//	private Map<String, Map<String, Integer>> cacheBean= new HashMap<String, Map<String,Integer>>();
 	private Map<String,Integer> cacheColumn= new HashMap<String,Integer>();
 	
 	public CacheMetaData(ResultSet rs) throws SQLException {
@@ -28,10 +28,10 @@ public class CacheMetaData {
 			if(columnName.indexOf("|")!=-1){
 				String prefixName = columnName.substring(columnName.indexOf("|"));
 				String columnNameOption = columnName.substring(columnName.indexOf("|"), columnName.length());
-				Map<String, Integer> columnNameOptionMap = cacheBean.get(prefixName);
+				Map<String, Integer> columnNameOptionMap = cacheTable.get(prefixName);
 				if(columnNameOptionMap==null){
 					columnNameOptionMap = new HashMap<String, Integer>();
-					cacheBean.put(prefixName, columnNameOptionMap);
+					cacheTable.put(prefixName, columnNameOptionMap);
 				}
 				columnNameOptionMap.put(columnNameOption, i+1);
 			}else{
@@ -55,12 +55,12 @@ public class CacheMetaData {
 		return cloumMap.get(cloumName);
 	}
 	
-	public Integer getFindCloumIndexByBeanNameAndCloum(String asName,String cloumName){
-		if(!cacheBean.containsKey(asName))
-			return null;
-		Map<String, Integer> cloumMap = cacheBean.get(asName);
-		if(!cloumMap.containsKey(cloumName))
-			return null;
-		return cloumMap.get(cloumName);
-	}
+//	public Integer getFindCloumIndexByBeanNameAndCloum(String asName,String cloumName){
+//		if(!cacheBean.containsKey(asName))
+//			return null;
+//		Map<String, Integer> cloumMap = cacheBean.get(asName);
+//		if(!cloumMap.containsKey(cloumName))
+//			return null;
+//		return cloumMap.get(cloumName);
+//	}
 }
