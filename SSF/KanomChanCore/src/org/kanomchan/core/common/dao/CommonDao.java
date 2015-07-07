@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.kanomchan.core.common.bean.BeanLang;
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.TechnicalException;
+
+
 
 public interface CommonDao {
 
@@ -296,6 +299,8 @@ public interface CommonDao {
 	
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String SubListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+	
+	public <T extends Object > BeanLang<T> saveAndLang(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException, IllegalAccessException;
 
 	
 }

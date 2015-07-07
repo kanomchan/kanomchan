@@ -751,7 +751,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						Object value = method.invoke(target);
 						if(value != null){
 							if(tableLang){
-								listPkName.add(columnName + "_LANG");
+//								listPkName.add(columnName + "_LANG");
+								listPkName.add(columnName);
 								listPkNamePara.add(value);
 							}else{
 								listPkName.add(columnName);

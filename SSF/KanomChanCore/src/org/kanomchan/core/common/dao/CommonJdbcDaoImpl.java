@@ -3,17 +3,16 @@ package org.kanomchan.core.common.dao;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.kanomchan.core.common.bean.BeanLang;
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
-import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -245,7 +244,6 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		
 		Method methodGetSubDetail = null;
 		Method methodSetSubDetail = null;
-//		Method methodSetStatusSubDetail = null;
 		if(subListColumnName != null){
 			methodGetSubDetail = classMapper.getColumn().get(subListColumnName).get(0).getMethodGet();
 			methodSetSubDetail = classMapper.getColumn().get(subListColumnName).get(0).getMethodSet();
@@ -321,5 +319,41 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			}
 		}
 		return resultList;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> BeanLang<T> saveAndLang(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException, IllegalAccessException {
+		if(beanLang == null || beanLang.getEngLang() == null)
+			return null;
+		ClassMapper classMapper = JPAUtil.getClassMapper(beanLang.getEngLang().getClass());
+//		Class<? extends Object> clazz = beanLang.getEngLang().getClass();
+		
+		Object idLang = null;
+		T engLang = null;
+		if(beanLang.getEngLang() != null){
+			engLang = saveOrUpdate(beanLang.getEngLang(), includeMinusOne);
+			beanLang.setEngLang(engLang);
+			if(engLang != null){
+				try {
+					idLang = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getEngLang());
+					classMapper.getPropertyId().getMethodSet().invoke(beanLang.getOtherLang(),idLang);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					logger.error("saveAndLang getId message ", e);
+				}
+			}
+		}
+		T otherLang = null;
+		if(beanLang.getOtherLang() != null && beanLang.getLangCode() != null && !"".equals(beanLang.getLangCode())){
+			List<T> haveLang = (List<T>) findByPropertyWithStatusAndLang(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idLang, "A", beanLang.getLangCode());
+			
+			if(haveLang != null && haveLang.size()> 0)
+				otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode());
+			else{
+				otherLang = save(beanLang.getOtherLang(), beanLang.getLangCode());
+			}
+			beanLang.setOtherLang(otherLang);
+		}
+		return beanLang;
 	}
 }
