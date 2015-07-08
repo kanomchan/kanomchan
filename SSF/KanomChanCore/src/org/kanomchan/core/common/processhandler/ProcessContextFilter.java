@@ -61,6 +61,8 @@ public class ProcessContextFilter  implements Filter  {
 			processContext.setString("SESSION_CORP_ID_KEY", corpId);
 			String appId = String.valueOf(httpSession.getAttribute("SESSION_APP_ID_KEY"));
 			processContext.setString("SESSION_APP_ID_KEY", appId);
+			String shopId = String.valueOf(httpSession.getAttribute("SESSION_SHOP_ID_KEY"));
+			processContext.setString("SESSION_SHOP_ID_KEY", shopId);
 			CurrentThread.setProcessContext(processContext);
 			String userId = processContext.userBean==null?"guest"+getRealIp(request):processContext.userBean.getUserId()==null?"guest"+getRealIp(request):processContext.userBean.getUserId();
 			String userName = processContext.userBean==null?"guest"+getRealIp(request):processContext.userBean.getUserName()==null?"guest"+getRealIp(request):processContext.userBean.getUserName();
