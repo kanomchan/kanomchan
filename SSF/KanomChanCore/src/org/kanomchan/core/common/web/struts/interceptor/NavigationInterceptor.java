@@ -13,6 +13,7 @@ import org.apache.struts2.interceptor.ParameterAware;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.common.util.StrutsUtil;
+import org.kanomchan.core.common.web.struts.AjaxOut;
 import org.kanomchan.core.security.authorize.bean.MenuBean;
 import org.kanomchan.core.security.authorize.io.NavigationBean;
 import org.kanomchan.core.security.authorize.service.UserNavigationService;
@@ -47,6 +48,14 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 				String namespace = invocation.getProxy().getNamespace();
 				String actionName = invocation.getProxy().getActionName();
 				String tableName = "";
+				
+				if(actionName.indexOf("-")!=-1){
+					String method = actionName.substring(actionName.indexOf("-")+1);
+					if(invocation.getAction().getClass().getMethod(method).isAnnotationPresent(AjaxOut.class)){
+						return invocation.invoke();
+					}
+				}
+				
 				HttpServletRequest request = ServletActionContext.getRequest();
 //				String queryString = request.getQueryString();
 				String queryString = "";
