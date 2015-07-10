@@ -33,7 +33,7 @@ public class ActionInterceptor extends AbstractInterceptor  {
 			}
 			
 		}
-		ActionBean actionBean = actionService.findAction(namespace,actionName);
+//		ActionBean actionBean = actionService.findAction(namespace,actionName);
 		
 		return invocation.invoke();
 	}
