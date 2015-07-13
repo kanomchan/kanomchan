@@ -30,6 +30,8 @@ public interface CommonConstant {
 	public static final String USER_ID = "SESSION_USER_ID";
 	public static final String USER_NAME = "SESSION_USER_NAME";
 	
+	public static final String PERCENT_KEY = "SESSION_PERCENT_KEY";
+	
     }
     
     public static interface PARAMETER {
