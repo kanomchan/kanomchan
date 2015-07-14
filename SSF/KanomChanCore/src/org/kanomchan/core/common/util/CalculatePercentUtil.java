@@ -1,6 +1,7 @@
 package org.kanomchan.core.common.util;
 
 import java.beans.IntrospectionException;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,7 +13,12 @@ import java.util.Set;
 
 import org.kanomchan.core.common.bean.EntityBean;
 
-public class CalculatePercentUtil {
+public class CalculatePercentUtil implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5641774522934759653L;
 
 	public static Long cal(Object object){
 		if(object == null)
