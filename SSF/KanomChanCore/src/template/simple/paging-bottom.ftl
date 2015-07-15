@@ -57,7 +57,7 @@
 					function rowsPerPage_Bottom_${parameters.id}_select(){
 						$('#currentPage').val('1');
 						$('#rowsPerPage').val($('#rowsPerPage_Bottom_${parameters.id}').val());
-						$('#${parameters.id}').submit();
+						${parameters.id}_goToPage();
 					}
 				</script>
 				<label class="control-label">
@@ -69,7 +69,7 @@
 			<#if parameters.currentPage == 1>
 				<li><a class="disabled">&laquo;</a></li>
 				<#else>
-					<li><a href="#" onclick="$('#currentPage').val('${parameters.previousPage?html}');$('#${parameters.id}').submit();">&laquo;</a></li>
+					<li><a href="#" onclick="$('#currentPage').val('${parameters.previousPage?html}');${parameters.id}_goToPage();">&laquo;</a></li>
 			</#if>
 			<@s.set var="breakLoop" value="%{false}" />
 	  		<#if (parameters.pageCount &lt; 10)>
@@ -79,7 +79,7 @@
 		  					<li><span><@s.property value="${parameters.currentPage}"/></span></li>
 		  				</@s.if>
 		  				<@s.else>
-		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');$('#${parameters.id}').submit();"><@s.property value="%{#count}"/></a></li>
+		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');${parameters.id}_goToPage();"><@s.property value="%{#count}"/></a></li>
 						</@s.else>
 						<@s.if test="%{#count > 10}">
 							<@s.set var="#breakLoop" value="%{true}" />
@@ -94,12 +94,12 @@
 		  					<li><span><@s.property value="${parameters.currentPage}"/></span></li>
 		  				</@s.if>
 		  				<@s.else>
-		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');$('#${parameters.id}').submit();"><@s.property value="%{#count}"/></a></li>
+		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');${parameters.id}_goToPage();"><@s.property value="%{#count}"/></a></li>
 						</@s.else>
 						<@s.if test="%{#count > 6 && ${parameters.pageCount} > 9}">
 							<li><a class="paging-hidden">...</a></li>
-							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount-1}"/>');$('#${parameters.id}').submit();"><@s.property value="${parameters.pageCount-1}"/></a></li>
-							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount}"/>');$('#${parameters.id}').submit();"><@s.property value="${parameters.pageCount}"/></a></li>
+							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount-1}"/>');${parameters.id}_goToPage();"><@s.property value="${parameters.pageCount-1}"/></a></li>
+							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount}"/>');${parameters.id}_goToPage();"><@s.property value="${parameters.pageCount}"/></a></li>
 							<@s.set var="breakLoop" value="%{true}" />
 						</@s.if> 
 					</@s.if>		
@@ -108,15 +108,15 @@
 		  		<@s.iterator var="count" begin="1" end="${parameters.pageCount}">
 		  			<@s.if test="!#breakLoop">
 		  				<@s.if test="%{#count == 1}">
-		  					<li><a href="#" onclick="$('#currentPage').val('1');$('#${parameters.id}').submit();">1</a></li>
-							<li><a href="#" onclick="$('#currentPage').val('2');$('#${parameters.id}').submit();">2</a></li>
+		  					<li><a href="#" onclick="$('#currentPage').val('1');${parameters.id}_goToPage();">1</a></li>
+							<li><a href="#" onclick="$('#currentPage').val('2');${parameters.id}_goToPage();">2</a></li>
 							<li><a class="paging-hidden">...</a></li>
 		  				</@s.if>
 		  				<@s.if test="%{${parameters.currentPage} == #count}">
 		  					<li><span><@s.property value="${parameters.currentPage}"/></span></li>
 		  				</@s.if>
 		  				<@s.elseif test="%{#count > (${parameters.pageCount-7}) }">
-		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');$('#${parameters.id}').submit();"><@s.property value="%{#count}"/></a></li>
+		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');${parameters.id}_goToPage();"><@s.property value="%{#count}"/></a></li>
 						</@s.elseif>
 						<@s.if test="%{#count == ${parameters.pageCount}}">
 							<@s.set var="breakLoop" value="%{true}" />
@@ -127,20 +127,20 @@
 		  		<@s.iterator var="count" begin="1" end="${parameters.pageCount}">
 		  			<@s.if test="!#breakLoop">
 		  				<@s.if test="%{#count == 1}">
-		  					<li><a href="#" onclick="$('#currentPage').val('1');$('#${parameters.id}').submit();">1</a></li>
-							<li><a href="#" onclick="$('#currentPage').val('2');$('#${parameters.id}').submit();">2</a></li>
+		  					<li><a href="#" onclick="$('#currentPage').val('1');${parameters.id}_goToPage();">1</a></li>
+							<li><a href="#" onclick="$('#currentPage').val('2');${parameters.id}_goToPage();">2</a></li>
 							<li><a class="paging-hidden">...</a></li>
 		  				</@s.if>
 		  				<@s.if test="%{${parameters.currentPage} == #count}">
 		  					<li><span><@s.property value="${parameters.currentPage}"/></span></li>
 		  				</@s.if>
 		  				<@s.elseif test="%{#count == ${parameters.currentPage+1} || #count == ${parameters.currentPage+2} || #count == ${parameters.currentPage-1} || #count == ${parameters.currentPage-2}}">
-		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');$('#${parameters.id}').submit();"><@s.property value="%{#count}"/></a></li>
+		  					<li><a href="#" onclick="$('#currentPage').val('<@s.property value="%{#count}"/>');${parameters.id}_goToPage();"><@s.property value="%{#count}"/></a></li>
 						</@s.elseif>
 						<@s.if test="%{#count == ${parameters.pageCount}}">
 							<li><a class="paging-hidden">...</a></li>
-							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount-1}"/>');$('#${parameters.id}').submit();"><@s.property value="${parameters.pageCount-1}"/></a></li>
-							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount}"/>');$('#${parameters.id}').submit();"><@s.property value="${parameters.pageCount}"/></a></li>
+							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount-1}"/>');${parameters.id}_goToPage();"><@s.property value="${parameters.pageCount-1}"/></a></li>
+							<li><a href="#" onclick="$('#currentPage').val('<@s.property value="${parameters.pageCount}"/>');${parameters.id}_goToPage();"><@s.property value="${parameters.pageCount}"/></a></li>
 							<@s.set var="breakLoop" value="%{true}" />
 						</@s.if>
 					</@s.if>						  			
@@ -149,7 +149,7 @@
 			<#if parameters.currentPage == parameters.pageCount>
 				<li><a class="disabled">&raquo;</a></li>
 				<#else>
-					<li><a href="#" onclick="$('#currentPage').val('${parameters.nextPage?html}');$('#${parameters.id}').submit();">&raquo;</a></li>
+					<li><a href="#" onclick="$('#currentPage').val('${parameters.nextPage?html}');${parameters.id}_goToPage();">&raquo;</a></li>
 			</#if>
 			</ul>
 		</div>

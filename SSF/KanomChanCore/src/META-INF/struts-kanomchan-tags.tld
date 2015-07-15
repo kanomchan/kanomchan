@@ -1600,6 +1600,18 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <description><![CDATA[Name used to Allow Ajax in Paging]]></description>
+      <name>isAjax</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Function of Ajax in Paging]]></description>
+      <name>ajaxFunction</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <dynamic-attributes>true</dynamic-attributes>
   </tag>
   

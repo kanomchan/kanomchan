@@ -33,6 +33,8 @@ public class PagingTag extends AbstractClosingTag {
     protected String focusElement;
     protected boolean includeContext = true;
     protected String pagingBean;
+    protected String isAjax;
+    protected String ajaxFunction;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return  new Paging(stack, req, res);
@@ -55,6 +57,8 @@ public class PagingTag extends AbstractClosingTag {
         paging.setFocusElement(focusElement);
         paging.setIncludeContext(includeContext);
         paging.setPagingBean(pagingBean);
+        paging.setIsAjax(isAjax);
+        paging.setAjaxFunction(ajaxFunction);
     }
 
     
@@ -113,4 +117,13 @@ public class PagingTag extends AbstractClosingTag {
     public void setPagingBean(String pagingBean) {
 		this.pagingBean = pagingBean;
 	}
+    
+    public void setIsAjax(String isAjax) {
+		this.isAjax = isAjax;
+	}
+    
+    public void setAjaxFunction(String ajaxFunction) {
+		this.ajaxFunction = ajaxFunction;
+	}
+    
 }

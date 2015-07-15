@@ -20,6 +20,8 @@ public class Paging extends Form {
     
     
     protected String pagingBean;
+    protected String isAjax;
+    protected String ajaxFunction;
     
 	public Paging(ValueStack stack, HttpServletRequest request,HttpServletResponse response) {
 		super(stack, request, response);
@@ -31,29 +33,19 @@ public class Paging extends Form {
 	        
 	        PagingBean pagingBeanValue = new PagingBean();
 	        pagingBeanValue =(PagingBean) findValue(pagingBean);
-
-	            if (pagingBeanValue != null) {
-	                addParameter("currentPage", pagingBeanValue.getCurrentPage());
-	                addParameter("rowsPerPage", pagingBeanValue.getRowsPerPage());
-	                addParameter("pageCount", pagingBeanValue.getPageCount());
-	                addParameter("previousPage", pagingBeanValue.getPerviousPage());
-	                addParameter("nextPage", pagingBeanValue.getNextPage());
-	                addParameter("pageCount", pagingBeanValue.getPageCount());
-	                addParameter("totalRows", pagingBeanValue.getTotalRows());
-	                addParameter("orderBy", pagingBeanValue.getOrderBy());
-	                addParameter("orderMode", pagingBeanValue.getOrderMode());
-	            }else{
-	            	pagingBeanValue = new PagingBean();
-	            	addParameter("currentPage", pagingBeanValue.getCurrentPage());
-	                addParameter("rowsPerPage", pagingBeanValue.getRowsPerPage());
-	                addParameter("pageCount", pagingBeanValue.getPageCount());
-	                addParameter("previousPage", pagingBeanValue.getPerviousPage());
-	                addParameter("nextPage", pagingBeanValue.getNextPage());
-	                addParameter("pageCount", pagingBeanValue.getPageCount());
-	                addParameter("totalRows", pagingBeanValue.getTotalRows());
-	                addParameter("orderBy", pagingBeanValue.getOrderBy());
-	                addParameter("orderMode", pagingBeanValue.getOrderMode());
-	            }
+            if (pagingBeanValue == null) {
+            	pagingBeanValue = new PagingBean();
+            }
+            addParameter("currentPage", pagingBeanValue.getCurrentPage());
+            addParameter("rowsPerPage", pagingBeanValue.getRowsPerPage());
+            addParameter("pageCount", pagingBeanValue.getPageCount());
+            addParameter("previousPage", pagingBeanValue.getPreviousPage());
+            addParameter("nextPage", pagingBeanValue.getNextPage());
+            addParameter("totalRows", pagingBeanValue.getTotalRows());
+            addParameter("orderBy", pagingBeanValue.getOrderBy());
+            addParameter("orderMode", pagingBeanValue.getOrderMode());
+            addParameter("isAjax", isAjax);
+            addParameter("ajaxFunction", ajaxFunction);
 	        return result;
 	}
 
@@ -80,4 +72,21 @@ public class Paging extends Form {
 	public void setPagingBean(String pagingBean) {
 		this.pagingBean = pagingBean;
 	}
+	
+	public String getIsAjax() {
+		return isAjax;
+	}
+	
+	public void setIsAjax(String isAjax) {
+		this.isAjax = isAjax;
+	}
+	
+	public String getAjaxFunction() {
+		return ajaxFunction;
+	}
+	
+	public void setAjaxFunction(String ajaxFunction) {
+		this.ajaxFunction = ajaxFunction;
+	}
+	
 }

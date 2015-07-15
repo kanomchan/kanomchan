@@ -120,7 +120,7 @@ public class PagingBean implements Serializable {
 		this.currentPage = currentPage;
 	}
 	
-	public long getPerviousPage() {
+	public long getPreviousPage() {
 		return (currentPage==1)?currentPage:currentPage-1;
 	}
 	
