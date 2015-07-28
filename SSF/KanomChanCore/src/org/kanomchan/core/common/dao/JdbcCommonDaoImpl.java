@@ -108,6 +108,45 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	protected static String GEN_SQL_COUNTY_LEFT_JOIN(String mapTable,String colunmSubfix,String countySubfix){
 		return new StringBuilder(SQL_COUNTY_LEFT_JOIN).toString().replaceAll("\\{prefix\\}", mapTable).replaceAll("\\{subfix\\}", colunmSubfix).replaceAll("\\{map\\}", countySubfix);
 	}
+	
+	protected static final String SQL_COUNTY_LEFT_JOIN_LANG = new StringBuilder()
+	.append(" LEFT JOIN SYS_M_COUNTY COUNTY{map} ON ")
+		.append(" COUNTY{map}.ID_COUNTY = {prefix}.ID_COUNTY{subfix} ")
+		.append(" AND COUNTY{map}.ID_CITY = {prefix}.ID_CITY{subfix} ")
+		.append(" AND COUNTY{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
+		.append(" AND COUNTY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
+	.append(" LEFT JOIN SYS_M_COUNTY_LANG COUNTY_LANG{map} ON ")
+		.append(" COUNTY{map}.ID_COUNTY = COUNTY_LANG{map}.ID_COUNTY ")
+		.append(" AND COUNTY{map}.ID_CITY = COUNTY_LANG{map}.ID_CITY ")
+		.append(" AND COUNTY{map}.ID_PROVINCE = COUNTY_LANG{map}.ID_PROVINCE ")
+		.append(" AND COUNTY{map}.ID_COUNTRY = COUNTY_LANG{map}.ID_COUNTRY ")
+		
+	.append(" LEFT JOIN SYS_M_CITY CITY{map} ON  ")
+		.append(" CITY{map}.ID_CITY = {prefix}.ID_CITY{subfix}  ")
+		.append(" AND CITY{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
+		.append(" AND CITY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
+	.append(" LEFT JOIN SYS_M_CITY_LANG CITY_LANG{map} ON  ")
+		.append(" CITY{map}.ID_CITY = CITY_LANG{map}.ID_CITY  ")
+		.append(" AND CITY{map}.ID_PROVINCE = CITY_LANG{map}.ID_PROVINCE ")
+		.append(" AND CITY{map}.ID_COUNTRY = CITY_LANG{map}.ID_COUNTRY ")
+		
+	.append(" LEFT JOIN SYS_M_PROVINCE PROVINCE{map} ON   ")
+		.append(" PROVINCE{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
+		.append(" AND PROVINCE{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
+	.append(" LEFT JOIN SYS_M_PROVINCE_LANG PROVINCE_LANG{map} ON   ")
+		.append(" PROVINCE{map}.ID_PROVINCE = PROVINCE_LANG{map}.ID_PROVINCE ")
+		.append(" AND PROVINCE{map}.ID_COUNTRY = PROVINCE_LANG{map}.ID_COUNTRY ")
+		
+	.append(" LEFT JOIN SYS_M_COUNTRY COUNTRY{map}  ON ")
+		.append("COUNTRY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
+	.append(" LEFT JOIN SYS_M_COUNTRY_LANG COUNTRY_LANG{map}  ON ")
+		.append("COUNTRY{map}.ID_COUNTRY = COUNTRY_LANG{map}.ID_COUNTRY ")
+	.toString();
+
+protected static final String SQL_COUNTY_SELECT_LANG = ",COUNTRY.* ,PROVINCE.* ,CITY.* , COUNTY.* ";
+protected static String GEN_SQL_COUNTY_LEFT_JOIN_LANG(String mapTable,String colunmSubfix,String countySubfix){
+	return new StringBuilder(SQL_COUNTY_LEFT_JOIN_LANG).toString().replaceAll("\\{prefix\\}", mapTable).replaceAll("\\{subfix\\}", colunmSubfix).replaceAll("\\{map\\}", countySubfix);
+}
 	@Override
 	public int executeNativeSQL(String sql) throws RollBackException, NonRollBackException {
 		return jdbcTemplate.update( sql );
