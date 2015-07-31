@@ -23,6 +23,7 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlheader.ftl" />
 <#include "/${parameters.templateDir}/simple/select.ftl" />
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlfooter.ftl" />
+<#assign nameFunction = '${parameters.name?replace(".","_")}'>
 <script>
-	$("#${parameters.id?html}").select2();
+	$("#${parameters.id?replace(".","\\\\.")}").select2();<#rt/>
 </script>
