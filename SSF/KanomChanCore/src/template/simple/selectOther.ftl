@@ -47,13 +47,14 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/dynamic-attributes.ftl" />
 >
+
 <#if parameters.headerKey?? && parameters.headerValue??>
     <option value="${parameters.headerKey?html}"
     <#if tag.contains(parameters.nameValue, parameters.headerKey) == true>
     selected="selected"
     <#assign check = false/>
     </#if>
-    >${parameters.headerValue?html}</option>
+    ><@s.text name="${parameters.headerValue?html}"/></option>
 </#if>
 <#if parameters.emptyOption?default(false)>
     <option value=""></option>
@@ -128,54 +129,43 @@
 <#assign names = nameAtt?split(".")>
 
 <#assign nameId = names[names?size - 1]>
- <#if  !parameters.nameValue??>
+<<#if  !parameters.nameValue??>
 <#assign check = false/>
-    </#if>
+</#if>
 
 
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/optgroup.ftl" />
 <option value="-2" 
-    <#if  (tag.contains(parameters.nameValue, -2) == true) || (!parameters.nameValue?? && check)>
+    <#if  (tag.contains(parameters.nameValue, -2) == true) || (parameters.nameValue?? && parameters.nameValue != 0 && check)>
     selected="selected"
     </#if>
 ><@s.text name="COMMON_OTHER" /></option>
 </select>
 
-<#--<input type="text" 
-<@s.if test="%{!#check}">
- style="display:none;"
-</@s.if>
- class="form-control" name="${nameAtt?replace(nameId,"name")}" />-->
-
 <#assign name = '${nameAtt?replace(nameId,"name")}'>
-
+<#assign nameFunction = '${parameters.name?replace(".","_")}'>
+<div class="selectOther">
+<br/>
 <@s.textfield theme="simple" name="${name?html}" cssClass="form-control"/>
+</div>
  
-<#--<@s.textfield name="jobPositionOtherList"
-<input type="text" name="${nameId?html}" 
-<#if check=='false'>
-  cssStyle="display:none;" 
-</#if>
-class="form-control"/>
-</@s.textfield>-->
 <script>
-	<#if !((tag.contains(parameters.nameValue, -2) == true) || (!parameters.nameValue?? && check))>
-	$("[name='${name?html}']").parents(".selectOther:first").hide();
+	<#if !((tag.contains(parameters.nameValue, -2) == true) || (parameters.nameValue?? && parameters.nameValue != 0 &&  check))>
+	$("[name='${name?html}']").closest(".selectOther").hide();
 	</#if>
 		
-	$("[name='${parameters.name}']").change( function(i, e){	
-		var name = $(this).attr('name');
-		var names = name.split(".");
-		var nameId = names[names.length -1];
-		name = name.replace(nameId, "name");
+	$("[name='${parameters.name}']").change( function(i, e){
 		if($(this).val() == "-2"){
-			$("[name='" + name + "']").parents(".selectOther:first").show();
-			$("[name='" + name + "']").val("");
+			$(this).next().show();
+			$(this).next().find("input[type=text]").val("");
     	}else{
-			$("[name='" + name + "']").parents(".selectOther:first").hide();
-			$("[name='" + name + "']").val("");
+			$(this).next().hide();
+			$(this).next().find("input[type=text]").val("");
     	}
 	});
+	
+	$("#${parameters.id?replace(".","\\\\.")}").select2();<#rt/>
+	
 </script>
 <#if parameters.multiple?default(false)>
   <#if (parameters.id?? && parameters.name??)>
