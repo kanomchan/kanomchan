@@ -33,11 +33,65 @@ public class RefreshAction extends BaseAction {
 	@Override
 	public String init() throws Exception {
 		
+		return "refresh.init";
+	}
+	
+	public String refreshAll() throws Exception {
+		
 		refreshService.refreshAll();
 		if(actionValidatorManager instanceof DBActionValidatorManager){
 			((DBActionValidatorManager)actionValidatorManager).refreshAll();
 		}
-		return "json";
+		return "refresh.init";
+	}
+	
+	public String refreshConfig() throws Exception {
+		
+		refreshService.refreshConfig();
+		if(actionValidatorManager instanceof DBActionValidatorManager){
+			((DBActionValidatorManager)actionValidatorManager).refreshAll();
+		}
+		return "refresh.init";
+	}
+	public String refreshLabel() throws Exception {
+		
+		refreshService.refreshLabel();
+		if(actionValidatorManager instanceof DBActionValidatorManager){
+			((DBActionValidatorManager)actionValidatorManager).refreshAll();
+		}
+		return "refresh.init";
+	}
+	public String refreshMessage() throws Exception {
+		
+		refreshService.refreshMessage();
+		if(actionValidatorManager instanceof DBActionValidatorManager){
+			((DBActionValidatorManager)actionValidatorManager).refreshAll();
+		}
+		return "refresh.init";
+	}
+	public String refreshAction() throws Exception {
+		
+		refreshService.refreshAction();
+		if(actionValidatorManager instanceof DBActionValidatorManager){
+			((DBActionValidatorManager)actionValidatorManager).refreshAll();
+		}
+		return "refresh.init";
+	}
+	public String refreshNavigation() throws Exception {
+		
+		refreshService.refreshNavigation();
+		if(actionValidatorManager instanceof DBActionValidatorManager){
+			((DBActionValidatorManager)actionValidatorManager).refreshAll();
+		}
+		return "refresh.init";
+	}
+	public String refreshMotto() throws Exception {
+		
+		refreshService.refreshMotto();
+		if(actionValidatorManager instanceof DBActionValidatorManager){
+			((DBActionValidatorManager)actionValidatorManager).refreshAll();
+		}
+		return "refresh.init";
 	}
 	
 	
