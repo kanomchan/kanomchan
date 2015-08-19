@@ -1,8 +1,10 @@
 package org.kanomchan.core.security.authorize.bean;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.kanomchan.core.common.bean.ActionBean;
 
@@ -22,8 +24,18 @@ public class MenuBean implements Serializable {
 	private Long level;
 	private Long menuId;
 	private Long parentId;
+	private Set<Long> setActiveMenuId;
 	private String type;
 	private ActionBean actionBean;
+
+//	public boolean isActive() {
+//		
+//		return active;
+//	}
+	public boolean isActive(Long menuId) {
+		return setActiveMenuId.contains(menuId);
+	}
+
 	public String getUrl() {
 		return url;
 	}
@@ -39,7 +51,10 @@ public class MenuBean implements Serializable {
 	public void addChildMenu(MenuBean menuBean) {
 		if(childMenu == null)
 			childMenu= new LinkedList<MenuBean>();
-			childMenu.add(menuBean);
+		if(setActiveMenuId==null)
+			setActiveMenuId = new HashSet<Long>();
+		childMenu.add(menuBean);
+		setActiveMenuId.add(menuBean.getMenuId());
 	}
 	public String getMenuName() {
 		return menuName;
@@ -66,6 +81,9 @@ public class MenuBean implements Serializable {
 		return menuId;
 	}
 	public void setMenuId(Long menuId) {
+		if(setActiveMenuId==null)
+			setActiveMenuId = new HashSet<Long>();
+		setActiveMenuId.add(menuId);
 		this.menuId = menuId;
 	}
 	public String getType() {
@@ -80,13 +98,39 @@ public class MenuBean implements Serializable {
 	public void setActionBean(ActionBean actionBean) {
 		this.actionBean = actionBean;
 	}
+
 	@Override
 	public String toString() {
-		return "MenuBean [url=" + url + ", menuName=" + menuName
-				+ ", childMenu=" + childMenu + ", level=" + level + ", menuId="
-				+ menuId + ", parentId=" + parentId + ", type=" + type + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("MenuBean [url=");
+		builder.append(url);
+		builder.append(", menuName=");
+		builder.append(menuName);
+		builder.append(", childMenu=");
+		builder.append(childMenu);
+		builder.append(", level=");
+		builder.append(level);
+		builder.append(", menuId=");
+		builder.append(menuId);
+		builder.append(", parentId=");
+		builder.append(parentId);
+		builder.append(", setActiveMenuId=");
+		builder.append(setActiveMenuId);
+		builder.append(", type=");
+		builder.append(type);
+		builder.append(", actionBean=");
+		builder.append(actionBean);
+		builder.append("]");
+		return builder.toString();
 	}
 	
+//	public Set<Long> getSetChildMenuId() {
+//		return setChildMenuId;
+//	}
+//	public void setSetChildMenuId(Set<Long> setChildMenuId) {
+//		this.setChildMenuId = setChildMenuId;
+//	}
+
 	
 	
 

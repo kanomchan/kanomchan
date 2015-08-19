@@ -47,7 +47,7 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 		try{
 				String namespace = invocation.getProxy().getNamespace();
 				String actionName = invocation.getProxy().getActionName();
-				String tableName = "";
+				String paramName = "";
 				
 				if(actionName.indexOf("-")!=-1){
 					String method = actionName.substring(actionName.indexOf("-")+1);
@@ -62,12 +62,11 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 				Map<String, String[]> parameters = request.getParameterMap();
 				for(Map.Entry<String,  String[]> entry : parameters.entrySet()){
 					String[] obje = entry.getValue();
-					if(entry.getKey().equals("tableName") && obje!=null && !"".equals(obje))
-					tableName = entry.getKey() + "=" + obje[0];
+					if((entry.getKey().equals("tableName") || entry.getKey().equals("idAddressType")) && obje!=null && !"".equals(obje))
+					paramName = entry.getKey() + "=" + obje[0];
 				}
-				queryString += tableName;
-				String url =request.getRequestURI().substring(request.getContextPath().length())+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString).replaceAll("[?]request_locale=[A-Z]{3}&", "?").replaceAll("[&?]request_locale=[A-Z]{3}", "");
-				
+				queryString += paramName;
+ 				String url =request.getRequestURI().substring(request.getContextPath().length())+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString).replaceAll("[?]request_locale=[A-Z]{3}&", "?").replaceAll("[&?]request_locale=[A-Z]{3}", "");
 				ServiceResult<NavigationBean> serviceResultNavigation = userNavigationService.generateNavigationList(namespace, actionName,url);
 				if(serviceResultNavigation.isSuccess()){
 					if(serviceResultNavigation.getResult().getNavigationMenuList()!=null)
