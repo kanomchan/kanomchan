@@ -20,6 +20,9 @@
  * under the License.
  */
 -->
+<script>
+		//555555
+	</script>
 <#if parameters.editview?default(false) == true && parameters.validate?default(false) == true >
 	<script type="text/javascript" src="${base}/struts/boot_xhtml/validation.js"></script>
 	<script type="text/javascript" src="${base}/struts/utils.js"></script>
@@ -32,8 +35,11 @@
 <#elseif parameters.validate?default(false) == true>
 	<script type="text/javascript" src="${base}/struts/boot_xhtml/validation.js"></script>
 	<script type="text/javascript" src="${base}/struts/utils.js"></script>
-	<#if parameters.onsubmit??>
-		${tag.addParameter('onsubmit', "${parameters.onsubmit}; return validateForm_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}();")}
+	<#if parameters.onsubmit??><script>
+		//555555 ${parameters.onsubmit}
+	</script>
+
+		${tag.addParameter('onsubmit', "return validateForm_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}() && ${parameters.onsubmit};")}
 	<#else>
 		${tag.addParameter('onsubmit', "return validateForm_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}();")}
 	</#if>
