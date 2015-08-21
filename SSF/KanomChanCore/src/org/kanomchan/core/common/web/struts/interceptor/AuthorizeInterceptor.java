@@ -85,8 +85,48 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 		Set<String> codes = getcode(invocation.getAction().getClass(), methodStr);
 		String namespace = invocation.getProxy().getNamespace();
 		Set<String> c = actionService.getAuthorizeCodeByAction(namespace, actionName);
-		codes.addAll(c);
-		if (!privileges.containsAll(codes)) {
+		if(c != null && !c.isEmpty()){
+			codes.addAll(c);
+			if (!privileges.containsAll(codes)) {
+				if(userBean != null){
+					if(invocation.getAction() instanceof BaseAction){
+						BaseAction baseAction = (BaseAction) invocation.getAction();
+						Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
+						List<Message> messageList = new ArrayList<Message>();
+						List<Button> buttonList = new ArrayList<Button>();
+						messageList.add(message);
+						baseAction.setMessageList(messageList);
+						Button e = new Button();
+						e.setAction("home-end");
+						e.setNamespace("/home");
+						e.setName("OK");
+						buttonList.add(e);
+						baseAction.setButtonList(buttonList);
+						return MESSAGE;
+					}else{
+						return "FORCE_TO_LOGIN_WELCOME_PAGE";
+					}
+				}else{
+					if(invocation.getAction() instanceof BaseAction){
+						BaseAction baseAction = (BaseAction) invocation.getAction();
+						Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
+						List<Message> messageList = new ArrayList<Message>();
+						List<Button> buttonList = new ArrayList<Button>();
+						messageList.add(message);
+						baseAction.setMessageList(messageList);
+						Button e = new Button();
+						e.setAction("login-end");
+						e.setNamespace("/login");
+						e.setName("OK");
+						buttonList.add(e);
+						baseAction.setButtonList(buttonList);
+						return MESSAGE;
+					}else{
+						return "FORCE_TO_LOGIN_PAGE";
+					}
+				}
+			}
+		}else{
 			if(userBean != null){
 				if(invocation.getAction() instanceof BaseAction){
 					BaseAction baseAction = (BaseAction) invocation.getAction();
