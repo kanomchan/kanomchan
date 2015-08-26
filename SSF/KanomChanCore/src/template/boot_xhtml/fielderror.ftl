@@ -27,6 +27,7 @@
     <#assign doneEndUlTag=false><#t/>
     <#assign haveMatchedErrorField=false><#t/>
     <#if (fieldErrorFieldNames?size > 0) ><#t/>
+    	<div class="alert triangle error">
         <#list fieldErrorFieldNames as fieldErrorFieldName><#t/>
             <#list eKeys as eKey><#t/>
                 <#if (eKey = fieldErrorFieldName)><#t/>
@@ -81,5 +82,6 @@
             </#list><#t/>
         </ul>
         </#if><#t/>
+        </div>
     </#if><#t/>
 </#if><#t/>
