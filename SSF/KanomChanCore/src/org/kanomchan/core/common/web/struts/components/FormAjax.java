@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.validator.FieldValidator;
@@ -88,31 +89,31 @@ public class FormAjax extends Form {
     private void findFieldValidators(String name, Class actionClass, String actionName,
             List<Validator> validatorList, List<Validator> retultValidators, String prefix) {
 
-        for (Validator validator : validatorList) {
-            if (validator instanceof FieldValidator) {
-                FieldValidator fieldValidator = (FieldValidator) validator;
+    	 for (Validator validator : validatorList) {
+             if (validator instanceof FieldValidator) {
+                 FieldValidator fieldValidator = (FieldValidator) validator;
+                 String fieldName = (fieldValidator.getFieldName() != null ? fieldValidator.getFieldName() : "");
+                 if (validator instanceof VisitorFieldValidator) {
+                     VisitorFieldValidator vfValidator = (VisitorFieldValidator) fieldValidator;
+                     Class clazz = getVisitorReturnType(actionClass, vfValidator.getFieldName());
+                     if (clazz == null) {
+                         continue;
+                     }
 
-                if (validator instanceof VisitorFieldValidator) {
-                    VisitorFieldValidator vfValidator = (VisitorFieldValidator) fieldValidator;
-                    Class clazz = getVisitorReturnType(actionClass, vfValidator.getFieldName());
-                    if (clazz == null) {
-                        continue;
-                    }
-
-                    List<Validator> visitorValidators = actionValidatorManager.getValidators(clazz, actionName);
-                    String vPrefix = prefix + (vfValidator.isAppendPrefix() ? vfValidator.getFieldName() + "." : "");
-                    findFieldValidators(name, clazz, actionName, visitorValidators, retultValidators, vPrefix);
-                } else if ((prefix + fieldValidator.getFieldName()).equals(name)) {
-                    if (StringUtils.isNotBlank(prefix)) {
-                        //fixing field name for js side
-                        FieldVisitorValidatorWrapper wrap = new FieldVisitorValidatorWrapper(fieldValidator, prefix);
-                        retultValidators.add(wrap);
-                    } else {
-                        retultValidators.add(fieldValidator);
-                    }
-                }
-            }
-        }
+                     List<Validator> visitorValidators = actionValidatorManager.getValidators(clazz, actionName);
+                     String vPrefix = prefix + (vfValidator.isAppendPrefix() ? vfValidator.getFieldName() + "." : "");
+                     findFieldValidators(name, clazz, actionName, visitorValidators, retultValidators, vPrefix);
+                 } else if (Pattern.compile(prefix + fieldName).matcher(name).matches()) {
+                     if (StringUtils.isNotBlank(prefix)) {
+                         //fixing field name for js side
+                         FieldVisitorValidatorWrapper wrap = new FieldVisitorValidatorWrapper(fieldValidator, prefix);
+                         retultValidators.add(wrap);
+                     } else {
+                         retultValidators.add(fieldValidator);
+                     }
+                 }
+             }
+         }
     }
 
 
