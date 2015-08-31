@@ -168,14 +168,14 @@ var error = new Array();
 		for (i = 0; i < validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.validateList.length; i++) { 
 		    validator = validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.validateList[i];
 				if(validator.validate!=undefined){
-			    log.fieldName = validator.fieldName;
-				var field = form.elements[validator.fieldName];
+			    log.fieldName = validator.name;
+				var field = form.elements[validator.name];
 			    var fieldValue = validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.getFieldValue(field);
 			    if(validator.validate!=undefined && validator.validate(fieldValue,continueValidation).errors && validator.subForm == false){
 				    if(!validator.continueValidation){
 				    	continueValidation = false;
 				    }
-	            	addError(validator.fieldName, validator.message);
+	            	addError(validator.name, validator.message);
 	                errors = true;
 					error.push(validator);
 			    }
@@ -207,14 +207,14 @@ var error = new Array();
 		for (i = 0; i < validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.validateList.length; i++) { 
 		    validator = validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.validateList[i];
 				if(validator.validate!=undefined){
-			    log.fieldName = validator.fieldName;
-				var field = form.elements[validator.fieldName];
+			    log.fieldName = validator.name;
+				var field = form.elements[validator.name];
 			    var fieldValue = validate.form_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}.getFieldValue(field);
 			    if(validator.validate!=undefined && validator.validate(fieldValue,continueValidation).errors && validator.subForm == true){
 				    if(!validator.continueValidation){
 				    	cotrueueValidation = false;
 				    }
-	            	addError(validator.fieldName, validator.message);
+	            	addError(validator.name, validator.message);
 	                errors = true;
 					error.push(validator);
 			    }
