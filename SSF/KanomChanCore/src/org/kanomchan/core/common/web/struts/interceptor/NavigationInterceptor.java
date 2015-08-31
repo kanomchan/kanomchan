@@ -39,7 +39,7 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 	}
 	List<MenuBean> NavigationList;
 	
-
+	private Long idAddressType;
 	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
@@ -62,8 +62,10 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 				Map<String, String[]> parameters = request.getParameterMap();
 				for(Map.Entry<String,  String[]> entry : parameters.entrySet()){
 					String[] obje = entry.getValue();
-					if((entry.getKey().equals("tableName") || entry.getKey().equals("idAddressType")) && obje!=null && !"".equals(obje))
-					paramName = entry.getKey() + "=" + obje[0];
+					if((entry.getKey().equals("tableName") || entry.getKey().equals("idAddressType")) && obje!=null && !"".equals(obje)){
+						paramName = entry.getKey() + "=" + obje[0];
+						idAddressType = Long.parseLong(obje[0]);
+					}
 				}
 				queryString += paramName;
  				String url =request.getRequestURI().substring(request.getContextPath().length())+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString).replaceAll("[?]request_locale=[A-Z]{3}&", "?").replaceAll("[&?]request_locale=[A-Z]{3}", "");
@@ -87,6 +89,18 @@ public class NavigationInterceptor extends AbstractInterceptor implements Parame
 	public void setParameters(Map<String, String[]> arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	public Long getIdAddressType() {
+		return idAddressType;
+	}
+
+
+
+	public void setIdAddressType(Long idAddressType) {
+		this.idAddressType = idAddressType;
 	}
 
 	
