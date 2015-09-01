@@ -24,6 +24,16 @@ public class SelectGroupLevel extends ListUIBean {
     protected String size;
     protected String label;
     protected String ajaxUrl;
+    protected String chooseLimit;
+    protected String beanName;
+    protected String subName;
+    protected String subBeanName;
+    protected String placeholder;
+    protected String itemKey;
+    protected String itemName;
+    protected String itemParentId;
+    protected String idParentIgnore;
+    protected String beanId;
 
     public SelectGroupLevel(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -59,6 +69,26 @@ public class SelectGroupLevel extends ListUIBean {
         	addParameter("label", findString(label));
         if(ajaxUrl != null)
         	addParameter("ajaxUrl", findString(ajaxUrl));
+        if(chooseLimit != null)
+        	addParameter("chooseLimit", findString(chooseLimit));
+        if(beanName != null)
+        	addParameter("beanName", findString(beanName));
+        if(subName != null)
+        	addParameter("subName", findString(subName));
+        if(subName != null)
+        	addParameter("subBeanName", findString(subBeanName));
+        if(placeholder != null)
+        	addParameter("placeholder", findString(placeholder));
+        if(itemName != null)
+        	addParameter("itemName", findString(itemName));
+        if(itemKey != null)
+        	addParameter("itemKey", findString(itemKey));
+        if(itemParentId != null)
+        	addParameter("itemParentId", findString(itemParentId));
+        if(idParentIgnore != null)
+        	addParameter("idParentIgnore", findString(idParentIgnore));
+        if(beanId != null)
+        	addParameter("beanId", findString(beanId));
     }
 
     @StrutsTagAttribute(description="Whether or not to add an empty (--) option after the header option", type="Boolean", defaultValue="false")
@@ -94,5 +124,45 @@ public class SelectGroupLevel extends ListUIBean {
     
     public void setAjaxUrl(String ajaxUrl) {
 		this.ajaxUrl = ajaxUrl;
+	}
+    
+    public void setChooseLimit(String chooseLimit) {
+		this.chooseLimit = chooseLimit;
+	}
+    
+    public void setSubBeanName(String subBeanName) {
+		this.subBeanName = subBeanName;
+	}
+    
+    public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
+    
+    public void setSubName(String subName) {
+		this.subName = subName;
+	}
+    
+    public void setPlaceholder(String placeholder) {
+		this.placeholder = placeholder;
+	}
+    
+	public void setItemKey(String itemKey) {
+		this.itemKey = itemKey;
+	}
+    
+    public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+    
+    public void setItemParentId(String itemParentId) {
+		this.itemParentId = itemParentId;
+	}
+    
+    public void setIdParentIgnore(String idParentIgnore) {
+		this.idParentIgnore = idParentIgnore;
+	}
+    
+    public void setBeanId(String beanId) {
+		this.beanId = beanId;
 	}
 }
