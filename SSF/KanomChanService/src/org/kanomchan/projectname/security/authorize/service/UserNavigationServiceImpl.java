@@ -13,6 +13,7 @@ import org.kanomchan.core.security.authorize.bean.Menu;
 import org.kanomchan.core.security.authorize.bean.MenuBean;
 import org.kanomchan.core.security.authorize.dao.ActionDao;
 import org.kanomchan.core.security.authorize.dao.UserMenuDao;
+import org.kanomchan.core.security.authorize.io.NavigationBean;
 import org.kanomchan.core.security.authorize.service.UserNavigationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -39,7 +40,7 @@ public class UserNavigationServiceImpl implements UserNavigationService{
 	
 	@Override
 	@Cacheable(cacheName = "generateNavigationList")
-	public ServiceResult<List<MenuBean>> generateNavigationList(
+	public ServiceResult<NavigationBean> generateNavigationList(
 			String namespace, String actionName, String url) throws NonRollBackException, RollBackException {
 		ActionBean currentAction = actionDao.getActionByNamespaceAndActionName(namespace, actionName);
 		if(currentAction!=null){
@@ -76,10 +77,12 @@ public class UserNavigationServiceImpl implements UserNavigationService{
 					if(parent==null){break;}
 				}
 			}
-			return new ServiceResult<List<MenuBean>>(result);
+			NavigationBean navigationBean = new NavigationBean();
+			navigationBean.setNavigationMenuList(result);
+			return new ServiceResult<NavigationBean>(navigationBean);
 		}
 		
-		return new ServiceResult<List<MenuBean>>(new ArrayList<MenuBean>());
+		return new ServiceResult<NavigationBean>(new NavigationBean());
 	}
 
 	@Override
