@@ -35,6 +35,7 @@ public class PagingTag extends AbstractClosingTag {
     protected String pagingBean;
     protected String isAjax;
     protected String ajaxFunction;
+    protected String defaultShowPerPage;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return  new Paging(stack, req, res);
@@ -59,6 +60,7 @@ public class PagingTag extends AbstractClosingTag {
         paging.setPagingBean(pagingBean);
         paging.setIsAjax(isAjax);
         paging.setAjaxFunction(ajaxFunction);
+        paging.setDefaultShowPerPage(defaultShowPerPage);
     }
 
     
@@ -124,6 +126,10 @@ public class PagingTag extends AbstractClosingTag {
     
     public void setAjaxFunction(String ajaxFunction) {
 		this.ajaxFunction = ajaxFunction;
+	}
+    
+    public void setDefaultShowPerPage(String defaultShowPerPage) {
+		this.defaultShowPerPage = defaultShowPerPage;
 	}
     
 }

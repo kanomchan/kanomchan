@@ -22,6 +22,7 @@ public class Paging extends Form {
     protected String pagingBean;
     protected String isAjax;
     protected String ajaxFunction;
+    protected String defaultShowPerPage;
     
 	public Paging(ValueStack stack, HttpServletRequest request,HttpServletResponse response) {
 		super(stack, request, response);
@@ -46,6 +47,7 @@ public class Paging extends Form {
             addParameter("orderMode", pagingBeanValue.getOrderMode());
             addParameter("isAjax", isAjax);
             addParameter("ajaxFunction", ajaxFunction);
+            addParameter("defaultShowPerPage", defaultShowPerPage);
 	        return result;
 	}
 
@@ -87,6 +89,10 @@ public class Paging extends Form {
 	
 	public void setAjaxFunction(String ajaxFunction) {
 		this.ajaxFunction = ajaxFunction;
+	}
+	
+	public void setDefaultShowPerPage(String defaultShowPerPage) {
+		this.defaultShowPerPage = defaultShowPerPage;
 	}
 	
 }
