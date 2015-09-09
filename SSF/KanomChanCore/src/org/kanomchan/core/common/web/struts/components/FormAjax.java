@@ -103,7 +103,8 @@ public class FormAjax extends Form {
                      List<Validator> visitorValidators = actionValidatorManager.getValidators(clazz, actionName);
                      String vPrefix = prefix + (vfValidator.isAppendPrefix() ? vfValidator.getFieldName() + "." : "");
                      findFieldValidators(name, clazz, actionName, visitorValidators, retultValidators, vPrefix);
-                 } else if (Pattern.compile(prefix + fieldName).matcher(name).matches()) {
+//                 } else if (Pattern.compile(prefix + fieldName).matcher(name).matches()) {
+                 } else if ((prefix + fieldValidator.getFieldName()).equals(name)) {
                      if (StringUtils.isNotBlank(prefix)) {
                          //fixing field name for js side
                          FieldVisitorValidatorWrapper wrap = new FieldVisitorValidatorWrapper(fieldValidator, prefix);
