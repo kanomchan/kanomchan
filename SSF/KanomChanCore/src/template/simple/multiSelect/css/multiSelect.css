@@ -179,7 +179,7 @@
 }
 
 .select2-container-multi .select2-choices .select2-search-choice {
-  padding: 3px 25px 5px 5px;
+  padding: 4px 25px 5px 5px;
   margin: 5px 0 3px 5px;
   border: 1px solid #CCC;
   background-image: none;
@@ -202,4 +202,6 @@
 	font-size: 12px;
 	border-radius: 3px !important;
 	border: 0px solid !important;
+	width: 13px;
+    height: 13px;
 }
