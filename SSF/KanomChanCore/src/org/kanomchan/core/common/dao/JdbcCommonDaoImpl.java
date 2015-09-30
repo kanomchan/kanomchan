@@ -8,6 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,12 +17,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.apache.log4j.Logger;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.ColumnType;
 import org.kanomchan.core.common.bean.Criteria;
@@ -216,6 +220,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
      */
 	@Override
 	public Number executeNativeSQLGetId(String sql, Object... params) throws RollBackException, NonRollBackException {
+		KeyHolder keyHolder = executeNativeSQLGetIdKeyHolder(sql,params);
+		return keyHolder.getKey();
+	}
+	@Override
+	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql, Object... params) throws RollBackException, NonRollBackException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		List<SqlParameter> types = new ArrayList<SqlParameter>();
 		for (Object object : params) {
@@ -227,24 +236,34 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(sql, types);
 		pscf.setReturnGeneratedKeys(true);
 		jdbcTemplate.update(pscf.newPreparedStatementCreator(params), keyHolder);
+		return keyHolder;
+	}
+	@Override
+	public Number executeNativeSQLGetId(String sql, EntityBean params) throws RollBackException, NonRollBackException {
+		KeyHolder keyHolder = executeNativeSQLGetIdKeyHolder(sql, params);
 		return keyHolder.getKey();
 	}
 	
 	@Override
-	public Number executeNativeSQLGetId(String sql, EntityBean params) throws RollBackException, NonRollBackException {
+	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql, EntityBean params) throws RollBackException, NonRollBackException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource sd = new BeanPropertySqlParameterSource(params);
 		jdbcTemplate.update(sql, sd , keyHolder);
-		return keyHolder.getKey();
+		return keyHolder;
 	}
 	
 	@Override
 	public Number executeNativeSQLGetId(String sql, Map<String, Object> params) throws RollBackException, NonRollBackException {
-		
+		KeyHolder keyHolder = executeNativeSQLGetIdKeyHolder(sql, params);
+		return keyHolder.getKey();
+	}
+	
+	@Override
+	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql, Map<String, Object> params) throws RollBackException, NonRollBackException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource sd = new MapSqlParameterSource(params);
 		namedParameterJdbcTemplate.update(sql, sd , keyHolder);
-		return keyHolder.getKey();
+		return keyHolder;
 	}
 	
 	@Override
@@ -531,8 +550,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						if(joinColumnsObject!=null){
 							if(property.getEmbeddedId()!=null)
 								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
+							if(joinColumnsObject == null)
+								continue;
 							Object value = property.getMethodGet().invoke(joinColumnsObject);
-							if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
+							if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
 								continue;
 							}
 							if(value!=null){
@@ -566,7 +587,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(entity!=null){
 								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
 								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-								if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
+								if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
 									continue;
 								}
 								if(value!=null ) {
@@ -614,8 +635,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								para.add(valueEmbeddedId);
 							}
 						}
-						
-						
 					}
 
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -634,32 +653,86 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //			sb.append(Joiner.on(" AND ").skipNulls().join(listPkName));
 //			for (Object id : listPkId) 
 //				para.add(id);
-		Number idNumber;
+		KeyHolder keyHolder;
 		try{
-			idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+			keyHolder = executeNativeSQLGetIdKeyHolder(sb.toString(),para.toArray());
 		} catch (BadSqlGrammarException ba) {
 			throw new RollBackTechnicalException(CommonMessageCode.COM4994);
 		}
-			if(methodSetId !=null&&idNumber!=null){
-				try {
-					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
-						
-						Class<?> type = methodSetId.getParameterTypes()[0];
-						if(type == Long.class){
-							methodSetId.invoke(target, idNumber.longValue());
-						}else if(type == Integer.class){
-							methodSetId.invoke(target, idNumber.intValue());
-						}else if(type == Short.class){
-							methodSetId.invoke(target, idNumber.shortValue());
-						}else if(type == Double.class){
-							methodSetId.invoke(target, idNumber.doubleValue());
+		target = idToBean(keyHolder,target,methodSetId, methodGetId);
+ 		return target;
+	}
+	
+	private <T> T idToBean(KeyHolder keyHolder,T target,Method methodSetId, Method methodGet){
+		if(methodSetId !=null&&keyHolder!=null){
+			try {
+				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
+					
+					Class<?> type = methodSetId.getParameterTypes()[0];
+					if(type == Long.class&& keyHolder.getKey()!=null){
+						methodSetId.invoke(target, keyHolder.getKey().longValue());
+					}else if(type == Integer.class&& keyHolder.getKey()!=null){
+						methodSetId.invoke(target, keyHolder.getKey().intValue());
+					}else if(type == Short.class&& keyHolder.getKey()!=null){
+						methodSetId.invoke(target, keyHolder.getKey().shortValue());
+					}else if(type == Double.class&& keyHolder.getKey()!=null){
+						methodSetId.invoke(target, keyHolder.getKey().doubleValue());
+					}else if(type.isAnnotationPresent(Embeddable.class)&&keyHolder.getKeys()!=null){
+						boolean isSet = false;
+						for ( Map<String, Object> keyList : keyHolder.getKeyList()) {
+							if(isSet)
+								continue;
+							for (Entry<String, Object> keyEntry : keyList.entrySet()) {
+								if(isSet)
+									continue;
+								Object key = keyEntry.getValue();
+								if (key instanceof Number) {
+									Number idValue = (Number) key;
+									Class<? extends Object> clazz = target.getClass();
+									ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+									Method methodGetId = classMapper.getPropertyId().getMethodGet();
+									for (String  columnName : classMapper.getColumn().keySet()) {
+										if(isSet)
+											continue;
+										for (Property property : classMapper.getColumn().get(columnName)) {
+											if(isSet)
+												continue;
+											if(property.getColumnType() == ColumnType.embeddedId){
+												Object embeddedIdObject = methodGet.invoke(target);
+												if(embeddedIdObject!=null){
+													ClassMapper classMapperId = JPAUtil.getClassMapper(methodGetId.getReturnType());
+													for (String  colName : classMapperId.getColumn().keySet()) {
+														if(isSet)
+															continue;
+														for (Property prop : classMapperId.getColumn().get(colName)) {
+															if(isSet)
+																continue;
+															Method methodGetEmbeddedId = prop.getMethodGet();
+															Method methodSetEmbeddedId = prop.getMethodSet();
+															Object value = methodGetEmbeddedId.invoke(embeddedIdObject);
+															if(value == null){
+																methodSetEmbeddedId.invoke(embeddedIdObject, idValue);
+																isSet = true;
+																continue;
+															}
+														}
+													}
+												}
+											}
+										}
+										
+									}
+								}
+								
+							}
 						}
+						
 					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				logger.error("save(T, boolean, boolean, String)", e); //$NON-NLS-1$
 				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			logger.error("save(T, boolean, boolean, String)", e); //$NON-NLS-1$
 			}
-//		}
+		}
 		return target;
 	}
 	@Override
@@ -749,6 +822,17 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //										value = null;
 									para.add(value);
 								}
+							}else if(value instanceof Date){
+								Date date = new Date();
+								date.setTime(((Date) value).getTime());
+								if(((Date) value).getTime() <= 0L){
+									listColumnName.add(columnName);
+									listParaName.add(" (NULL) ");
+								}else{
+									listColumnName.add(columnName);
+									listParaName.add("?");
+									para.add(value);
+								}
 							}else{
 								if(value.equals("NULL") && "NULL".equals(value)){
 									listColumnName.add(columnName);
@@ -769,7 +853,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(property.getEmbeddedId()!=null)
 								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 							Object value = property.getMethodGet().invoke(joinColumnsObject);
-							if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
+							if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
 								continue;
 							}
 							if(value!=null){
@@ -779,6 +863,17 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 										listParaName.add("?");
 										if(((Number)value).intValue() == 0)
 											value = null;
+										para.add(value);
+									}
+								}else if(value instanceof Date){
+									Date date = new Date();
+									date.setTime(((Date) value).getTime());
+									if(((Date) value).getTime() <= 0L){
+										listColumnName.add(columnName);
+										listParaName.add(" (NULL) ");
+									}else{
+										listColumnName.add(columnName);
+										listParaName.add("?");
 										para.add(value);
 									}
 								}else{
@@ -805,7 +900,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								
 								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
 								
-								if(configService.checkTable(columnName) && value != null && ((Number)value).intValue() ==-1){
+								if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
 									continue;
 								}
 								
@@ -816,6 +911,17 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 											listParaName.add("?");
 											if(((Number)value).intValue() == 0)
 												value = null;
+											para.add(value);
+										}
+									}else if(value instanceof Date){
+										Date date = new Date();
+										date.setTime(((Date) value).getTime());
+										if(((Date) value).getTime() <= 0L){
+											listColumnName.add(columnName);
+											listParaName.add(" (NULL) ");
+										}else{
+											listColumnName.add(columnName);
+											listParaName.add("?");
 											para.add(value);
 										}
 									}else{
@@ -831,6 +937,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								listParaName.add("?");
 								para.add(value);
 							}
+						}else{
+							if(configService.checkClearableList(columnName)){
+								listColumnName.add(columnName);
+								listParaName.add(" (NULL) ");
+							}
 						}
 					}
 					if(property.getColumnType() == ColumnType.id){
@@ -844,7 +955,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								listPkName.add(columnName);
 								listPkNamePara.add(value);
 							}
-							
 						}
 					}
 					
@@ -966,7 +1076,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<String> listPkName = new LinkedList<String>();
 		List<Object> listPkNamePara = new LinkedList<Object>();
 		Method methodSetId = classMapper.getPropertyId().getMethodSet();
-		
+		Method methodGetId = classMapper.getPropertyId().getMethodGet();
 		for (String  columnName : classMapper.getColumn().keySet()) {
 			Property property = classMapper.getColumn().get(columnName).get(0);
 			Method method = property.getMethodGet();
@@ -999,31 +1109,38 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			// throw exception not parameter
 			throw new RollBackTechnicalException(CommonMessageCode.COM4991);
 		}
-		Number idNumber =null;
+//		Number idNumber =null;
+//		try{
+//			idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
+//		}catch(Exception e){
+//			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
+//		}
+//		if(methodSetId !=null&&idNumber!=null){
+//			try {
+//				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
+//					
+//					Class<?> type = methodSetId.getParameterTypes()[0];
+//					if(type == Long.class){
+//						methodSetId.invoke(target, idNumber.longValue());
+//					}else if(type == Integer.class){
+//						methodSetId.invoke(target, idNumber.intValue());
+//					}else if(type == Short.class){
+//						methodSetId.invoke(target, idNumber.shortValue());
+//					}else if(type == Double.class){
+//						methodSetId.invoke(target, idNumber.doubleValue());
+//					}
+//				}
+//			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+//				logger.error("updateStatusDelete(T)", e); //$NON-NLS-1$
+//			}
+//		}
+		KeyHolder keyHolder;
 		try{
-			idNumber = executeNativeSQLGetId(sb.toString(),para.toArray());
-		}catch(Exception e){
-			throw new RollBackTechnicalException(CommonMessageCode.COM4993);
+			keyHolder = executeNativeSQLGetIdKeyHolder(sb.toString(),para.toArray());
+		} catch (BadSqlGrammarException ba) {
+			throw new RollBackTechnicalException(CommonMessageCode.COM4994);
 		}
-		if(methodSetId !=null&&idNumber!=null){
-			try {
-				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
-					
-					Class<?> type = methodSetId.getParameterTypes()[0];
-					if(type == Long.class){
-						methodSetId.invoke(target, idNumber.longValue());
-					}else if(type == Integer.class){
-						methodSetId.invoke(target, idNumber.intValue());
-					}else if(type == Short.class){
-						methodSetId.invoke(target, idNumber.shortValue());
-					}else if(type == Double.class){
-						methodSetId.invoke(target, idNumber.doubleValue());
-					}
-				}
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				logger.error("updateStatusDelete(T)", e); //$NON-NLS-1$
-			}
-		}
+		target = idToBean(keyHolder,target,methodSetId, methodGetId);
 		return target;
 	}
 	

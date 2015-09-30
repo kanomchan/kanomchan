@@ -117,7 +117,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 	
 	@Override
-	public boolean checkTable(String name) throws RollBackException ,NonRollBackException{
+	public boolean checkNeedleList(String name) throws RollBackException ,NonRollBackException{
 		try {
 			String text = config.get("NEEDLE_LIST");
 			Gson gson = new GsonBuilder().create();
@@ -125,7 +125,21 @@ public class ConfigServiceImpl implements ConfigService {
 			Set<String> setKey = gson.fromJson(text, typeOfSrc );
 			return setKey==null?false:setKey.contains(name);
 		}catch (Exception e) {
-			logger.error("checkTable", e);
+			logger.error("checkNeedleList", e);
+			throw new RollBackProcessException(CommonMessageCode.COM4998, e);
+		}
+	}
+	
+	@Override
+	public boolean checkClearableList(String name) throws RollBackException ,NonRollBackException{
+		try {
+			String text = config.get("CLEARABLE_LIST");
+			Gson gson = new GsonBuilder().create();
+			Type typeOfSrc = new TypeToken<Set<String>>() {}.getType();
+			Set<String> setKey = gson.fromJson(text, typeOfSrc );
+			return setKey==null?false:setKey.contains(name);
+		}catch (Exception e) {
+			logger.error("checkClearableList", e);
 			throw new RollBackProcessException(CommonMessageCode.COM4998, e);
 		}
 	}

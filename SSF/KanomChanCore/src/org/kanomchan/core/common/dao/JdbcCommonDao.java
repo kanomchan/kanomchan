@@ -11,6 +11,7 @@ import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.KeyHolder;
 
 public interface JdbcCommonDao {
 	
@@ -118,5 +119,10 @@ public interface JdbcCommonDao {
 
 	public <T> T nativeQueryOneRowForObject(String sql, Class<T> requiredType,Map<String, Object> args) throws RollBackException, NonRollBackException;
 
+	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql,Map<String, Object> params) throws RollBackException,NonRollBackException;
+
+	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql, EntityBean params)throws RollBackException, NonRollBackException;
+
+	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql, Object... params)throws RollBackException, NonRollBackException;
 
 }

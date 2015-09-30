@@ -24,5 +24,7 @@ public interface ConfigService {
 
 	public String getInputResultName(String namespace, String name);
 	
-	public boolean checkTable(String name) throws RollBackException, NonRollBackException;
+	public boolean checkNeedleList(String name) throws RollBackException, NonRollBackException;
+
+	public boolean checkClearableList(String name) throws RollBackException, NonRollBackException;
 }
