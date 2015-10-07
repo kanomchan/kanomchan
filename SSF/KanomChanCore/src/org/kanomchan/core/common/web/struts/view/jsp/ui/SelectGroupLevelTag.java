@@ -30,7 +30,10 @@ public class SelectGroupLevelTag extends AbstractRequiredListTag {
     protected String itemName;
     protected String itemKey;
     protected String itemParentId;
+    protected String typeOfIgnore;
     protected String idParentIgnore;
+    protected String parentLevel;
+    protected String levelIgnore;
     protected String beanId;
 	
 	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
@@ -56,7 +59,10 @@ public class SelectGroupLevelTag extends AbstractRequiredListTag {
         selectGroupLevel.setItemName(itemName);
         selectGroupLevel.setItemKey(itemKey);
         selectGroupLevel.setItemParentId(itemParentId);
+        selectGroupLevel.setTypeOfIgnore(typeOfIgnore);
         selectGroupLevel.setIdParentIgnore(idParentIgnore);
+        selectGroupLevel.setParentLevel(parentLevel);
+        selectGroupLevel.setLevelIgnore(levelIgnore);
         selectGroupLevel.setBeanId(beanId);
         
     }
@@ -117,12 +123,24 @@ public class SelectGroupLevelTag extends AbstractRequiredListTag {
 		this.itemName = itemName;
 	}
     
-    public void setItemParentId(String itemParentId) {
+  	public void setItemParentId(String itemParentId) {
 		this.itemParentId = itemParentId;
+	}
+    
+    public void setTypeOfIgnore(String typeOfIgnore) {
+		this.typeOfIgnore = typeOfIgnore;
 	}
     
     public void setIdParentIgnore(String idParentIgnore) {
 		this.idParentIgnore = idParentIgnore;
+	}
+    
+    public void setParentLevel(String parentLevel) {
+		this.parentLevel = parentLevel;
+	}
+    
+    public void setLevelIgnore(String levelIgnore) {
+		this.levelIgnore = levelIgnore;
 	}
     
     public void setBeanId(String beanId) {

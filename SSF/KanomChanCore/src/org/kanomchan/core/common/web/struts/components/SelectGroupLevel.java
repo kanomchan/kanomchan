@@ -32,7 +32,10 @@ public class SelectGroupLevel extends ListUIBean {
     protected String itemKey;
     protected String itemName;
     protected String itemParentId;
+    protected String typeOfIgnore;
     protected String idParentIgnore;
+    protected String parentLevel;
+    protected String levelIgnore;
     protected String beanId;
 
     public SelectGroupLevel(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
@@ -85,8 +88,14 @@ public class SelectGroupLevel extends ListUIBean {
         	addParameter("itemKey", findString(itemKey));
         if(itemParentId != null)
         	addParameter("itemParentId", findString(itemParentId));
+        if(typeOfIgnore != null)
+        	addParameter("typeOfIgnore", findString(typeOfIgnore));
         if(idParentIgnore != null)
         	addParameter("idParentIgnore", findString(idParentIgnore));
+        if(parentLevel != null)
+        	addParameter("parentLevel", findString(parentLevel));
+        if(levelIgnore != null)
+        	addParameter("levelIgnore", findString(levelIgnore));
         if(beanId != null)
         	addParameter("beanId", findString(beanId));
     }
@@ -154,12 +163,24 @@ public class SelectGroupLevel extends ListUIBean {
 		this.itemName = itemName;
 	}
     
-    public void setItemParentId(String itemParentId) {
-		this.itemParentId = itemParentId;
+   public void setItemParentId(String itemParentId) {
+	this.itemParentId = itemParentId;
+}
+    
+    public void setTypeOfIgnore(String typeOfIgnore) {
+		this.typeOfIgnore = typeOfIgnore;
 	}
     
     public void setIdParentIgnore(String idParentIgnore) {
-		this.idParentIgnore = idParentIgnore;
+    	this.idParentIgnore = idParentIgnore;
+    }
+    
+    public void setLevelIgnore(String levelIgnore) {
+		this.levelIgnore = levelIgnore;
+	}
+    
+    public void setParentLevel(String parentLevel) {
+		this.parentLevel = parentLevel;
 	}
     
     public void setBeanId(String beanId) {

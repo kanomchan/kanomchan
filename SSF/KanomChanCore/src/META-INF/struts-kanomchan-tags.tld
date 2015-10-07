@@ -1330,6 +1330,24 @@
     </attribute>
     <attribute>
       <description><![CDATA[Set the Place holder on MultiSelect]]></description>
+      <name>levelIgnore</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Set the Place holder on MultiSelect]]></description>
+      <name>typeOfIgnore</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Set the Place holder on MultiSelect]]></description>
+      <name>parentLevel</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Set the Place holder on MultiSelect]]></description>
       <name>beanId</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
