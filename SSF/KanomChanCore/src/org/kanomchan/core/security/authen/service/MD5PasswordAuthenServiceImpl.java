@@ -7,6 +7,9 @@ public class MD5PasswordAuthenServiceImpl implements PasswordAuthenService {
 
 	@Override
 	public String encrytPassword(String password) {
+		if(password == null){
+			return null;
+		}
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("MD5");
