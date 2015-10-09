@@ -1,5 +1,7 @@
 package org.kanomchan.core.common.web.struts.interceptor;
 
+import org.apache.log4j.Logger;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +30,10 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 public class AuthorizeInterceptor extends ServletConfigInterceptor {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(AuthorizeInterceptor.class);
 	
 	
 	/**
@@ -88,87 +94,57 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 		if(c != null && !c.isEmpty()){
 			codes.addAll(c);
 			if (!privileges.containsAll(codes)) {
-				if(userBean != null){
-					if(invocation.getAction() instanceof BaseAction){
-						BaseAction baseAction = (BaseAction) invocation.getAction();
-						Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
-						List<Message> messageList = new ArrayList<Message>();
-						List<Button> buttonList = new ArrayList<Button>();
-						messageList.add(message);
-						baseAction.setMessageList(messageList);
-						Button e = new Button();
-						e.setAction("home-end");
-						e.setNamespace("/home");
-						e.setName("OK");
-						buttonList.add(e);
-						baseAction.setButtonList(buttonList);
-						return MESSAGE;
-					}else{
-						return "FORCE_TO_LOGIN_WELCOME_PAGE";
-					}
-				}else{
-					if(invocation.getAction() instanceof BaseAction){
-						BaseAction baseAction = (BaseAction) invocation.getAction();
-						Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
-						List<Message> messageList = new ArrayList<Message>();
-						List<Button> buttonList = new ArrayList<Button>();
-						messageList.add(message);
-						baseAction.setMessageList(messageList);
-						Button e = new Button();
-						e.setAction("login-end");
-						e.setNamespace("/login");
-						e.setName("OK");
-						buttonList.add(e);
-						baseAction.setButtonList(buttonList);
-						return MESSAGE;
-					}else{
-						return "FORCE_TO_LOGIN_PAGE";
-					}
-				}
+				logger.error("privileges:"+privileges.toString()+"codes:"+codes.toString());
+				return authFail(invocation,userBean);
 			}
 		}else{
-			if(userBean != null){
-				if(invocation.getAction() instanceof BaseAction){
-					BaseAction baseAction = (BaseAction) invocation.getAction();
-					Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
-					List<Message> messageList = new ArrayList<Message>();
-					List<Button> buttonList = new ArrayList<Button>();
-					messageList.add(message);
-					baseAction.setMessageList(messageList);
-					Button e = new Button();
-					e.setAction("home-end");
-					e.setNamespace("/home");
-					e.setName("OK");
-					buttonList.add(e);
-					baseAction.setButtonList(buttonList);
-					return MESSAGE;
-				}else{
-					return "FORCE_TO_LOGIN_WELCOME_PAGE";
-				}
-			}else{
-				if(invocation.getAction() instanceof BaseAction){
-					BaseAction baseAction = (BaseAction) invocation.getAction();
-					Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
-					List<Message> messageList = new ArrayList<Message>();
-					List<Button> buttonList = new ArrayList<Button>();
-					messageList.add(message);
-					baseAction.setMessageList(messageList);
-					Button e = new Button();
-					e.setAction("login-end");
-					e.setNamespace("/login");
-					e.setName("OK");
-					buttonList.add(e);
-					baseAction.setButtonList(buttonList);
-					return MESSAGE;
-				}else{
-					return "FORCE_TO_LOGIN_PAGE";
-				}
-			}
+			logger.error("C is emtry ");
+			return authFail(invocation,userBean);
 		}
 		return invocation.invoke();
 	}
 	
-	Set<String> getcode(Class<?> class1 , String methodStr) throws NoSuchMethodException, SecurityException{
+	private String authFail(ActionInvocation invocation,UserBean userBean){
+		if(userBean != null){
+			if(invocation.getAction() instanceof BaseAction){
+				BaseAction baseAction = (BaseAction) invocation.getAction();
+				Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
+				List<Message> messageList = new ArrayList<Message>();
+				List<Button> buttonList = new ArrayList<Button>();
+				messageList.add(message);
+				baseAction.setMessageList(messageList);
+				Button e = new Button();
+				e.setAction("home-end");
+				e.setNamespace("/home");
+				e.setName("OK");
+				buttonList.add(e);
+				baseAction.setButtonList(buttonList);
+				return MESSAGE;
+			}else{
+				return "FORCE_TO_LOGIN_WELCOME_PAGE";
+			}
+		}else{
+			if(invocation.getAction() instanceof BaseAction){
+				BaseAction baseAction = (BaseAction) invocation.getAction();
+				Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
+				List<Message> messageList = new ArrayList<Message>();
+				List<Button> buttonList = new ArrayList<Button>();
+				messageList.add(message);
+				baseAction.setMessageList(messageList);
+				Button e = new Button();
+				e.setAction("login-end");
+				e.setNamespace("/login");
+				e.setName("OK");
+				buttonList.add(e);
+				baseAction.setButtonList(buttonList);
+				return MESSAGE;
+			}else{
+				return "FORCE_TO_LOGIN_PAGE";
+			}
+		}
+	}
+	
+	private Set<String> getcode(Class<?> class1 , String methodStr) throws NoSuchMethodException, SecurityException{
 		Set<String> codes = new HashSet<String>();
 		Authorize authorize;
 		
