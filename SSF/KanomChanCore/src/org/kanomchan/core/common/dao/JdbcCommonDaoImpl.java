@@ -592,7 +592,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								}
 								if(value!=null ) {
 									if(value instanceof Number){
-										if(includeMinusOne || ((Number)value).intValue() !=-1){
+										if(configService.checkClearableList(columnName) && value != null && ((Number)value).intValue() ==-1){
+											listColumnName.add(columnName);
+											listParaName.add(" (NULL) ");
+										}else if(includeMinusOne || ((Number)value).intValue() !=-1){
 											listColumnName.add(columnName);
 											listParaName.add("?");
 											if((Long)value == 0)
@@ -815,7 +818,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						Object value = method.invoke(target);
 						if(value != null){
 							if(value instanceof Number){
-								if(includeMinusOne || ((Number)value).intValue() !=-1){
+								if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
+									listColumnName.add(columnName);
+									listParaName.add(" (NULL) ");
+								}else if(includeMinusOne || ((Number)value).intValue() !=-1){
 									listColumnName.add(columnName);
 									listParaName.add("?");
 //									if(((Number)value).intValue() == 0)
@@ -838,8 +844,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 									listColumnName.add(columnName);
 									listParaName.add(" NULL ");
 //									para.add(null);
-								}
-								else if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
+								}else if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
 									listColumnName.add(columnName);
 									listParaName.add("?");
 									para.add(value);
@@ -906,7 +911,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								
 								if(value!=null ) {
 									if(value instanceof Number){
-										if(includeMinusOne || ((Number)value).intValue() !=-1){
+										if(configService.checkClearableList(columnName) && value != null && ((Number)value).intValue() ==-1){
+											listColumnName.add(columnName);
+											listParaName.add(" (NULL) ");
+										}else if(includeMinusOne || ((Number)value).intValue() !=-1){
 											listColumnName.add(columnName);
 											listParaName.add("?");
 											if(((Number)value).intValue() == 0)
