@@ -95,7 +95,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-core-2.3.16.3.jar" sourcepath="C:/Users/kwan/.m2/repository/org/apache/struts/struts2-core/2.3.16.3/struts2-core-2.3.16.3-sources.jar">
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-core-2.3.16.3.jar" sourcepath="C:/Users/l3za_/.m2/repository/org/apache/struts/struts2-core/2.3.16.3/struts2-core-2.3.16.3-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -260,11 +260,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-jquery-plugin-3.7.1/struts2-jquery-plugin-3.7.1.jar" sourcepath="C:/Users/kwan/.m2/repository/com/jgeppert/struts2/jquery/struts2-jquery-plugin/3.7.1/struts2-jquery-plugin-3.7.1-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-jquery-richtext-plugin-3.7.1/struts2-jquery-richtext-plugin-3.7.1.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -391,5 +386,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/OIClient"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/struts2/struts2-jquery-plugin-3.7.1/struts2-jquery-plugin-3.7.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
