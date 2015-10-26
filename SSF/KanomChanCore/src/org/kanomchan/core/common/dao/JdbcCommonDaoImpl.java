@@ -1330,21 +1330,47 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like, String langCode3) throws RollBackException, NonRollBackException {
 		
 		StringBuilder countQueryString = new StringBuilder();
-		countQueryString.append(FROM);
-		countQueryString.append(JPAUtil.getClassMapper(clazz).getTableName() + (langCode3 != null && !"".equals(langCode3) ? "_LANG" : ""));
+		String tableName = JPAUtil.getClassMapper(clazz).getTableName();
+		countQueryString.append("select ");
+		countQueryString.append(tableName);
+		countQueryString.append(".* ");
+		
+		if(langCode3 != null && !"".equals(langCode3)){
+			
+			countQueryString.append(" , IFNULL(");
+			countQueryString.append(tableName);
+			countQueryString.append("_LANG.NAME, ");
+			countQueryString.append(tableName);
+			countQueryString.append(".NAME) AS '");
+			countQueryString.append(tableName);
+			countQueryString.append("|NAME' ");
+		}
+		
+		countQueryString.append(" from ");
+		countQueryString.append(tableName);
+		
+		if(langCode3 != null && !"".equals(langCode3)){
+			countQueryString.append(" LEFT JOIN ");
+			countQueryString.append(tableName);
+			countQueryString.append("_LANG ON ");
+			countQueryString.append(tableName);
+			countQueryString.append("_LANG.STATUS = :STATUS AND ");
+			countQueryString.append(tableName);
+			countQueryString.append("_LANG.LANG_CODE3 = :LANG_CODE3 ");
+		}
 		countQueryString.append(AILIAT);
 				
-		countQueryString.append(genQueryWhereStringByECriteria(criteriaList, extraWhereClause, like));
+		countQueryString.append(genQueryWhereStringByECriteria(tableName,criteriaList, extraWhereClause, like));
 
-		if(langCode3 != null && !"".equals(langCode3)){
-			if(criteriaList == null || criteriaList.size() == 0)
-				countQueryString.append(WHERE);
-			else
-				countQueryString.append(" and ");
-//			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
-			countQueryString.append(" LANG_CODE3 = '");
-			countQueryString.append(langCode3 + "' ");
-		}
+//		if(langCode3 != null && !"".equals(langCode3)){
+//			if(criteriaList == null || criteriaList.size() == 0)
+//				countQueryString.append(WHERE);
+//			else
+//				countQueryString.append(" and ");
+////			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
+//			countQueryString.append(" LANG_CODE3 = '");
+//			countQueryString.append(langCode3 + "' ");
+//		}
 		
 //		sb.append(sql);
 		if(pagingBean !=null){
@@ -1365,7 +1391,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		countQueryString.append(JPAUtil.getClassMapper(clazz).getTableName());
 		countQueryString.append(AILIAT);
 		
-		countQueryString.append(genQueryWhereStringByECriteria(criteriaList, extraWhereClause, like));
+		countQueryString.append(genQueryWhereStringByECriteria(JPAUtil.getClassMapper(clazz).getTableName(),criteriaList, extraWhereClause, like));
 		Map<String, Object>params = new HashMap<String, Object>();
 		if (criteriaList != null && criteriaList.size() > 0) {
 			for (Criteria criteria : criteriaList) {
@@ -1376,7 +1402,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return totalRows;
 	}
 	
-	protected String genQueryWhereStringByECriteria(List<Criteria> criteriaList,String extraWhereClause,boolean like) throws RollBackException, NonRollBackException {
+	protected String genQueryWhereStringByECriteria(String tableName ,List<Criteria> criteriaList,String extraWhereClause,boolean like) throws RollBackException, NonRollBackException {
 		StringBuilder queryString = new StringBuilder();
 		
 		if(criteriaList !=null && criteriaList.size()>0){
@@ -1386,11 +1412,15 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				StringBuilder sb = new StringBuilder();
 				if(criteria.getValue() instanceof String && like){
 					sb.append(UPPER);
+					sb.append(tableName);
+					sb.append(".");
 					sb.append(criteria.getColumn());
 					sb.append(LIKE);
 					sb.append(criteria.getParam());
 				}else{
 					sb.append(NON);
+					sb.append(tableName);
+					sb.append(".");
 					sb.append(criteria.getColumn());
 					sb.append(EQU);
 					sb.append(criteria.getParam());
@@ -1524,6 +1554,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				for (Criteria criteria : criteriaList) {
 					params.put(criteria.getParam(), criteria.getValue());
 				}
+			}
+			if(langCode3!=null&&!"".equals(langCode3)){
+				params.put("LANG_CODE3", langCode3);
 			}
 			List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 			return resultList1;

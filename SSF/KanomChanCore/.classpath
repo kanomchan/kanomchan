@@ -50,7 +50,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/openid/openid-connect-client-1.1.12.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/openid/openid-connect-common-1.1.12.jar" sourcepath="C:/Users/JM/.m2/repository/org/mitre/openid-connect-common/1.1.12/openid-connect-common-1.1.12-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/hibernate-core-3.6.10.Final.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aop-4.1.4.RELEASE.jar" sourcepath="C:/Users/admin/.m2/repository/org/springframework/spring-aop/4.1.4.RELEASE/spring-aop-4.1.4.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aop-4.1.4.RELEASE.jar" sourcepath="C:/Users/JM/.m2/repository/org/springframework/spring-aop/4.1.4.RELEASE/spring-aop-4.1.4.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-aspects-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-beans-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-context-4.1.4.RELEASE.jar"/>
