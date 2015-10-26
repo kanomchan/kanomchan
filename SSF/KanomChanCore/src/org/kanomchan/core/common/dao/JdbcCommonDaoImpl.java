@@ -167,7 +167,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		.append(" AND COUNTY{map}.ID_CITY = COUNTY_LANG{map}.ID_CITY ")
 		.append(" AND COUNTY{map}.ID_PROVINCE = COUNTY_LANG{map}.ID_PROVINCE ")
 		.append(" AND COUNTY{map}.ID_COUNTRY = COUNTY_LANG{map}.ID_COUNTRY ")
-		.append(" COUNTY_LANG{map}.LANG_CODE3 = :LANG ")
+		.append(" AND COUNTY_LANG{map}.LANG_CODE3 = :LANG ")
 		
 	.append(" LEFT JOIN SYS_M_CITY CITY{map} ON  ")
 		.append(" CITY{map}.ID_CITY = {prefix}.ID_CITY{subfix}  ")
@@ -177,7 +177,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		.append(" CITY{map}.ID_CITY = CITY_LANG{map}.ID_CITY  ")
 		.append(" AND CITY{map}.ID_PROVINCE = CITY_LANG{map}.ID_PROVINCE ")
 		.append(" AND CITY{map}.ID_COUNTRY = CITY_LANG{map}.ID_COUNTRY ")
-		.append(" CITY_LANG{map}.LANG_CODE3 = :LANG ")
+		.append(" AND CITY_LANG{map}.LANG_CODE3 = :LANG ")
 		
 	.append(" LEFT JOIN SYS_M_PROVINCE PROVINCE{map} ON   ")
 		.append(" PROVINCE{map}.ID_PROVINCE = {prefix}.ID_PROVINCE{subfix} ")
@@ -185,13 +185,13 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	.append(" LEFT JOIN SYS_M_PROVINCE_LANG PROVINCE_LANG{map} ON   ")
 		.append(" PROVINCE{map}.ID_PROVINCE = PROVINCE_LANG{map}.ID_PROVINCE ")
 		.append(" AND PROVINCE{map}.ID_COUNTRY = PROVINCE_LANG{map}.ID_COUNTRY ")
-		.append(" PROVINCE_LANG{map}.LANG_CODE3 = :LANG ")
+		.append(" AND PROVINCE_LANG{map}.LANG_CODE3 = :LANG ")
 		
 	.append(" LEFT JOIN SYS_M_COUNTRY COUNTRY{map}  ON ")
 		.append("COUNTRY{map}.ID_COUNTRY = {prefix}.ID_COUNTRY{subfix} ")
 	.append(" LEFT JOIN SYS_M_COUNTRY_LANG COUNTRY_LANG{map}  ON ")
-		.append("COUNTRY{map}.ID_COUNTRY = COUNTRY_LANG{map}.ID_COUNTRY ")
-		.append(" COUNTRY_LANG{map}.LANG_CODE3 = :LANG ")
+		.append(" COUNTRY{map}.ID_COUNTRY = COUNTRY_LANG{map}.ID_COUNTRY ")
+		.append(" AND COUNTRY_LANG{map}.LANG_CODE3 = :LANG ")
 	.toString();
 
 	protected static final String SQL_COUNTY_SELECT_LANG_NAME = ",COUNTRY.* ,PROVINCE.* ,CITY.* , COUNTY.* ";
@@ -660,7 +660,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try{
 			keyHolder = executeNativeSQLGetIdKeyHolder(sb.toString(),para.toArray());
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4994);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4994,ba);
 		}
 		target = idToBean(keyHolder,target,methodSetId, methodGetId);
  		return target;
@@ -1146,7 +1146,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		try{
 			keyHolder = executeNativeSQLGetIdKeyHolder(sb.toString(),para.toArray());
 		} catch (BadSqlGrammarException ba) {
-			throw new RollBackTechnicalException(CommonMessageCode.COM4994);
+			throw new RollBackTechnicalException(CommonMessageCode.COM4994,ba);
 		}
 		target = idToBean(keyHolder,target,methodSetId, methodGetId);
 		return target;
