@@ -2,32 +2,35 @@ package org.kanomchan.core.common.bean;
 
 import java.io.Serializable;
 
-
-public class BeanLang<T> implements Serializable {
+public class BeanLang<T> implements Serializable  {
+	
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -4533404070391824591L;
-	private T engLang;
-	private T otherLang;
-	private MasterBeanLang<T> BeanLang;
+	private T beanEng;
+	private T beanOtherLang;
+	private BeanLang<T> beanLang;
 	private String langCode;
 	private Long idLang;
 	
-	public T getEngLang() {
-		return engLang;
+	public T getBeanEng() {
+		return beanEng;
 	}
-	public void setEngLang(T engLang) {
-		this.engLang = engLang;
+	public void setBeanEng(T beanEng) {
+		this.beanEng = beanEng;
 	}
-	public T getOtherLang() {
-		return otherLang;
+	public T getBeanOtherLang() {
+		return beanOtherLang;
 	}
-	public void setOtherLang(T otherLang) {
-		this.otherLang = otherLang;
+	public void setBeanOtherLang(T beanOtherLang) {
+		this.beanOtherLang = beanOtherLang;
 	}
-	public MasterBeanLang<T> getBeanLang() {
-		return BeanLang;
+	public BeanLang<T> getMasterBeanLang() {
+		return beanLang;
 	}
-	public void setBeanLang(MasterBeanLang<T> beanLang) {
-		BeanLang = beanLang;
+	public void setMasterBeanLang(BeanLang<T> masterBeanLang) {
+		this.beanLang = masterBeanLang;
 	}
 	public String getLangCode() {
 		return langCode;
@@ -40,5 +43,18 @@ public class BeanLang<T> implements Serializable {
 	}
 	public void setIdLang(Long idLang) {
 		this.idLang = idLang;
+	}
+	public void setEngLang(T beanEng) {
+		this.beanEng = beanEng;
+	}
+	public T getEngLang() {
+		return this.beanEng;
+	}
+	public void setOtherLang(T otherLang) {
+		this.beanOtherLang = otherLang;
+	}
+	
+	public T getOtherLang() {
+		return this.beanOtherLang;
 	}
 }

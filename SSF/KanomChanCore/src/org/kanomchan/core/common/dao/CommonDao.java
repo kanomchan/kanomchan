@@ -34,7 +34,7 @@ public interface CommonDao {
 	 * @throws TechnicalException
 	 */
 	public <T> T update(T entity) throws RollBackException ,NonRollBackException;
-	public <T> T update(T entity,String langCode3) throws RollBackException ,NonRollBackException;
+	public <T> T update(T entity,String langCode3,Long idLang) throws RollBackException ,NonRollBackException;
 	
 	/**
 	 * Execute Update with JPQL

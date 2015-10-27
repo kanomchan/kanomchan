@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletConfigInterceptor;
 import org.kanomchan.core.common.bean.Button;
 import org.kanomchan.core.common.bean.Message;
@@ -124,6 +128,11 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 				return "FORCE_TO_LOGIN_WELCOME_PAGE";
 			}
 		}else{
+			HttpServletRequest request = ServletActionContext.getRequest();
+			HttpSession session = request.getSession();
+			String queryString = request.getQueryString();
+			String url = request.getRequestURL().toString()+((queryString==null||"null".equals(queryString)||"".equals(queryString))?"":"?"+queryString);
+			session.setAttribute(CommonConstant.SESSION.NEXT_URL_KEY, url);
 			if(invocation.getAction() instanceof BaseAction){
 				BaseAction baseAction = (BaseAction) invocation.getAction();
 				Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);

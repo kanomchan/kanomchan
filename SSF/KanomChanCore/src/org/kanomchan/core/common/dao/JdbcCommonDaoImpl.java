@@ -91,6 +91,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 	};
 	
+	protected static final RowMapper<Long> LONG_MAPPER = new RowMapper<Long>() {
+		
+		@Override
+		public Long mapRow(ResultSet resultSet, int arg1) throws SQLException {
+			return resultSet.getLong(1);
+		}
+	};
+	
 	protected static final String SQL_COUNTY_LEFT_JOIN = new StringBuilder()
 		.append(" LEFT JOIN SYS_M_COUNTY COUNTY{map} ON ")
 			.append(" COUNTY{map}.ID_COUNTY = {prefix}.ID_COUNTY{subfix} ")
@@ -740,14 +748,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	@Override
 	public <T extends Object> T saveOrUpdate(T t, boolean includeMinusOne) throws RollBackException, NonRollBackException {
-		return saveOrUpdate(t, includeMinusOne,false,null);
+		return saveOrUpdate(t, includeMinusOne,false,null,null);
 	}
 	@Override
 	public <T extends Object> T saveOrUpdate(T t) throws RollBackException, NonRollBackException {
-		return saveOrUpdate(t, true,false,null);
+		return saveOrUpdate(t, true,false,null,null);
 	}
 	@Override
-	public <T extends Object> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code) throws RollBackException, NonRollBackException {
+	public <T extends Object> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code,Long idLang) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper =JPAUtil.getClassMapper(target.getClass());
 		Object objectId = null;
 		try {
@@ -758,7 +766,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		if(objectId!=null){
 			try{
-			return update(target, includeMinusOne,tableLang,code);
+			return update(target, includeMinusOne,tableLang,code,idLang);
 			} catch (Exception e){
 				logger.error("saveOrUpdate message ", e);
 				return save(target, includeMinusOne,tableLang ,code);
@@ -774,15 +782,15 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //	}
 	@Override
 	public <T extends Object> T update(T target) throws RollBackException, NonRollBackException{
-		return update(target, true,false,null);
+		return update(target, true,false,null,null);
 	}
 	
 	@Override
 	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackException, NonRollBackException{
-		return update(target, includeMinusOne,false,null);
+		return update(target, includeMinusOne,false,null,null);
 	}
 	@Override
-	public <T extends Object> T update(T target, boolean includeMinusOne, boolean tableLang, String langCode) throws RollBackException, NonRollBackException{
+	public <T extends Object> T update(T target, boolean includeMinusOne, boolean tableLang, String langCode,Long idLang) throws RollBackException, NonRollBackException{
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			EntityBean entityBean = (EntityBean) target;

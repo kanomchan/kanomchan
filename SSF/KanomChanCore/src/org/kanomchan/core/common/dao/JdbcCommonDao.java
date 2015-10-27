@@ -85,13 +85,13 @@ public interface JdbcCommonDao {
 
 	public <T> T saveOrUpdate(T t, boolean includeMinusOne) throws RollBackException, NonRollBackException;
 	
-	public <T> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code) throws RollBackException, NonRollBackException;
+	public <T> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code,Long idLang) throws RollBackException, NonRollBackException;
 	
 	public <T> T update(T target) throws RollBackException, NonRollBackException;
 
 	public <T> T update(T target, boolean includeMinusOne) throws RollBackException, NonRollBackException;
 
-	public <T> T update(T target, boolean includeMinusOne, boolean tableLang,String langCode) throws RollBackException, NonRollBackException;
+	public <T> T update(T target, boolean includeMinusOne, boolean tableLang,String langCode,Long idLang) throws RollBackException, NonRollBackException;
 
 	public <T> Collection<T> saveOrUpdateAll(Collection<T> entities) throws RollBackException, NonRollBackException;
 

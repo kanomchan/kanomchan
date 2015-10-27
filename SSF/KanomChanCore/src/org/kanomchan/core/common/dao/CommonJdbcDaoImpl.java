@@ -3,8 +3,10 @@ package org.kanomchan.core.common.dao;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.BeanLang;
@@ -31,7 +33,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T extends Object> T update(T target) throws RollBackException ,NonRollBackException{
-		return update(target,false,false,null);
+		return update(target,false,false,null,null);
 	}
 
 	@Override
@@ -58,8 +60,8 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> T update(T entity, String langCode3) throws RollBackException ,NonRollBackException {
-		return update(entity, false, true, langCode3);
+	public <T> T update(T entity, String langCode3,Long idLang) throws RollBackException ,NonRollBackException {
+		return update(entity, false, true, langCode3,idLang);
 	}
 	@Override
 	public <T> T save(T target, String langCode3) throws RollBackException ,NonRollBackException {
@@ -329,15 +331,15 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		ClassMapper classMapper = JPAUtil.getClassMapper(beanLang.getEngLang().getClass());
 //		Class<? extends Object> clazz = beanLang.getEngLang().getClass();
 		
-		Object idLang = null;
+		Object idEng = null;
 		T engLang = null;
 		if(beanLang.getEngLang() != null){
 			engLang = saveOrUpdate(beanLang.getEngLang(), includeMinusOne);
 			beanLang.setEngLang(engLang);
 			if(engLang != null){
 				try {
-					idLang = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getEngLang());
-					classMapper.getPropertyId().getMethodSet().invoke(beanLang.getOtherLang(),idLang);
+					idEng = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getEngLang());
+					classMapper.getPropertyId().getMethodSet().invoke(beanLang.getOtherLang(),idEng);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					logger.error("saveAndLang getId message ", e);
 				}
@@ -345,15 +347,45 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		}
 		T otherLang = null;
 		if(beanLang.getOtherLang() != null && beanLang.getLangCode() != null && !"".equals(beanLang.getLangCode())){
-			List<T> haveLang = (List<T>) findByPropertyWithStatusAndLang(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idLang, "A", beanLang.getLangCode());
+			Long idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, "A", beanLang.getLangCode());
 			
-			if(haveLang != null && haveLang.size()> 0)
-				otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode());
+			if(idlang!=null)
+				if(beanLang.getIdLang()==null){
+					otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
+				}else{
+					otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),beanLang.getIdLang());
+				}
 			else{
 				otherLang = save(beanLang.getOtherLang(), beanLang.getLangCode());
 			}
 			beanLang.setOtherLang(otherLang);
 		}
 		return beanLang;
+	}
+
+	private Long checkLangBean(Class<? extends Object> class1,String columnName, Object idEng, String string, String langCode) throws RollBackException, NonRollBackException {
+		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
+		StringBuilder sb = new StringBuilder();
+		sb.append("select ");
+		sb.append(columnName);
+		sb.append("_LANG from ");
+		sb.append(classMapper.getTableName());
+		sb.append("_LANG ");
+		sb.append(" WHERE ");
+		sb.append(columnName);
+		sb.append(" = :ID_ENG");
+		sb.append(" AND LANG_CODE3 = :LANG_CODE3");
+		sb.append(" AND STATUS = :STATUS");
+		Map<String,  Object>params = new HashMap<String, Object>();
+		params.put("ID_ENG", idEng);
+		params.put("LANG_CODE3", langCode);
+		params.put("STATUS", string);
+		List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
+		if(conut==null ||conut.size()==0){
+			return null;
+		}else{
+			return conut.get(0);
+		}
+		
 	}
 }
