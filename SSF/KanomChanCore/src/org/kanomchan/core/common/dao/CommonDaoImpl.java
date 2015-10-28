@@ -465,7 +465,7 @@ public abstract class CommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> T update(T entity, String langCode3) throws RollBackTechnicalException {
+	public <T> T update(T entity, String langCode3,Long IdLang) throws RollBackTechnicalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
