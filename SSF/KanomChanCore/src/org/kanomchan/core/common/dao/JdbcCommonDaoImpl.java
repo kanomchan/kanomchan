@@ -837,9 +837,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 									para.add(value);
 								}
 							}else if(value instanceof Date){
-								Date date = new Date();
-								date.setTime(((Date) value).getTime());
-								if(((Date) value).getTime() <= 0L){
+								if(((Date) value).getTime() == 0L){
 									listColumnName.add(columnName);
 									listParaName.add(" (NULL) ");
 								}else{
@@ -881,7 +879,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								}else if(value instanceof Date){
 									Date date = new Date();
 									date.setTime(((Date) value).getTime());
-									if(((Date) value).getTime() <= 0L){
+									if(((Date) value).getTime() == 0L){
 										listColumnName.add(columnName);
 										listParaName.add(" (NULL) ");
 									}else{
@@ -932,7 +930,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 									}else if(value instanceof Date){
 										Date date = new Date();
 										date.setTime(((Date) value).getTime());
-										if(((Date) value).getTime() <= 0L){
+										if(((Date) value).getTime() == 0L){
 											listColumnName.add(columnName);
 											listParaName.add(" (NULL) ");
 										}else{
