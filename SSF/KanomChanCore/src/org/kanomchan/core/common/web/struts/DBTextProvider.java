@@ -24,7 +24,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 public class DBTextProvider implements TextProvider {
 	
-    private static final ConcurrentMap<MessageFormatKey, MessageFormat> messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>();
+    private static final Map<MessageFormatKey, MessageFormat> messageFormats = new ConcurrentHashMap<MessageFormatKey, MessageFormat>();
 //    private static final Map<String, Map<String,String>> lableCache  = new ConcurrentHashMap<String, Map<String,String>>();
 //    private static final Map<String, Map<String,Message>> messageCache  = new ConcurrentHashMap<String, Map<String,Message>>();
 
