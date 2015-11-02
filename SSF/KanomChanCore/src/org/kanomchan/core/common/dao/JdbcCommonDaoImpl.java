@@ -203,6 +203,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	.toString();
 
 	protected static final String SQL_COUNTY_SELECT_LANG_NAME = ",COUNTRY.* ,PROVINCE.* ,CITY.* , COUNTY.* ";
+	
+	/**
+     * PROVINCE{countySubfix}.ID_PROVINCE = {mapTable}.ID_PROVINCE{colunmSubfix}
+     */
 	protected static String GEN_SQL_COUNTY_LEFT_JOIN_LANG_NAME(String mapTable,String colunmSubfix,String countySubfix){
 		return new StringBuilder(SQL_COUNTY_LEFT_JOIN_LANG_NAME).toString().replaceAll("\\{prefix\\}", mapTable).replaceAll("\\{subfix\\}", colunmSubfix).replaceAll("\\{map\\}", countySubfix);
 	}
