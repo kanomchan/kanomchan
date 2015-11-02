@@ -323,9 +323,8 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return resultList;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T> BeanLang<T> saveAndLang(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException, IllegalAccessException {
+	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException {
 		if(beanLang == null || beanLang.getEngLang() == null)
 			return null;
 		ClassMapper classMapper = JPAUtil.getClassMapper(beanLang.getEngLang().getClass());
@@ -387,5 +386,10 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			return conut.get(0);
 		}
 		
+	}
+
+	@Override
+	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang) throws RollBackException,NonRollBackException {
+		return saveOrUpdate(beanLang,false);
 	}
 }

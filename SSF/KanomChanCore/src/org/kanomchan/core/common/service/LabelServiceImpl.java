@@ -2,6 +2,7 @@ package org.kanomchan.core.common.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.kanomchan.core.common.dao.ConfigDao;
 import org.kanomchan.core.common.exception.NonRollBackException;
@@ -25,6 +26,21 @@ public class LabelServiceImpl implements LabelService  {
 	public Map<String, String> getLabel(String lang) {
 		return labelMap.get(lang);
 	}
+	
+	@Override
+	public Map<String, String> getLabelByPage(String lang, String page) {
+		Map<String, String> labels = new HashMap<String, String>();
+		Map<String, String> mapLang = labelMap.get(lang);
+		if(mapLang == null)
+			mapLang = labelMap.get("ENG");
+		for (Entry<String, String> map : mapLang.entrySet()) {
+			if(map.getKey().startsWith(page)){
+				labels.put(map.getKey(), map.getValue());
+			}
+		}
+		return labels;
+	}
+	
 	@Override
 	public void refresh()throws RollBackException ,NonRollBackException {
 		labelMap = configDao.getLabelStrMap();

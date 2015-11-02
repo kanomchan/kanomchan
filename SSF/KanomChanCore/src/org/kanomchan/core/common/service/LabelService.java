@@ -11,4 +11,6 @@ public interface LabelService {
 
 	public void refresh()throws RollBackException ,NonRollBackException;
 
+	public Map<String, String> getLabelByPage(String lang, String page);
+
 }

@@ -25,7 +25,8 @@ public interface CommonDao {
 	 */
 	public <T> T save(T target) throws RollBackException ,NonRollBackException;
 	public <T> T save(T target,String langCode3) throws RollBackException ,NonRollBackException;
-	
+	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang) throws RollBackException, NonRollBackException;
+	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException;
 	/**
 	 * Update method that merge the state of the given entity into the current persistence context.  <br/>
 	 * ( finally : update into DB )
@@ -35,7 +36,8 @@ public interface CommonDao {
 	 */
 	public <T> T update(T entity) throws RollBackException ,NonRollBackException;
 	public <T> T update(T entity,String langCode3,Long idLang) throws RollBackException ,NonRollBackException;
-	
+//	public <T> BeanLang<T> update(BeanLang<T> beanLang) throws RollBackException, NonRollBackException, IllegalAccessException;
+//	public <T> BeanLang<T> update(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException, IllegalAccessException;
 	/**
 	 * Execute Update with JPQL
 	 * @param jpql - JPQL to execute.
@@ -300,7 +302,7 @@ public interface CommonDao {
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String SubListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	
-	public <T extends Object > BeanLang<T> saveAndLang(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException, IllegalAccessException;
+//	public <T extends Object > BeanLang<T> saveAndLang(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException, IllegalAccessException;
 
 	
 }
