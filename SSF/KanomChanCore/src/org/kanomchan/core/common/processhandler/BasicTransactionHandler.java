@@ -24,6 +24,8 @@ public class BasicTransactionHandler  implements TransactionHandler{
 	public void setPlatformTransactionManager(PlatformTransactionManager platformTransactionManager) {
 		this.platformTransactionManager = platformTransactionManager;
 	}
+	private int timeout;
+	
 	@Override
 	public boolean isTxnProcess(ProceedingJoinPoint joinPoint){
 		
@@ -71,7 +73,10 @@ public class BasicTransactionHandler  implements TransactionHandler{
 				if (logger.isDebugEnabled()) {
 					logger.debug("beginTxn(ProcessContext) - beginTxn");
 				}
-				TransactionDefinition txnDefinition = new DefaultTransactionDefinition(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+				DefaultTransactionDefinition txnDefinition = new DefaultTransactionDefinition(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+				if(timeout>0){
+					txnDefinition.setTimeout(timeout);
+				}
 				TransactionStatus txnStatus = platformTransactionManager.getTransaction(txnDefinition);	
 //				logger.debug("TransactionStatus.isCompleted "+txnStatus.isCompleted());
 				processContext.txnStatus = txnStatus;
@@ -130,5 +135,15 @@ public class BasicTransactionHandler  implements TransactionHandler{
 		}
 		
 	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+	
+	
 
 }
