@@ -25,7 +25,7 @@
 	    <div class="col-md-12">
 			<div class="inline">
 				<label class="control-label">
-				Show 
+				<@s.text name="COMMON_PAGING_SHOW"></@s.text> 
 				</label>
 				<select 
 					class="form-control paging-select inline" 
@@ -61,7 +61,7 @@
 					}
 				</script>
 				<label class="control-label">
-				rows
+				<@s.text name="COMMON_PAGING_ROWS"></@s.text>
 				</label>
 			</div>
 			<br class="hidden-md hidden-lg">
@@ -160,14 +160,14 @@
 		<div class="col-md-12">
 			<div class="inline">
 				<label class="control-label">
-				Showing ${(parameters.currentPage * parameters.rowsPerPage - parameters.rowsPerPage + 1)} to 
+				<@s.text name="COMMON_PAGING_SHOWING"></@s.text> ${(parameters.currentPage * parameters.rowsPerPage - parameters.rowsPerPage + 1)} to 
 				<@s.if test="%{${parameters.currentPage} == ${parameters.pageCount}}">
 					${parameters.totalRows}
 				</@s.if>
 				<@s.else>
 					${parameters.currentPage * parameters.rowsPerPage}
 				</@s.else>
-					 from Total ${parameters.totalRows} rows
+					 <@s.text name="COMMON_PAGING_FROM_TOTAL"></@s.text> ${parameters.totalRows} <@s.text name="COMMON_PAGING_ROWS"></@s.text>
 				</label>
 			</div>
 		</div>
