@@ -1338,9 +1338,18 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	
 	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like, String langCode3) throws RollBackException, NonRollBackException {
-		
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+//		StringBuilder sb = new StringBuilder();
+//		Table table = clazz.getAnnotation(Table.class);
+//		
+//		List<Object> para = new LinkedList<Object>();
+//		List<String> listPkName = new LinkedList<String>();
+//		List<Object> listPkNamePara = new LinkedList<Object>();
+//		List<String> listColumnName = new LinkedList<String>();
+//		List<String> listParaName = new LinkedList<String>();
 		StringBuilder countQueryString = new StringBuilder();
-		String tableName = JPAUtil.getClassMapper(clazz).getTableName();
+		String tableName = classMapper.getTableName();
+		
 		countQueryString.append("select ");
 		countQueryString.append(tableName);
 		countQueryString.append(".* ");
@@ -1360,29 +1369,22 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		countQueryString.append(tableName);
 		
 		if(langCode3 != null && !"".equals(langCode3)){
-			countQueryString.append(" LEFT JOIN ");
-			countQueryString.append(tableName);
-			countQueryString.append("_LANG ON ");
-			countQueryString.append(tableName);
-			countQueryString.append("_LANG.STATUS = :STATUS AND ");
-			countQueryString.append(tableName);
-			countQueryString.append("_LANG.LANG_CODE3 = :LANG_CODE3 ");
+			countQueryString.append(" LEFT JOIN ");countQueryString.append(tableName);countQueryString.append("_LANG ON ");
+			countQueryString.append(tableName);countQueryString.append("_LANG.STATUS = :STATUS AND ");
+			for (String  columnName : classMapper.getColumn().keySet()) {
+				for(Property property : classMapper.getColumn().get(columnName)){
+					if(property.getColumnType() == ColumnType.embeddedId||property.getColumnType() == ColumnType.id){
+						countQueryString.append(tableName);countQueryString.append("_LANG.");countQueryString.append(columnName);countQueryString.append(" = ");countQueryString.append(tableName);countQueryString.append(".");countQueryString.append(columnName);countQueryString.append(" AND ");
+					}
+					
+				}
+				
+			}
+			countQueryString.append(tableName);countQueryString.append("_LANG.LANG_CODE3 = :LANG_CODE3 ");
 		}
 		countQueryString.append(AILIAT);
 				
 		countQueryString.append(genQueryWhereStringByECriteria(tableName,criteriaList, extraWhereClause, like));
-
-//		if(langCode3 != null && !"".equals(langCode3)){
-//			if(criteriaList == null || criteriaList.size() == 0)
-//				countQueryString.append(WHERE);
-//			else
-//				countQueryString.append(" and ");
-////			countQueryString.append(CommonDao.ENTITY_MODEL_ALIAS);
-//			countQueryString.append(" LANG_CODE3 = '");
-//			countQueryString.append(langCode3 + "' ");
-//		}
-		
-//		sb.append(sql);
 		if(pagingBean !=null){
 			countQueryString.append(genQueryOrderStringByOrders(pagingBean.getOrderList()));
 //			
