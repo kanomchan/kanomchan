@@ -99,6 +99,12 @@ public interface JdbcCommonDao {
 
 	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value,PagingBean pagingBean) throws RollBackException, NonRollBackException;
 	
+	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criteriaList,PagingBean pagingBean) throws RollBackException, NonRollBackException;
+	
+	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criteriaList, String langCode3) throws RollBackException, NonRollBackException;
+	
+	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criteriaList,PagingBean pagingBean, String langCode3) throws RollBackException,NonRollBackException;
+	
 	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String, Object> columnMap) throws RollBackException, NonRollBackException;
 	
 	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String, Object> columnMap, PagingBean pagingBean) throws RollBackException, NonRollBackException;
@@ -109,11 +115,7 @@ public interface JdbcCommonDao {
 
 	public <T> List<T> findAllEntityOnechild(List<T> list) throws RollBackException, NonRollBackException;
 
-	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList,PagingBean pagingBean) throws RollBackException, NonRollBackException;
-
 	public <T> T get(Serializable target, String lang, Class<T> clazz) throws RollBackException, NonRollBackException;
-
-	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, String langCode3) throws RollBackException, NonRollBackException;
 
 	public <T> T nativeQueryOneRowForObject(String sql, Class<T> requiredType, Object... args)throws RollBackException, NonRollBackException;
 
@@ -124,5 +126,19 @@ public interface JdbcCommonDao {
 	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql, EntityBean params)throws RollBackException, NonRollBackException;
 
 	public KeyHolder executeNativeSQLGetIdKeyHolder(String sql, Object... params)throws RollBackException, NonRollBackException;
+
+	public <T> T findByColumnOneRow(Class<T> clazz, List<Criteria> criteriaList)throws RollBackException, NonRollBackException;
+
+	public <T>T findByColumnOneRow(Class<T> clazz, List<Criteria> criteriaList,boolean like) throws RollBackException, NonRollBackException;
+
+	public <T>T findByColumnOneRow(Class<T> clazz, List<Criteria> criteriaList,String langCode3) throws RollBackException, NonRollBackException;
+
+	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criterias,PagingBean pagingBean, boolean like, String langCode3)throws RollBackException, NonRollBackException;
+
+	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criterias)throws RollBackException, NonRollBackException;
+
+	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criterias,PagingBean pagingBean, boolean like) throws RollBackException,NonRollBackException;
+
+
 
 }

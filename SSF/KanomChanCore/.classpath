@@ -58,7 +58,7 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-core-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-expression-4.1.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-jdbc-4.1.4.RELEASE.jar" sourcepath="C:/Users/JM/.m2/repository/org/springframework/spring-jdbc/4.1.4.RELEASE/spring-jdbc-4.1.4.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-orm-4.1.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-orm-4.1.4.RELEASE.jar" sourcepath="C:/Users/JM/.m2/repository/org/springframework/spring-orm/4.1.4.RELEASE/spring-orm-4.1.4.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-security-core-3.2.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-security-oauth2-2.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/spring/spring-tx-4.1.4.RELEASE.jar" sourcepath="C:/Users/JM/.m2/repository/org/springframework/spring-tx/4.1.4.RELEASE/spring-tx-4.1.4.RELEASE-sources.jar"/>

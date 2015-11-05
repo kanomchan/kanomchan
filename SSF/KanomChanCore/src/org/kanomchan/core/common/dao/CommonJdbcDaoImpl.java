@@ -107,19 +107,19 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		List<Criteria> criteria = new LinkedList<Criteria>();
 		criteria.add(new Criteria(propertyName, value));
 		criteria.add(new Criteria("STATUS", status));
-		return findByColumns(clazz, criteria, LangCode3);
+		return findByColumn(clazz, criteria, LangCode3);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackException ,NonRollBackException {
-		return findByColumns(clazz, criteriaList, (PagingBean)null);
+		return findByColumn(clazz, criteriaList, (PagingBean)null);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, String langCode) throws RollBackException ,NonRollBackException {
-		return findByColumns(clazz, criteriaList, langCode);
+		return findByColumn(clazz, criteriaList, langCode);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackException ,NonRollBackException {
-		return findByColumns(clazz, criteriaList, pagingBean);
+		return findByColumn(clazz, criteriaList, pagingBean);
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackException ,NonRollBackException {

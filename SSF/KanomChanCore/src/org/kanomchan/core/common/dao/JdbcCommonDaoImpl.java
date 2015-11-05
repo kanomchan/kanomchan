@@ -8,7 +8,6 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
@@ -25,7 +23,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.apache.log4j.Logger;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.ColumnType;
 import org.kanomchan.core.common.bean.Criteria;
@@ -1246,107 +1243,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return nativeQuery(sql, clazz);
 	}
 	
-	@Override
-	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value) throws RollBackException, NonRollBackException {
-			return findByColumn(clazz, propertyName, value,null);
-	}
+
 	
-	@Override
-	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackException, NonRollBackException {
-		if(pagingBean==null){
-			try{
-				List<Criteria> criteriaList = new LinkedList<Criteria>();
-				criteriaList.add(new Criteria(propertyName, value));
-				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
-				Map<String, Object>params = new HashMap<String, Object>();
-				if (criteriaList != null && criteriaList.size() > 0) {
-					for (Criteria criteria : criteriaList) {
-						params.put(criteria.getParam(), criteria.getValue());
-					}
-				}
-				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
-				return resultList1;
-			}catch(RuntimeException e){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4991, e);
-			}
-			
-		}else{
-			try{
-				
-				List<Criteria> criteriaList = new LinkedList<Criteria>();
-				criteriaList.add(new Criteria(propertyName, value));
-				
-				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
-				
-				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
-				Map<String, Object>params = new HashMap<String, Object>();
-				if (criteriaList != null && criteriaList.size() > 0) {
-					for (Criteria criteria : criteriaList) {
-						params.put(criteria.getParam(), criteria.getValue());
-					}
-				}
-				List<T> resultList1 =nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
-				
-				return resultList1;
-				
-			}catch (RuntimeException re){
-				throw new RollBackTechnicalException(CommonMessageCode.COM4991, re);
-			}
-		}
-	}
 	
-	@Override
-	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap) throws RollBackException, NonRollBackException {
-		return findByColumnMap(clazz, columnMap, null);
-	}
 	
-	@Override
-	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap, PagingBean pagingBean) throws RollBackException, NonRollBackException {
-		List<Criteria> criteriaList = new LinkedList<Criteria>();
-		Iterator<Entry<String, Object>> iterator = columnMap.entrySet().iterator();
-		
-		while (iterator.hasNext()) {
-			Map.Entry<String,Object> column = iterator.next();
-			criteriaList.add(new Criteria(column.getKey().toString(), column.getValue()));
-		}
-		
-		if(pagingBean==null){
-				String queryString = genQueryStringByExample(clazz, criteriaList, null, null, false, null);
-				Map<String, Object>params = new HashMap<String, Object>();
-				if (criteriaList != null && criteriaList.size() > 0) {
-					for (Criteria criteria : criteriaList) {
-						params.put(criteria.getParam(), criteria.getValue());
-					}
-				}
-				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
-				return resultList1;
-		}else{
-				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
-				
-				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
-				Map<String, Object>params = new HashMap<String, Object>();
-				if (criteriaList != null && criteriaList.size() > 0) {
-					for (Criteria criteria : criteriaList) {
-						params.put(criteria.getParam(), criteria.getValue());
-					}
-				}
-				List<T> resultList1 = nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
-				
-				return resultList1;
-				
-		}
-	}
-	
-	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,String extraWhereClause,boolean like, String langCode3) throws RollBackException, NonRollBackException {
+	protected String genQueryStringByExample(Class<?> clazz,List<Criteria> criteriaList,PagingBean pagingBean,boolean like, String langCode3) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
-//		StringBuilder sb = new StringBuilder();
-//		Table table = clazz.getAnnotation(Table.class);
-//		
-//		List<Object> para = new LinkedList<Object>();
-//		List<String> listPkName = new LinkedList<String>();
-//		List<Object> listPkNamePara = new LinkedList<Object>();
-//		List<String> listColumnName = new LinkedList<String>();
-//		List<String> listParaName = new LinkedList<String>();
 		StringBuilder countQueryString = new StringBuilder();
 		String tableName = classMapper.getTableName();
 		
@@ -1384,7 +1286,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		countQueryString.append(AILIAT);
 				
-		countQueryString.append(genQueryWhereStringByECriteria(tableName,criteriaList, extraWhereClause, like));
+		countQueryString.append(genQueryWhereStringByECriteria(tableName,criteriaList, like));
 		if(pagingBean !=null){
 			countQueryString.append(genQueryOrderStringByOrders(pagingBean.getOrderList()));
 //			
@@ -1397,13 +1299,28 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return countQueryString.toString();
 	}
 	
-	protected Long getTotalRowByExample(Class<?> clazz,List<Criteria> criteriaList,String extraWhereClause,boolean like) throws RollBackException, NonRollBackException {
+	protected Long getTotalRowByExample(Class<?> clazz,List<Criteria> criteriaList,boolean like,String LangCode) throws RollBackException, NonRollBackException {
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder countQueryString = new StringBuilder();
+		String tableName = classMapper.getTableName();
 		countQueryString.append("select count(*) from ");
-		countQueryString.append(JPAUtil.getClassMapper(clazz).getTableName());
+		countQueryString.append(tableName);
 		countQueryString.append(AILIAT);
-		
-		countQueryString.append(genQueryWhereStringByECriteria(JPAUtil.getClassMapper(clazz).getTableName(),criteriaList, extraWhereClause, like));
+		if(LangCode != null && !"".equals(LangCode)){
+			countQueryString.append(" LEFT JOIN ");countQueryString.append(tableName);countQueryString.append("_LANG ON ");
+			countQueryString.append(tableName);countQueryString.append("_LANG.STATUS = :STATUS AND ");
+			for (String  columnName : classMapper.getColumn().keySet()) {
+				for(Property property : classMapper.getColumn().get(columnName)){
+					if(property.getColumnType() == ColumnType.embeddedId||property.getColumnType() == ColumnType.id){
+						countQueryString.append(tableName);countQueryString.append("_LANG.");countQueryString.append(columnName);countQueryString.append(" = ");countQueryString.append(tableName);countQueryString.append(".");countQueryString.append(columnName);countQueryString.append(" AND ");
+					}
+					
+				}
+				
+			}
+			countQueryString.append(tableName);countQueryString.append("_LANG.LANG_CODE3 = :LANG_CODE3 ");
+		}
+		countQueryString.append(genQueryWhereStringByECriteria(tableName,criteriaList, like));
 		Map<String, Object>params = new HashMap<String, Object>();
 		if (criteriaList != null && criteriaList.size() > 0) {
 			for (Criteria criteria : criteriaList) {
@@ -1414,7 +1331,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return totalRows;
 	}
 	
-	protected String genQueryWhereStringByECriteria(String tableName ,List<Criteria> criteriaList,String extraWhereClause,boolean like) throws RollBackException, NonRollBackException {
+	protected String genQueryWhereStringByECriteria(String tableName ,List<Criteria> criteriaList,boolean like) throws RollBackException, NonRollBackException {
 		StringBuilder queryString = new StringBuilder();
 		
 		if(criteriaList !=null && criteriaList.size()>0){
@@ -1440,12 +1357,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				criteriaString.add(sb.toString());
 			}
 			queryString.append(Joiner.on(" AND ").skipNulls().join(criteriaString));
-		}
-		
-		if(extraWhereClause!=null &&extraWhereClause.length()>0){
-			if (criteriaList==null||criteriaList.size()>0) {
-				queryString.append(extraWhereClause);
-			}
 		}
 		
 		return queryString.toString();
@@ -1478,7 +1389,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	private static final String UPPER = " UPPER( "; 
 	private static final String EQU = " = :"; 
 	private static final String WHERE = " where "; 
-	private static final String FROM = "select * from "; 
+//	private static final String FROM = "select * from "; 
 	private static final String ORDER = " order by "; 
 	private static final String AILIAT = "  "; 
 	
@@ -1530,40 +1441,61 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //		
 		return list;
 	}
+	
 	@Override
-	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackException, NonRollBackException{
-		if(pagingBean==null){
-				String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
-				Map<String, Object>params = new HashMap<String, Object>();
-				if (criteriaList != null && criteriaList.size() > 0) {
-					for (Criteria criteria : criteriaList) {
-						params.put(criteria.getParam(), criteria.getValue());
-					}
-				}
-				List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
-				return resultList1;
-			
-		}else{
-				pagingBean.setTotalRows(getTotalRowByExample(clazz, criteriaList, null, false));
-				
-				String qureyString = genQueryStringByExample(clazz, criteriaList, pagingBean,null, false, null);
-				Map<String, Object>params = new HashMap<String, Object>();
-				if (criteriaList != null && criteriaList.size() > 0) {
-					for (Criteria criteria : criteriaList) {
-						params.put(criteria.getParam(), criteria.getValue());
-					}
-				}
-				List<T> resultList1 = nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
-				return resultList1;
-		}
+	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap) throws RollBackException, NonRollBackException {
+		return findByColumnMap(clazz, columnMap, null);
 	}
 	
 	@Override
-	public <T> List<T> findByColumns(Class<T> clazz, List<Criteria> criteriaList, String langCode3) throws RollBackException, NonRollBackException{
-			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, langCode3);
+	public <T> List<T> findByColumnMap(Class<T> clazz, Map<String,Object> columnMap, PagingBean pagingBean) throws RollBackException, NonRollBackException {
+		List<Criteria> criteriaList = new LinkedList<Criteria>();
+		Iterator<Entry<String, Object>> iterator = columnMap.entrySet().iterator();
+		
+		while (iterator.hasNext()) {
+			Map.Entry<String,Object> column = iterator.next();
+			criteriaList.add(new Criteria(column.getKey().toString(), column.getValue()));
+		}
+		return findByColumn(clazz, criteriaList, pagingBean);
+	}
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value) throws RollBackException, NonRollBackException {
+			return findByColumn(clazz, propertyName, value,null);
+	}
+	
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackException, NonRollBackException {
+		List<Criteria> criteriaList = new LinkedList<Criteria>();
+		criteriaList.add(new Criteria(propertyName, value));
+		return findByColumn(clazz, criteriaList, pagingBean);
+	}
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz,List<Criteria> criterias, String langCode3) throws RollBackException, NonRollBackException{
+		return findByColumn(clazz, criterias, null, false, langCode3);
+	}
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz,List<Criteria> criterias,PagingBean pagingBean, String langCode3) throws RollBackException, NonRollBackException{
+		return findByColumn(clazz, criterias, pagingBean, false, langCode3);
+	}
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz,List<Criteria> criterias,PagingBean pagingBean) throws RollBackException, NonRollBackException{
+		return findByColumn(clazz, criterias, pagingBean, false, null);
+	}
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz,List<Criteria> criterias,PagingBean pagingBean,boolean like) throws RollBackException, NonRollBackException{
+		return findByColumn(clazz, criterias, pagingBean, like, null);
+	}
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criterias) throws RollBackException, NonRollBackException{
+		return findByColumn(clazz, criterias, null, false, null);
+	}
+	@Override
+	public <T> List<T> findByColumn(Class<T> clazz,List<Criteria> criterias,PagingBean pagingBean,boolean like, String langCode3) throws RollBackException, NonRollBackException{
+		if(pagingBean==null){
+			String queryString = genQueryStringByExample(clazz, criterias, pagingBean, like, langCode3);
 			Map<String, Object>params = new HashMap<String, Object>();
-			if (criteriaList != null && criteriaList.size() > 0) {
-				for (Criteria criteria : criteriaList) {
+			if (criterias != null && criterias.size() > 0) {
+				for (Criteria criteria : criterias) {
 					params.put(criteria.getParam(), criteria.getValue());
 				}
 			}
@@ -1572,17 +1504,50 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 			List<T> resultList1 = nativeQuery(queryString, JPAUtil.getRm(clazz), params);
 			return resultList1;
-	}
-	
-	public <T> T findByColumn(Class<T> clazz, List<Criteria> criteriaList) throws RollBackException, NonRollBackException{
-			String queryString = genQueryStringByExample(clazz, criteriaList, null,null, false, null);
+		
+		}else{
+			pagingBean.setTotalRows(getTotalRowByExample(clazz, criterias, like,langCode3));
+			
+			String qureyString = genQueryStringByExample(clazz, criterias, pagingBean, like, langCode3);
 			Map<String, Object>params = new HashMap<String, Object>();
-			if (criteriaList != null && criteriaList.size() > 0) {
-				for (Criteria criteria : criteriaList) {
+			if (criterias != null && criterias.size() > 0) {
+				for (Criteria criteria : criterias) {
 					params.put(criteria.getParam(), criteria.getValue());
 				}
 			}
-			T result = nativeQueryOneRow(queryString, JPAUtil.getRm(clazz), params);
-			return result;
+			if(langCode3!=null&&!"".equals(langCode3)){
+				params.put("LANG_CODE3", langCode3);
+			}
+			List<T> resultList1 = nativeQuery(qureyString, JPAUtil.getRm(clazz), params);
+			return resultList1;
+		}
+	}
+
+	@Override
+	public <T> T findByColumnOneRow(Class<T> clazz, List<Criteria> criteriaList) throws RollBackException, NonRollBackException{
+		return findByColumnOneRow(clazz, criteriaList, null,false);
+	}
+	@Override
+	public <T> T findByColumnOneRow(Class<T> clazz, List<Criteria> criteriaList,boolean like) throws RollBackException, NonRollBackException{
+		return findByColumnOneRow(clazz, criteriaList, null, like);
+	}
+	@Override
+	public <T> T findByColumnOneRow(Class<T> clazz, List<Criteria> criteriaList,String langCode3) throws RollBackException, NonRollBackException{
+		return findByColumnOneRow(clazz, criteriaList, langCode3,false);
+	}
+
+	public <T> T findByColumnOneRow(Class<T> clazz, List<Criteria> criteriaList,String langCode3,boolean like) throws RollBackException, NonRollBackException{
+		String queryString = genQueryStringByExample(clazz, criteriaList, null, like, langCode3);
+		Map<String, Object>params = new HashMap<String, Object>();
+		if (criteriaList != null && criteriaList.size() > 0) {
+			for (Criteria criteria : criteriaList) {
+				params.put(criteria.getParam(), criteria.getValue());
+			}
+		}
+		if(langCode3!=null&&!"".equals(langCode3)){
+			params.put("LANG_CODE3", langCode3);
+		}
+		T result = nativeQueryOneRow(queryString, JPAUtil.getRm(clazz), params);
+		return result;
 	}
 }
