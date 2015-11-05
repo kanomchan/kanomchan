@@ -102,7 +102,7 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 				return authFail(invocation,userBean);
 			}
 		}else{
-			logger.error("C is emtry ");
+			logger.error("C is empty ");
 			return authFail(invocation,userBean);
 		}
 		return invocation.invoke();

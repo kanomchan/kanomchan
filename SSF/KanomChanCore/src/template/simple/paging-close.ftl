@@ -160,7 +160,7 @@
 		<div class="col-md-12">
 			<div class="inline">
 				<label class="control-label">
-				<@s.text name="COMMON_PAGING_SHOWING"></@s.text> ${(parameters.currentPage * parameters.rowsPerPage - parameters.rowsPerPage + 1)} to 
+				<@s.text name="COMMON_PAGING_SHOWING"></@s.text> ${(parameters.currentPage * parameters.rowsPerPage - parameters.rowsPerPage + 1)} <@s.text name="COMMON_PAGING_TO"></@s.text> 
 				<@s.if test="%{${parameters.currentPage} == ${parameters.pageCount}}">
 					${parameters.totalRows}
 				</@s.if>
