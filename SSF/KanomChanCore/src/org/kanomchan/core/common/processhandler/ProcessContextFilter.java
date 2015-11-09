@@ -63,7 +63,16 @@ public class ProcessContextFilter  implements Filter  {
 			processContext.setString("SESSION_APP_ID_KEY", appId);
 			String shopId = String.valueOf(httpSession.getAttribute("SESSION_SHOP_ID_KEY"));
 			processContext.setString("SESSION_SHOP_ID_KEY", shopId);
+			String nativeLang = httpServletRequest.getParameter("native_lang");
+			if(nativeLang != null){
+				processContext.setString("SESSION_NATIVE_LANG_KEY", nativeLang);
+				httpSession.setAttribute("SESSION_NATIVE_LANG_KEY", nativeLang);
+			}else{
+				nativeLang = String.valueOf(httpSession.getAttribute("SESSION_NATIVE_LANG_KEY"));
+				processContext.setString("SESSION_NATIVE_LANG_KEY", nativeLang);
+			}
 			CurrentThread.setProcessContext(processContext);
+			
 			String userId = processContext.userBean==null?"guest"+getRealIp(request):processContext.userBean.getUserId()==null?"guest"+getRealIp(request):processContext.userBean.getUserId();
 			String userName = processContext.userBean==null?"guest"+getRealIp(request):processContext.userBean.getUserName()==null?"guest"+getRealIp(request):processContext.userBean.getUserName();
 			httpSession.setAttribute(CommonConstant.SESSION.USER_ID, userId);
