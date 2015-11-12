@@ -157,6 +157,11 @@ public class ProcessContext {
 	public String getSessionId() {
 		return sessionId;
 	}
+	
+	public String getNativeLang(){
+		return (contextMapString.get("SESSION_NATIVE_LANG_KEY") == null ? lang : contextMapString.get("SESSION_NATIVE_LANG_KEY"));
+	}
+	
 	public String getLang() {
 		return lang;
 	}
