@@ -31,6 +31,7 @@ import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.bean.PagingBean.ORDER_MODE;
 import org.kanomchan.core.common.bean.PagingBean.Order;
 import org.kanomchan.core.common.bean.Property;
+import org.kanomchan.core.common.constant.CheckService;
 import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.NonRollBackException;
@@ -79,7 +80,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	protected  NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	@Autowired
-	private ConfigService configService;
+//	private ConfigService configService;
+	private CheckService checkService;
+	
+	
 	protected static final RowMapper<String> STRING_MAPPER = new RowMapper<String>() {
 		
 		@Override
@@ -533,98 +537,101 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			for (Property property : classMapper.getColumn().get(columnName)) {
 				Method method = property.getMethodGet();
 				try {
-					if(property.getColumnType() == ColumnType.column){
-						Object value = method.invoke(target);
-						if(value != null){
-							if(value instanceof Number){
-								if(includeMinusOne || ((Number)value).intValue() !=-1){
-									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-									listParaName.add("?");
-//									if(((Number)value).longValue() == 0)
-//										value = null;
-									para.add(value);
-								}
-							}else{
-								if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
-									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-									listParaName.add("?");
-									para.add(value);
-								}
-									
-							}
-						}
-					}
-					if(property.getColumnType() == ColumnType.joinColumns){
-						Object joinColumnsObject = property.getJoinColumns().getMethodGet().invoke(target);
-						if(joinColumnsObject!=null){
-							if(property.getEmbeddedId()!=null)
-								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
-							if(joinColumnsObject == null)
-								continue;
-							Object value = property.getMethodGet().invoke(joinColumnsObject);
-							if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
-								continue;
-							}
-							if(value!=null){
+					if(tableLang && checkService.checkColumnNameInTableLang(table.name(), columnName)){
+						
+						if(property.getColumnType() == ColumnType.column){
+							Object value = method.invoke(target);
+							if(value != null){
 								if(value instanceof Number){
 									if(includeMinusOne || ((Number)value).intValue() !=-1){
 										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 										listParaName.add("?");
-										if(((Number)value).intValue() == 0)
-											value = null;
+//									if(((Number)value).longValue() == 0)
+//										value = null;
 										para.add(value);
 									}
 								}else{
-									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-									listParaName.add("?");
-									if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
-										value = null;
-									para.add(value);
+									if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
+										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
+										listParaName.add("?");
+										para.add(value);
+									}
+									
 								}
 							}
-//							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-//							listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-//							listParaName.add("?");
-//							para.add(value);
 						}
-						
-					}
-					if(property.getColumnType() == ColumnType.joinColumn){
-						Object value = method.invoke(target);
-						if(value != null){
-							Entity entity = method.getReturnType().getAnnotation(Entity.class);
-							if(entity!=null){
-								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
-								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-								if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
+						if(property.getColumnType() == ColumnType.joinColumns){
+							Object joinColumnsObject = property.getJoinColumns().getMethodGet().invoke(target);
+							if(joinColumnsObject!=null){
+								if(property.getEmbeddedId()!=null)
+									joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
+								if(joinColumnsObject == null)
+									continue;
+								Object value = property.getMethodGet().invoke(joinColumnsObject);
+								if(checkService.checkNeedleList(table.name(),columnName) && value != null && ((Number)value).intValue() ==-1){
 									continue;
 								}
-								if(value!=null ) {
+								if(value!=null){
 									if(value instanceof Number){
-										if(configService.checkClearableList(columnName) && value != null && ((Number)value).intValue() ==-1){
-											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-											listParaName.add(" (NULL) ");
-										}else if(includeMinusOne || ((Number)value).intValue() !=-1){
+										if(includeMinusOne || ((Number)value).intValue() !=-1){
 											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 											listParaName.add("?");
-											if((Long)value == 0)
+											if(((Number)value).intValue() == 0)
 												value = null;
 											para.add(value);
 										}
 									}else{
 										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 										listParaName.add("?");
-										if((Long)value == 0)
+										if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
 											value = null;
 										para.add(value);
 									}
 								}
-							}else{
-								listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-								listParaName.add("?");
-								para.add(value);
+//							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+//							listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
+//							listParaName.add("?");
+//							para.add(value);
 							}
 							
+						}
+						if(property.getColumnType() == ColumnType.joinColumn){
+							Object value = method.invoke(target);
+							if(value != null){
+								Entity entity = method.getReturnType().getAnnotation(Entity.class);
+								if(entity!=null){
+									ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+									value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+									if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
+										continue;
+									}
+									if(value!=null ) {
+										if(value instanceof Number){
+											if(value != null && ((Number)value).intValue() ==-1&&checkService.checkClearableList(table.name(),columnName)){
+												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
+												listParaName.add(" (NULL) ");
+											}else if(includeMinusOne || ((Number)value).intValue() !=-1){
+												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
+												listParaName.add("?");
+												if((Long)value == 0)
+													value = null;
+												para.add(value);
+											}
+										}else{
+											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
+											listParaName.add("?");
+											if((Long)value == 0)
+												value = null;
+											para.add(value);
+										}
+									}
+								}else{
+									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
+									listParaName.add("?");
+									para.add(value);
+								}
+								
+							}
 						}
 					}
 					
@@ -808,10 +815,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<Object> listPkNamePara = new LinkedList<Object>();
 		List<String> listColumnName = new LinkedList<String>();
 		List<String> listParaName = new LinkedList<String>();
-
-//		Method methodGetId = classMapper.getPropertyId().getMethodGet();
-//		Method methodSetId = classMapper.getPropertyId().getMethodSet();
-
 		
 		sb.append(" UPDATE ");
 		if(langCode != null && !langCode.equals("")){
@@ -827,7 +830,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						Object value = method.invoke(target);
 						if(value != null){
 							if(value instanceof Number){
-								if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
+								if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
 									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 									listParaName.add(" (NULL) ");
 								}else if(includeMinusOne || ((Number)value).intValue() !=-1){
@@ -850,7 +853,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								if(value.equals("NULL") && "NULL".equals(value)){
 									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 									listParaName.add(" NULL ");
-//									para.add(null);
 								}else if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
 									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 									listParaName.add("?");
@@ -865,7 +867,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(property.getEmbeddedId()!=null)
 								joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 							Object value = property.getMethodGet().invoke(joinColumnsObject);
-							if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
+							if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
 								continue;
 							}
 							if(value!=null){
@@ -912,13 +914,13 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								
 								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
 								
-								if(configService.checkNeedleList(columnName) && value != null && ((Number)value).intValue() ==-1){
+								if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
 									continue;
 								}
 								
 								if(value!=null ) {
 									if(value instanceof Number){
-										if(configService.checkClearableList(columnName) && value != null && ((Number)value).intValue() ==-1){
+										if( value != null && ((Number)value).intValue() ==-1 && checkService.checkClearableList(table.name(),columnName)){
 											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 											listParaName.add(" (NULL) ");
 										}else if(includeMinusOne || ((Number)value).intValue() !=-1){
@@ -953,7 +955,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								para.add(value);
 							}
 						}else{
-							if(configService.checkClearableList(columnName)){
+							if(checkService.checkClearableList(table.name(),columnName)){
 								listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
 								listParaName.add(" (NULL) ");
 							}
@@ -963,11 +965,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						Object value = method.invoke(target);
 						if(value != null){
 							if(tableLang){
-//								listPkName.add(columnName + "_LANG");
-								listPkName.add(PI_CLOUM+columnName+PI_CLOUM);
+								listPkName.add(PI_CLOUM+columnName+ "_LANG"+PI_CLOUM);
+								listParaName.add("?");
 								listPkNamePara.add(value);
 							}else{
 								listPkName.add(PI_CLOUM+columnName+PI_CLOUM);
+								listParaName.add("?");
 								listPkNamePara.add(value);
 							}
 						}
@@ -979,12 +982,12 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							Object valueEmbeddedId = method.invoke(embeddedIdObject);
 							if(valueEmbeddedId!=null){
 								if(tableLang){
-									listPkName.add(columnName+"_LANG");
-//									listParaName.add("?");
+									listPkName.add(PI_CLOUM+columnName+"_LANG"+PI_CLOUM);
+									listParaName.add("?");
 									listPkNamePara.add(valueEmbeddedId);
 								}else{
 									listPkName.add(PI_CLOUM+columnName+PI_CLOUM);
-//									listParaName.add("?");
+									listParaName.add("?");
 									listPkNamePara.add(valueEmbeddedId);
 								}
 								
@@ -996,6 +999,11 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					logger.error("update(T, boolean)", e); //$NON-NLS-1$
 				}
 			}
+		}
+		if(tableLang){
+			listPkName.add(PI_CLOUM+"LANG_CODE3"+PI_CLOUM);
+			listParaName.add("?");
+			listPkNamePara.add(langCode);
 		}
 		if(tableLang)
 			sb.append(table.name()+"_LANG");
@@ -1016,14 +1024,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			for (int i = 0; i < listPkName.size(); i++) {
 				sb.append( i > 0 ? " AND ":"" );
 				sb.append(listPkName.get(i));
-				sb.append(" = ? ");
+				sb.append(" = ");
 				para.add(listPkNamePara.get(i));
 			}
-		}
-		
-		if(langCode != null && !langCode.equals("")){
-			sb.append(" AND LANG_CODE3 = ? ");
-			para.add(langCode); 
 		}
 		
 		if(listColumnName.size() > 0&&listPkName.size() > 0){
