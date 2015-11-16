@@ -32,6 +32,8 @@ public interface CommonConstant {
 	
 	public static final String PERCENT_KEY = "SESSION_PERCENT_KEY";
 	
+	//ACTIVE_ACCOUNT_KEY is for UserDefualt Bean
+	public static final String ACTIVE_ACCOUNT_KEY = "SESSION_ACTIVE_ACCOUNT_KEY";
     }
     
     public static interface PARAMETER {
