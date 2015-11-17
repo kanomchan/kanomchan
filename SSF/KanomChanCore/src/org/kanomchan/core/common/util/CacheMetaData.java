@@ -14,7 +14,7 @@ public class CacheMetaData {
 	public CacheMetaData(ResultSet rs) throws SQLException {
 		ResultSetMetaData md = rs.getMetaData();
 		for (int i = 0; i < md.getColumnCount(); i++) {
-			String columnName = md.getColumnName(i+1);
+			String columnName = md.getColumnName(i+1).toUpperCase();
 			//option |
 			if(columnName.indexOf("|")!=-1){
 				String prefixName = columnName.substring(0,columnName.indexOf("|"));
@@ -26,7 +26,7 @@ public class CacheMetaData {
 				}
 				columnNameOptionMap.put(columnNameOption, i+1);
 			}else{
-				String tableName = md.getTableName(i+1);
+				String tableName = md.getTableName(i+1).toUpperCase();
 				Map<String, Integer> cloumMap = cacheTable.get(tableName);
 				if(cloumMap == null){
 					cloumMap = new HashMap<String, Integer>();
@@ -40,19 +40,33 @@ public class CacheMetaData {
 	}
 	
 	public Map<String, Integer> getMapCloumByTable(String tableName){
-		return cacheTable.get(tableName);
+		return cacheTable.get(tableName.toUpperCase());
 	}
 	
 	public Integer getFindCloumIndexByTableNameAndCloum(String tableName,String cloumName){
-		if(!cacheTable.containsKey(tableName))
+		if(!cacheTable.containsKey(tableName.toUpperCase()))
 			return null;
-		Map<String, Integer> cloumMap = cacheTable.get(tableName);
-		if(!cloumMap.containsKey(cloumName))
+		Map<String, Integer> cloumMap = cacheTable.get(tableName.toUpperCase());
+		if(!cloumMap.containsKey(cloumName.toUpperCase()))
 			return null;
-		return cloumMap.get(cloumName);
+		return cloumMap.get(cloumName.toUpperCase());
 	}
 	
 	public Map<String, Integer> getCacheColumn() {
 		return cacheColumn;
 	}
+	
+//	private class StringLower {
+//		private String value;
+//		
+//		public StringLower(String value) {
+//			// TODO Auto-generated constructor stub
+//		}
+//		@Override
+//		public int hashCode() {
+//			// TODO Auto-generated method stub
+//			return value.toLowerCase().hashCode();
+//		}
+//		
+//	}
 }
