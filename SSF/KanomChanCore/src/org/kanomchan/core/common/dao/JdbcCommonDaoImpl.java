@@ -165,6 +165,23 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	protected static String GEN_SQL_COUNTY_LEFT_JOIN_LANG(String mapTable,String colunmSubfix,String countySubfix){
 		return new StringBuilder(SQL_COUNTY_LEFT_JOIN_LANG).toString().replaceAll("\\{prefix\\}", mapTable).replaceAll("\\{subfix\\}", colunmSubfix).replaceAll("\\{map\\}", countySubfix);
 	}
+	
+	protected static final String SQL_MASTER_LEFT_JOIN_LANG = new StringBuilder()
+	.append(" LEFT JOIN {table} {table}{map} ON ")
+		.append(" {table}{map}.{pk} = {prefix}.{pk}{subfix} ")
+	.append(" LEFT JOIN {table}_LANG {table}_LANG{map} ON ")
+		.append(" {table}_LANG{map}.{pk} = {prefix}.{pk}{subfix} ")
+		.append(" AND {table}_LANG{map}.LANG_CODE3 = ? ")
+	.toString();
+	protected static final String SQL_MASTER_SELECT_LANG = ",COUNTRY.* ";
+	protected static String GEN_SQL_MASTER_LEFT_JOIN_LANG(String mapTable, String colunmSubfix, String tableSubfix, String tableMaster, String tableMasterPk){
+		return new StringBuilder(SQL_MASTER_LEFT_JOIN_LANG).toString().replaceAll("\\{prefix\\}", mapTable)
+																	.replaceAll("\\{subfix\\}", colunmSubfix)
+																	.replaceAll("\\{map\\}", tableSubfix)
+																	.replaceAll("\\{table\\}", tableMaster)
+																	.replaceAll("\\{pk\\}", tableMasterPk);
+	}
+	
 	protected static final String SQL_COUNTY_LEFT_JOIN_LANG_NAME = new StringBuilder()
 	.append(" LEFT JOIN SYS_M_COUNTY COUNTY{map} ON ")
 		.append(" COUNTY{map}.ID_COUNTY = {prefix}.ID_COUNTY{subfix} ")
