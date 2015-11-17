@@ -793,7 +793,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			try{
 			return update(target, includeMinusOne,tableLang,code,idLang);
 			} catch (Exception e){
-				logger.error("saveOrUpdate message ", e);
+//				logger.error("saveOrUpdate message ", e);
 				return save(target, includeMinusOne,tableLang ,code);
 			}
 			
@@ -987,7 +987,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							if(tableLang){
 								listPkName.add(PI_CLOUM+columnName+ "_LANG"+PI_CLOUM);
 								listParaName.add("?");
-								listPkNamePara.add(value);
+								listPkNamePara.add(idLang);
 							}else{
 								listPkName.add(PI_CLOUM+columnName+PI_CLOUM);
 								listParaName.add("?");
