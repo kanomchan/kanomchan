@@ -1025,6 +1025,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				sb.append( i > 0 ? " AND ":"" );
 				sb.append(listPkName.get(i));
 				sb.append(" = ");
+				sb.append(listParaName.get(i));
 				para.add(listPkNamePara.get(i));
 			}
 		}
