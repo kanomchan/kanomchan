@@ -3,7 +3,10 @@ package org.kanomchan.core.common.processhandler;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.util.Locale;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -24,12 +27,12 @@ import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.service.LocationService;
 
+
 public class ProcessContextFilter  implements Filter  {
 	/**
 	 * Logger for this class
 	 */
 	private static final Logger logger = Logger.getLogger(ProcessContextFilter.class);
-
 
 
 	@Override
@@ -65,11 +68,25 @@ public class ProcessContextFilter  implements Filter  {
 			processContext.setString("SESSION_SHOP_ID_KEY", shopId);
 			String nativeLang = httpServletRequest.getParameter("native_lang");
 			if(nativeLang != null){
-				processContext.setString("SESSION_NATIVE_LANG_KEY", nativeLang);
+				Object languageDao = ApplicationContextUtil.getBean("languageDao");
+				
+				Object nativeLocale=null;
+				try {
+					Method method = Class.forName("com.jobsmatcher.jm.usermanament.dao.LanguageDao").getMethod("getLocaleByCode3", String.class);
+					nativeLocale = method.invoke(languageDao, nativeLang);
+				} catch (NoSuchMethodException | SecurityException| ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
+					nativeLocale = Locale.ENGLISH;
+				}
+				
+				httpSession.setAttribute("SESSION_NATIVE_LANG_KEY", nativeLocale);
+				processContext.setNativeLocale((Locale) nativeLocale);
 				httpSession.setAttribute("SESSION_NATIVE_LANG_KEY", nativeLang);
 			}else{
-				nativeLang = String.valueOf(httpSession.getAttribute("SESSION_NATIVE_LANG_KEY"));
-				processContext.setString("SESSION_NATIVE_LANG_KEY", nativeLang);
+				Object nativeLocale = (Locale)httpSession.getAttribute("SESSION_NATIVE_LANG_KEY");
+				if(nativeLocale == null)
+					nativeLocale = Locale.ENGLISH;
+				processContext.setNativeLocale((Locale) nativeLocale);
 			}
 			CurrentThread.setProcessContext(processContext);
 			

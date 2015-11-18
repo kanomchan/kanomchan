@@ -26,6 +26,7 @@ public class ProcessContext {
 	protected List<Message> messageList;
 	
 	protected String lang;
+	protected Locale nativeLocale;
 	
 	protected boolean startProcess = false;
 	protected String sessionId;
@@ -158,12 +159,20 @@ public class ProcessContext {
 		return sessionId;
 	}
 	
-	public String getNativeLang(){
-		return (contextMapString.get("SESSION_NATIVE_LANG_KEY") == null ? lang : contextMapString.get("SESSION_NATIVE_LANG_KEY"));
-	}
+//	public Locale getNativeLang(){
+//		return (contextMapString.get("SESSION_NATIVE_LANG_KEY");
+//	}
+	
+	
 	
 	public String getLang() {
 		return lang;
+	}
+	public Locale getNativeLocale() {
+		return nativeLocale;
+	}
+	public void setNativeLocale(Locale nativeLocale) {
+		this.nativeLocale = nativeLocale;
 	}
 	public void setLang(String lang) {
 		this.lang = lang;
