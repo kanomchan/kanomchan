@@ -3,6 +3,7 @@ package org.kanomchan.core.common.web.struts.action;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,7 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected String namespace;
 	
 	protected String expression;
+	protected Locale nativeLocale;
 	
 	
 	protected String beanName;
@@ -256,6 +258,16 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
+	}
+
+
+	public Locale getNativeLocale() {
+		return nativeLocale;
+	}
+
+
+	public void setNativeLocale(Locale nativeLocale) {
+		this.nativeLocale = nativeLocale;
 	}
 	
 	
