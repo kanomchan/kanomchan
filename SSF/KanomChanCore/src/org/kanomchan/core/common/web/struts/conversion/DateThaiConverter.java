@@ -13,6 +13,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import org.kanomchan.core.common.context.CurrentThread;
+import org.kanomchan.core.common.processhandler.ProcessContext;
+
 public class DateThaiConverter extends DateConverter {
 
     @Override
@@ -20,11 +23,10 @@ public class DateThaiConverter extends DateConverter {
         Date result = null;
         
         if (value instanceof String && value != null && ((String) value).length() > 0) {
+        	ProcessContext processContext = CurrentThread.getProcessContext();
+        	Locale locale = (processContext.getNativeLocale() != null ? processContext.getNativeLocale() : Locale.ENGLISH);
             String sa = (String) value;
-            Locale locale = getLocale(context);
-
-            
-            
+//            Locale locale = getLocale(context);
             DateFormat df = null;
             if (java.sql.Time.class == toType) {
                 df = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
