@@ -236,5 +236,10 @@ public class ProcessContext {
 		contextMapString.put(key, value);
 	}
 	
+	void clearStage(){
+		startProcess = false;
+		status=null;
+		messageList = null;
+	}
 	
 }
