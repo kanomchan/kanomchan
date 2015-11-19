@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.context.ApplicationContextUtil;
+import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.service.LabelService;
 import org.kanomchan.core.common.service.MessageService;
@@ -76,7 +77,7 @@ public class DBTextProvider implements TextProvider {
         if (text == null && defaultValue != null) {
 
             MessageFormat format = new MessageFormat(defaultValue);
-            format.setLocale(ActionContext.getContext().getLocale());
+            format.setLocale(CurrentThread.getProcessContext().getNativeLocale());
             format.applyPattern(defaultValue);
 
             Object[] params;
@@ -95,7 +96,7 @@ public class DBTextProvider implements TextProvider {
         String text = getText(key, args);
         if (text == null) {
             MessageFormat format = new MessageFormat(defaultValue);
-            format.setLocale(ActionContext.getContext().getLocale());
+            format.setLocale(CurrentThread.getProcessContext().getNativeLocale());
             format.applyPattern(defaultValue);
 
             if (args == null) {
@@ -136,7 +137,7 @@ public class DBTextProvider implements TextProvider {
     	
     	String defaultText = findDBText(aTextName, locale);
         if (defaultText != null) {
-            MessageFormat mf = buildMessageFormat(defaultText, locale);
+            MessageFormat mf = buildMessageFormat(defaultText, CurrentThread.getProcessContext().getNativeLocale());
             return formatWithNullDetection(mf, args);
         }
         return null;
