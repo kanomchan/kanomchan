@@ -81,7 +81,6 @@ public class ProcessContextFilter  implements Filter  {
 				
 				httpSession.setAttribute("SESSION_NATIVE_LANG_KEY", nativeLocale);
 				processContext.setNativeLocale((Locale) nativeLocale);
-				httpSession.setAttribute("SESSION_NATIVE_LANG_KEY", nativeLang);
 			}else{
 				Object nativeLocale = (Locale)httpSession.getAttribute("SESSION_NATIVE_LANG_KEY");
 				if(nativeLocale == null)
