@@ -390,21 +390,35 @@ public class JPAUtil {
 	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz){
 		return getRm(null,clazz, null);
 	}
+	public static <T extends Object> RowMapper<T> getRm(final T targetOut){
+		return getRm(null,targetOut, null);
+	}
 	
 	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz,final String prefix){
 		return getRm(null ,clazz, prefix);
 	}
-	
+	public static <T extends Object> RowMapper<T> getRm(final T targetOut,final String prefix){
+		return getRm(null ,targetOut, prefix);
+	}
 	public static <T extends Object> RowMapper<T> getRm(final CacheMetaData cacheMetaData,final Class<T> clazz,final String prefix  ){
+		try {
+			return getRm(cacheMetaData ,clazz.newInstance(), prefix);
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static <T extends Object> RowMapper<T> getRm(final CacheMetaData cacheMetaData,final T targetOut,final String prefix  ){
 		return new RowMapper<T>() {
 //			private Map<String, List<Integer>> cacheListTable;
 
 			@Override
 			public T mapRow(ResultSet rs, int rowNum) throws SQLException {
-				T t = null;
+				T t = targetOut;
 				try {
 					
-					ClassMapper classMapper = getClassMapper(clazz);
+					ClassMapper classMapper = getClassMapper(targetOut.getClass());
 					Map<String, List<Property>> columns = classMapper.getColumn();
 					String tableName;
 					if(prefix!=null){
@@ -425,7 +439,7 @@ public class JPAUtil {
 					if(mapCloum ==null)
 						mapCloum = localcacheMetaData.getCacheColumn();
 					if(mapCloum !=null){
-						t = clazz.newInstance();
+//						t = clazz.newInstance();
 						for(Entry<String, Integer> entry : mapCloum.entrySet()) {
 						    String columnName = entry.getKey();
 						    Integer index = entry.getValue();
@@ -511,7 +525,7 @@ public class JPAUtil {
 //						}
 					
 					
-				} catch (InstantiationException | IllegalAccessException e) {
+				} catch (Exception e) {
 					logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
 				}
 				return t;
