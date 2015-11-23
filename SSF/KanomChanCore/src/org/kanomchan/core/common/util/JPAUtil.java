@@ -598,6 +598,7 @@ public class JPAUtil {
 						}
 					}else{
 						objectData = JdbcUtils.getResultSetValue(rs, columnNum, property.getMethodSet().getParameterTypes()[0]);
+						
 					}
 					
 				}
