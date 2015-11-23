@@ -387,34 +387,21 @@ public class JPAUtil {
 
 	private static Map<String, ClassMapper > mapClass = new ConcurrentHashMap<String,ClassMapper>();
 	
-	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz){
+	public static <T extends Object> RowMapperClone<T> getRm(final Class<T> clazz){
 		return getRm(null,clazz, null);
 	}
-	public static <T extends Object> RowMapper<T> getRm(final T targetOut){
-		return getRm(null,targetOut, null);
-	}
-	
-	public static <T extends Object> RowMapper<T> getRm(final Class<T> clazz,final String prefix){
+
+	public static <T extends Object> RowMapperClone<T> getRm(final Class<T> clazz,final String prefix){
 		return getRm(null ,clazz, prefix);
 	}
-	public static <T extends Object> RowMapper<T> getRm(final T targetOut,final String prefix){
-		return getRm(null ,targetOut, prefix);
-	}
-	public static <T extends Object> RowMapper<T> getRm(final CacheMetaData cacheMetaData,final Class<T> clazz,final String prefix  ){
-		try {
-			return getRm(cacheMetaData ,clazz.newInstance(), prefix);
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+
 	
-	public static <T extends Object> RowMapper<T> getRm(final CacheMetaData cacheMetaData,final T targetOut,final String prefix  ){
-		return new RowMapper<T>() {
+	public static <T extends Object> RowMapperClone<T> getRm(final CacheMetaData cacheMetaData,final Class<T> clazz,final String prefix  ){
+		return new RowMapperClone<T>() {
 //			private Map<String, List<Integer>> cacheListTable;
 
 			@Override
-			public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+			public T mapRow(ResultSet rs, int rowNum, T targetOut) throws SQLException {
 				T t = targetOut;
 				try {
 					
@@ -526,7 +513,7 @@ public class JPAUtil {
 					
 					
 				} catch (Exception e) {
-					logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
+					logger.error("$RowMapperClone<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
 				}
 				return t;
 			}
@@ -581,7 +568,7 @@ public class JPAUtil {
 					}
 					
 				} catch (IllegalArgumentException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-					logger.error("$RowMapper<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
+					logger.error("$RowMapperClone<T>.mapRow(ResultSet, int)", e); //$NON-NLS-1$
 				}
 				return traget;
 			}
@@ -615,6 +602,16 @@ public class JPAUtil {
 					
 				}
 				property.getMethodSet().invoke(traget, objectData);
+			}
+
+			@Override
+			public T mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				try {
+					return mapRow(rs,rowNum,clazz.newInstance());
+				} catch (InstantiationException | IllegalAccessException e) {
+				}
+				return null;
 			}
 			
 //			move to use JdbcUtils
