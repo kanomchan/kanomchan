@@ -338,7 +338,8 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			if(engLang != null){
 				try {
 					idEng = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getEngLang());
-					classMapper.getPropertyId().getMethodSet().invoke(beanLang.getOtherLang(),idEng);
+					if(beanLang.getOtherLang() != null)
+						classMapper.getPropertyId().getMethodSet().invoke(beanLang.getOtherLang(),idEng);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					logger.error("saveAndLang getId message ", e);
 				}
