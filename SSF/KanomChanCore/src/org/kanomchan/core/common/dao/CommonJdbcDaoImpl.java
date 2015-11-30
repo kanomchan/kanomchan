@@ -13,8 +13,10 @@ import org.kanomchan.core.common.bean.BeanLang;
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.PagingBean;
+import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
+import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -346,7 +348,18 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			}
 		}
 		T otherLang = null;
+		
+		
 		if(beanLang.getOtherLang() != null && beanLang.getLangCode() != null && !"".equals(beanLang.getLangCode())){
+			if(idEng == null){
+				try {
+					idEng = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getOtherLang());
+					if(idEng == null)
+						throw new RollBackTechnicalException(CommonMessageCode.COM4987);
+				} catch (IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
 			Long idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, "A", beanLang.getLangCode());
 			
 			if(idlang!=null)

@@ -12,6 +12,7 @@ public interface CommonConstant {
     public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
     public static final String DEFAULT_LANG_KEY = "ENG";
     public static final String DEFAULT_LANG_CONFIG = "DEFAULT_LANG_CONFIG";
+	public static final String ENG = "ENG";
     
     public static interface SESSION {
 	// public static final String USER_BEAN = "SESSION_USER_BEAN";

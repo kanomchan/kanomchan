@@ -5,8 +5,17 @@ public enum CommonMessageCode implements MessageCode {
 	,COM0001("Success! Insert {1} Complete.")
 	,COM0002("Success! Update {1} Complete.")
 	,COM0003("Success! Delete {1} Complete.")
-	, COM4999("Exction"), COM2001(""), ATC2001(""), ATC2002(""), ATZ2002(""), USR3001(""), USR3002(""), COM4994(""), COM4993(""), COM4998(""), COM0004(""), ATC2005(""), REG2001(""), REG2002(""), COM4886(""), COM4991(""), COM4992("")
-	, COM4893("File Not Found"), ATZ2001("Unauthorized Operation Business Exception"), REG3001(""), REG3002(""), REG0003(""), EXA1001("Exction"), EXA1002("Exction");
+	, COM4999("Exction"), COM2001(""), COM4994(""), COM4993(""), COM4998(""), COM0004(""), COM4886("")
+	, COM4991("")
+	, COM4992("")
+	, COM4987("PK LANG NUll")
+	, COM4893("File Not Found")
+	, ATZ2001("Unauthorized Operation Business Exception")
+	, ATC2001(""), ATC2002(""), ATZ2002("")
+	, USR3001(""), USR3002("")
+	, REG3001(""), REG3002(""), REG0003("")
+	, ATC2005(""), REG2001(""), REG2002("")
+	, EXA1001("Exction"), EXA1002("Exction");
 
 	private CommonMessageCode(String dec){
 		this.dec = dec;
