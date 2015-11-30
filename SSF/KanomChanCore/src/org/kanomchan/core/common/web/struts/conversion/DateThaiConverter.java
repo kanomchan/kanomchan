@@ -1,8 +1,10 @@
 package org.kanomchan.core.common.web.struts.conversion;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.XWorkException;
 import com.opensymphony.xwork2.conversion.impl.DateConverter;
 import com.opensymphony.xwork2.conversion.impl.DefaultTypeConverter;
+import com.opensymphony.xwork2.ognl.OgnlUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
@@ -12,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+
+import ognl.OgnlContext;
 
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.processhandler.ProcessContext;
@@ -24,7 +28,13 @@ public class DateThaiConverter extends DateConverter {
         
         if (value instanceof String && value != null && ((String) value).length() > 0) {
         	ProcessContext processContext = CurrentThread.getProcessContext();
-        	Locale locale = (processContext.getNativeLocale() != null ? processContext.getNativeLocale() : Locale.ENGLISH);
+        	Locale nativeLocale =null;
+        	Locale localeStruts = getLocale(context);
+        	try{
+        		nativeLocale = (Locale) ActionContext.getContext().getValueStack().findValue("nativeLocale",Locale.class);
+        		
+        	}catch(Exception e){}
+        	Locale locale = (nativeLocale != null ? nativeLocale : localeStruts!=null?localeStruts:Locale.ENGLISH);
             String sa = (String) value;
 //            Locale locale = getLocale(context);
             DateFormat df = null;

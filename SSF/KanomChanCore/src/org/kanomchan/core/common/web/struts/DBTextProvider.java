@@ -77,7 +77,7 @@ public class DBTextProvider implements TextProvider {
         if (text == null && defaultValue != null) {
 
             MessageFormat format = new MessageFormat(defaultValue);
-            format.setLocale(CurrentThread.getProcessContext().getNativeLocale());
+            format.setLocale(CurrentThread.getProcessContext().getNativeLocaleText());
             format.applyPattern(defaultValue);
 
             Object[] params;
@@ -96,7 +96,7 @@ public class DBTextProvider implements TextProvider {
         String text = getText(key, args);
         if (text == null) {
             MessageFormat format = new MessageFormat(defaultValue);
-            format.setLocale(CurrentThread.getProcessContext().getNativeLocale());
+            format.setLocale(CurrentThread.getProcessContext().getNativeLocaleText());
             format.applyPattern(defaultValue);
 
             if (args == null) {
@@ -137,7 +137,7 @@ public class DBTextProvider implements TextProvider {
     	
     	String defaultText = findDBText(aTextName, locale);
         if (defaultText != null) {
-            MessageFormat mf = buildMessageFormat(defaultText, CurrentThread.getProcessContext().getNativeLocale());
+            MessageFormat mf = buildMessageFormat(defaultText, CurrentThread.getProcessContext().getNativeLocaleText());
             return formatWithNullDetection(mf, args);
         }
         return null;

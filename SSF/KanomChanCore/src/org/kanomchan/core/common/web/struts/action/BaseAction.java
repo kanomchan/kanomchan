@@ -19,6 +19,8 @@ import org.kanomchan.core.common.bean.Button;
 import org.kanomchan.core.common.bean.Message;
 import org.springframework.beans.factory.BeanNameAware;
 import org.kanomchan.core.common.bean.JSONResult;
+import org.kanomchan.core.common.context.CurrentThread;
+import org.kanomchan.core.common.processhandler.ProcessContext;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -54,7 +56,7 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 	protected String namespace;
 	
 	protected String expression;
-	protected Locale nativeLocale;
+	private Locale nativeLocale;
 	
 	
 	protected String beanName;
@@ -267,6 +269,8 @@ public abstract class BaseAction extends ActionSupport implements RequestAware,S
 
 
 	public void setNativeLocale(Locale nativeLocale) {
+		ProcessContext processContext = CurrentThread.getProcessContext();
+		processContext.setNativeLocaleText(nativeLocale);
 		this.nativeLocale = nativeLocale;
 	}
 	

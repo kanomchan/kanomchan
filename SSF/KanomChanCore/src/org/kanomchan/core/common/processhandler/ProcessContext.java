@@ -27,6 +27,7 @@ public class ProcessContext {
 	
 	protected String lang;
 	protected Locale nativeLocale;
+	protected Locale nativeLocaleText;
 	
 	protected boolean startProcess = false;
 	protected String sessionId;
@@ -173,6 +174,13 @@ public class ProcessContext {
 	}
 	public void setNativeLocale(Locale nativeLocale) {
 		this.nativeLocale = nativeLocale;
+	}
+	
+	public Locale getNativeLocaleText() {
+		return nativeLocaleText==null?locale:nativeLocaleText;
+	}
+	public void setNativeLocaleText(Locale nativeLocale) {
+		this.nativeLocaleText = nativeLocale;
 	}
 	public void setLang(String lang) {
 		this.lang = lang;
