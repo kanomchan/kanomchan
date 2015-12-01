@@ -15,7 +15,20 @@ public enum CommonMessageCode implements MessageCode {
 	, USR3001(""), USR3002("")
 	, REG3001(""), REG3002(""), REG0003("")
 	, ATC2005(""), REG2001(""), REG2002("")
-	, EXA1001("Exction"), EXA1002("Exction");
+	, EXA1001("Exction"), EXA1002("Exction")
+	, KEY3999("")
+	, KEY3998("")
+	, KEY3997("")
+	, KEY3996("")
+	, KEY3995("")
+	, KEY3994("")
+	, KEY3993("")
+	, KEY3992("")
+	, KEY3991("")
+	, KEY3990("")
+	, KEY3989("")
+	, KEY3988("");
+
 
 	private CommonMessageCode(String dec){
 		this.dec = dec;
