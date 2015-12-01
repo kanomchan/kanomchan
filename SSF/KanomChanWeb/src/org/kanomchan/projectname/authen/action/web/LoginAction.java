@@ -1,9 +1,13 @@
 package org.kanomchan.projectname.authen.action.web;
 
+import javax.servlet.http.Cookie;
+
 import org.kanomchan.core.common.bean.MenuVO;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
+import org.kanomchan.core.common.cookie.bean.CookieOrm;
 import org.kanomchan.core.common.io.LoginIO;
+import org.kanomchan.core.common.processhandler.CookieFilter;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
 import org.kanomchan.core.openid.bean.AuthRequestBean;
@@ -40,7 +44,20 @@ public class LoginAction extends BaseAction {
 	}
 	
 	public String login() throws Exception{
-		ServiceResult<LoginIO> serviceResult = loginSSOService.performLoginAndPutDataSession(user,password);
+		Cookie[] cookies = httpServletRequest.getCookies();
+		CookieOrm cookieBean = new CookieOrm();
+		for (Cookie cookie : cookies) {
+			if(CookieFilter.KEY_MID.equals(cookie.getName())){
+				cookieBean.setMachineId(cookie.getValue());
+			}else if(CookieFilter.KEY_UID.equals(cookie.getName())){
+				cookieBean.setUserId(cookie.getValue());
+			}else if(CookieFilter.KEY_KID.equals(cookie.getName())){
+				cookieBean.setKeyId(cookie.getValue());
+			}else if(CookieFilter.KEY_TID.equals(cookie.getName())){
+				cookieBean.setTokenId(cookie.getValue());
+			}
+		}
+		ServiceResult<LoginIO> serviceResult = loginSSOService.performLoginAndPutDataSession(user,password,cookieBean);
 		 
 		if(serviceResult.isSuccess()){
 			session.put(CommonConstant.SESSION.USER_BEAN_KEY, serviceResult.getResult().getUserBean());
