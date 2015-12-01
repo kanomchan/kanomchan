@@ -327,9 +327,9 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException {
-		if(beanLang == null || beanLang.getEngLang() == null)
+		if(beanLang == null)
 			return null;
-		ClassMapper classMapper = JPAUtil.getClassMapper(beanLang.getEngLang().getClass());
+		ClassMapper classMapper = (beanLang.getEngLang() != null ? JPAUtil.getClassMapper(beanLang.getEngLang().getClass()) : JPAUtil.getClassMapper(beanLang.getBeanOtherLang().getClass()));
 //		Class<? extends Object> clazz = beanLang.getEngLang().getClass();
 		
 		Object idEng = null;
@@ -360,7 +360,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 					e.printStackTrace();
 				}
 			}
-			Long idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, "A", beanLang.getLangCode());
+			Long idlang =  checkLangBean((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng, "A", beanLang.getLangCode());
 			
 			if(idlang!=null)
 				if(beanLang.getIdLang()==null){
