@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.BeanLang;
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.Criteria;
+import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.exception.NonRollBackException;
@@ -360,17 +361,24 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 					e.printStackTrace();
 				}
 			}
-			Long idlang =  checkLangBean((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng, "A", beanLang.getLangCode());
+			Long idlang = beanLang.getIdLang();
+			if(idlang==null){
+				if(beanLang.getEngLang() instanceof EntityBean){
+					EntityBean entityBean = (EntityBean) beanLang.getEngLang();
+					idlang =  checkLangBean((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+				}
+			}else{
+				if(checkLangBeanId((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng,idlang)==null){
+					throw new RollBackTechnicalException(CommonMessageCode.COM4986);
+				}
+			}
+			
 			
 			if(idlang!=null)
-				if(beanLang.getIdLang()==null){
-					otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
-				}else{
-					otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),beanLang.getIdLang());
-				}
-			else{
+				otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
+			else
 				otherLang = save(beanLang.getOtherLang(), beanLang.getLangCode());
-			}
+			
 			beanLang.setOtherLang(otherLang);
 		}
 		return beanLang;
@@ -393,6 +401,33 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		params.put("ID_ENG", idEng);
 		params.put("LANG_CODE3", langCode);
 		params.put("STATUS", string);
+		List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
+		if(conut==null ||conut.size()==0){
+			return null;
+		}else{
+			return conut.get(0);
+		}
+		
+	}
+	
+	private Long checkLangBeanId(Class<? extends Object> class1,String columnName, Object idEng, Object idLang) throws RollBackException, NonRollBackException {
+		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
+		StringBuilder sb = new StringBuilder();
+		sb.append("select ");
+		sb.append(columnName);
+		sb.append("_LANG from ");
+		sb.append(classMapper.getTableName());
+		sb.append("_LANG ");
+		sb.append(" WHERE ");
+		sb.append(columnName);
+		sb.append(" = :ID_ENG");
+		sb.append(" AND ");
+		sb.append(columnName);
+		sb.append("_LANG ");
+		sb.append(" = :ID_LANG");
+		Map<String,  Object>params = new HashMap<String, Object>();
+		params.put("ID_ENG", idEng);
+		params.put("ID_LANG", idLang);
 		List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
 		if(conut==null ||conut.size()==0){
 			return null;
