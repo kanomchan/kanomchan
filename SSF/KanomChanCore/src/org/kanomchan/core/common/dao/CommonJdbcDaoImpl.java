@@ -31,12 +31,12 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	
 	@Override
 	public <T extends Object> T save(T target)throws RollBackException ,NonRollBackException{
-		return save(target, false, false,null);
+		return save(target, false,null);
 	}
 
 	@Override
 	public <T extends Object> T update(T target) throws RollBackException ,NonRollBackException{
-		return update(target,false,false,null,null);
+		return update(target,false,null,null);
 	}
 
 	@Override
@@ -64,11 +64,11 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T> T update(T entity, String langCode3,Long idLang) throws RollBackException ,NonRollBackException {
-		return update(entity, false, true, langCode3,idLang);
+		return update(entity, true, langCode3,idLang);
 	}
 	@Override
 	public <T> T save(T target, String langCode3) throws RollBackException ,NonRollBackException {
-		return save(target, false, true, langCode3);
+		return save(target, true, langCode3);
 	}
 	@Override
 	public <T> T delete(T entity, String langCode3) throws RollBackException ,NonRollBackException {
@@ -224,13 +224,13 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		// TODO Auto-generated method stub
 		
 	}
+//	@Override
+//	public <T extends Object > T saveOrUpdate(T target)throws RollBackException ,NonRollBackException {
+//		return super.saveOrUpdate(target);
+//	}
 	@Override
 	public <T extends Object > T saveOrUpdate(T target)throws RollBackException ,NonRollBackException {
 		return super.saveOrUpdate(target);
-	}
-	@Override
-	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne)throws RollBackException ,NonRollBackException {
-		return super.saveOrUpdate(target,includeMinusOne);
 	}
 
 	@Override
@@ -273,7 +273,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 				}
 				if (have == false) {
 					methodSetStatus.invoke(old, "I");
-					this.update(old, false);
+					this.update(old);
 				}
 			}
 			for (T neww : newList) {
@@ -287,20 +287,20 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 							if(idNew.equals(idOld)){
 								if(subListColumnName != null){
 									Object subDetail = methodGetSubDetail.invoke(neww);
-									Object resultSubDetail = this.saveOrUpdate(subDetail, false);
+									Object resultSubDetail = this.saveOrUpdate(subDetail);
 									methodSetSubDetail.invoke(neww, resultSubDetail);
 								}
-								resultList.add(this.update(neww, false));
+								resultList.add(this.update(neww));
 							}
 						}
 					}
 				}else{
 					if(subListColumnName != null){
 						Object subDetail = methodGetSubDetail.invoke(neww);
-						Object resultSubDetail = this.save(subDetail, false);
+						Object resultSubDetail = this.save(subDetail);
 						methodSetSubDetail.invoke(neww, resultSubDetail);
 					}
-					resultList.add(this.save(neww, false));
+					resultList.add(this.save(neww));
 				}
 
 			}
@@ -309,17 +309,17 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 				if(neww != null){
 					if(subListColumnName != null){
 						Object subDetail = methodGetSubDetail.invoke(neww);
-						Object resultSubDetail = this.save(subDetail, false);
+						Object resultSubDetail = this.save(subDetail);
 						methodSetSubDetail.invoke(neww, resultSubDetail);
 					}
-					resultList.add(this.save(neww, false));
+					resultList.add(this.save(neww));
 				}
 			}
 		}else if(oldList != null && oldList.size() > 0){
 			for (T old : oldList) {
 				if(old != null){
 					methodSetStatus.invoke(old, "I");
-					resultList.add(this.update(old, false));
+					resultList.add(this.update(old));
 				}
 			}
 		}
@@ -327,7 +327,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException {
+	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang) throws RollBackException, NonRollBackException {
 		if(beanLang == null)
 			return null;
 		ClassMapper classMapper = (beanLang.getEngLang() != null ? JPAUtil.getClassMapper(beanLang.getEngLang().getClass()) : JPAUtil.getClassMapper(beanLang.getBeanOtherLang().getClass()));
@@ -336,7 +336,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		Object idEng = null;
 		T engLang = null;
 		if(beanLang.getEngLang() != null){
-			engLang = saveOrUpdate(beanLang.getEngLang(), includeMinusOne);
+			engLang = super.saveOrUpdate(beanLang.getEngLang());
 			beanLang.setEngLang(engLang);
 			if(engLang != null){
 				try {
@@ -437,8 +437,5 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		
 	}
 
-	@Override
-	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang) throws RollBackException,NonRollBackException {
-		return saveOrUpdate(beanLang,false);
-	}
+
 }

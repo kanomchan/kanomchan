@@ -26,7 +26,7 @@ public interface CommonDao {
 	public <T> T save(T target) throws RollBackException ,NonRollBackException;
 	public <T> T save(T target,String langCode3) throws RollBackException ,NonRollBackException;
 	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang) throws RollBackException, NonRollBackException;
-	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException;
+//	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException;
 	/**
 	 * Update method that merge the state of the given entity into the current persistence context.  <br/>
 	 * ( finally : update into DB )
@@ -297,7 +297,7 @@ public interface CommonDao {
 	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, String langCode) throws RollBackException ,NonRollBackException;
 	public <T extends Object > List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackException ,NonRollBackException;
 	public <T extends Object > T saveOrUpdate(T target) throws RollBackException ,NonRollBackException;
-	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) throws RollBackException ,NonRollBackException;
+//	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne) throws RollBackException ,NonRollBackException;
 	
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String SubListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
