@@ -530,6 +530,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			EntityBean entityBean = (EntityBean) target;
 			entityBean.setCreateDate(new Date());
 			entityBean.setCreateUser(processContext.getUserName());
+			entityBean.setUpdateDate(null);
+			entityBean.setUpdateUser(null);
 		}
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
