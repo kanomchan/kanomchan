@@ -514,6 +514,16 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public <T extends Object> T save(T target, boolean tableLang, String langCode) throws RollBackException, NonRollBackException {
+		Class<? extends Object> clazz = target.getClass();
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+		Method methodGetId = classMapper.getPropertyId().getMethodGet();
+		KeyHolder keyHolder = saveKeyHolder(target, tableLang, langCode);
+		target = idToBean(keyHolder,target,methodSetId, methodGetId);
+ 		return target;
+	}
+	
+	public KeyHolder saveKeyHolder(Object target, boolean tableLang, String langCode) throws RollBackException, NonRollBackException {
 		
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
@@ -535,7 +545,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		List<Criteria> setList = new LinkedList<Criteria>();
 		Map<String, Object> para = new HashMap<String, Object>();
 		
-		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+//		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		Method methodGetId = classMapper.getPropertyId().getMethodGet();
 		
 		if(langCode != null && !langCode.equals("")){
@@ -671,14 +681,19 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		KeyHolder keyHolder;
 		try{
 			keyHolder = executeNativeSQLGetIdKeyHolder(sb.toString(),para);
+			return keyHolder;
 		} catch (BadSqlGrammarException ba) {
 			throw new RollBackTechnicalException(CommonMessageCode.COM4994,ba);
 		}
-		target = idToBean(keyHolder,target,methodSetId, methodGetId);
- 		return target;
+//		return null;
+//		if(!tableLang)
+//			target = idToBean(keyHolder,target,methodSetId, methodGetId);
+// 		return target;
 	}
 	
-	private <T> T idToBean(KeyHolder keyHolder,T target,Method methodSetId, Method methodGet){
+	
+	
+	public <T> T idToBean(KeyHolder keyHolder,T target,Method methodSetId, Method methodGet){
 		if(methodSetId !=null&&keyHolder!=null){
 			try {
 				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){

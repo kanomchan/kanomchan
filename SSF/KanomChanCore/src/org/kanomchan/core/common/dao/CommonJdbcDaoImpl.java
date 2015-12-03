@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.dao;
 
+import java.beans.IntrospectionException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,7 +19,9 @@ import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
+import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -376,8 +379,20 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			
 			if(idlang!=null)
 				otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
-			else
-				otherLang = save(beanLang.getOtherLang(), beanLang.getLangCode());
+			else{
+				KeyHolder keyHolder = saveKeyHolder(beanLang.getOtherLang(),true, beanLang.getLangCode());
+				
+				try {
+					Method methodGet = ClassUtil.findGetter(BeanLang.class, "idLang");
+					Method methodSetId= ClassUtil.findSetter(BeanLang.class, "idLang");
+					otherLang = beanLang.getOtherLang();
+					beanLang = idToBean(keyHolder, beanLang, methodSetId, methodGet);
+				} catch (NoSuchFieldException | IntrospectionException e) {
+					e.printStackTrace();
+				}
+			}
+				
+//				otherLang = saveKeyHolder(beanLang.getOtherLang(), beanLang.getLangCode());
 			
 			beanLang.setOtherLang(otherLang);
 		}
