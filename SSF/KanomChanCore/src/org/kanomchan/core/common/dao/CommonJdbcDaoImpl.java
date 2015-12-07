@@ -366,9 +366,16 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			}
 			Long idlang = beanLang.getIdLang();
 			if(idlang==null){
-				if(beanLang.getEngLang() instanceof EntityBean){
-					EntityBean entityBean = (EntityBean) beanLang.getEngLang();
-					idlang =  checkLangBean((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+				if(beanLang.getEngLang() != null){
+					if(beanLang.getEngLang() instanceof EntityBean){
+						EntityBean entityBean = (EntityBean) beanLang.getEngLang();
+						idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+					}
+				}else{
+					if(beanLang.getOtherLang() instanceof EntityBean){
+						EntityBean entityBean = (EntityBean) beanLang.getOtherLang();
+						idlang =  checkLangBean(beanLang.getBeanOtherLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+					}
 				}
 			}else{
 				if(checkLangBeanId((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng,idlang)==null){
@@ -399,7 +406,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return beanLang;
 	}
 
-	private Long checkLangBean(Class<? extends Object> class1,String columnName, Object idEng, String string, String langCode) throws RollBackException, NonRollBackException {
+	private Long checkLangBean(Class<? extends Object> class1,String columnName, Object idEng, String status, String langCode) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
 		StringBuilder sb = new StringBuilder();
 		sb.append("select ");
@@ -411,11 +418,15 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		sb.append(columnName);
 		sb.append(" = :ID_ENG");
 		sb.append(" AND LANG_CODE3 = :LANG_CODE3");
-		sb.append(" AND STATUS = :STATUS");
+		if(!"".equals(status) && status != null){
+			sb.append(" AND STATUS = :STATUS");
+		}
 		Map<String,  Object>params = new HashMap<String, Object>();
 		params.put("ID_ENG", idEng);
 		params.put("LANG_CODE3", langCode);
-		params.put("STATUS", string);
+		if(!"".equals(status) && status != null){
+			params.put("STATUS", status);
+		}
 		List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
 		if(conut==null ||conut.size()==0){
 			return null;
