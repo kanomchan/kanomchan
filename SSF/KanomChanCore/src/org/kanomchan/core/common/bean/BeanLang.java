@@ -14,6 +14,16 @@ public class BeanLang<T> implements Serializable  {
 	private String langCode;
 	private Long idLang;
 	
+	public BeanLang() {
+		
+	}
+	public BeanLang(T beanEng, T beanOtherLang, BeanLang<T> beanLang, String langCode, Long idLang) {
+		this.beanEng = beanEng;
+		this.beanOtherLang = beanOtherLang;
+		this.beanLang = beanLang;
+		this.langCode = langCode;
+		this.idLang = idLang;
+	}
 	public T getBeanEng() {
 		return beanEng;
 	}

@@ -139,6 +139,7 @@ public interface JdbcCommonDao {
 
 	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criterias,PagingBean pagingBean, boolean like) throws RollBackException,NonRollBackException;
 
+	public Integer getCount(String sql, Object... params) throws RollBackException,NonRollBackException;
 
-
+	
 }
