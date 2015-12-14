@@ -75,23 +75,23 @@ public interface JdbcCommonDao {
 
 	public <T> List<T> findAll(Class<T> class1) throws RollBackException, NonRollBackException;
 
+//	public <T> T save(T target) throws RollBaCckException, NonRollBackException;
+	
 	public <T> T save(T target) throws RollBackException, NonRollBackException;
 	
-	public <T> T save(T target, boolean includeMinusOne) throws RollBackException, NonRollBackException;
+	public <T> T save(T target, boolean tableLang,String langCode) throws RollBackException, NonRollBackException;
 
-	public <T> T save(T target, boolean includeMinusOne, boolean tableLang,String langCode) throws RollBackException, NonRollBackException;
+//	public <T> T saveOrUpdate(T t) throws RollBackException, NonRollBackException;
 	
 	public <T> T saveOrUpdate(T t) throws RollBackException, NonRollBackException;
 
-	public <T> T saveOrUpdate(T t, boolean includeMinusOne) throws RollBackException, NonRollBackException;
+	public <T> T saveOrUpdate(T target, boolean tableLang,String code,Long idLang) throws RollBackException, NonRollBackException;
 	
-	public <T> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code,Long idLang) throws RollBackException, NonRollBackException;
+//	public <T> T update(T target) throws RollBackException, NonRollBackException;
 	
 	public <T> T update(T target) throws RollBackException, NonRollBackException;
 
-	public <T> T update(T target, boolean includeMinusOne) throws RollBackException, NonRollBackException;
-
-	public <T> T update(T target, boolean includeMinusOne, boolean tableLang,String langCode,Long idLang) throws RollBackException, NonRollBackException;
+	public <T> T update(T target, boolean tableLang,String langCode,Long idLang) throws RollBackException, NonRollBackException;
 
 	public <T> Collection<T> saveOrUpdateAll(Collection<T> entities) throws RollBackException, NonRollBackException;
 

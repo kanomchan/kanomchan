@@ -7,4 +7,5 @@ public interface CheckService {
 	public boolean checkNeedleList(String tableName, String columnName)throws RollBackException, NonRollBackException;
 	public boolean checkColumnNameInTableLang(String tableName, String columnName)throws RollBackException, NonRollBackException;
 	public boolean checkClearableList(String tableName, String columnName)throws RollBackException, NonRollBackException;
+	public boolean checkIncludeMinusOne(String name, String columnName)throws RollBackException, NonRollBackException;
 }
