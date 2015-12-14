@@ -78,17 +78,17 @@ public interface JdbcCommonDao {
 //	public <T> T save(T target) throws RollBaCckException, NonRollBackException;
 	
 	public <T> T save(T target) throws RollBackException, NonRollBackException;
-	
+
 	public <T> T save(T target, boolean tableLang,String langCode) throws RollBackException, NonRollBackException;
-
-//	public <T> T saveOrUpdate(T t) throws RollBackException, NonRollBackException;
 	
-	public <T> T saveOrUpdate(T t) throws RollBackException, NonRollBackException;
+//	public <T> T saveOrUpdate(T t) throws RollBackException, NonRollBackException;
 
+	public <T> T saveOrUpdate(T t) throws RollBackException, NonRollBackException;
+	
 	public <T> T saveOrUpdate(T target, boolean tableLang,String code,Long idLang) throws RollBackException, NonRollBackException;
 	
 //	public <T> T update(T target) throws RollBackException, NonRollBackException;
-	
+
 	public <T> T update(T target) throws RollBackException, NonRollBackException;
 
 	public <T> T update(T target, boolean tableLang,String langCode,Long idLang) throws RollBackException, NonRollBackException;

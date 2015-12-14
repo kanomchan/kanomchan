@@ -385,7 +385,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			
 			
 			if(idlang!=null)
-					otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
+				otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
 			else{
 				KeyHolder keyHolder = saveKeyHolder(beanLang.getOtherLang(),true, beanLang.getLangCode());
 				
@@ -419,7 +419,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		sb.append(" = :ID_ENG");
 		sb.append(" AND LANG_CODE3 = :LANG_CODE3");
 		if(!"".equals(status) && status != null){
-		sb.append(" AND STATUS = :STATUS");
+			sb.append(" AND STATUS = :STATUS");
 		}
 		Map<String,  Object>params = new HashMap<String, Object>();
 		params.put("ID_ENG", idEng);
@@ -435,7 +435,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		}
 		
 	}
-
+	
 	private Long checkLangBeanId(Class<? extends Object> class1,String columnName, Object idEng, Object idLang) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
 		StringBuilder sb = new StringBuilder();
@@ -462,4 +462,6 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		}
 		
 	}
+
+
 }

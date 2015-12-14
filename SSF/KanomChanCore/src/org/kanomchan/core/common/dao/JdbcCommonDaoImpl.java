@@ -563,7 +563,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				Method method = property.getMethodGet();
 				try {
 					if(!tableLang||(tableLang && checkService.checkColumnNameInTableLang(table.name(), columnName))){
-						
+
 						if(property.getColumnType() == ColumnType.joinColumns){
 							Object joinColumnsObject = property.getJoinColumns().getMethodGet().invoke(target);
 							if(joinColumnsObject!=null){
@@ -579,10 +579,10 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 											setList.add(new Criteria(columnName,value,columnName+i++));
 										}else if (checkService.checkClearableList(table.name(),columnName)){
 											setList.add(new Criteria(columnName,(Object)null,columnName+i++));
-								}
+										}
 									}else{
 										setList.add(new Criteria(columnName,value,columnName+i++));
-										}
+									}
 								}else if(value instanceof Date){
 									if(((Date) value).getTime() == 0L){
 										setList.add(new Criteria(columnName,(Object)null,columnName+i++));
@@ -600,23 +600,23 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							Object value = method.invoke(target);
 							if(value == null)
 								continue;
-								Entity entity = method.getReturnType().getAnnotation(Entity.class);
-								if(entity!=null){
-									ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
-									value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-									}
-									if(value!=null ) {
+							Entity entity = method.getReturnType().getAnnotation(Entity.class);
+							if(entity!=null){
+								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+							}
+							if(value != null){
 								//pregen
-										if(value instanceof Number){
+								if(value instanceof Number){
 									if(((Number)value).intValue() ==-1){
 										if(checkService.checkIncludeMinusOne(table.name(),columnName)){
 											setList.add(new Criteria(columnName,value,columnName+i++));
 										}else if (checkService.checkClearableList(table.name(),columnName)){
 											setList.add(new Criteria(columnName,(Object)null,columnName+i++));
-											}
-										}else{
-										setList.add(new Criteria(columnName,value,columnName+i++));
 										}
+									}else{
+										setList.add(new Criteria(columnName,value,columnName+i++));
+									}
 								}else if(value instanceof Date){
 									if(((Date) value).getTime() == 0L){
 										setList.add(new Criteria(columnName,(Object)null,columnName+i++));
@@ -810,7 +810,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	public <T extends Object> T update(T target) throws RollBackException, NonRollBackException{
 		return update(target,false,null,null);
 	}
-	
 	@Override
 	public <T extends Object> T update(T target, boolean tableLang, String langCode,Long idLang) throws RollBackException, NonRollBackException{
 		if(target instanceof EntityBean){
@@ -845,7 +844,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 									joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 								Object value = property.getMethodGet().invoke(joinColumnsObject);
 
-								if(value!=null){
+								if(value != null){
 									//pregen
 									if(value instanceof Number){
 										if(((Number)value).intValue() ==-1){
@@ -875,16 +874,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							Object value = method.invoke(target);
 							if(value == null)
 								continue;
-								Entity entity = method.getReturnType().getAnnotation(Entity.class);
-								if(entity!=null){
-									ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
-									
-									value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-									}
-									
-									if(value!=null ) {
+							Entity entity = method.getReturnType().getAnnotation(Entity.class);
+							if(entity!=null){
+								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+							}
+							if(value != null){
 								//pregen
-										if(value instanceof Number){
+								if(value instanceof Number){
 									if(((Number)value).intValue() ==-1){
 										if(checkService.checkIncludeMinusOne(table.name(),columnName)){
 											setList.add(new Criteria(columnName,value,columnName+i++));
@@ -893,19 +890,19 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 										}
 									}else{
 										setList.add(new Criteria(columnName,value,columnName+i++));
-											}
-										}else if(value instanceof Date){
-											if(((Date) value).getTime() == 0L){
-										setList.add(new Criteria(columnName,(Object)null,columnName+i++));
-											}else{
-										setList.add(new Criteria(columnName,value,columnName+i++));
-											}
-										}else{
-									setList.add(new Criteria(columnName,value,columnName+i++));
-										}
-								//pregen
 									}
+								}else if(value instanceof Date){
+									if(((Date) value).getTime() == 0L){
+										setList.add(new Criteria(columnName,(Object)null,columnName+i++));
+									}else{
+										setList.add(new Criteria(columnName,value,columnName+i++));
+									}
+								}else{
+									setList.add(new Criteria(columnName,value,columnName+i++));
 								}
+								//pregen
+							}
+						}
 					}//case checkColumnNameInTableLang
 					
 					if(property.getColumnType() == ColumnType.id){
