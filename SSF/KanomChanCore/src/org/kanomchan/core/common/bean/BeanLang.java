@@ -1,6 +1,8 @@
 package org.kanomchan.core.common.bean;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BeanLang<T> implements Serializable  {
 	
@@ -11,6 +13,7 @@ public class BeanLang<T> implements Serializable  {
 	private T beanEng;
 	private T beanOtherLang;
 	private BeanLang<T> beanLang;
+	private Map<String, T> beanLangMap = new HashMap<String, T>();
 	private String langCode;
 	private Long idLang;
 	
@@ -67,4 +70,17 @@ public class BeanLang<T> implements Serializable  {
 	public T getOtherLang() {
 		return this.beanOtherLang;
 	}
+	public Map<String, T> getBeanLangMap() {
+		return beanLangMap;
+	}
+	public void setBeanLangMap(Map<String, T> beanLangMap) {
+		this.beanLangMap = beanLangMap;
+	}
+	public BeanLang<T> getBeanLang() {
+		return beanLang;
+	}
+	public void setBeanLang(BeanLang<T> beanLang) {
+		this.beanLang = beanLang;
+	}
+	
 }
