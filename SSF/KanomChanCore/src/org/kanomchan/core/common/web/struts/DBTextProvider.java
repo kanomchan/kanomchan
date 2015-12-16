@@ -135,7 +135,7 @@ public class DBTextProvider implements TextProvider {
     }
     private static String findDBText(  String aTextName ,Locale locale, Object[] args) {
     	
-    	String defaultText = findDBText(aTextName, getLocal(locale));
+    	String defaultText = findDBText(aTextName, locale);
         if (defaultText != null) {
             MessageFormat mf = buildMessageFormat(defaultText, getLocal(locale));
             return formatWithNullDetection(mf, args);
