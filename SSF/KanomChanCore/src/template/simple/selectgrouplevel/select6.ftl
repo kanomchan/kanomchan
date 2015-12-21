@@ -224,19 +224,21 @@
 		<div class="select6-input-box">
 			<div class="select6-input-wrapper">
 				<div class="select6-input" id="select6-input-${parameters.id}" onclick="openselect6_${parameters.id}(event,$(this))">
-					<@s.iterator value="stack.findValue(parameters.nameList)" status="status">
-						<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
-							<div class="select6-input-item-label">
-							 	<@s.property value=(parameters.nameValue)/>
+					<#if parameters.nameList??>
+						<@s.iterator value="stack.findValue(parameters.nameList)" status="status">
+							<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
+								<div class="select6-input-item-label">
+								 	<@s.property value=(parameters.nameValue)/>
+								</div>
+								<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameKey}" value="<@s.property value=(parameters.nameKey)/>"> 
+								<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameParentKey}" value="<@s.property value=(parameters.nameParentKey)/>">
+								<input type="hidden" name="${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
+								<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
 							</div>
-							<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameKey}" value="<@s.property value=(parameters.nameKey)/>"> 
-							<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameParentKey}" value="<@s.property value=(parameters.nameParentKey)/>">
-							<input type="hidden" name="${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
-							<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
-						</div>
-						<input type="hidden" name="item_count_${parameters.id}"/>
-						<input type="hidden" name="__pushdataonremove_${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
-					</@s.iterator>
+							<input type="hidden" name="item_count_${parameters.id}"/>
+							<input type="hidden" name="__pushdataonremove_${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
+						</@s.iterator>
+					</#if>
 					<div class="clone-input-${parameters.id}" style="display: none;">
 						<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
 							<div class="select6-input-item-label" >
@@ -287,8 +289,8 @@
 				<div class="select6-scroll mCustomScrollbar" data-mcs-theme="minimal-dark" >
 					<div class="clone${parameters.id}" style="display: none">
 						<div class="select6-select-item" id="select6-select-item-sub-${parameters.id}-{0}" onclick="click_${parameters.id}(event,$(this));">
-							<div class="check-box" onclick="<#if parameters.sigleSelect??>
-								<#if stack.findValue(parameters.sigleSelect)>
+							<div class="check-box" onclick="<#if parameters.singleSelect??>
+								<#if stack.findValue(parameters.singleSelect)>
 									checkboxClickSigle_${parameters.id}(event,$(this).parent()); 
 								<#else>
 									checkboxClick_${parameters.id}(event,$(this).parent());
@@ -419,8 +421,6 @@
 		var checkBox = e.children('.check-box');
 		if(checkBox.hasClass('isChecked')){
 			checkBox.removeClass('isChecked'); 
-			e.children('.item_profi_radio_${parameters.id}');
-			$(e).find("[type='radio']").attr("checked" , false);
 			$('#select6-input-${parameters.id} .select6-input-item').has("input.id_${parameters.id}[value="+ $(checkBox).children(".item_id_${parameters.id}").val() +"]").remove();
 		}
 		else{
@@ -429,22 +429,22 @@
 		}
 	}
 	
-	<#if parameters.sigleSelect??>
-	<#if stack.findValue(parameters.sigleSelect)>
+	<#if parameters.singleSelect??>
+	<#if stack.findValue(parameters.singleSelect)>
 	checkboxClickSigle_${parameters.id} = function(event,e){
 		event.stopPropagation();
 		var checkBox = e.children('.check-box');
 		if(checkBox.hasClass('isChecked')){
 			checkBox.removeClass('isChecked'); 
-			e.children('.item_profi_radio_${parameters.id}');
-			$(e).find("[type='radio']").attr("checked" , false);
 			$('#select6-input-${parameters.id} .select6-input-item').has("input.id_${parameters.id}[value="+ $(checkBox).children(".item_id_${parameters.id}").val() +"]").remove();
 		}
 		else{
 			checkBox.addClass('isChecked');
+			$("#select6-input-${parameters.id} > div:not(.clone-input-${parameters.id})").remove();
+			setItemToInput_${parameters.id}(e);
+			$(".select6_${parameters.id} .select6-select-item .check-box").removeClass("isChecked");
+			setInputToItemList_${parameters.id}();
 		}
-		
-		setItemToInput_${parameters.id}(e);
 	}
 	</#if>
 	</#if>
@@ -556,7 +556,16 @@
 	
 	click_${parameters.id} = function(event, e){
 		event.stopPropagation();
-		checkboxClick_${parameters.id}(event, e);
+		<#if parameters.singleSelect??>
+		<#if stack.findValue(parameters.singleSelect)>
+			checkboxClickSigle_${parameters.id}(event, e);
+			<#else>
+			checkboxClick_${parameters.id}(event, e);
+		</#if>
+		<#else>
+			checkboxClick_${parameters.id}(event, e);
+		</#if>
+		
 	}
 	
 	setItemToInput_${parameters.id} = function(e){
