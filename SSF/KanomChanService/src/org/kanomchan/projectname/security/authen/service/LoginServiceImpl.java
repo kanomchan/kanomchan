@@ -1,10 +1,7 @@
 package org.kanomchan.projectname.security.authen.service;
 
-import java.util.Map;
-
 import org.kanomchan.core.common.bean.MenuVO;
 import org.kanomchan.core.common.bean.UserBean;
-import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
@@ -14,15 +11,13 @@ import org.kanomchan.core.common.io.LoginIOBean;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.service.LocationService;
-import org.kanomchan.core.openid.bean.AuthRequestBean;
 import org.kanomchan.core.openid.service.OpenIdClientService;
+import org.kanomchan.core.security.authen.bean.IUserDefault;
 import org.kanomchan.core.security.authen.service.AuthenService;
-import org.kanomchan.core.security.authen.service.LoginSSOService;
 import org.kanomchan.core.security.authen.service.LoginService;
 import org.kanomchan.core.security.authorize.service.UserAuthorizeService;
 import org.kanomchan.core.security.authorize.service.UserMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 
 public class LoginServiceImpl implements LoginService {
 
@@ -74,8 +69,13 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	@Override
-	public ServiceResult<LoginIO> performLoginWithOutPasswordAndPutDataSession(
-			String username) throws NonRollBackException, RollBackException {
+	public ServiceResult<LoginIO> performLoginWithOutPasswordAndPutDataSession(String username) throws NonRollBackException, RollBackException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ServiceResult<LoginIO> performLoginAndPutDataSession(UserBean userBean, IUserDefault userDefault)throws NonRollBackException, RollBackException {
 		// TODO Auto-generated method stub
 		return null;
 	}

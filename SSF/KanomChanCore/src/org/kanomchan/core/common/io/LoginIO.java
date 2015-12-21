@@ -13,6 +13,6 @@ public interface LoginIO {
 	public void setMenuVO(MenuVO menuVO);
 	public Map<String, Object> getSession();
 	public void setSession(Map<String, Object> session);
-	
-
+	public String getGotoPage();
+	public void setGotoPage(String gotoPage);
 }

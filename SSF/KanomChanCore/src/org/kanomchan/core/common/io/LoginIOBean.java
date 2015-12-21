@@ -10,6 +10,7 @@ public class LoginIOBean  implements LoginIO{
 	
 	private UserBean userBean;
 	private MenuVO menuVO;
+	private String gotoPage;
 	private Map<String, Object> session = new HashMap<String, Object>();
 	public UserBean getUserBean() {
 		return userBean;
@@ -28,6 +29,12 @@ public class LoginIOBean  implements LoginIO{
 	}
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
+	}
+	public String getGotoPage() {
+		return gotoPage;
+	}
+	public void setGotoPage(String gotoPage) {
+		this.gotoPage = gotoPage;
 	}
 	
 	
