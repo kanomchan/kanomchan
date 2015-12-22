@@ -21,8 +21,4 @@ public interface LoginIO {
 	public String getGotoPage();
 	public void setGotoPage(String gotoPage);
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> refs/remotes/origin/master

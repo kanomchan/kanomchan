@@ -78,8 +78,4 @@ public class Criteria {
 	public void setParam(String param) {
 		this.param = param;
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> refs/remotes/origin/master

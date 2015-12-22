@@ -43,9 +43,4 @@ public enum CommonMessageCode implements MessageCode {
 	public String toString() {
 		return "code : "+name()+" dec : "+dec;
 	}
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> refs/remotes/origin/master
