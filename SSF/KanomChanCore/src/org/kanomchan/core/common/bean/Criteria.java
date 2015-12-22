@@ -28,6 +28,10 @@ public class Criteria {
 		this( null, column, value, column);
 	}
 	
+	public Criteria(String column, Object value, String param) {
+		this( null, column, value,param);
+	}
+	
 	/**
 	 * By Default use column name as param
 	 */

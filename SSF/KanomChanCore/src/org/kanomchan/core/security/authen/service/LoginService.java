@@ -6,6 +6,7 @@ import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.io.LoginIO;
 import org.kanomchan.core.common.processhandler.ServiceResult;
+import org.kanomchan.core.security.authen.bean.IUserDefault;
 
 public interface LoginService {
 
@@ -17,5 +18,6 @@ public interface LoginService {
 //	public ServiceResult<AuthRequestBean> startSSO(String identifier,String redirectUri)throws NonRollBackException,RollBackException;
 	public ServiceResult<LoginIO> performLoginWithOutPasswordAndPutDataSession(String username,CookieOrm cookieOrm) throws NonRollBackException, RollBackException;
 	public ServiceResult<LoginIO> performLoginWithOutPasswordAndPutDataSession(Long userId,CookieOrm cookieOrm) throws NonRollBackException, RollBackException;
+	public ServiceResult<LoginIO> performLoginAndPutDataSession(UserBean userBean,IUserDefault userDefault) throws NonRollBackException,RollBackException;
 
 }

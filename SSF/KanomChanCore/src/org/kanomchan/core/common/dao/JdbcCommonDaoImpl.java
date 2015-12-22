@@ -38,7 +38,6 @@ import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.processhandler.ProcessContext;
-import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -503,50 +502,59 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		return resultList;
 	}
+//	@Override
+//	public <T extends Object> T save(T target) throws RollBackException, NonRollBackException {
+//		return save(target, true, false,null);
+//	}
+	
 	@Override
 	public <T extends Object> T save(T target) throws RollBackException, NonRollBackException {
-		return save(target, true, false,null);
+		return save(target, false,null);
 	}
 	
 	@Override
-	public <T extends Object> T save(T target,boolean includeMinusOne) throws RollBackException, NonRollBackException {
-		return save(target, includeMinusOne, false,null);
+	public <T extends Object> T save(T target, boolean tableLang, String langCode) throws RollBackException, NonRollBackException {
+		Class<? extends Object> clazz = target.getClass();
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+		Method methodGetId = classMapper.getPropertyId().getMethodGet();
+		KeyHolder keyHolder = saveKeyHolder(target, tableLang, langCode);
+		target = idToBean(keyHolder,target,methodSetId, methodGetId);
+ 		return target;
 	}
 	
-	@Override
-	public <T extends Object> T save(T target, boolean includeMinusOne, boolean tableLang, String langCode) throws RollBackException, NonRollBackException {
+	public KeyHolder saveKeyHolder(Object target, boolean tableLang, String langCode) throws RollBackException, NonRollBackException {
 		
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			EntityBean entityBean = (EntityBean) target;
 			entityBean.setCreateDate(new Date());
 			entityBean.setCreateUser(processContext.getUserName());
+			entityBean.setUpdateDate(null);
+			entityBean.setUpdateUser(null);
 		}
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
 		Table table = clazz.getAnnotation(Table.class);
-		
+		int i=0;
 		sb.append(" INSERT INTO  ");
 		if(tableLang)
 			sb.append(table.name()+"_LANG");
 		else
 			sb.append(table.name());
 		
-//		sb.append(" SET ");
-		List<Object> para = new LinkedList<Object>();
-//		Method[] arrmet = clazz.getMethods();
-		List<String> listColumnName = new LinkedList<String>();
-		List<String> listParaName = new LinkedList<String>();
-//		List<String> listPkName = new LinkedList<String>();
-//		List<Object> listPkId = new LinkedList<Object>();
-		Method methodSetId = classMapper.getPropertyId().getMethodSet();
+		List<Criteria> setList = new LinkedList<Criteria>();
+		Map<String, Object> para = new HashMap<String, Object>();
+		
+//		Method methodSetId = classMapper.getPropertyId().getMethodSet();
 		Method methodGetId = classMapper.getPropertyId().getMethodGet();
 		
 		if(langCode != null && !langCode.equals("")){
-			listColumnName.add("LANG_CODE3");
-			listParaName.add("?");
-			para.add(langCode); 
+//			listColumnName.add("LANG_CODE3");
+//			listParaName.add("?");
+//			para.add(langCode); 
+			setList.add(new Criteria("LANG_CODE3",(Object)langCode,"LANG_CODE3"+i++));
 		}
 		
 		for (String  columnName : classMapper.getColumn().keySet()) {
@@ -555,28 +563,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 				Method method = property.getMethodGet();
 				try {
 					if(!tableLang||(tableLang && checkService.checkColumnNameInTableLang(table.name(), columnName))){
-						
-						if(property.getColumnType() == ColumnType.column){
-							Object value = method.invoke(target);
-							if(value != null){
-								if(value instanceof Number){
-									if(includeMinusOne || ((Number)value).intValue() !=-1){
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add("?");
-//									if(((Number)value).longValue() == 0)
-//										value = null;
-										para.add(value);
-									}
-								}else{
-									if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add("?");
-										para.add(value);
-									}
-									
-								}
-							}
-						}
+
 						if(property.getColumnType() == ColumnType.joinColumns){
 							Object joinColumnsObject = property.getJoinColumns().getMethodGet().invoke(target);
 							if(joinColumnsObject!=null){
@@ -585,69 +572,61 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 								if(joinColumnsObject == null)
 									continue;
 								Object value = property.getMethodGet().invoke(joinColumnsObject);
-								if(checkService.checkNeedleList(table.name(),columnName) && value != null && ((Number)value).intValue() ==-1){
-									continue;
-								}
-								if(value!=null){
-									if(value instanceof Number){
-										if(includeMinusOne || ((Number)value).intValue() !=-1){
-											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-											listParaName.add("?");
-											if(((Number)value).intValue() == 0)
-												value = null;
-											para.add(value);
+								//pregen
+								if(value instanceof Number){
+									if(((Number)value).intValue() ==-1){
+										if(checkService.checkIncludeMinusOne(table.name(),columnName)){
+											setList.add(new Criteria(columnName,value,columnName+i++));
+										}else if (checkService.checkClearableList(table.name(),columnName)){
+											setList.add(new Criteria(columnName,(Object)null,columnName+i++));
 										}
 									}else{
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add("?");
-										if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
-											value = null;
-										para.add(value);
+										setList.add(new Criteria(columnName,value,columnName+i++));
 									}
+								}else if(value instanceof Date){
+									if(((Date) value).getTime() == 0L){
+										setList.add(new Criteria(columnName,(Object)null,columnName+i++));
+									}else{
+										setList.add(new Criteria(columnName,value,columnName+i++));
+									}
+								}else{
+									setList.add(new Criteria(columnName,value,columnName+i++));
 								}
-//							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-//							listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-//							listParaName.add("?");
-//							para.add(value);
+								//pregen
 							}
 							
 						}
-						if(property.getColumnType() == ColumnType.joinColumn){
+						if(property.getColumnType() == ColumnType.joinColumn||property.getColumnType() == ColumnType.column){
 							Object value = method.invoke(target);
+							if(value == null)
+								continue;
+							Entity entity = method.getReturnType().getAnnotation(Entity.class);
+							if(entity!=null){
+								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+							}
 							if(value != null){
-								Entity entity = method.getReturnType().getAnnotation(Entity.class);
-								if(entity!=null){
-									ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
-									value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-									if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
-										continue;
-									}
-									if(value!=null ) {
-										if(value instanceof Number){
-											if(value != null && ((Number)value).intValue() ==-1&&checkService.checkClearableList(table.name(),columnName)){
-												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-												listParaName.add(" (NULL) ");
-											}else if(includeMinusOne || ((Number)value).intValue() !=-1){
-												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-												listParaName.add("?");
-												if((Long)value == 0)
-													value = null;
-												para.add(value);
-											}
-										}else{
-											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-											listParaName.add("?");
-											if((Long)value == 0)
-												value = null;
-											para.add(value);
+								//pregen
+								if(value instanceof Number){
+									if(((Number)value).intValue() ==-1){
+										if(checkService.checkIncludeMinusOne(table.name(),columnName)){
+											setList.add(new Criteria(columnName,value,columnName+i++));
+										}else if (checkService.checkClearableList(table.name(),columnName)){
+											setList.add(new Criteria(columnName,(Object)null,columnName+i++));
 										}
+									}else{
+										setList.add(new Criteria(columnName,value,columnName+i++));
+									}
+								}else if(value instanceof Date){
+									if(((Date) value).getTime() == 0L){
+										setList.add(new Criteria(columnName,(Object)null,columnName+i++));
+									}else{
+										setList.add(new Criteria(columnName,value,columnName+i++));
 									}
 								}else{
-									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-									listParaName.add("?");
-									para.add(value);
+									setList.add(new Criteria(columnName,value,columnName+i++));
 								}
-								
+								//pregen
 							}
 						}
 					}
@@ -655,9 +634,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 					if(property.getColumnType() == ColumnType.id){
 						Object value = method.invoke(target);
 						if(value != null){
-							listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-							listParaName.add("?");
-							para.add(value);
+							setList.add(new Criteria(columnName,value,columnName+i++));
 						}
 					}
 					
@@ -666,9 +643,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						if(embeddedIdObject!=null){
 							Object valueEmbeddedId = method.invoke(embeddedIdObject);
 							if(valueEmbeddedId!=null){
-								listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-								listParaName.add("?");
-								para.add(valueEmbeddedId);
+								setList.add(new Criteria(columnName,valueEmbeddedId,columnName+i++));
 							}
 						}
 					}
@@ -679,10 +654,26 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			
 			}
 		}
+		StringBuilder sbColumnName = new StringBuilder();
+		StringBuilder sbParaName = new StringBuilder();
+		for (int y = 0; y < setList.size(); y++) {
+			Criteria craCriteria = setList.get(y);
+			sbColumnName.append( y > 0 ? ",":"" );
+			sbColumnName.append(PI_CLOUM+craCriteria.getColumn()+PI_CLOUM);
+			
+			sbParaName.append( y > 0 ? ",":"" );
+			if(craCriteria.getValue()==null){
+				sbParaName.append(" (NULL) ");
+			}else{
+				sbParaName.append(COLON);
+				sbParaName.append(craCriteria.getParam());
+				para.put(craCriteria.getParam(), craCriteria.getValue());
+			}
+		}
 		sb.append(" ( ");
-		sb.append(Joiner.on(" , ").skipNulls().join(listColumnName));
+		sb.append(sbColumnName.toString());
 		sb.append(" ) VALUES ( ");
-		sb.append(Joiner.on(" , ").skipNulls().join(listParaName));
+		sb.append(sbParaName.toString());
 		sb.append(" ) ");
 //		if(listPkName.size() != 0){
 //			sb.append(" WHERE ");
@@ -691,15 +682,20 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //				para.add(id);
 		KeyHolder keyHolder;
 		try{
-			keyHolder = executeNativeSQLGetIdKeyHolder(sb.toString(),para.toArray());
+			keyHolder = executeNativeSQLGetIdKeyHolder(sb.toString(),para);
+			return keyHolder;
 		} catch (BadSqlGrammarException ba) {
 			throw new RollBackTechnicalException(CommonMessageCode.COM4994,ba);
 		}
-		target = idToBean(keyHolder,target,methodSetId, methodGetId);
- 		return target;
+//		return null;
+//		if(!tableLang)
+//			target = idToBean(keyHolder,target,methodSetId, methodGetId);
+// 		return target;
 	}
 	
-	private <T> T idToBean(KeyHolder keyHolder,T target,Method methodSetId, Method methodGet){
+	
+	
+	public <T> T idToBean(KeyHolder keyHolder,T target,Method methodSetId, Method methodGet){
 		if(methodSetId !=null&&keyHolder!=null){
 			try {
 				if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
@@ -771,16 +767,16 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		return target;
 	}
-	@Override
-	public <T extends Object> T saveOrUpdate(T t, boolean includeMinusOne) throws RollBackException, NonRollBackException {
-		return saveOrUpdate(t, includeMinusOne,false,null,null);
-	}
+//	@Override
+//	public <T extends Object> T saveOrUpdate(T t) throws RollBackException, NonRollBackException {
+//		return saveOrUpdate(t,false,null,null);
+//	}
 	@Override
 	public <T extends Object> T saveOrUpdate(T t) throws RollBackException, NonRollBackException {
-		return saveOrUpdate(t, true,false,null,null);
+		return saveOrUpdate(t,false,null,null);
 	}
 	@Override
-	public <T extends Object> T saveOrUpdate(T target, boolean includeMinusOne, boolean tableLang,String code,Long idLang) throws RollBackException, NonRollBackException {
+	public <T extends Object> T saveOrUpdate(T target, boolean tableLang,String code,Long idLang) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper =JPAUtil.getClassMapper(target.getClass());
 		Object objectId = null;
 		try {
@@ -791,207 +787,131 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		}
 		if(objectId!=null){
 			try{
-			return update(target, includeMinusOne,tableLang,code,idLang);
+			return update(target,tableLang,code,idLang);
 			} catch (Exception e){
 //				logger.error("saveOrUpdate message ", e);
-				return save(target, includeMinusOne,tableLang ,code);
+				return save(target,tableLang ,code);
 			}
 			
 		}
 		else{
-			return save(target, includeMinusOne,tableLang ,code);
+			return save(target,tableLang ,code);
 		}
 	}
 //	public <T extends Object> T update(T t) throws RollBackException, NonRollBackException {
 //		return t;
 //	}
-	@Override
-	public <T extends Object> T update(T target) throws RollBackException, NonRollBackException{
-		return update(target, true,false,null,null);
-	}
+//	@Override
+//	public <T extends Object> T update(T target) throws RollBackException, NonRollBackException{
+//		return update(target, true,false,null,null);
+//	}
 	
 	@Override
-	public <T extends Object> T update(T target, boolean includeMinusOne) throws RollBackException, NonRollBackException{
-		return update(target, includeMinusOne,false,null,null);
+	public <T extends Object> T update(T target) throws RollBackException, NonRollBackException{
+		return update(target,false,null,null);
 	}
 	@Override
-	public <T extends Object> T update(T target, boolean includeMinusOne, boolean tableLang, String langCode,Long idLang) throws RollBackException, NonRollBackException{
+	public <T extends Object> T update(T target, boolean tableLang, String langCode,Long idLang) throws RollBackException, NonRollBackException{
 		if(target instanceof EntityBean){
 			ProcessContext processContext = CurrentThread.getProcessContext();
 			EntityBean entityBean = (EntityBean) target;
 			entityBean.setUpdateDate(new Date());
 			entityBean.setUpdateUser(processContext.getUserName());
 		}
+		int i=0;
 		Class<? extends Object> clazz = target.getClass();
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
 		StringBuilder sb = new StringBuilder();
 		Table table = clazz.getAnnotation(Table.class);
-		
-		List<Object> para = new LinkedList<Object>();
-		List<String> listPkName = new LinkedList<String>();
-		List<Object> listPkNamePara = new LinkedList<Object>();
-		List<String> listColumnName = new LinkedList<String>();
-		List<String> listParaName = new LinkedList<String>();
+		List<Criteria> setList = new LinkedList<Criteria>();
+		List<Criteria> pkParaList = new LinkedList<Criteria>();
+		Map<String, Object> para = new HashMap<String, Object>();
 		
 		sb.append(" UPDATE ");
 		if(langCode != null && !langCode.equals("")){
-			listColumnName.add("LANG_CODE3");
-			listParaName.add("?");
-			para.add(langCode); 
+			setList.add(new Criteria("LANG_CODE3",(Object)langCode,"LANG_CODE3"+i++));
 		}
 		for (String  columnName : classMapper.getColumn().keySet()) {
 			for(Property property : classMapper.getColumn().get(columnName)){
 				Method method = property.getMethodGet();
 				try {
+//					checkColumnNameInTableLang
 					if(!tableLang||(tableLang && checkService.checkColumnNameInTableLang(table.name(), columnName))){
-						
-						if(property.getColumnType() == ColumnType.column){
-							Object value = method.invoke(target);
-							if(value != null){
-								if(value instanceof Number){
-									if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add(" (NULL) ");
-									}else if(includeMinusOne || ((Number)value).intValue() !=-1){
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add("?");
-//									if(((Number)value).intValue() == 0)
-//										value = null;
-										para.add(value);
-									}
-								}else if(value instanceof Date){
-									if(((Date) value).getTime() == 0L){
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add(" (NULL) ");
-									}else{
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add("?");
-										para.add(value);
-									}
-								}else{
-									if(value.equals("NULL") && "NULL".equals(value)){
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add(" NULL ");
-									}else if(includeMinusOne || (!value.equals("-1") && !"-1".equals(value))){
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add("?");
-										para.add(value);
-									} 
-								}
-							}
-						}
 						if(property.getColumnType() == ColumnType.joinColumns){
 							Object joinColumnsObject = property.getJoinColumns().getMethodGet().invoke(target);
 							if(joinColumnsObject!=null){
 								if(property.getEmbeddedId()!=null)
 									joinColumnsObject = property.getEmbeddedId().getMethodGet().invoke(joinColumnsObject);
 								Object value = property.getMethodGet().invoke(joinColumnsObject);
-								if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
-									continue;
-								}
-								if(value!=null){
+
+								if(value != null){
+									//pregen
 									if(value instanceof Number){
-										if(includeMinusOne || ((Number)value).intValue() !=-1){
-											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-											listParaName.add("?");
-											if(((Number)value).intValue() == 0)
-												value = null;
-											para.add(value);
+										if(((Number)value).intValue() ==-1){
+											if(checkService.checkIncludeMinusOne(table.name(),columnName)){
+												setList.add(new Criteria(columnName,value,columnName+i++));
+											}else if (checkService.checkClearableList(table.name(),columnName)){
+												setList.add(new Criteria(columnName,(Object)null,columnName+i++));
+											}
+										}else{
+											setList.add(new Criteria(columnName,value,columnName+i++));
 										}
 									}else if(value instanceof Date){
-										Date date = new Date();
-										date.setTime(((Date) value).getTime());
 										if(((Date) value).getTime() == 0L){
-											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-											listParaName.add(" (NULL) ");
+											setList.add(new Criteria(columnName,(Object)null,columnName+i++));
 										}else{
-											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-											listParaName.add("?");
-											para.add(value);
+											setList.add(new Criteria(columnName,value,columnName+i++));
 										}
 									}else{
-										listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-										listParaName.add("?");
-										if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
-											value = null;
-										para.add(value);
+										setList.add(new Criteria(columnName,value,columnName+i++));
 									}
+									//pregen
 								}
-//							value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-//							listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-//							listParaName.add("?");
-//							para.add(value);
 							}
 							
 						}
-						if(property.getColumnType() == ColumnType.joinColumn){
+						if(property.getColumnType() == ColumnType.joinColumn||property.getColumnType() == ColumnType.column){
 							Object value = method.invoke(target);
+							if(value == null)
+								continue;
+							Entity entity = method.getReturnType().getAnnotation(Entity.class);
+							if(entity!=null){
+								ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
+								value = classMapperId.getPropertyId().getMethodGet().invoke(value);
+							}
 							if(value != null){
-								Entity entity = method.getReturnType().getAnnotation(Entity.class);
-								if(entity!=null){
-									ClassMapper classMapperId = JPAUtil.getClassMapper(method.getReturnType());
-									
-									value = classMapperId.getPropertyId().getMethodGet().invoke(value);
-									
-									if(value != null && ((Number)value).intValue() ==-1&&checkService.checkNeedleList(table.name(),columnName)){
-										continue;
-									}
-									
-									if(value!=null ) {
-										if(value instanceof Number){
-											if( value != null && ((Number)value).intValue() ==-1 && checkService.checkClearableList(table.name(),columnName)){
-												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-												listParaName.add(" (NULL) ");
-											}else if(includeMinusOne || ((Number)value).intValue() !=-1){
-												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-												listParaName.add("?");
-												if(((Number)value).intValue() == 0)
-													value = null;
-												para.add(value);
-											}
-										}else if(value instanceof Date){
-											Date date = new Date();
-											date.setTime(((Date) value).getTime());
-											if(((Date) value).getTime() == 0L){
-												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-												listParaName.add(" (NULL) ");
-											}else{
-												listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-												listParaName.add("?");
-												para.add(value);
-											}
-										}else{
-											listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-											listParaName.add("?");
-											if("null".equalsIgnoreCase(value+"")||(value+"").equals("0"))
-												value = null;
-											para.add(value);
+								//pregen
+								if(value instanceof Number){
+									if(((Number)value).intValue() ==-1){
+										if(checkService.checkIncludeMinusOne(table.name(),columnName)){
+											setList.add(new Criteria(columnName,value,columnName+i++));
+										}else if (checkService.checkClearableList(table.name(),columnName)){
+											setList.add(new Criteria(columnName,(Object)null,columnName+i++));
 										}
+									}else{
+										setList.add(new Criteria(columnName,value,columnName+i++));
+									}
+								}else if(value instanceof Date){
+									if(((Date) value).getTime() == 0L){
+										setList.add(new Criteria(columnName,(Object)null,columnName+i++));
+									}else{
+										setList.add(new Criteria(columnName,value,columnName+i++));
 									}
 								}else{
-									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-									listParaName.add("?");
-									para.add(value);
+									setList.add(new Criteria(columnName,value,columnName+i++));
 								}
-							}else{
-								if(checkService.checkClearableList(table.name(),columnName)){
-									listColumnName.add(PI_CLOUM+columnName+PI_CLOUM);
-									listParaName.add(" (NULL) ");
-								}
+								//pregen
 							}
 						}
-					}
+					}//case checkColumnNameInTableLang
+					
 					if(property.getColumnType() == ColumnType.id){
 						Object value = method.invoke(target);
 						if(value != null){
 							if(tableLang){
-								listPkName.add(PI_CLOUM+columnName+ "_LANG"+PI_CLOUM);
-								listParaName.add("?");
-								listPkNamePara.add(idLang);
+								pkParaList.add(new Criteria(columnName+"_LANG",idLang,columnName+"_LANG"+i++));
 							}else{
-								listPkName.add(PI_CLOUM+columnName+PI_CLOUM);
-								listParaName.add("?");
-								listPkNamePara.add(value);
+								pkParaList.add(new Criteria(columnName,value,columnName+i++));
 							}
 						}
 					}
@@ -1002,13 +922,9 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 							Object valueEmbeddedId = method.invoke(embeddedIdObject);
 							if(valueEmbeddedId!=null){
 								if(tableLang){
-									listPkName.add(PI_CLOUM+columnName+"_LANG"+PI_CLOUM);
-									listParaName.add("?");
-									listPkNamePara.add(valueEmbeddedId);
+									pkParaList.add(new Criteria(columnName+"_LANG",idLang,columnName+"_LANG"+i++));
 								}else{
-									listPkName.add(PI_CLOUM+columnName+PI_CLOUM);
-									listParaName.add("?");
-									listPkNamePara.add(valueEmbeddedId);
+									pkParaList.add(new Criteria(columnName,valueEmbeddedId,columnName+i++));
 								}
 								
 							}
@@ -1021,65 +937,49 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 			}
 		}
 		if(tableLang){
-			listPkName.add(PI_CLOUM+"LANG_CODE3"+PI_CLOUM);
-			listParaName.add("?");
-			listPkNamePara.add(langCode);
+			pkParaList.add(new Criteria("LANG_CODE3",(Object)langCode,"LANG_CODE3"+i++));
 		}
 		if(tableLang)
 			sb.append(table.name()+"_LANG");
 		else
 			sb.append(table.name());
 		sb.append(" SET ");
-//		sb.append(" ( ");
-		for (int i = 0; i < listColumnName.size(); i++) {
-			sb.append( i > 0 ? ",":"" );
-			sb.append(listColumnName.get(i));
+		for (int y = 0; y < setList.size(); y++) {
+			Criteria craCriteria = setList.get(y);
+			sb.append( y > 0 ? ",":"" );
+			sb.append(PI_CLOUM+craCriteria.getColumn()+PI_CLOUM);
 			sb.append(" = ");
-			sb.append(listParaName.get(i));
+			if(craCriteria.getValue()==null){
+				sb.append(" (NULL) ");
+			}else{
+				sb.append(COLON);
+				sb.append(craCriteria.getParam());
+				para.put(craCriteria.getParam(), craCriteria.getValue());
+			}
 		}
-//		sb.append(" ) ");
-		
-		if(listPkName.size() > 0){
+		if(pkParaList.size() > 0){
 			sb.append(" WHERE ");
-			for (int i = 0; i < listPkName.size(); i++) {
-				sb.append( i > 0 ? " AND ":"" );
-				sb.append(listPkName.get(i));
+			for (int y = 0; y < pkParaList.size(); y++) {
+				Criteria craCriteria = pkParaList.get(y);
+				sb.append( y > 0 ? " AND ":"" );
+				sb.append(PI_CLOUM+craCriteria.getColumn()+PI_CLOUM);
 				sb.append(" = ");
-				sb.append(listParaName.get(i));
-				para.add(listPkNamePara.get(i));
+				sb.append(COLON);
+				sb.append(craCriteria.getParam());
+				para.put(craCriteria.getParam(), craCriteria.getValue());
 			}
 		}
 		
-		if(listColumnName.size() > 0&&listPkName.size() > 0){
+		if(setList.size() > 0&&pkParaList.size() > 0){
 			int row = 0;
 			try{
-				row = executeNativeSQL(sb.toString(),para.toArray());
+				row = executeNativeSQL(sb.toString(),para);
 			} catch (BadSqlGrammarException ba) {
 				throw new RollBackTechnicalException(CommonMessageCode.COM4993,ba);
 			}
 			if(row == 0){
 				throw new RollBackTechnicalException(CommonMessageCode.COM4993," Row Update 0 SQL:" + sb.toString());
 			}
-//			System.out.println(idNumber);
-//			if(methodSetId !=null&&idNumber!=null){
-//				try {
-//					if(methodSetId.getParameterTypes()!=null&&methodSetId.getParameterTypes().length!=0){
-//						
-//						Class<?> type = methodSetId.getPar6ameterTypes()[0];
-//						if(type == Long.class){
-//							methodSetId.invoke(target, idNumber.longValue());
-//						}else if(type == Integer.class){
-//							methodSetId.invoke(target, idNumber.intValue());
-//						}else if(type == Short.class){
-//							methodSetId.invoke(target, idNumber.shortValue());
-//						}else if(type == Double.class){
-//							methodSetId.invoke(target, idNumber.doubleValue());
-//						}
-//					}
-//				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-//					logger.error("update(T, boolean)", e); //$NON-NLS-1$
-//				}
-//			}
 		}else{
 			if (logger.isDebugEnabled()) {
 				logger.debug("update(T, boolean) - column size 0"); //$NON-NLS-1$
@@ -1417,6 +1317,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	private static final String ORDER = " order by "; 
 	private static final String AILIAT = "  "; 
 	private static final String PI_CLOUM = "`";
+	private static final String COLON = ":";
 	
 	
 	@Override

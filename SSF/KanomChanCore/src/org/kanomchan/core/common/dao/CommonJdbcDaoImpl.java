@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.dao;
 
+import java.beans.IntrospectionException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,14 +13,17 @@ import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.BeanLang;
 import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.Criteria;
+import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
 import org.kanomchan.core.common.constant.CheckService;
 import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
+import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -34,12 +38,12 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	
 	@Override
 	public <T extends Object> T save(T target)throws RollBackException ,NonRollBackException{
-		return save(target, false, false,null);
+		return save(target, false,null);
 	}
 
 	@Override
 	public <T extends Object> T update(T target) throws RollBackException ,NonRollBackException{
-		return update(target,false,false,null,null);
+		return update(target,false,null,null);
 	}
 
 	@Override
@@ -67,11 +71,11 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T> T update(T entity, String langCode3,Long idLang) throws RollBackException ,NonRollBackException {
-		return update(entity, false, true, langCode3,idLang);
+		return update(entity, true, langCode3,idLang);
 	}
 	@Override
 	public <T> T save(T target, String langCode3) throws RollBackException ,NonRollBackException {
-		return save(target, false, true, langCode3);
+		return save(target, true, langCode3);
 	}
 	@Override
 	public <T> T delete(T entity, String langCode3) throws RollBackException ,NonRollBackException {
@@ -227,13 +231,13 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		// TODO Auto-generated method stub
 		
 	}
+//	@Override
+//	public <T extends Object > T saveOrUpdate(T target)throws RollBackException ,NonRollBackException {
+//		return super.saveOrUpdate(target);
+//	}
 	@Override
 	public <T extends Object > T saveOrUpdate(T target)throws RollBackException ,NonRollBackException {
 		return super.saveOrUpdate(target);
-	}
-	@Override
-	public <T extends Object > T saveOrUpdate(T target, boolean includeMinusOne)throws RollBackException ,NonRollBackException {
-		return super.saveOrUpdate(target,includeMinusOne);
 	}
 
 	@Override
@@ -276,7 +280,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 				}
 				if (have == false) {
 					methodSetStatus.invoke(old, "I");
-					this.update(old, false);
+					this.update(old);
 				}
 			}
 			for (T neww : newList) {
@@ -290,20 +294,20 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 							if(idNew.equals(idOld)){
 								if(subListColumnName != null){
 									Object subDetail = methodGetSubDetail.invoke(neww);
-									Object resultSubDetail = this.saveOrUpdate(subDetail, false);
+									Object resultSubDetail = this.saveOrUpdate(subDetail);
 									methodSetSubDetail.invoke(neww, resultSubDetail);
 								}
-								resultList.add(this.update(neww, false));
+								resultList.add(this.update(neww));
 							}
 						}
 					}
 				}else{
 					if(subListColumnName != null){
 						Object subDetail = methodGetSubDetail.invoke(neww);
-						Object resultSubDetail = this.save(subDetail, false);
+						Object resultSubDetail = this.save(subDetail);
 						methodSetSubDetail.invoke(neww, resultSubDetail);
 					}
-					resultList.add(this.save(neww, false));
+					resultList.add(this.save(neww));
 				}
 
 			}
@@ -312,17 +316,17 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 				if(neww != null){
 					if(subListColumnName != null){
 						Object subDetail = methodGetSubDetail.invoke(neww);
-						Object resultSubDetail = this.save(subDetail, false);
+						Object resultSubDetail = this.save(subDetail);
 						methodSetSubDetail.invoke(neww, resultSubDetail);
 					}
-					resultList.add(this.save(neww, false));
+					resultList.add(this.save(neww));
 				}
 			}
 		}else if(oldList != null && oldList.size() > 0){
 			for (T old : oldList) {
 				if(old != null){
 					methodSetStatus.invoke(old, "I");
-					resultList.add(this.update(old, false));
+					resultList.add(this.update(old));
 				}
 			}
 		}
@@ -330,7 +334,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException {
+	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang) throws RollBackException, NonRollBackException {
 		if(beanLang == null)
 			return null;
 		ClassMapper classMapper = (beanLang.getEngLang() != null ? JPAUtil.getClassMapper(beanLang.getEngLang().getClass()) : JPAUtil.getClassMapper(beanLang.getBeanOtherLang().getClass()));
@@ -339,7 +343,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		Object idEng = null;
 		T engLang = null;
 		if(beanLang.getEngLang() != null){
-			engLang = saveOrUpdate(beanLang.getEngLang(), includeMinusOne);
+			engLang = super.saveOrUpdate(beanLang.getEngLang());
 			beanLang.setEngLang(engLang);
 			if(engLang != null){
 				try {
@@ -364,22 +368,43 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 					e.printStackTrace();
 				}
 			}
-			
-			boolean isHaveTableLang = checkLangBean((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()));
-			if(isHaveTableLang){
-				Long idlang =  checkLangBean((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng, "A", beanLang.getLangCode());
-				
-				if(idlang!=null)
-					if(beanLang.getIdLang()==null){
-						otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
-					}else{
-						otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),beanLang.getIdLang());
+			Long idlang = beanLang.getIdLang();
+			if(idlang==null){
+				if(beanLang.getEngLang() != null){
+					if(beanLang.getEngLang() instanceof EntityBean){
+						EntityBean entityBean = (EntityBean) beanLang.getEngLang();
+						idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
 					}
-				else{
-					otherLang = save(beanLang.getOtherLang(), beanLang.getLangCode());
+				}else{
+					if(beanLang.getOtherLang() instanceof EntityBean){
+						EntityBean entityBean = (EntityBean) beanLang.getOtherLang();
+						idlang =  checkLangBean(beanLang.getBeanOtherLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+					}
 				}
-				beanLang.setOtherLang(otherLang);
+			}else{
+				if(checkLangBeanId((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng,idlang)==null){
+					throw new RollBackTechnicalException(CommonMessageCode.COM4986);
+				}
 			}
+			
+			
+			if(idlang!=null)
+				otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
+			else{
+				KeyHolder keyHolder = saveKeyHolder(beanLang.getOtherLang(),true, beanLang.getLangCode());
+				
+				try {
+					Method methodGet = ClassUtil.findGetter(BeanLang.class, "idLang");
+					Method methodSetId= ClassUtil.findSetter(BeanLang.class, "idLang");
+					otherLang = beanLang.getOtherLang();
+					beanLang = idToBean(keyHolder, beanLang, methodSetId, methodGet);
+				} catch (NoSuchFieldException | IntrospectionException e) {
+					e.printStackTrace();
+				}
+			}
+				
+//				otherLang = saveKeyHolder(beanLang.getOtherLang(), beanLang.getLangCode());
+			beanLang.setOtherLang(otherLang);
 		}
 		return beanLang;
 	}
@@ -390,7 +415,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return checkService.checkTableLang(classMapper.getTableName());
 	}
 
-	private Long checkLangBean(Class<? extends Object> class1,String columnName, Object idEng, String string, String langCode) throws RollBackException, NonRollBackException {
+	private Long checkLangBean(Class<? extends Object> class1,String columnName, Object idEng, String status, String langCode) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
 		
 		// check have table Lang
@@ -406,11 +431,42 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		sb.append(columnName);
 		sb.append(" = :ID_ENG");
 		sb.append(" AND LANG_CODE3 = :LANG_CODE3");
-		sb.append(" AND STATUS = :STATUS");
+		if(!"".equals(status) && status != null){
+			sb.append(" AND STATUS = :STATUS");
+		}
 		Map<String,  Object>params = new HashMap<String, Object>();
 		params.put("ID_ENG", idEng);
 		params.put("LANG_CODE3", langCode);
-		params.put("STATUS", string);
+		if(!"".equals(status) && status != null){
+			params.put("STATUS", status);
+		}
+		List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
+		if(conut==null ||conut.size()==0){
+			return null;
+		}else{
+			return conut.get(0);
+		}
+		
+	}
+	
+	private Long checkLangBeanId(Class<? extends Object> class1,String columnName, Object idEng, Object idLang) throws RollBackException, NonRollBackException {
+		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
+		StringBuilder sb = new StringBuilder();
+		sb.append("select ");
+		sb.append(columnName);
+		sb.append("_LANG from ");
+		sb.append(classMapper.getTableName());
+		sb.append("_LANG ");
+		sb.append(" WHERE ");
+		sb.append(columnName);
+		sb.append(" = :ID_ENG");
+		sb.append(" AND ");
+		sb.append(columnName);
+		sb.append("_LANG ");
+		sb.append(" = :ID_LANG");
+		Map<String,  Object>params = new HashMap<String, Object>();
+		params.put("ID_ENG", idEng);
+		params.put("ID_LANG", idLang);
 		List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
 		if(conut==null ||conut.size()==0){
 			return null;
@@ -420,8 +476,5 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		
 	}
 
-	@Override
-	public <T> BeanLang<T> saveOrUpdate(BeanLang<T> beanLang) throws RollBackException,NonRollBackException {
-		return saveOrUpdate(beanLang,false);
-	}
+
 }

@@ -15,6 +15,7 @@ public class LoginIOBean  implements LoginIO ,Serializable{
 	
 	private UserBean userBean;
 	private MenuVO menuVO;
+	private String gotoPage;
 	private Map<String, Object> session = new HashMap<String, Object>();
 	private List<Cookie> cookies = new ArrayList<Cookie>();
 	public UserBean getUserBean() {
@@ -35,12 +36,19 @@ public class LoginIOBean  implements LoginIO ,Serializable{
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 	}
+	public String getGotoPage() {
+		return gotoPage;
+	}
+	public void setGotoPage(String gotoPage) {
+		this.gotoPage = gotoPage;
+	}
+	@Override
 	public List<Cookie> getCookies() {
 		return cookies;
 	}
+	@Override
 	public void setCookies(List<Cookie> cookies) {
 		this.cookies = cookies;
 	}
-
 	
 }

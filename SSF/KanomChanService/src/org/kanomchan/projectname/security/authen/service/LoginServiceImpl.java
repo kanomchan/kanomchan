@@ -13,6 +13,7 @@ import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.service.LocationService;
 import org.kanomchan.core.openid.service.OpenIdClientService;
+import org.kanomchan.core.security.authen.bean.IUserDefault;
 import org.kanomchan.core.security.authen.service.AuthenService;
 import org.kanomchan.core.security.authen.service.LoginService;
 import org.kanomchan.core.security.authorize.service.UserAuthorizeService;
@@ -20,6 +21,7 @@ import org.kanomchan.core.security.authorize.service.UserMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
@@ -69,6 +71,12 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public ServiceResult<LoginIO> performLoginWithOutPasswordAndPutDataSession(Long userId, CookieOrm cookieOrm) throws NonRollBackException,RollBackException {
 		throw new RollBackProcessException(CommonMessageCode.ATC2001);
+	}
+	
+	@Override
+	public ServiceResult<LoginIO> performLoginAndPutDataSession(UserBean userBean, IUserDefault userDefault)throws NonRollBackException, RollBackException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
