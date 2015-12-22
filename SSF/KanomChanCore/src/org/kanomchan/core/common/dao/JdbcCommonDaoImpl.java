@@ -1477,4 +1477,23 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		T result = nativeQueryOneRow(queryString, JPAUtil.getRm(clazz), params);
 		return result;
 	}
+//	@Override
+//	public int getCount(String sql, Object... sss) throws RollBackException, NonRollBackException {
+////		Long count = nativeQueryOneRowForObject(sql, Long.class, params) ;
+//		
+//		Map<String, Object> params11 = new HashMap<String, Object>();
+//		params11.put(key, value)
+//		
+//		Long count = jdbcTemplate.queryForObject(sql, Long.class, sss) ;
+//		return count;
+//	}
+	
+	@Override
+	public Integer getCount(String sql, Object... params)throws RollBackException, NonRollBackException {
+		
+		Integer totalRows = nativeQueryOneRowForObject(sql, Integer.class, params);
+		
+		return totalRows;
+		
+	}
 }

@@ -1,5 +1,6 @@
 package org.kanomchan.core.common.io;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import javax.servlet.http.Cookie;
 import org.kanomchan.core.common.bean.MenuVO;
 import org.kanomchan.core.common.bean.UserBean;
 
-public class LoginIOBean  implements LoginIO{
+public class LoginIOBean  implements LoginIO ,Serializable{
 	
 	private UserBean userBean;
 	private MenuVO menuVO;
@@ -41,10 +42,13 @@ public class LoginIOBean  implements LoginIO{
 	public void setGotoPage(String gotoPage) {
 		this.gotoPage = gotoPage;
 	}
+	@Override
 	public List<Cookie> getCookies() {
 		return cookies;
 	}
+	@Override
 	public void setCookies(List<Cookie> cookies) {
 		this.cookies = cookies;
 	}
+	
 }

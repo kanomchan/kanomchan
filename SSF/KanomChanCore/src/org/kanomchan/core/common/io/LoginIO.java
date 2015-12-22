@@ -17,6 +17,8 @@ public interface LoginIO {
 	public Map<String, Object> getSession();
 	public void setSession(Map<String, Object> session);
 	public List<Cookie> getCookies();
+	public void setCookies(List<Cookie> cookies);
 	public String getGotoPage();
 	public void setGotoPage(String gotoPage);
+
 }

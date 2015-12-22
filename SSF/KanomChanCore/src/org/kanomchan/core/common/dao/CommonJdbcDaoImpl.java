@@ -15,12 +15,14 @@ import org.kanomchan.core.common.bean.ClassMapper;
 import org.kanomchan.core.common.bean.Criteria;
 import org.kanomchan.core.common.bean.EntityBean;
 import org.kanomchan.core.common.bean.PagingBean;
+import org.kanomchan.core.common.constant.CheckService;
 import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackTechnicalException;
 import org.kanomchan.core.common.util.ClassUtil;
 import org.kanomchan.core.common.util.JPAUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,8 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	 */
 	private static final Logger logger = Logger.getLogger(CommonJdbcDaoImpl.class);
 
+	@Autowired
+	private CheckService checkService;
 	
 	@Override
 	public <T extends Object> T save(T target)throws RollBackException ,NonRollBackException{
@@ -398,16 +402,23 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 					e.printStackTrace();
 				}
 			}
-				
-//				otherLang = saveKeyHolder(beanLang.getOtherLang(), beanLang.getLangCode());
-			
 			beanLang.setOtherLang(otherLang);
 		}
 		return beanLang;
 	}
+	
+	private boolean checkLangBean(Class<? extends Object> class1) throws RollBackException, NonRollBackException {
+		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
+		// check have table Lang
+		return checkService.checkTableLang(classMapper.getTableName());
+	}
 
 	private Long checkLangBean(Class<? extends Object> class1,String columnName, Object idEng, String status, String langCode) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
+		
+		// check have table Lang
+		checkService.checkTableLang(classMapper.getTableName());
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append("select ");
 		sb.append(columnName);
