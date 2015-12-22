@@ -44,4 +44,8 @@ public enum CommonMessageCode implements MessageCode {
 		return "code : "+name()+" dec : "+dec;
 	}
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> refs/remotes/origin/master

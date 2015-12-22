@@ -402,8 +402,6 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 					e.printStackTrace();
 				}
 			}
-				
-//				otherLang = saveKeyHolder(beanLang.getOtherLang(), beanLang.getLangCode());
 			beanLang.setOtherLang(otherLang);
 		}
 		return beanLang;
