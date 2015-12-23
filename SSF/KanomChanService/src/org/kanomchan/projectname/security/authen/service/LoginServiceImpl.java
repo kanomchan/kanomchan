@@ -71,6 +71,7 @@ public class LoginServiceImpl implements LoginService {
 		throw new RollBackProcessException(CommonMessageCode.ATC2001);
 	}
 
+<<<<<<< HEAD
 
 	@Autowired
 	private AuthenService authenService;
@@ -129,3 +130,6 @@ public class LoginServiceImpl implements LoginService {
 
 }
 
+=======
+}
+>>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git

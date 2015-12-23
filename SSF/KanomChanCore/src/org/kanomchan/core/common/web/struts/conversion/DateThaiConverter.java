@@ -112,12 +112,16 @@ public class DateThaiConverter extends DateConverter {
                 result = (Date) convertValue(context, target, member, propertyName, value, toType);
             } else if (!"".equals(value)) { // we've already tried the types we know
                 result = (Date) convertValue(context, value, toType);
+<<<<<<< HEAD
             }else if(java.util.Date.class == toType){
             	if("".equals(value)||(value!=null&&"".equals(((String)value).trim()))){
                 	result = new Date(0);
                 }
             }
             
+=======
+            }
+>>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git
 
             if (result == null && value != null && !"".equals(value)) {
                 throw new XWorkException("Cannot create type " + toType + " from value " + value);

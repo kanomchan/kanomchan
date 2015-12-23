@@ -15,6 +15,7 @@ public class LoginIOBean  implements LoginIO ,Serializable{
 	
 	private UserBean userBean;
 	private MenuVO menuVO;
+<<<<<<< HEAD
 	private String gotoPage;
 	private Map<String, Object> session = new HashMap<String, Object>();
 	private List<Cookie> cookies = new ArrayList<Cookie>();
@@ -50,5 +51,34 @@ public class LoginIOBean  implements LoginIO ,Serializable{
 	public void setCookies(List<Cookie> cookies) {
 		this.cookies = cookies;
 	}
+=======
+	private Map<String, Object> session = new HashMap<String, Object>();
+	private List<Cookie> cookies = new ArrayList<Cookie>();
+	public UserBean getUserBean() {
+		return userBean;
+	}
+	public void setUserBean(UserBean userBean) {
+		this.userBean = userBean;
+	}
+	public MenuVO getMenuVO() {
+		return menuVO;
+	}
+	public void setMenuVO(MenuVO menuVO) {
+		this.menuVO = menuVO;
+	}
+	public Map<String, Object> getSession() {
+		return session;
+	}
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
+	}
+	public List<Cookie> getCookies() {
+		return cookies;
+	}
+	public void setCookies(List<Cookie> cookies) {
+		this.cookies = cookies;
+	}
+
+>>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git
 	
 }

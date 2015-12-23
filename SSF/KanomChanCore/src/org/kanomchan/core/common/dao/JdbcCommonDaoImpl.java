@@ -1477,6 +1477,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		T result = nativeQueryOneRow(queryString, JPAUtil.getRm(clazz), params);
 		return result;
 	}
+<<<<<<< HEAD
 //	@Override
 //	public int getCount(String sql, Object... sss) throws RollBackException, NonRollBackException {
 ////		Long count = nativeQueryOneRowForObject(sql, Long.class, params) ;
@@ -1496,4 +1497,6 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		return totalRows;
 		
 	}
+=======
+>>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git
 }

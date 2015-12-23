@@ -78,4 +78,8 @@ public class Criteria {
 	public void setParam(String param) {
 		this.param = param;
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git
