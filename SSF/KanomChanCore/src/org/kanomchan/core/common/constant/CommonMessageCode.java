@@ -30,21 +30,7 @@ public enum CommonMessageCode implements MessageCode {
 	, KEY3989("")
 	, KEY3988("");
 
-<<<<<<< HEAD
-	private CommonMessageCode(String dec){
-		this.dec = dec;
-	}
-	private String dec;
-	
-	public String getCode() {
-		return name();
-	}
-	
-	@Override
-	public String toString() {
-		return "code : "+name()+" dec : "+dec;
-	}
-=======
+
 
 	private CommonMessageCode(String dec){
 		this.dec = dec;
@@ -60,5 +46,4 @@ public enum CommonMessageCode implements MessageCode {
 		return "code : "+name()+" dec : "+dec;
 	}
 
->>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git
 }

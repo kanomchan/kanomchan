@@ -139,12 +139,6 @@ public interface JdbcCommonDao {
 
 	public <T> List<T> findByColumn(Class<T> clazz, List<Criteria> criterias,PagingBean pagingBean, boolean like) throws RollBackException,NonRollBackException;
 
-<<<<<<< HEAD
 	public Integer getCount(String sql, Object... params) throws RollBackException,NonRollBackException;
 
-	
-=======
-
-
->>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git
 }

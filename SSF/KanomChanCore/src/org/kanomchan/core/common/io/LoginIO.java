@@ -18,11 +18,7 @@ public interface LoginIO {
 	public void setSession(Map<String, Object> session);
 	public List<Cookie> getCookies();
 	public void setCookies(List<Cookie> cookies);
-<<<<<<< HEAD
 	public String getGotoPage();
 	public void setGotoPage(String gotoPage);
-=======
-	
->>>>>>> branch 'v1.4.0' of https://github.com/viatoro/kanomchan.git
 
 }
