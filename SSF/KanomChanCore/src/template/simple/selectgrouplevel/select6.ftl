@@ -218,6 +218,12 @@
 	    color: #888;
 	    font-weight: bold;
 	}
+	.select6_${parameters.id} .spinner-search-div{
+		display: none;
+	    position: absolute;
+	    right: 20px;
+	    bottom: 0px;
+	}
 </style>
 <div class="select6-wrapper multiple select6_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
 	<div class="select6-input-box">
@@ -262,6 +268,9 @@
 			<div class="row">
 				<div class="col-md-12">
 					<input type="text" name="keyWord" id="keyWordSearch_${parameters.id}" class="form-control" placeholder="<@s.text name="COMMON_SEARCH"/>" onclick="clickSearch_${parameters.id}(event)">
+					<div class="spinner-search-div">
+						<i class="fa fa-spinner fa-2x fa-spin"></i>
+					</div>
 				</div> 
 			</div>
 			<div class="row title-container">
@@ -622,6 +631,7 @@
 	
 	function keyWordChange_${parameters.id}(){
 		var keyWord = $('#keyWordSearch_${parameters.id}').val();
+		 $(".select6_${parameters.id} .spinner-search-div").hide();
 		if(keyWord === ""){
 			$(".select6_${parameters.id} .select6-select-col.group .select6-select-item").each(function(key,value){
 				var text = $(value).children(".item_name_${parameters.id}").val();
@@ -686,7 +696,8 @@
 	})();
 	
 	$('#keyWordSearch_${parameters.id}').keyup(function() {
-	    delay(keyWordChange_${parameters.id} , 2000 );
+	    delay(keyWordChange_${parameters.id} , 1000 );
+	    $(".select6_${parameters.id} .spinner-search-div").show();
 	});
 	
 </script>
