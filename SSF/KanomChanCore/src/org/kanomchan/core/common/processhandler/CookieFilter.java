@@ -67,6 +67,7 @@ public class CookieFilter  implements Filter  {
 					List<Cookie> cookies = cookieBean.getCookies();
 					if(cookies!=null){
 						for (Cookie cookie : cookies) {
+							if(cookie!=null)
 							httpServletResponse.addCookie(cookie);
 						}
 					}
@@ -85,7 +86,7 @@ public class CookieFilter  implements Filter  {
 					
 				}
 			}catch(Exception e){
-				logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
+//				logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
 			}finally{
 				ProcessContext processContext = CurrentThread.getProcessContext();
 				processContext.clearStage();
