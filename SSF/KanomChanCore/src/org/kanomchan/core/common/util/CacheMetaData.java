@@ -56,17 +56,4 @@ public class CacheMetaData {
 		return cacheColumn;
 	}
 	
-//	private class StringLower {
-//		private String value;
-//		
-//		public StringLower(String value) {
-//			// TODO Auto-generated constructor stub
-//		}
-//		@Override
-//		public int hashCode() {
-//			// TODO Auto-generated method stub
-//			return value.toLowerCase().hashCode();
-//		}
-//		
-//	}
 }

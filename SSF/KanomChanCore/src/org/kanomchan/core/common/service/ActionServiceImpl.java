@@ -36,7 +36,6 @@ public class ActionServiceImpl implements ActionService {
 	@Override
 	@TriggersRemove(cacheName={"actionService.getAuthorizeCodeByAction"}, removeAll=true)
 	public void refresh() throws RollBackException, NonRollBackException {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -358,139 +358,116 @@ public abstract class CommonDaoImpl implements CommonDao {
 
 	@Override
 	public <T> List<T> findAll(Class<T> clazz, PagingBean pagingBean) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> query(String jpql, Class<T> clazz) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> query(String jpql, Class<T> clazz, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> query(String jpql, Class<T> clazz, String jpqlCount, PagingBean pagingBean, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> T querySingleResult(String jpql, Class<T> clazz) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> T querySingleResult(String jpql, Class<T> clazz, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int executeBatch(String sql) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int executeNativeSQL(String sql) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int executeNativeSQL(String sql, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> clazz) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> clazz, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> clazz, PagingBean pagingBean) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> nativeQuery(String sql, Class<T> clazz, PagingBean pagingBean, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> Object nativeQuerySingleResult(String sql, Class<T> clazz) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> Object nativeQuerySingleResult(String sql, Class<T> clazz, Object... params) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void flush() throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void refresh(Object entity) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public <T> T save(T target, String langCode3) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> T update(T entity, String langCode3,Long IdLang) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> T delete(T entity, String langCode3) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList, PagingBean pagingBean) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> T findById(Class<T> class1, Serializable id, String lang) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, List<Criteria> criteriaList) throws RollBackTechnicalException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

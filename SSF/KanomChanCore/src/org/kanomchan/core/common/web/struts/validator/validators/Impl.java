@@ -59,165 +59,138 @@ public class Impl extends ValidatorSupport {
 			
 			@Override
 			public Locale getLocale() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public boolean hasKey(String key) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			@Override
 			public ResourceBundle getTexts(String bundleName) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public ResourceBundle getTexts() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, String defaultValue, String[] args,
 					ValueStack stack) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, String defaultValue, List<?> args,
 					ValueStack stack) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, String defaultValue, String[] args) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, String defaultValue, List<?> args) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, String defaultValue, String obj) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, String[] args) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, List<?> args) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key, String defaultValue) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getText(String key) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public void setFieldErrors(Map<String, List<String>> errorMap) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void setActionMessages(Collection<String> messages) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void setActionErrors(Collection<String> errorMessages) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public boolean hasFieldErrors() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			@Override
 			public boolean hasErrors() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			@Override
 			public boolean hasActionMessages() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			@Override
 			public boolean hasActionErrors() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			@Override
 			public Map<String, List<String>> getFieldErrors() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public Collection<String> getActionMessages() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public Collection<String> getActionErrors() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public void addFieldError(String fieldName, String errorMessage) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void addActionMessage(String aMessage) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void addActionError(String anErrorMessage) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public String getFullFieldName(String fieldName) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		};

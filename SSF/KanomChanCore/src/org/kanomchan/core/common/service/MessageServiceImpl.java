@@ -48,7 +48,6 @@ public class MessageServiceImpl implements MessageService {
 		try {
 			configDao.getMessageMap();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("load()", e);
 		}
 	}
@@ -59,7 +58,6 @@ public class MessageServiceImpl implements MessageService {
 		try {
 			configDao.clearMessageCache();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("clearCache()", e);
 		}
 	}
@@ -82,7 +80,6 @@ public class MessageServiceImpl implements MessageService {
 		try {
 			return configDao.getMessageList(messageType, lang);
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			logger.error("getMessageList(String, String)", e);
 		}
 		return new ArrayList<Message>();
@@ -102,7 +99,6 @@ public class MessageServiceImpl implements MessageService {
 		try {
 			messageMap = configDao.getMessageMap();
 		} catch (RollBackException | NonRollBackException e) {
-			// TODO Auto-generated catch block
 			messageMap = new  HashMap<String, Message>();
 			logger.error("getMessage(String, String, String[])", e);
 		}

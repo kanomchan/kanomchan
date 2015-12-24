@@ -117,7 +117,6 @@ public class StrutsUtil {
 						out = set.setData(obje,clazz.newInstance());
 						listOut.add(new CheckBox<E>(out));
 					} catch (InstantiationException | IllegalAccessException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

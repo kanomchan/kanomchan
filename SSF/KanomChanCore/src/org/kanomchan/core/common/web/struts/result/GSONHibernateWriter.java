@@ -36,7 +36,6 @@ public class GSONHibernateWriter implements DynamicWriter {
 
 	@Override
 	public void writeToResponse(HttpServletResponse response,Object object, Collection<Pattern> excludeProperties, Collection<Pattern> includeProperties) {
-		// TODO Auto-generated method stub
 		GsonBuilder gsonBuilder = new GsonBuilder();
 //	gsonBuilder.
 //	object.getClass()
