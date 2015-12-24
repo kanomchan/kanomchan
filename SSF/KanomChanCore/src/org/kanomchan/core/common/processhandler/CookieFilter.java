@@ -44,50 +44,52 @@ public class CookieFilter  implements Filter  {
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-		List<Cookie> cookiesOld = Arrays.asList(httpServletRequest.getCookies());
-		CookieOrm cookieOrm = new CookieOrm();
-		for (Cookie cookie : cookiesOld) {
-			if(KEY_MID.equals(cookie.getName())){
-				cookieOrm.setMachineId(cookie.getValue());
-			}else if(KEY_UID.equals(cookie.getName())){
-				cookieOrm.setUserId(cookie.getValue());
-			}else if(KEY_KID.equals(cookie.getName())){
-				cookieOrm.setKeyId(cookie.getValue());
-			}else if(KEY_TID.equals(cookie.getName())){
-				cookieOrm.setTokenId(cookie.getValue());
-			}
-		}
-		try{
-			CookieService cookieService = ApplicationContextUtil.getBean(CookieService.class);
-			ServiceResult<CookieBean> serviceResult = cookieService.checkCookie(cookieOrm);
-			if(serviceResult.isSuccess()){
-				CookieBean cookieBean = serviceResult.getResult();
-				cookieOrm = cookieBean.getCookieOrm();
-				List<Cookie> cookies = cookieBean.getCookies();
-				if(cookies!=null){
-					for (Cookie cookie : cookies) {
-						httpServletResponse.addCookie(cookie);
-					}
+		if(httpServletRequest.getCookies()!=null){
+			List<Cookie> cookiesOld = Arrays.asList(httpServletRequest.getCookies());
+			CookieOrm cookieOrm = new CookieOrm();
+			for (Cookie cookie : cookiesOld) {
+				if(KEY_MID.equals(cookie.getName())){
+					cookieOrm.setMachineId(cookie.getValue());
+				}else if(KEY_UID.equals(cookie.getName())){
+					cookieOrm.setUserId(cookie.getValue());
+				}else if(KEY_KID.equals(cookie.getName())){
+					cookieOrm.setKeyId(cookie.getValue());
+				}else if(KEY_TID.equals(cookie.getName())){
+					cookieOrm.setTokenId(cookie.getValue());
 				}
-				LoginIO loginIO = cookieBean.getLoginIO();
-				if(loginIO!=null){
-					SessionMap<String, Object> session = new SessionMap<String, Object>(httpServletRequest);
-					session.put(CommonConstant.SESSION.USER_BEAN_KEY, loginIO.getUserBean());
-					session.put(CommonConstant.SESSION.MENU_BEAN_KEY, loginIO.getMenuVO().getMenuBeans());
-					session.put(CommonConstant.SESSION.MENU_BEAN_MAP_KEY, loginIO.getMenuVO().getLookupMap());
-					for (Cookie cookie : loginIO.getCookies()) {
-						httpServletResponse.addCookie(cookie);
-					}
-					httpServletResponse.sendRedirect(httpServletRequest.getContextPath());
-//		            request.getRequestDispatcher("/").forward(request, response);
-				}
-				
 			}
-		}catch(Exception e){
-			logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
-		}finally{
-			ProcessContext processContext = CurrentThread.getProcessContext();
-			processContext.clearStage();
+			try{
+				CookieService cookieService = ApplicationContextUtil.getBean(CookieService.class);
+				ServiceResult<CookieBean> serviceResult = cookieService.checkCookie(cookieOrm);
+				if(serviceResult.isSuccess()){
+					CookieBean cookieBean = serviceResult.getResult();
+					cookieOrm = cookieBean.getCookieOrm();
+					List<Cookie> cookies = cookieBean.getCookies();
+					if(cookies!=null){
+						for (Cookie cookie : cookies) {
+							httpServletResponse.addCookie(cookie);
+						}
+					}
+					LoginIO loginIO = cookieBean.getLoginIO();
+					if(loginIO!=null){
+						SessionMap<String, Object> session = new SessionMap<String, Object>(httpServletRequest);
+						session.put(CommonConstant.SESSION.USER_BEAN_KEY, loginIO.getUserBean());
+						session.put(CommonConstant.SESSION.MENU_BEAN_KEY, loginIO.getMenuVO().getMenuBeans());
+						session.put(CommonConstant.SESSION.MENU_BEAN_MAP_KEY, loginIO.getMenuVO().getLookupMap());
+						for (Cookie cookie : loginIO.getCookies()) {
+							httpServletResponse.addCookie(cookie);
+						}
+						httpServletResponse.sendRedirect(httpServletRequest.getContextPath());
+	//		            request.getRequestDispatcher("/").forward(request, response);
+					}
+					
+				}
+			}catch(Exception e){
+				logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
+			}finally{
+				ProcessContext processContext = CurrentThread.getProcessContext();
+				processContext.clearStage();
+			}
 		}
 		chain.doFilter(request,response);
 	}
