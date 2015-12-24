@@ -1289,7 +1289,7 @@
     <attribute>
       <description><![CDATA[Preset the value of input element.]]></description>
       <name>subName</name>
-      <required>false</required>
+      <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -4590,7 +4590,7 @@
     <attribute>
       <description><![CDATA[Text.]]></description>
       <name>subName</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -4644,6 +4644,12 @@
     <attribute>
       <description><![CDATA[Text.]]></description>
       <name>singleSelect</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Text.]]></description>
+      <name>nameToSaveKey</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
