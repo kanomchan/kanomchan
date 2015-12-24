@@ -236,6 +236,9 @@
 								<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
 							</div>
 							<input type="hidden" name="item_count_${parameters.id}"/>
+							<#if parameters.nameToSaveKey??>
+								<input type="hidden" class="id_${parameters.id}_toSave" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameToSaveKey}" value="<@s.property value=(parameters.nameToSaveKey)/>"> 
+							</#if>
 							<input type="hidden" name="__pushdataonremove_${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
 						</@s.iterator>
 					</#if>
@@ -246,6 +249,7 @@
 							</div>
 							<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[{3}].${parameters.nameKey}" value="{1}"> 
 							<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[{3}].${parameters.nameParentKey}" value="{2}">
+							<input type="hidden" name="${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
 							<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
 						</div>
 						<input type="hidden" name="item_count_${parameters.id}"/>
@@ -354,7 +358,7 @@
 							$(".select6_${parameters.id} .spinner-div").hide();
 						}
 						
-						$.each( jsonResponse.result.${parameters.subName}, function( key, val ) {
+						$.each( jsonResponse.result<#if parameters.subName??>.${parameters.subName}</#if>, function( key, val ) {
 							var data = $(".clone${parameters.id}").html();
 							var name ;
 							if(keyWord != null && keyWord != "" ){
@@ -486,8 +490,8 @@
 					"currentPage": currentPage_${parameters.id}},
 			cache : false,
 			success : function(jsonResponse) {
-				if (typeof jsonResponse != 'undefined' && jsonResponse.success && jsonResponse != null && jsonResponse.result != null && jsonResponse.result.${parameters.subName}.length > 0){
-					$.each( jsonResponse.result.${parameters.subName}, function( key, val ) {
+				if (typeof jsonResponse != 'undefined' && jsonResponse.success && jsonResponse != null && jsonResponse.result != null && jsonResponse.result<#if parameters.subName??>.${parameters.subName}</#if>.length > 0){
+					$.each( jsonResponse.result<#if parameters.subName??>.${parameters.subName}</#if>, function( key, val ) {
 						var rowsPerPage = jsonResponse.pagingBean.rowsPerPage;
 						var totalRows = jsonResponse.pagingBean.totalRows;
 						var totalPage = totalRows/rowsPerPage;

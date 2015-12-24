@@ -25,6 +25,7 @@ public class Select6 extends ListUIBean {
     protected String label;
     protected String nameList;
     protected String nameKey;
+    protected String nameToSaveKey;
     protected String nameParentKey;
     protected String nameProfiKey;
     protected String nameProfiValue;
@@ -187,6 +188,9 @@ public class Select6 extends ListUIBean {
 			addParameter("singleSelect", findString(singleSelect));
 		} 
 	    
+	    if(nameToSaveKey != null){
+			addParameter("nameToSaveKey", findString(nameToSaveKey));
+		} 
     }
 
     @StrutsTagAttribute(description="Whether or not to add an empty (--) option after the header option", type="Boolean", defaultValue="false")
@@ -428,5 +432,13 @@ public class Select6 extends ListUIBean {
 		this.singleSelect = singleSelect;
 	}
 
+	public String getNameToSaveKey() {
+		return nameToSaveKey;
+	}
+
+	public void setNameToSaveKey(String nameToSaveKey) {
+		this.nameToSaveKey = nameToSaveKey;
+	}
+	
 	
 }

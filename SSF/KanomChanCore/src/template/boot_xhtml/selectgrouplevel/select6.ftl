@@ -23,4 +23,3 @@
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlheader.ftl" />
 <#include "/${parameters.templateDir}/simple/selectgrouplevel/select6.ftl" />
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/controlfooter.ftl" />
-sd
