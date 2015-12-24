@@ -249,5 +249,8 @@ public class ProcessContext {
 		status=null;
 		messageList = null;
 	}
+	public String getNativeLocaleStr() {
+		return getNativeLocale().getISO3Language().toUpperCase();
+	}
 	
 }
