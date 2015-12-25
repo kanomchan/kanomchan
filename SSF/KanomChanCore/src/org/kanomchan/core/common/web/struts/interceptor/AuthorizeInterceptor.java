@@ -16,13 +16,16 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletConfigInterceptor;
 import org.kanomchan.core.common.bean.Button;
+import org.kanomchan.core.common.bean.JSONResult;
 import org.kanomchan.core.common.bean.Message;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.constant.CommonMessageCode;
+import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.common.service.ActionService;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.service.MessageService;
+import org.kanomchan.core.common.web.struts.AjaxOut;
 import org.kanomchan.core.common.web.struts.action.BaseAction;
 import org.kanomchan.core.security.authorize.Authorize;
 import org.kanomchan.core.security.authorize.dao.UserAuthorizeDao;
@@ -99,19 +102,37 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 			codes.addAll(c);
 			if (!privileges.containsAll(codes)) {
 				logger.error("privileges:"+privileges.toString()+"codes:"+codes.toString());
-				return authFail(invocation,userBean);
+				return authFail(invocation,userBean,methodStr);
 			}
 		}else{
 			logger.error("C is empty ");
-			return authFail(invocation,userBean);
+			return authFail(invocation,userBean,methodStr);
 		}
 		return invocation.invoke();
 	}
 	
-	private String authFail(ActionInvocation invocation,UserBean userBean){
+	private String authFail(ActionInvocation invocation,UserBean userBean,String methodStr){
+		Object action = invocation.getAction();
+		AjaxOut ajaxOut = null;
+		try {
+			Method method = action.getClass().getMethod(methodStr);
+//			method.isAnnotationPresent(AjaxOut.class);
+			ajaxOut = method.getAnnotation(AjaxOut.class);
+		} catch (NoSuchMethodException | SecurityException e1) {}
+		if(ajaxOut !=null){
+			BaseAction baseAction = (BaseAction) action;
+			Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
+			JSONResult<Object> results = new JSONResult<Object>("");
+			ArrayList<Message> messages = new ArrayList<Message>();
+			messages.add(message);
+			results.setStatus(CommonConstant.SERVICE_STATUS_FAIL);
+			results.setMessages(messages);
+			baseAction.setResults(results );
+			return "jsonResult";
+		}
 		if(userBean != null){
-			if(invocation.getAction() instanceof BaseAction){
-				BaseAction baseAction = (BaseAction) invocation.getAction();
+			if(action instanceof BaseAction){
+				BaseAction baseAction = (BaseAction) action;
 				Message message = messageService.getMessage(CommonMessageCode.ATZ2001,null);
 				List<Message> messageList = new ArrayList<Message>();
 				List<Button> buttonList = new ArrayList<Button>();
