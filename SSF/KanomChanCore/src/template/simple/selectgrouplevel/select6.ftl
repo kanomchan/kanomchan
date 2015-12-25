@@ -475,7 +475,7 @@
 		}
 		else{
 			checkBox.addClass('isChecked');
-			$("#select6-input-${parameters.id} > div:not(.clone-input-${parameters.id})").remove();
+			$("#select6-input-${parameters.id} > div:not(.clone-input-${parameters.id}):not(.input-down-arrow)").remove();
 			setItemToInput_${parameters.id}(e);
 			$(".select6_${parameters.id} .select6-select-item .check-box").removeClass("isChecked");
 			setInputToItemList_${parameters.id}();
