@@ -224,6 +224,23 @@
 	    right: 20px;
 	    bottom: 0px;
 	}
+	
+	.select6_${parameters.id} .input-down-arrow{
+	    display: flex;
+  		justify-content: center;
+	    position: absolute;
+	    right: 5px;
+	    width: 13px;
+	    height: 100%;
+	    padding: 5px;
+	    border-left: 1px solid #CCC;
+	}
+	
+	.select6_${parameters.id} .input-down-arrow > div{
+		align-self: center;
+		margin-left: 5px;
+		margin-right: 2px;
+	}
 </style>
 <div class="select6-wrapper multiple select6_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
 	<div class="select6-input-box">
@@ -260,6 +277,11 @@
 						</div>
 						<input type="hidden" name="item_count_${parameters.id}"/>
 						<input type="hidden" name="__pushdataonremove_${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
+					</div>
+					<div class="input-down-arrow">
+						<div>
+							<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -453,7 +475,7 @@
 		}
 		else{
 			checkBox.addClass('isChecked');
-			$("#select6-input-${parameters.id} > div:not(.clone-input-${parameters.id})").remove();
+			$("#select6-input-${parameters.id} > div:not(.clone-input-${parameters.id}):not(.input-down-arrow)").remove();
 			setItemToInput_${parameters.id}(e);
 			$(".select6_${parameters.id} .select6-select-item .check-box").removeClass("isChecked");
 			setInputToItemList_${parameters.id}();
