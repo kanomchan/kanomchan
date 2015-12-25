@@ -79,18 +79,15 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 	@Override
 	public <T> T delete(T entity, String langCode3) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public int update(String jpql) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	@Override
 	public int update(String jpql, Object... params) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	@Override
@@ -133,102 +130,82 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	}
 	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value, PagingBean pagingBean) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExample(T example) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExample(T example, String extraWhereClause) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExample(T example, PagingBean pagingBean) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExample(T example, PagingBean pagingBean, String extraWhereClause) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExampleLike(T example) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExampleLike(T example, String extraWhereClause) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExampleLike(T example, PagingBean pagingBean) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findByExampleLike(T example, PagingBean pagingBean, String extraWhereClause) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> findAll(Class<T> clazz, PagingBean pagingBean) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> query(String jpql, Class<T> clazz) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> query(String jpql, Class<T> clazz, Object... params) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> List<T> query(String jpql, Class<T> clazz, String jpqlCount, PagingBean pagingBean, Object... params) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> T querySingleResult(String jpql, Class<T> clazz) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> T querySingleResult(String jpql, Class<T> clazz, Object... params) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public int executeBatch(String sql) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	@Override
 	public <T> Object nativeQuerySingleResult(String sql, Class<T> clazz) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public <T> Object nativeQuerySingleResult(String sql, Class<T> clazz, Object... params) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public void flush() throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void refresh(Object entity) throws RollBackException ,NonRollBackException {
-		// TODO Auto-generated method stub
 		
 	}
 //	@Override

@@ -94,7 +94,6 @@ public class DisplayText extends UIBean {
     
     @Override
     protected void evaluateExtraParams() {
-    	// TODO Auto-generated method stub
     	super.evaluateExtraParams();
 //        Map context = stack.getContext();
 ////        Boolean ifResult = (Boolean) context.get(If.ANSWER);

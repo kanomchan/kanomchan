@@ -152,7 +152,6 @@ public class HibernateBaseEntiyDaoImpl<T extends EntityBean> extends HibernateBa
 			}
 			return t;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			throw new RollBackTechnicalException(CommonMessageCode.COM4994, e);
 		}
 		

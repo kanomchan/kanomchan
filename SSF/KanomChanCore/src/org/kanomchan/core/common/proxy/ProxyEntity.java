@@ -36,7 +36,6 @@
 //		try {
 //			proxy = entityClass.newInstance();
 //		} catch (InstantiationException | IllegalAccessException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	
@@ -53,7 +52,6 @@
 //				try {
 //					Ognl.setValue(paraName, proxy, value[0]);
 //				} catch (OgnlException e1) {
-//					// TODO Auto-generated catch block
 //					e1.printStackTrace();
 //				}
 //			}

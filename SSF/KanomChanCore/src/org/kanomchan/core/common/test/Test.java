@@ -138,7 +138,6 @@ public class Test {
 //		try {
 //			System.out.println(ClassUtil.findSetterName(UserBeanDefault.class, "getuserName".substring(3)));
 //		} catch (NoSuchFieldException | NoSuchMethodException | IntrospectionException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		;

@@ -58,25 +58,16 @@ public class Display extends ClosingUIBean {
     
     @Override
     public void evaluateParams() {
-    	// TODO Auto-generated method stub
-//    	name = "display";
-    	
     	super.evaluateParams();
     }
     
     @Override
     protected void evaluateExtraParams() {
-    	// TODO Auto-generated method stub
     	super.evaluateExtraParams();
     	this.id = escape("display_"+seq);
     	addParameter("id", this.id);
         Map<String, Object> context = stack.getContext();
-//        Boolean ifResult = (Boolean) context.get(If.ANSWER);
         context.put(KEY, id);
-//        context.remove(If.ANSWER);
-        
-        
-    	
     }
     
     @Override
@@ -104,7 +95,6 @@ public class Display extends ClosingUIBean {
     
 //    @Override
     protected void populateComponentHtmlId(Form form) {
-    	// TODO Auto-generated method stub
     	super.populateComponentHtmlId(form);
     }
     

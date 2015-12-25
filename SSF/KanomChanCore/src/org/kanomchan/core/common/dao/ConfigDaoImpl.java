@@ -218,14 +218,12 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	@Override
 	@TriggersRemove(cacheName="getActionByActionId", removeAll=true)
 	public void clearConfigCache() throws RollBackException ,NonRollBackException{
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	@TriggersRemove(cacheName="getMessageMap", removeAll=true)
 	public void clearMessageCache() throws RollBackException ,NonRollBackException{
-		// TODO Auto-generated method stub
 		
 	}
 	

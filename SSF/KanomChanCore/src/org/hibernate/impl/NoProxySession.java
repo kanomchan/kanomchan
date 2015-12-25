@@ -304,7 +304,6 @@ public final class NoProxySession extends AbstractSessionImpl
 	public Batcher getBatcher() {
 		errorIfClosed();
 		checkTransactionSynchStatus();
-		// TODO : should remove this exposure
 		//  and have all references to the session's batcher use the ConnectionManager.
 		return jdbcContext.getConnectionManager().getBatcher();
 	}

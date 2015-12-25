@@ -41,7 +41,6 @@ public class AuthenServiceImpl  implements AuthenService {
 	@Override
 	public ServiceResult<UserBean> login(Long userId)
 			throws NonRollBackException, RollBackException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
