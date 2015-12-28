@@ -59,6 +59,8 @@ public class CookieFilter  implements Filter  {
 				}
 			}
 			try{
+
+//				if(cookieOrm.getMachineId()!=null){
 				CookieService cookieService = ApplicationContextUtil.getBean(CookieService.class);
 				ServiceResult<CookieBean> serviceResult = cookieService.checkCookie(cookieOrm);
 				if(serviceResult.isSuccess()){
@@ -67,8 +69,20 @@ public class CookieFilter  implements Filter  {
 					List<Cookie> cookies = cookieBean.getCookies();
 					if(cookies!=null){
 						for (Cookie cookie : cookies) {
-							if(cookie!=null)
-							httpServletResponse.addCookie(cookie);
+							if(cookie!=null){
+								if(KEY_MID.equals(cookie.getName())){
+									if(cookie.getPath()==null)
+										cookie.setPath(httpServletRequest.getContextPath());
+									cookie.setHttpOnly(true);
+									httpServletResponse.addCookie(cookie);
+								}else if(KEY_TID.equals(cookie.getName())){
+									if(cookie.getPath()==null)
+										cookie.setPath(httpServletRequest.getContextPath());
+									cookie.setHttpOnly(true);
+									httpServletResponse.addCookie(cookie);
+								}
+								
+							}
 						}
 					}
 					LoginIO loginIO = cookieBean.getLoginIO();
@@ -85,6 +99,7 @@ public class CookieFilter  implements Filter  {
 					}
 					
 				}
+//				}
 			}catch(Exception e){
 //				logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
 			}finally{
