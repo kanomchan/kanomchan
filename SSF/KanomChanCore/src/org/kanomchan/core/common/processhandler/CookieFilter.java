@@ -73,12 +73,12 @@ public class CookieFilter  implements Filter  {
 							if(cookie!=null){
 								if(KEY_MID.equals(cookie.getName())){
 									if(cookie.getPath()==null)
-										cookie.setPath(httpServletRequest.getContextPath());
+										cookie.setPath(getPathCookie(httpServletRequest));
 									cookie.setHttpOnly(true);
 									httpServletResponse.addCookie(cookie);
 								}else if(KEY_TID.equals(cookie.getName())){
 									if(cookie.getPath()==null)
-										cookie.setPath(httpServletRequest.getContextPath());
+										cookie.setPath(getPathCookie(httpServletRequest));
 									cookie.setHttpOnly(true);
 									httpServletResponse.addCookie(cookie);
 								}
@@ -93,6 +93,9 @@ public class CookieFilter  implements Filter  {
 						session.put(CommonConstant.SESSION.MENU_BEAN_KEY, loginIO.getMenuVO().getMenuBeans());
 						session.put(CommonConstant.SESSION.MENU_BEAN_MAP_KEY, loginIO.getMenuVO().getLookupMap());
 						for (Cookie cookie : loginIO.getCookies()) {
+							if(cookie.getPath()==null)
+								cookie.setPath(getPathCookie(httpServletRequest));
+							cookie.setHttpOnly(true);
 							httpServletResponse.addCookie(cookie);
 						}
 						if(session.get(CommonConstant.SESSION.NEXT_URL_KEY)!=null){
@@ -119,7 +122,11 @@ public class CookieFilter  implements Filter  {
 		
 	}
 
-
+	public static String getPathCookie(HttpServletRequest httpServletRequest){
+//		return httpServletRequest.getContextPath();
+		return "/";
+	}
+	
 
 	@Override
 	public void destroy() {
