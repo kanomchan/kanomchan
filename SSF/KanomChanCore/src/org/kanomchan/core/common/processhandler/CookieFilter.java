@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
@@ -44,7 +45,8 @@ public class CookieFilter  implements Filter  {
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-		if(httpServletRequest.getCookies()!=null){
+		SessionMap<String, Object> session = new SessionMap<String, Object>(httpServletRequest);
+		if(session.get(CommonConstant.SESSION.USER_BEAN_KEY)==null &&httpServletRequest.getCookies()!=null){
 			List<Cookie> cookiesOld = Arrays.asList(httpServletRequest.getCookies());
 			CookieOrm cookieOrm = new CookieOrm();
 			for (Cookie cookie : cookiesOld) {
@@ -60,7 +62,6 @@ public class CookieFilter  implements Filter  {
 			}
 			try{
 
-//				if(cookieOrm.getMachineId()!=null){
 				CookieService cookieService = ApplicationContextUtil.getBean(CookieService.class);
 				ServiceResult<CookieBean> serviceResult = cookieService.checkCookie(cookieOrm);
 				if(serviceResult.isSuccess()){
@@ -87,21 +88,22 @@ public class CookieFilter  implements Filter  {
 					}
 					LoginIO loginIO = cookieBean.getLoginIO();
 					if(loginIO!=null){
-						SessionMap<String, Object> session = new SessionMap<String, Object>(httpServletRequest);
+						
 						session.put(CommonConstant.SESSION.USER_BEAN_KEY, loginIO.getUserBean());
 						session.put(CommonConstant.SESSION.MENU_BEAN_KEY, loginIO.getMenuVO().getMenuBeans());
 						session.put(CommonConstant.SESSION.MENU_BEAN_MAP_KEY, loginIO.getMenuVO().getLookupMap());
 						for (Cookie cookie : loginIO.getCookies()) {
 							httpServletResponse.addCookie(cookie);
 						}
-						httpServletResponse.sendRedirect(httpServletRequest.getContextPath());
-	//		            request.getRequestDispatcher("/").forward(request, response);
+						if(session.get(CommonConstant.SESSION.NEXT_URL_KEY)!=null){
+							String nextUrl = (String) session.get(CommonConstant.SESSION.NEXT_URL_KEY);
+							session.remove(CommonConstant.SESSION.NEXT_URL_KEY);
+							httpServletResponse.sendRedirect(nextUrl);
+						}
 					}
 					
 				}
-//				}
 			}catch(Exception e){
-//				logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
 			}finally{
 				ProcessContext processContext = CurrentThread.getProcessContext();
 				processContext.clearStage();
