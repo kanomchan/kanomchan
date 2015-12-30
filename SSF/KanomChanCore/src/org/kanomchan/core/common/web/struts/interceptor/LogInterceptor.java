@@ -22,14 +22,15 @@ public class LogInterceptor extends AbstractInterceptor {
 		String action = namespace+"/"+actionName;
 		logger.info("[Action  Start]\tCall Action:" +action);
 		long start = System.currentTimeMillis();
+		String s=null;
 		try{
-			
+			s = invocation.invoke();
 		}catch(Exception e){
 			long end = System.currentTimeMillis();
 			logger.error("[Action  Error]\tCall Action:" +action+ "\tTIME:\t" + (end - start),e);
 			throw e;
 		}
-		String s = invocation.invoke();
+
 		long end = System.currentTimeMillis();
 		logger.info("[Action  End  ]\tCall Action:" +action+ "\tTIME:\t" + (end - start));
 		return s;
