@@ -89,16 +89,17 @@ public class Select6 extends ListUIBean {
         }
         else if((boolean) findValue(singleSelect)){
         	if(nameValue != null){
-    			addParameter("nameValue_Single", findString(name)+"."+ findString(nameValue));
+    			addParameter("nameValue_Single", findString(findString(name)+"."+ findString(nameValue)));
+    			
     		}
     		if(nameValue != null){
-    			addParameter("nameKey_Single", findString(name)+"."+ findString(nameKey));
+    			addParameter("nameKey_Single", findString(findString(name)+"."+ findString(nameKey)));
     		}
     		if(nameValue != null){
-    			addParameter("nameParentKey_Single", findString(name)+"."+ findString(nameParentKey));
+    			addParameter("nameParentKey_Single", findString(findString(name)+"."+ findString(nameParentKey)));
     		}
     		if(nameToSaveKey != null){
-    			addParameter("nameToSaveKey_Single", findString(name)+"."+ findString(nameToSaveKey));
+    			addParameter("nameToSaveKey_Single", findString(findString(name)+"."+ findString(nameToSaveKey)));
     		}
         }
         	

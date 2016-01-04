@@ -4588,7 +4588,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <description><![CDATA[Text.]]></description>
+      <description><![CDATA[If ajax return list don't enter subName. Only when list is inside another bean that require you to set subName]]></description>
       <name>subName</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>

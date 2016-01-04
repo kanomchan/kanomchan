@@ -56,6 +56,7 @@
 	    border: 1px solid #415D8E;
 	    border-radius: 4px;
 	    cursor: default;
+	    max-width: 95%;
 	}
 	.select6-input-box-cursor{
 	    padding: 7px;
@@ -222,22 +223,39 @@
 		display: none;
 	    position: absolute;
 	    right: 20px;
-	    bottom: 0px;
+	    bottom: 5px;
+	}
+	
+	.select6_${parameters.id} .input-down-arrow{
+	    display: flex;
+  		justify-content: center;
+	    position: absolute;
+	    right: 5px;
+	    width: 13px;
+	    height: 100%;
+	    padding: 5px;
+	    border-left: 1px solid #CCC;
+	}
+	
+	.select6_${parameters.id} .input-down-arrow > div{
+		align-self: center;
+		margin-left: 5px;
+		margin-right: 2px;
 	}
 </style>
-<div class="select6-wrapper multiple select6_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
+<div class="select6 select6-wrapper multiple select6_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
 	<div class="select6-input-box">
 		<div class="select6-input-box">
 			<div class="select6-input-wrapper">
 				<div class="select6-input" id="select6-input-${parameters.id}" onclick="openselect6_${parameters.id}(event,$(this))">
-					<#if parameters.nameList??>
+					<#if parameters.nameList?? && !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
 						<@s.iterator value="stack.findValue(parameters.nameList)" status="status">
 							<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
 								<div class="select6-input-item-label">
-								 	<@s.property value=(parameters.nameValue)/>
+								 	${stack.findValue(parameters.nameValue)}
 								</div>
-								<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameKey}" value="<@s.property value=(parameters.nameKey)/>"> 
-								<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameParentKey}" value="<@s.property value=(parameters.nameParentKey)/>">
+								<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameKey}" value="${stack.findValue(parameters.nameKey)}"> 
+								<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameParentKey}" value="${stack.findValue(parameters.nameParentKey)}">
 								<input type="hidden" name="${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
 								<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
 							</div>
@@ -247,19 +265,58 @@
 							</#if>
 							<input type="hidden" name="__pushdataonremove_${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
 						</@s.iterator>
+						<#else>
+							<#if stack.findValue(parameters.nameValue_Single)?? && stack.findValue(parameters.nameKey_Single)?? && stack.findValue(parameters.nameParentKey_Single)??>
+								<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
+									<div class="select6-input-item-label">
+										${stack.findValue(parameters.nameValue_Single)}
+									</div>
+									<input type="hidden" class="id_${parameters.id}" name="${parameters.name}.${parameters.nameKey}" value="${stack.findValue(parameters.nameKey_Single)}"> 
+									<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}.${parameters.nameParentKey}" value="${stack.findValue(parameters.nameParentKey_Single)}">
+									<input type="hidden" name="${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
+									<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
+								</div>
+								<input type="hidden" name="item_count_${parameters.id}"/>
+								<#if parameters.nameToSaveKey??>
+									<input type="hidden" class="id_${parameters.id}_toSave" name="${parameters.name}.${parameters.nameToSaveKey}" value="<@s.property value=(parameters.nameToSaveKey)/>"> 
+								</#if>
+								<input type="hidden" name="__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">	
+							</#if>					
 					</#if>
-					<div class="clone-input-${parameters.id}" style="display: none;">
-						<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
-							<div class="select6-input-item-label" >
-								{0}
+					<#if !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
+						<div class="clone-input-${parameters.id} clone" style="display: none;">
+							<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
+								<div class="select6-input-item-label" >
+									{0}
+								</div>
+								<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[{3}].${parameters.nameKey}" value="{1}"> 
+								<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[{3}].${parameters.nameParentKey}" value="{2}">
+								<input type="hidden" name="${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
+								<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
 							</div>
-							<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[{3}].${parameters.nameKey}" value="{1}"> 
-							<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[{3}].${parameters.nameParentKey}" value="{2}">
-							<input type="hidden" name="${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
-							<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
+							<input type="hidden" name="item_count_${parameters.id}"/>
+							<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
 						</div>
-						<input type="hidden" name="item_count_${parameters.id}"/>
-						<input type="hidden" name="__pushdataonremove_${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
+						<#else>
+							<div class="clone-input-${parameters.id} clone" style="display: none;">
+								<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
+									<div class="select6-input-item-label" >
+										{0}
+									</div>
+									<input type="hidden" class="id_${parameters.id}" name="${parameters.name}.${parameters.nameKey}" value="{1}"> 
+									<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}.${parameters.nameParentKey}" value="{2}">
+									<input type="hidden" name="${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
+									<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
+								</div>
+								<input type="hidden" name="item_count_${parameters.id}"/>
+								<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
+							</div>
+					</#if>
+					
+					<div class="input-down-arrow">
+						<div>
+							<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -300,14 +357,11 @@
 			</div>
 			<div class="select6-select-col sub">
 				<div class="select6-scroll mCustomScrollbar" data-mcs-theme="minimal-dark" >
-					<div class="clone${parameters.id}" style="display: none">
+					<div class="clone${parameters.id} clone" style="display: none">
 						<div class="select6-select-item" id="select6-select-item-sub-${parameters.id}-{0}" onclick="click_${parameters.id}(event,$(this));">
-							<div class="check-box" onclick="<#if parameters.singleSelect??>
-								<#if stack.findValue(parameters.singleSelect)>
+							<div class="check-box" onclick="
+								<#if parameters.singleSelect?? && stack.findValue(parameters.singleSelect)>
 									checkboxClickSigle_${parameters.id}(event,$(this).parent()); 
-								<#else>
-									checkboxClick_${parameters.id}(event,$(this).parent());
-								</#if>
 								<#else>
 									checkboxClick_${parameters.id}(event,$(this).parent());
 								</#if>
@@ -369,28 +423,7 @@
 						}
 						
 						$.each( jsonResponse.result<#if parameters.subName??>.${parameters.subName}</#if>, function( key, val ) {
-							var data = $(".clone${parameters.id}").html();
-							var name ;
-							if(keyWord != null && keyWord != "" ){
-								var text = val.${parameters.subNameValue};
-								var matchStart = text.toLowerCase().indexOf(keyWord.toLowerCase());
-								if (matchStart >= 0){
-									name = highlightText(text,matchStart,keyWord);
-								}
-								else{
-									name = text;
-								}
-							}
-							else{
-								name = val.${parameters.subNameValue};
-							}
-							
-							$('.clone${parameters.id}').before(data.format(
-								val.${parameters.subNameKey}, // {0}
-								name, // {1}
-								val.${parameters.subNameParentKey},
-								val.${parameters.subNameValue}
-							));
+							cloneInput_${parameters.id}(val,keyWord)
 						});
 						
 						
@@ -402,6 +435,31 @@
 				}
 			});
 		}
+	}
+	
+	cloneInput_${parameters.id} = function(val,keyWord){
+		var data = $(".clone${parameters.id}").html();
+		var name ;
+		if(keyWord != null && keyWord != "" ){
+			var text = val.${parameters.subNameValue};
+			var matchStart = text.toLowerCase().indexOf(keyWord.toLowerCase());
+			if (matchStart >= 0){
+				name = highlightText(text,matchStart,keyWord);
+			}
+			else{
+				name = text;
+			}
+		}
+		else{
+			name = val.${parameters.subNameValue};
+		}
+		
+		$('.clone${parameters.id}').before(data.format(
+			val.${parameters.subNameKey}, // {0}
+			name, // {1}
+			val.${parameters.subNameParentKey},
+			val.${parameters.subNameValue}
+		));
 	}
 
 	$(document).on('click',function() {
@@ -443,8 +501,7 @@
 		}
 	}
 	
-	<#if parameters.singleSelect??>
-	<#if stack.findValue(parameters.singleSelect)>
+	<#if parameters.singleSelect?? && stack.findValue(parameters.singleSelect)>
 	checkboxClickSigle_${parameters.id} = function(event,e){
 		event.stopPropagation();
 		var checkBox = e.children('.check-box');
@@ -453,14 +510,14 @@
 			$('#select6-input-${parameters.id} .select6-input-item').has("input.id_${parameters.id}[value="+ $(checkBox).children(".item_id_${parameters.id}").val() +"]").remove();
 		}
 		else{
-			checkBox.addClass('isChecked');
-			$("#select6-input-${parameters.id} > div:not(.clone-input-${parameters.id})").remove();
-			setItemToInput_${parameters.id}(e);
 			$(".select6_${parameters.id} .select6-select-item .check-box").removeClass("isChecked");
+			checkBox.addClass('isChecked');
+			$("#select6-input-${parameters.id} > div:not(.clone-input-${parameters.id}):not(.input-down-arrow").remove();
+			$("div:not(.clone) > .pushRemove_single_${parameters.id}").remove();
+			setItemToInput_${parameters.id}(e);
 			setInputToItemList_${parameters.id}();
 		}
 	}
-	</#if>
 	</#if>
 	
 	groupClick_${parameters.id} = function(event,e){
@@ -514,28 +571,7 @@
 							$(".select6_${parameters.id} .spinner-div").hide();
 						}
 						
-						var data = $(".clone${parameters.id}").html();
-						var name ;
-						if(keyWord != null && keyWord != "" ){
-							var text = val.${parameters.subNameValue};
-							var matchStart = text.toLowerCase().indexOf(keyWord.toLowerCase());
-							if (matchStart >= 0){
-								name = highlightText(text,matchStart,keyWord);
-							}
-							else{
-								name = text;
-							}
-						}
-						else{
-							name = val.${parameters.subNameValue};
-						}
-						
-						$('.clone${parameters.id}').before(data.format(
-							val.${parameters.subNameKey}, // {0}
-							name, // {1}
-							val.${parameters.subNameParentKey},
-							val.${parameters.subNameValue}
-						));
+						cloneInput_${parameters.id}(val,keyWord)
 						
 					});
 					
@@ -570,12 +606,8 @@
 	
 	click_${parameters.id} = function(event, e){
 		event.stopPropagation();
-		<#if parameters.singleSelect??>
-		<#if stack.findValue(parameters.singleSelect)>
+		<#if parameters.singleSelect?? && stack.findValue(parameters.singleSelect)>
 			checkboxClickSigle_${parameters.id}(event, e);
-			<#else>
-			checkboxClick_${parameters.id}(event, e);
-		</#if>
 		<#else>
 			checkboxClick_${parameters.id}(event, e);
 		</#if>
@@ -606,7 +638,6 @@
 				$(".select6_${parameters.id} div:not(.clone-input-${parameters.id})>input[name='item_count_${parameters.id}'] ").length
 			));
 		}
-		
 	}
 		
 	deleteInputItem_${parameters.id} = function(event,e){
@@ -700,5 +731,51 @@
 	    delay(keyWordChange_${parameters.id} , 1000 );
 	    $(".select6_${parameters.id} .spinner-search-div").show();
 	});
+	
+	function ${parameters.id}_clearData(){
+		$(".select6_${parameters.id} .select6-input > div:not(.clone-input-model):not(.input-down-arrow), .select6_${parameters.id} .select6-input > input").remove();
+	}
+	
+	function ${parameters.id}_setInitInput(e){
+		var id = null;
+		if(typeof e.${parameters.nameKey} !== "undefined" && e.${parameters.nameKey} != null){
+			id = e.${parameters.nameKey};
+		}
+		var idParent = null;
+		if(typeof e.${parameters.nameParentKey} !== "undefined"  && e.${parameters.nameParentKey} != null){
+			idParent = e.${parameters.nameParentKey};
+		}
+		
+		if( id == null || idParent == null){
+			console.log("id or idParent are not existed");
+		}
+		else{
+			var name = e.${parameters.nameValue};
+			
+			var isDup = false;
+			$('#select6-input-${parameters.id}').children('.select6-input-item').each(function(key,value){
+			   var idInputSkill = $(value).children('.id_${parameters.id}').val();
+			   if(idInputSkill == id){
+				   isDup = true;
+				   $(value).children('.select6-input-item-label').text(name);
+			   }
+			});
+			
+			if(!isDup){
+				var data = $(".clone-input-${parameters.id}").html();
+				$('.clone-input-${parameters.id}').before(data.format(
+					name, // {0}
+					id,
+					idParent,
+					$(".select6_${parameters.id} div:not(.clone-input-${parameters.id})>input[name='item_count_${parameters.id}'] ").length
+				));
+			}
+		}
+	}
+	
+	function ${parameters.id}_getExceptClearList(){
+		var exceptList = ""
+		return ;
+	}
 	
 </script>
