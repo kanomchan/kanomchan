@@ -280,7 +280,10 @@
 								<#if parameters.nameToSaveKey??>
 									<input type="hidden" class="id_${parameters.id}_toSave" name="${parameters.name}.${parameters.nameToSaveKey}" value="<@s.property value=(parameters.nameToSaveKey)/>"> 
 								</#if>
-								<input type="hidden" name="__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">	
+								<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">	
+								<#if parameters.minusOneOnRemove?? && stack.findValue(parameters.minusOneOnRemove)>
+									<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}.${parameters.nameKey}" value="-1">
+								</#if>
 							</#if>					
 					</#if>
 					<#if !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
@@ -303,13 +306,16 @@
 									<div class="select6-input-item-label" >
 										{0}
 									</div>
-									<input type="hidden" class="id_${parameters.id}" name="${parameters.name}.${parameters.nameKey}" value="{1}"> 
-									<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}.${parameters.nameParentKey}" value="{2}">
-									<input type="hidden" name="${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
+									<input type="hidden" class="id_${parameters.id}" name="{5}" value="{1}"> 
+									<input type="hidden" class="id_${parameters.id}_parent" name="{6}" value="{2}">
+									<input type="hidden" name="{3}" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
 									<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
 								</div>
 								<input type="hidden" name="item_count_${parameters.id}"/>
-								<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
+								<input type="hidden" class="pushRemove_single_${parameters.id}" name="{4}" value="I">
+								<#if parameters.minusOneOnRemove?? && stack.findValue(parameters.minusOneOnRemove)>
+									<input type="hidden" class="pushRemove_single_${parameters.id}" name="{7}" value="-1">
+								</#if>
 							</div>
 					</#if>
 					
@@ -423,7 +429,7 @@
 						}
 						
 						$.each( jsonResponse.result<#if parameters.subName??>.${parameters.subName}</#if>, function( key, val ) {
-							cloneInput_${parameters.id}(val,keyWord)
+							cloneSub_${parameters.id}(val,keyWord)
 						});
 						
 						
@@ -437,7 +443,7 @@
 		}
 	}
 	
-	cloneInput_${parameters.id} = function(val,keyWord){
+	cloneSub_${parameters.id} = function(val,keyWord){
 		var data = $(".clone${parameters.id}").html();
 		var name ;
 		if(keyWord != null && keyWord != "" ){
@@ -571,7 +577,7 @@
 							$(".select6_${parameters.id} .spinner-div").hide();
 						}
 						
-						cloneInput_${parameters.id}(val,keyWord)
+						cloneSub_${parameters.id}(val,keyWord)
 						
 					});
 					
@@ -630,14 +636,9 @@
 		});
 		
 		if(!isDup){
-			var data = $(".clone-input-${parameters.id}").html();
-			$('.clone-input-${parameters.id}').before(data.format(
-				name, // {0}
-				id,
-				idParent,
-				$(".select6_${parameters.id} div:not(.clone-input-${parameters.id})>input[name='item_count_${parameters.id}'] ").length
-			));
+			cloneInputItem_${parameters.id}(name, id, idParent);
 		}
+		
 	}
 		
 	deleteInputItem_${parameters.id} = function(event,e){
@@ -733,7 +734,7 @@
 	});
 	
 	function ${parameters.id}_clearData(){
-		$(".select6_${parameters.id} .select6-input > div:not(.clone-input-model):not(.input-down-arrow), .select6_${parameters.id} .select6-input > input").remove();
+		$(".select6_${parameters.id} .select6-input > div:not(.clone):not(.input-down-arrow), .select6_${parameters.id} .select6-input > input").remove();
 	}
 	
 	function ${parameters.id}_setInitInput(e){
@@ -762,15 +763,36 @@
 			});
 			
 			if(!isDup){
-				var data = $(".clone-input-${parameters.id}").html();
+				cloneInputItem_${parameters.id}(name, id, idParent);
+			}
+		}
+		
+		checkBox = $("#select6-select-item-sub-${parameters.id}-"+id);
+		$(".select6_${parameters.id} .select6-select-item .check-box").removeClass("isChecked");
+		checkBox.children(".check-box").addClass('isChecked');
+	}
+	
+	cloneInputItem_${parameters.id} = function(name, id, idParent){
+		var data = $(".clone-input-${parameters.id}").html();
+		<#if !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
+			$('.clone-input-${parameters.id}').before(data.format(
+				name, // {0}
+				id,
+				idParent,
+				$(".select6_${parameters.id} div:not(.clone-input-${parameters.id})>input[name='item_count_${parameters.id}'] ").length
+			));
+			<#else>
 				$('.clone-input-${parameters.id}').before(data.format(
 					name, // {0}
 					id,
 					idParent,
-					$(".select6_${parameters.id} div:not(.clone-input-${parameters.id})>input[name='item_count_${parameters.id}'] ").length
+					"${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>",
+					"__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>",
+					"${parameters.name}.${parameters.nameKey}",
+					"${parameters.name}.${parameters.nameParentKey}",
+					"__pushdataonremove_${parameters.name}.${parameters.nameKey}"
 				));
-			}
-		}
+		</#if>
 	}
 	
 	function ${parameters.id}_getExceptClearList(){

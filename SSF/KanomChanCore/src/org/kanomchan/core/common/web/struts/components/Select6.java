@@ -50,6 +50,7 @@ public class Select6 extends ListUIBean {
     protected String subNameParentKey;
     protected String subNameLabel;
     protected String singleSelect;
+    protected String minusOneOnRemove;
 
     public Select6(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -201,6 +202,10 @@ public class Select6 extends ListUIBean {
 	    
 	    if(singleSelect != null){
 			addParameter("singleSelect", findString(singleSelect));
+		} 
+	    
+	    if(minusOneOnRemove != null){
+			addParameter("minusOneOnRemove", findString(minusOneOnRemove));
 		} 
 	    
 	    if(nameToSaveKey != null){
@@ -454,6 +459,15 @@ public class Select6 extends ListUIBean {
 	public void setNameToSaveKey(String nameToSaveKey) {
 		this.nameToSaveKey = nameToSaveKey;
 	}
+
+	public String getMinusOneOnRemove() {
+		return minusOneOnRemove;
+	}
+
+	public void setMinusOneOnRemove(String minusOneOnRemove) {
+		this.minusOneOnRemove = minusOneOnRemove;
+	}
+	
 	
 	
 }
