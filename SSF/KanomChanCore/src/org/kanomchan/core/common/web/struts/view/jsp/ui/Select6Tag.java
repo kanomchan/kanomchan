@@ -49,6 +49,7 @@ public class Select6Tag extends AbstractUITag {
     protected String singleSelect;
     protected String nameToSaveKey;
     protected String minusOneOnRemove;
+    protected String nameInitSingle;
 
 	
 	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
@@ -93,6 +94,7 @@ public class Select6Tag extends AbstractUITag {
         Select6.setSingleSelect(singleSelect);
         Select6.setNameToSaveKey(nameToSaveKey);
         Select6.setMinusOneOnRemove(minusOneOnRemove);
+        Select6.setNameInitSingle(nameInitSingle);
     }
 	
 	public void setEmptyOption(String emptyOption) {
@@ -343,6 +345,14 @@ public class Select6Tag extends AbstractUITag {
 
 	public void setMinusOneOnRemove(String minusOneOnRemove) {
 		this.minusOneOnRemove = minusOneOnRemove;
+	}
+
+	public String getNameInitSingle() {
+		return nameInitSingle;
+	}
+
+	public void setNameInitSingle(String nameInitSingle) {
+		this.nameInitSingle = nameInitSingle;
 	}
 
 	
