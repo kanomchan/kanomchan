@@ -334,52 +334,54 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		}
 		T otherLang = null;
 		
-		
-		if(beanLang.getOtherLang() != null && beanLang.getLangCode() != null && !"".equals(beanLang.getLangCode())){
-			if(idEng == null){
-				try {
-					idEng = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getOtherLang());
-					if(idEng == null)
-						throw new RollBackTechnicalException(CommonMessageCode.COM4987);
-				} catch (IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
-					e.printStackTrace();
+		boolean isHaveLang = checkService.checkTableLang(classMapper.getTableName());
+		if(isHaveLang){
+			if(beanLang.getOtherLang() != null && beanLang.getLangCode() != null && !"".equals(beanLang.getLangCode())){
+				if(idEng == null){
+					try {
+						idEng = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getOtherLang());
+						if(idEng == null)
+							throw new RollBackTechnicalException(CommonMessageCode.COM4987);
+					} catch (IllegalAccessException | IllegalArgumentException| InvocationTargetException e) {
+						e.printStackTrace();
+					}
 				}
-			}
-			Long idlang = beanLang.getIdLang();
-			if(idlang==null){
-				if(beanLang.getEngLang() != null){
-					if(beanLang.getEngLang() instanceof EntityBean){
-						EntityBean entityBean = (EntityBean) beanLang.getEngLang();
-						idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+				Long idlang = beanLang.getIdLang();
+				if(idlang==null){
+					if(beanLang.getEngLang() != null){
+						if(beanLang.getEngLang() instanceof EntityBean){
+							EntityBean entityBean = (EntityBean) beanLang.getEngLang();
+							idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+						}
+					}else{
+						if(beanLang.getOtherLang() instanceof EntityBean){
+							EntityBean entityBean = (EntityBean) beanLang.getOtherLang();
+							idlang =  checkLangBean(beanLang.getBeanOtherLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+						}
 					}
 				}else{
-					if(beanLang.getOtherLang() instanceof EntityBean){
-						EntityBean entityBean = (EntityBean) beanLang.getOtherLang();
-						idlang =  checkLangBean(beanLang.getBeanOtherLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
+					if(checkLangBeanId((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng,idlang)==null){
+						throw new RollBackTechnicalException(CommonMessageCode.COM4986);
 					}
 				}
-			}else{
-				if(checkLangBeanId((beanLang.getEngLang() != null ? beanLang.getEngLang().getClass() : beanLang.getBeanOtherLang().getClass()), classMapper.getPropertyId().getColumnName(), idEng,idlang)==null){
-					throw new RollBackTechnicalException(CommonMessageCode.COM4986);
-				}
-			}
-			
-			
-			if(idlang!=null)
-				otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
-			else{
-				KeyHolder keyHolder = saveKeyHolder(beanLang.getOtherLang(),true, beanLang.getLangCode());
 				
-				try {
-					Method methodGet = ClassUtil.findGetter(BeanLang.class, "idLang");
-					Method methodSetId= ClassUtil.findSetter(BeanLang.class, "idLang");
-					otherLang = beanLang.getOtherLang();
-					beanLang = idToBean(keyHolder, beanLang, methodSetId, methodGet);
-				} catch (NoSuchFieldException | IntrospectionException e) {
-					e.printStackTrace();
+				
+				if(idlang!=null)
+					otherLang = update(beanLang.getOtherLang(), beanLang.getLangCode(),idlang);
+				else{
+					KeyHolder keyHolder = saveKeyHolder(beanLang.getOtherLang(),true, beanLang.getLangCode());
+					
+					try {
+						Method methodGet = ClassUtil.findGetter(BeanLang.class, "idLang");
+						Method methodSetId= ClassUtil.findSetter(BeanLang.class, "idLang");
+						otherLang = beanLang.getOtherLang();
+						beanLang = idToBean(keyHolder, beanLang, methodSetId, methodGet);
+					} catch (NoSuchFieldException | IntrospectionException e) {
+						e.printStackTrace();
+					}
 				}
+				beanLang.setOtherLang(otherLang);
 			}
-			beanLang.setOtherLang(otherLang);
 		}
 		return beanLang;
 	}
@@ -394,34 +396,36 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		ClassMapper classMapper = JPAUtil.getClassMapper(class1);
 		
 		// check have table Lang
-		checkService.checkTableLang(classMapper.getTableName());
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append("select ");
-		sb.append(columnName);
-		sb.append("_LANG from ");
-		sb.append(classMapper.getTableName());
-		sb.append("_LANG ");
-		sb.append(" WHERE ");
-		sb.append(columnName);
-		sb.append(" = :ID_ENG");
-		sb.append(" AND LANG_CODE3 = :LANG_CODE3");
-		if(!"".equals(status) && status != null){
-			sb.append(" AND STATUS = :STATUS");
-		}
-		Map<String,  Object>params = new HashMap<String, Object>();
-		params.put("ID_ENG", idEng);
-		params.put("LANG_CODE3", langCode);
-		if(!"".equals(status) && status != null){
-			params.put("STATUS", status);
-		}
-		List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
-		if(conut==null ||conut.size()==0){
-			return null;
+		boolean isHaveLang = checkService.checkTableLang(classMapper.getTableName());
+		if(isHaveLang){
+			StringBuilder sb = new StringBuilder();
+			sb.append("select ");
+			sb.append(columnName);
+			sb.append("_LANG from ");
+			sb.append(classMapper.getTableName());
+			sb.append("_LANG ");
+			sb.append(" WHERE ");
+			sb.append(columnName);
+			sb.append(" = :ID_ENG");
+			sb.append(" AND LANG_CODE3 = :LANG_CODE3");
+			if(!"".equals(status) && status != null){
+				sb.append(" AND STATUS = :STATUS");
+			}
+			Map<String,  Object>params = new HashMap<String, Object>();
+			params.put("ID_ENG", idEng);
+			params.put("LANG_CODE3", langCode);
+			if(!"".equals(status) && status != null){
+				params.put("STATUS", status);
+			}
+			List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
+			if(conut==null ||conut.size()==0){
+				return null;
+			}else{
+				return conut.get(0);
+			}
 		}else{
-			return conut.get(0);
+			return null;
 		}
-		
 	}
 	
 	private Long checkLangBeanId(Class<? extends Object> class1,String columnName, Object idEng, Object idLang) throws RollBackException, NonRollBackException {
