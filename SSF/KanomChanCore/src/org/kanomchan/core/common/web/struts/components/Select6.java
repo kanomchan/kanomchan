@@ -51,6 +51,7 @@ public class Select6 extends ListUIBean {
     protected String subNameLabel;
     protected String singleSelect;
     protected String minusOneOnRemove;
+    protected String nameInitSingle;
 
     public Select6(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -89,18 +90,25 @@ public class Select6 extends ListUIBean {
         	addParameter("nameList", findString(nameList));
         }
         else if((boolean) findValue(singleSelect)){
+        	String prefix = "";
+        	if(nameInitSingle != null){
+        		prefix = findString(nameInitSingle)+".";
+        	}
+        	else{
+        		prefix = findString(name)+".";
+        	}
         	if(nameValue != null){
-    			addParameter("nameValue_Single", findString(findString(name)+"."+ findString(nameValue)));
+    			addParameter("nameValue_Single", findString(prefix+ findString(nameValue)));
     			
     		}
-    		if(nameValue != null){
-    			addParameter("nameKey_Single", findString(findString(name)+"."+ findString(nameKey)));
+    		if(nameKey != null){
+    			addParameter("nameKey_Single", findString(prefix + findString(nameKey)));
     		}
-    		if(nameValue != null){
-    			addParameter("nameParentKey_Single", findString(findString(name)+"."+ findString(nameParentKey)));
+    		if(nameParentKey != null){
+    			addParameter("nameParentKey_Single", findString(prefix + findString(nameParentKey)));
     		}
     		if(nameToSaveKey != null){
-    			addParameter("nameToSaveKey_Single", findString(findString(name)+"."+ findString(nameToSaveKey)));
+    			addParameter("nameToSaveKey_Single", findString(prefix + findString(nameToSaveKey)));
     		}
         }
         	
@@ -211,6 +219,10 @@ public class Select6 extends ListUIBean {
 	    if(nameToSaveKey != null){
 			addParameter("nameToSaveKey", findString(nameToSaveKey));
 		} 
+	    
+	    if(nameInitSingle != null){
+	    	addParameter("nameInitSingle", findString(nameInitSingle));
+	    }
     }
 
     @StrutsTagAttribute(description="Whether or not to add an empty (--) option after the header option", type="Boolean", defaultValue="false")
@@ -466,6 +478,14 @@ public class Select6 extends ListUIBean {
 
 	public void setMinusOneOnRemove(String minusOneOnRemove) {
 		this.minusOneOnRemove = minusOneOnRemove;
+	}
+
+	public String getNameInitSingle() {
+		return nameInitSingle;
+	}
+
+	public void setNameInitSingle(String nameInitSingle) {
+		this.nameInitSingle = nameInitSingle;
 	}
 	
 	

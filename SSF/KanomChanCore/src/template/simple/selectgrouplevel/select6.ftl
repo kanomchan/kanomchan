@@ -242,6 +242,10 @@
 		margin-left: 5px;
 		margin-right: 2px;
 	}
+	
+	.group_has_input{
+		background: rgba(201, 233, 255, 0.5);
+	}
 </style>
 <div class="select6 select6-wrapper multiple select6_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
 	<div class="select6-input-box">
@@ -391,6 +395,7 @@
 	var addItemList_${parameters.id} = new Object();
 	var currentPage_${parameters.id};
 	var  isLastPage_${parameters.id} = false;
+	
 	scrollEnd_${parameters.id} = function(){
 		currentPage_${parameters.id}++;
 		var idParent = $('.select6_${parameters.id} .select6-select-item.active').children('.item_id_${parameters.id}').val();
@@ -487,7 +492,7 @@
 		});
 		$('.select6_${parameters.id} .scroll-element.scroll-y').hide(0);
 		load_item_${parameters.id}($('#select6-select-item-${parameters.id}-0'),null);
-
+		refreshState_${parameters.id}();
 	});
 	
 	clickSearch_${parameters.id} = function(event){
@@ -523,6 +528,7 @@
 			setItemToInput_${parameters.id}(e);
 			setInputToItemList_${parameters.id}();
 		}
+		refreshState_${parameters.id}();
 	}
 	</#if>
 	
@@ -590,6 +596,7 @@
 				else{
 					$(".select6_${parameters.id} .spinner-div").hide();
 				}
+				refreshState_${parameters.id}();
 			}
 			
 		});
@@ -638,7 +645,7 @@
 		if(!isDup){
 			cloneInputItem_${parameters.id}(name, id, idParent);
 		}
-		
+		refreshState_${parameters.id}();
 	}
 		
 	deleteInputItem_${parameters.id} = function(event,e){
@@ -647,6 +654,7 @@
 		$("#select6-select-item-sub-${parameters.id}-"+ id_input_item+ " .check-box").removeClass("isChecked");
 		$("#select6-select-item-sub-${parameters.id}-"+ id_input_item+ " input[type='radio']").attr("checked" , false);
 		e.remove();
+		refreshState_${parameters.id}();
 	}
 	
 	inputItemClick_${parameters.id} = function(event,e){
@@ -712,6 +720,29 @@
 		}
 	}
 	
+	cloneInputItem_${parameters.id} = function(name, id, idParent){
+		var data = $(".clone-input-${parameters.id}").html();
+		<#if !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
+			$('.clone-input-${parameters.id}').before(data.format(
+				name, // {0}
+				id,
+				idParent,
+				$(".select6_${parameters.id} div:not(.clone-input-${parameters.id})>input[name='item_count_${parameters.id}'] ").length
+			));
+			<#else>
+				$('.clone-input-${parameters.id}').before(data.format(
+					name, // {0}
+					id,
+					idParent,
+					"${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>",
+					"__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>",
+					"${parameters.name}.${parameters.nameKey}",
+					"${parameters.name}.${parameters.nameParentKey}",
+					"__pushdataonremove_${parameters.name}.${parameters.nameKey}"
+				));
+		</#if>
+	}
+	
 	highlightText = function(text,matchStart, keyWord){
 		var matchEnd = matchStart + keyWord.length - 1;
 		var beforeMatch = text.slice(0, matchStart);
@@ -735,6 +766,7 @@
 	
 	function ${parameters.id}_clearData(){
 		$(".select6_${parameters.id} .select6-input > div:not(.clone):not(.input-down-arrow), .select6_${parameters.id} .select6-input > input").remove();
+		refreshState_${parameters.id};
 	}
 	
 	function ${parameters.id}_setInitInput(e){
@@ -770,34 +802,22 @@
 		checkBox = $("#select6-select-item-sub-${parameters.id}-"+id);
 		$(".select6_${parameters.id} .select6-select-item .check-box").removeClass("isChecked");
 		checkBox.children(".check-box").addClass('isChecked');
-	}
-	
-	cloneInputItem_${parameters.id} = function(name, id, idParent){
-		var data = $(".clone-input-${parameters.id}").html();
-		<#if !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
-			$('.clone-input-${parameters.id}').before(data.format(
-				name, // {0}
-				id,
-				idParent,
-				$(".select6_${parameters.id} div:not(.clone-input-${parameters.id})>input[name='item_count_${parameters.id}'] ").length
-			));
-			<#else>
-				$('.clone-input-${parameters.id}').before(data.format(
-					name, // {0}
-					id,
-					idParent,
-					"${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>",
-					"__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>",
-					"${parameters.name}.${parameters.nameKey}",
-					"${parameters.name}.${parameters.nameParentKey}",
-					"__pushdataonremove_${parameters.name}.${parameters.nameKey}"
-				));
-		</#if>
+		refreshState_${parameters.id}();
 	}
 	
 	function ${parameters.id}_getExceptClearList(){
 		var exceptList = ""
 		return ;
+	}
+	
+	refreshState_${parameters.id} = function(){
+		//hilight group that has children selected
+		$(".select6_${parameters.id} .group .select6-select-item").removeClass("group_has_input");
+		
+		$(".select6_${parameters.id} div:not(.clone)>.select6-input-item").each(function(key,value){
+			var idInputParent = $(value).children('.id_${parameters.id}_parent').val();
+			$("#select6-select-item-${parameters.id}-"+idInputParent).addClass("group_has_input");
+		});
 	}
 	
 </script>

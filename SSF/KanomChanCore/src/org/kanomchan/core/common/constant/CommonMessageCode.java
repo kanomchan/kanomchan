@@ -12,7 +12,7 @@ public enum CommonMessageCode implements MessageCode {
 	, COM4986("fack id")
 	, COM4893("File Not Found")
 	, ATZ2001("Unauthorized Operation Business Exception")
-	, ATC2001(""), ATC2002(""), ATZ2002("")
+	, ATC2001(""), ATC2002(""), ATZ2002(""),ATC2012("")
 	, USR3001(""), USR3002("")
 	, REG3001(""), REG3002(""), REG0003("")
 	, ATC2005(""), REG2001(""), REG2002("")
