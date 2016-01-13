@@ -35,6 +35,8 @@ public interface CommonConstant {
 	
 	//ACTIVE_ACCOUNT_KEY is for UserDefualt Bean
 	public static final String ACTIVE_ACCOUNT_KEY = "SESSION_ACTIVE_ACCOUNT_KEY";
+	
+	public static final String CART_ID = "SESSION_CART_ID";
     }
     
     public static interface PARAMETER {
