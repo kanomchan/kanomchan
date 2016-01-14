@@ -28,27 +28,32 @@
 				<@s.text name="COMMON_PAGING_SHOW"></@s.text> 
 				</label>
 				<select 
-					class="form-control paging-select inline" 
-					id="rowsPerPage_${parameters.id}" 
+					class="form-control paging-select inline rowsPerPage_${parameters.id}" 
+					id="rowsPerPage_select_${parameters.id}" 
 					name="rowsPerPage" 
 					onchange="rowsPerPage_${parameters.id}_select()">
+					<option value="5"
+						<#if parameters.rowsPerPage?default(parameters.defaultShowPerPage) == 5>
+							selected="selected"
+						</#if>
+					>5</option>
 					<option value="10"
-						<#if parameters.rowsPerPage == 10>
+						<#if parameters.rowsPerPage?default(parameters.defaultShowPerPage) == 10>
 							selected="selected"
 						</#if>
 					>10</option>
 					<option value="20"
-						<#if parameters.rowsPerPage == 20>
+						<#if parameters.rowsPerPage?default(parameters.defaultShowPerPage) == 20>
 							selected="selected"
 						</#if>
 					>20</option>
 					<option value="50"
-						<#if parameters.rowsPerPage == 50>
+						<#if parameters.rowsPerPage?default(parameters.defaultShowPerPage) == 50>
 							selected="selected"
 						</#if>
 					>50</option>
 					<option value="100"
-						<#if parameters.rowsPerPage == 100>
+						<#if parameters.rowsPerPage?default(parameters.defaultShowPerPage) == 100>
 							selected="selected"
 						</#if>
 					>100</option>
@@ -56,7 +61,7 @@
 				<script>
 					function rowsPerPage_${parameters.id}_select(){
 						$('#currentPage').val('1');
-						$('#rowsPerPage_value_${parameters.id}').val($('#rowsPerPage_${parameters.id}').val());
+						$('#rowsPerPage_${parameters.id}').val($('#rowsPerPage_select_${parameters.id}').val());
 						$('#${parameters.id}').submit();
 					}
 				</script>
@@ -152,7 +157,7 @@
 					<li><a href="#" onclick="$('#currentPage').val('${parameters.nextPage?html}');$('#${parameters.id}').submit();">&raquo;</a></li>
 			</#if>
 			<@s.hidden id="currentPage" name="pagingBean.currentPage"></@s.hidden>
-			<@s.hidden id="rowsPerPage_value_${parameters.id}" name="pagingBean.rowsPerPage"></@s.hidden>
+			<@s.hidden id="rowsPerPage_${parameters.id}" name="pagingBean.rowsPerPage" value="${parameters.rowsPerPage?default(parameters.defaultShowPerPage)}"></@s.hidden>
 			</ul>
 		</div>
 	</div>
