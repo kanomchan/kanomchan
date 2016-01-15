@@ -37,6 +37,8 @@ public interface CommonConstant {
 	public static final String ACTIVE_ACCOUNT_KEY = "SESSION_ACTIVE_ACCOUNT_KEY";
 	
 	public static final String CART_ID = "SESSION_CART_ID";
+	public static final String CART_MAP_LEVEL = "SESSION_CART_MAP_LEVEL";
+	public static final String CART_RESULT = "SESSION_CART_RESULT";
     }
     
     public static interface PARAMETER {
