@@ -9,4 +9,5 @@ public interface CheckService {
 	public boolean checkColumnNameInTableLang(String tableName, String columnName)throws RollBackException, NonRollBackException;
 	public boolean checkClearableList(String tableName, String columnName)throws RollBackException, NonRollBackException;
 	public boolean checkIncludeMinusOne(String name, String columnName)throws RollBackException, NonRollBackException;
+	public String getPkTableLangByTableName(String tableName) throws RollBackException, NonRollBackException;
 }

@@ -921,7 +921,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 						if(embeddedIdObject!=null){
 							Object valueEmbeddedId = method.invoke(embeddedIdObject);
 							if(valueEmbeddedId!=null){
-								if(tableLang){
+								if(tableLang&&(columnName+"_LANG").equals(checkService.getPkTableLangByTableName(table.name()))){
 									pkParaList.add(new Criteria(columnName+"_LANG",idLang,columnName+"_LANG"+i++));
 								}else{
 									pkParaList.add(new Criteria(columnName,valueEmbeddedId,columnName+i++));
