@@ -335,8 +335,11 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		T otherLang = null;
 		
 		boolean isHaveLang = checkService.checkTableLang(classMapper.getTableName());
-		if(isHaveLang){
-			if(beanLang.getOtherLang() != null && beanLang.getLangCode() != null && !"".equals(beanLang.getLangCode())){
+		boolean isHaveLangCode = beanLang.getLangCode() != null 
+				&& !"".equals(beanLang.getLangCode()) 
+				&& !"ENG".equals(beanLang.getLangCode()) ? true : false;
+		if(isHaveLang && isHaveLangCode){
+			if(beanLang.getOtherLang() != null){
 				if(idEng == null){
 					try {
 						idEng = classMapper.getPropertyId().getMethodGet().invoke(beanLang.getOtherLang());
@@ -351,6 +354,9 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 					if(beanLang.getEngLang() != null){
 						if(beanLang.getEngLang() instanceof EntityBean){
 							EntityBean entityBean = (EntityBean) beanLang.getEngLang();
+							
+							//TODO status bug A & W beanLang.getBeanOtherLang()
+//							idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
 							idlang =  checkLangBean(beanLang.getEngLang().getClass(), classMapper.getPropertyId().getColumnName(), idEng, entityBean.getStatus(), beanLang.getLangCode());
 						}
 					}else{
@@ -408,15 +414,14 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 			sb.append(columnName);
 			sb.append(" = :ID_ENG");
 			sb.append(" AND LANG_CODE3 = :LANG_CODE3");
-			if(!"".equals(status) && status != null){
-				sb.append(" AND STATUS = :STATUS");
-			}
 			Map<String,  Object>params = new HashMap<String, Object>();
+			if(!"".equals(status) && status != null){
+//				sb.append(" AND STATUS = :STATUS");
+//				params.put("STATUS", status);
+				sb.append(" AND STATUS IN ('A','W') ");
+			}
 			params.put("ID_ENG", idEng);
 			params.put("LANG_CODE3", langCode);
-			if(!"".equals(status) && status != null){
-				params.put("STATUS", status);
-			}
 			List<Long> conut = nativeQuery(sb.toString(), LONG_MAPPER, params);
 			if(conut==null ||conut.size()==0){
 				return null;

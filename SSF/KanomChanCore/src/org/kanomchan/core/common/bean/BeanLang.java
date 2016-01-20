@@ -13,7 +13,8 @@ public class BeanLang<T> implements Serializable  {
 	private T beanEng;
 	private T beanOtherLang;
 	private BeanLang<T> beanLang;
-	private Map<String, T> beanLangMap = new HashMap<String, T>();
+//	private Map<String, T> beanLangMap = new HashMap<String, T>();
+	private Map<String, T> beanLangMap;
 	private String langCode;
 	private Long idLang;
 	
