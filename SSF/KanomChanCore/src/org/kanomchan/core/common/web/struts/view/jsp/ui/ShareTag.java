@@ -43,6 +43,7 @@ public class ShareTag extends AbstractUITag {
     protected String size;
     protected String type;
     protected String socialNetwork;
+    protected String shareUrl;
     
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
@@ -58,6 +59,7 @@ public class ShareTag extends AbstractUITag {
         share.setSize(size);
         share.setType(type);
         share.setSocialNetwork(socialNetwork);
+        share.setShareUrl(shareUrl);
     }
 
     /**
@@ -85,6 +87,10 @@ public class ShareTag extends AbstractUITag {
     
     public void setSocialNetwork(String socialNetwork) {
 		this.socialNetwork = socialNetwork;
+	}
+    
+    public void setShareUrl(String shareUrl) {
+		this.shareUrl = shareUrl;
 	}
     
 }
