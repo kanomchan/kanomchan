@@ -850,7 +850,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 										if(((Number)value).intValue() ==-1){
 											if(checkService.checkIncludeMinusOne(table.name(),columnName)){
 												setList.add(new Criteria(columnName,value,columnName+i++));
-											}else if (checkService.checkClearableList(table.name(),columnName)){
+											}else{
 												setList.add(new Criteria(columnName,(Object)null,columnName+i++));
 											}
 										}else{
