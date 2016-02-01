@@ -1,6 +1,7 @@
 package org.kanomchan.core.common.processhandler;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +18,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.MDC;
 import org.kanomchan.core.common.bean.LocationBean;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
@@ -40,8 +40,8 @@ public class ProcessContextFilter  implements Filter  {
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpSession httpSession = httpServletRequest.getSession(true);
-		MDC.put(CommonConstant.LOG.CONTEXT_PATH, ((HttpServletRequest) request).getContextPath());
-		MDC.put(CommonConstant.LOG.SERVER_NAME, request.getServerName());
+		MDC.put(CommonConstant.LOG.CONTEXT_PATH, (String)((HttpServletRequest) request).getContextPath());
+		MDC.put(CommonConstant.LOG.SERVER_NAME,(String) request.getServerName());
 		MDC.put(CommonConstant.LOG.SERVER_PORT, request.getServerPort());
 		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_SERVER_NAME, InetAddress.getLocalHost().getHostName());
 		MDC.put(CommonConstant.LOG.SERVER_INSTANCE_NAME, System.getProperty("com.sun.aas.instanceName"));
