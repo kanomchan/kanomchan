@@ -93,7 +93,7 @@
 	 	</#if>
 	 </#if>
  	 
-	><label for="${parameters.id}-option1" class=""><@s.text name="MULTI_SELECT_SPECIFIC_VALUE"></@s.text></label></div>&nbsp</lt>
+	><label for="${parameters.id}-option1" class=""><@s.text name="MULTI_SELECT_SPECIFIC_VALUE"></@s.text></label></div></lt>
 
 	<div class="radio radio-inline"><input type="radio" 
 	<#if parameters.choiceName??>
@@ -131,7 +131,7 @@
 	 		checked="checked"
 	 	</#if>
 	 </#if>
-	><label for="${parameters.id}-option3" class=""><@s.text name="MULTI_SELECT_ALL"></@s.text></label></div>&nbsp</lt>
+	><label for="${parameters.id}-option3" class=""><@s.text name="MULTI_SELECT_ALL"></@s.text></label></div></lt>
 
 </#if>
 <select<#rt/>

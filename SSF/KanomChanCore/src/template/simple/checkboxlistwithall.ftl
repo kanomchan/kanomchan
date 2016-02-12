@@ -3,7 +3,8 @@
 	<div class="checkbox">
 	<label class="checkbox-mobile" for="all${parameters.id?html}">
 		<input type="checkbox" name="all${parameters.id?html}" value="0" id="all${parameters.id?html}"/><label for="all${parameters.id?html}" class="checkboxLabel"> <@s.text name="CHECKBOX_LIST_WITH_ALL_ALL"/></label>
-	</label><br class="hidden-xs hidden-sm">
+	</label>
+	</div>
 <@s.iterator value="parameters.list">
     <#assign itemCount = itemCount + 1/>
  	<#assign itemCheck = stack.findValue('check')/>
@@ -39,6 +40,7 @@
         </#if>
     </#if>
     <#assign itemKeyStr=itemKey.toString() />
+<div class="checkbox">
 <label class="checkbox-mobile" for="${parameters.id?html}-${itemCount}">
 <input type="checkbox" 
 		<#if parameters.beanName??>
@@ -79,15 +81,15 @@
     <#include "/${parameters.templateDir}/${parameters.expandTheme}/scripting-events.ftl" />
     <#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
         />
-<label for="${parameters.id?html}-${itemCount}" class="checkboxLabel">${itemValue?html}</label>
+<label for="${parameters.id?html}-${itemCount}"><@s.text name="${itemValue?html}"/></label>
 <input type="hidden" id="__checkbox_${parameters.id?html}_${itemCount}" name="__checkbox_${parameters.name?html}[${itemCount-1}].check"
        value=""<#rt/><#if parameters.disabled?default(false)>
        disabled="disabled"<#rt/>
 </#if>
         />
-</label><br class="hidden-xs hidden-sm">
-</@s.iterator>
+</label>
 </div>
+</@s.iterator>
 <script type="text/javascript">
 	$( document ).ready(function() {
 		if ($('.checkbox-${parameters.id?html}:checked').length == $('.checkbox-${parameters.id?html}').length) {
