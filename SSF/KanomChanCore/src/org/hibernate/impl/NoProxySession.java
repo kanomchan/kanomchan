@@ -46,9 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.ConnectionReleaseMode;
 import org.hibernate.Criteria;
@@ -143,6 +141,7 @@ import org.hibernate.type.SerializationException;
 import org.hibernate.util.ArrayHelper;
 import org.hibernate.util.CollectionHelper;
 import org.hibernate.util.StringHelper;
+import org.kanomchan.core.common.processhandler.ProcessContextFilter;
 
 
 /**
@@ -160,7 +159,7 @@ public final class NoProxySession extends AbstractSessionImpl
 	// a seperate classs responsible for generating/dispatching events just duplicates most of the Session methods...
 	// passing around seperate reto interceptor, factory, actionQueue, and persistentContext is not manageable...
 
-	private static final Logger log = LoggerFactory.getLogger(NoProxySession.class);
+	private static final Logger log = Logger.getLogger(NoProxySession.class);
 
 	private transient EntityMode entityMode = EntityMode.POJO;
 	private transient boolean autoClear; //for EJB3

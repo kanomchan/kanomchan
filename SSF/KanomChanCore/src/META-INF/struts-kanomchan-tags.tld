@@ -888,6 +888,12 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <description><![CDATA[URL to Share]]></description>
+      <name>shareUrl</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <dynamic-attributes>true</dynamic-attributes>
   </tag>
   

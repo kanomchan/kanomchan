@@ -32,7 +32,6 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/hibernate-jpa-2.0-api-1.0.1.Final.jar" sourcepath="C:/Users/kwan/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/javassist-3.12.0.GA.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/jta-1.1.jar"/>
-	<classpathentry kind="lib" path="/KanomChanLib/lib/core/hibernate3/required/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/GSON/gson-2.2.4.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/ip2c/geoip-api-1.2.14.jar" sourcepath="C:/Users/kwan/.m2/repository/com/maxmind/geoip/geoip-api/1.2.14/geoip-api-1.2.14-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/template/velocity-1.7.jar" sourcepath="C:/Users/Lenovo/.m2/repository/org/apache/velocity/velocity/1.7/velocity-1.7-sources.jar"/>

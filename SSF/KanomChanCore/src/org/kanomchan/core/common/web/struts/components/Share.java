@@ -70,6 +70,7 @@ public class Share extends UIBean {
     protected String size;
     protected String type;
     protected String socialNetwork;
+    protected String shareUrl;
 
 
     public Share(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
@@ -101,6 +102,10 @@ public class Share extends UIBean {
         
         if (socialNetwork != null) {
             addParameter("socialNetwork", findValue(socialNetwork));
+        }
+        
+        if (shareUrl != null) {
+        	addParameter("shareUrl", findString(shareUrl));
         }
 
     }
@@ -134,5 +139,8 @@ public class Share extends UIBean {
 		this.socialNetwork = socialNetwork;
 	}
     
+    public void setShareUrl(String shareUrl) {
+		this.shareUrl = shareUrl;
+	}
 
 }

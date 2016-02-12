@@ -232,7 +232,7 @@
 	    position: absolute;
 	    right: 5px;
 	    width: 13px;
-	    height: 100%;
+	    height: 95%;
 	    padding: 5px;
 	    border-left: 1px solid #CCC;
 	}
@@ -241,6 +241,10 @@
 		align-self: center;
 		margin-left: 5px;
 		margin-right: 2px;
+	}
+	
+	.select6_${parameters.id} .select6-input, .select6_${parameters.id} .input-down-arrow{ 
+		cursor: pointer; 
 	}
 	
 	.group_has_input{
@@ -476,9 +480,22 @@
 	$(document).on('click',function() {
 		$('.select6-select-container').hide();
 	});
+	toggleselect6_${parameters.id} = function(element){
+		var arrow;
+		if($(element).is(":visible")){
+			arrow = "glyphicon glyphicon-chevron-down";
+		}
+		else{
+			arrow = "glyphicon glyphicon-chevron-up";
+		}
+		$(".select6_${parameters.id} .input-down-arrow").empty();
+		$(".select6_${parameters.id} .input-down-arrow").append("<div><span class='"+arrow+"' aria-hidden='true'></span></div>");
+		element.toggle();
+	};
 	var openselect6_${parameters.id} = function(event,element) {
 		$('.select6_${parameters.id} .select6-select-container').not(element.parent().parent().parent().children('.select6-select-container')).hide();
-		element.parent().parent().parent().children('.select6-select-container').toggle();
+		toggleselect6_${parameters.id}(element.parent().parent().parent().children('.select6-select-container'));
+		
 		event.stopPropagation();
 	};
 	$(document).ready(function(){

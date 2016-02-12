@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.views.annotations.StrutsTag;
 import org.apache.struts2.views.annotations.StrutsTagAttribute;
-import org.glassfish.webservices.node.ServiceReferenceNode;
 import org.kanomchan.core.common.bean.WebBoConfig;
 import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.NonRollBackException;
