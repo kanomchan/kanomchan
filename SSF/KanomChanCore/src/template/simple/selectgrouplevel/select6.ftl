@@ -479,6 +479,8 @@
 
 	$(document).on('click',function() {
 		$('.select6-select-container').hide();
+		$(".select6_${parameters.id} .input-down-arrow").empty();
+		$(".select6_${parameters.id} .input-down-arrow").append("<div><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span></div>");
 	});
 	toggleselect6_${parameters.id} = function(element){
 		var arrow;
