@@ -1673,6 +1673,18 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <description><![CDATA[Set the Place holder on MultiSelect]]></description>
+      <name>labelLeft</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Set the Place holder on MultiSelect]]></description>
+      <name>labelRight</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <dynamic-attributes>true</dynamic-attributes>
   </tag>
   

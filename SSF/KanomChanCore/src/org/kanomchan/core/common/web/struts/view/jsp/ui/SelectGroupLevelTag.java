@@ -35,6 +35,8 @@ public class SelectGroupLevelTag extends AbstractRequiredListTag {
     protected String parentLevel;
     protected String levelIgnore;
     protected String beanId;
+    protected String labelLeft;
+    protected String labelRight;
 	
 	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new SelectGroupLevel(stack, req, res);
@@ -64,7 +66,8 @@ public class SelectGroupLevelTag extends AbstractRequiredListTag {
         selectGroupLevel.setParentLevel(parentLevel);
         selectGroupLevel.setLevelIgnore(levelIgnore);
         selectGroupLevel.setBeanId(beanId);
-        
+        selectGroupLevel.setLabelLeft(labelLeft);
+        selectGroupLevel.setLabelRight(labelRight);
     }
 	
 	public void setEmptyOption(String emptyOption) {
@@ -145,5 +148,13 @@ public class SelectGroupLevelTag extends AbstractRequiredListTag {
     
     public void setBeanId(String beanId) {
 		this.beanId = beanId;
+	}
+    
+    public void setLabelLeft(String labelLeft) {
+		this.labelLeft = labelLeft;
+	}
+    
+    public void setLabelRight(String labelRight) {
+		this.labelRight = labelRight;
 	}
 }

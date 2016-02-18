@@ -37,6 +37,8 @@ public class SelectGroupLevel extends ListUIBean {
     protected String parentLevel;
     protected String levelIgnore;
     protected String beanId;
+    protected String labelLeft;
+    protected String labelRight;
 
     public SelectGroupLevel(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -98,6 +100,10 @@ public class SelectGroupLevel extends ListUIBean {
         	addParameter("levelIgnore", findString(levelIgnore));
         if(beanId != null)
         	addParameter("beanId", findString(beanId));
+        if(labelLeft != null)
+        	addParameter("labelLeft", findString(labelLeft));
+        if(labelRight != null)
+        	addParameter("labelRight", findString(labelRight));
     }
 
     @StrutsTagAttribute(description="Whether or not to add an empty (--) option after the header option", type="Boolean", defaultValue="false")
@@ -185,5 +191,13 @@ public class SelectGroupLevel extends ListUIBean {
     
     public void setBeanId(String beanId) {
 		this.beanId = beanId;
+	}
+    
+    public void setLabelLeft(String labelLeft) {
+		this.labelLeft = labelLeft;
+	}
+    
+    public void setLabelRight(String labelRight) {
+		this.labelRight = labelRight;
 	}
 }
