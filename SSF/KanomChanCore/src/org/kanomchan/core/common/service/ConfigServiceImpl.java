@@ -40,6 +40,7 @@ public class ConfigServiceImpl implements ConfigService {
 	private Map<String, Map<String, List<FieldValidatorBean>>> pageFieldValidatorBeans;
 	private Map<String, List<FieldValidatorBean>> pageValidators;
 	private Map<String, String> actionInputResult;
+	private Map<String, String> configByDate;
 	
 	@Override
 	@PostConstruct
@@ -69,6 +70,12 @@ public class ConfigServiceImpl implements ConfigService {
 		} catch (RollBackException | NonRollBackException e) {
 			logger.error("initConfig()", e);
 		}
+		
+		try {
+			configByDate = configDao.getConfigDateMap();
+		} catch (RollBackException | NonRollBackException e) {
+			logger.error("initConfig()", e);
+		}
 	}
 	
 	@Override
@@ -78,6 +85,7 @@ public class ConfigServiceImpl implements ConfigService {
 		pageFieldValidatorBeans = configDao.getPageFieldValidators();
 		pageValidators = configDao.getPageValidators();
 		actionInputResult = configDao.getActionInputResult();
+		configByDate = configDao.getConfigDateMap();
 	}
 	
 	@Override
@@ -142,6 +150,17 @@ public class ConfigServiceImpl implements ConfigService {
 			logger.error("checkClearableList", e);
 			throw new RollBackProcessException(CommonMessageCode.COM4998, e);
 		}
+	}
+
+	@Override
+	public String getByDate(String key) {
+		try{
+			String returnString = configByDate.get(key);    
+			return returnString;
+		}catch(Exception e){
+			logger.error("get(String)", e);
+		}
+		return null;
 	}
 
 }

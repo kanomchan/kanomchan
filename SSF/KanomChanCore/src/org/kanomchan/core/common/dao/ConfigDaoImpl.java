@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.kanomchan.core.common.bean.ActionBean;
 import org.kanomchan.core.common.bean.Config;
 import org.kanomchan.core.common.bean.ConfigByCountry;
+import org.kanomchan.core.common.bean.ConfigByDate;
 import org.kanomchan.core.common.bean.ConfigDefault;
 import org.kanomchan.core.common.bean.FieldValidatorBean;
 import org.kanomchan.core.common.bean.FieldValidatorDefault;
@@ -346,4 +347,32 @@ public class ConfigDaoImpl extends JdbcCommonDaoImpl implements ConfigDao {
 	        return displayFiled;
 	    }
     }
+	
+	private static final String SQL_QUERY_CONFIG_BY_DATE = "SELECT ID_REF_DATA, CONFIG_KEY, CONFIG_VALUE FROM SYS_M_CONFIG_BY_DATE WHERE STATUS = 'A' ";
+	
+	@Override
+	public Map<String, String> getConfigDateMap() throws RollBackException, NonRollBackException {
+		Map<String, String> configMap = new ConcurrentHashMap<String, String>();
+		List<ConfigByDate> configList = nativeQuery(SQL_QUERY_CONFIG_BY_DATE, CONFIG_BY_DATE_MAPPER);//(SQL_QUERY_CONFIG, new configMapper());
+		for (ConfigByDate systemConfig : configList) {
+			if (logger.isInfoEnabled()) {
+				logger.info("Config loading... " + systemConfig);
+			}	
+			configMap.put(systemConfig.getKey(), systemConfig.getValue());
+		}
+		return configMap;
+	}
+	
+	private static final ConfigByDateMapper<ConfigByDate> CONFIG_BY_DATE_MAPPER = new ConfigByDateMapper<ConfigByDate>();
+	public static final class ConfigByDateMapper<T extends ConfigByDate> implements RowMapper<ConfigByDate> {
+
+	    public ConfigByDate mapRow(ResultSet rs, int num)throws SQLException {
+	    	ConfigByDate configByDate = new ConfigByDate();
+	    	configByDate.setKey( rs.getString("ID_REF_DATA")+ "_"+rs.getString("CONFIG_KEY"));
+	    	configByDate.setValue( rs.getString("CONFIG_VALUE"));
+	    	configByDate.setIdRefData(Long.parseLong(rs.getString("ID_REF_DATA")));
+	    	
+	        return configByDate;
+	    }
+    } 
 }

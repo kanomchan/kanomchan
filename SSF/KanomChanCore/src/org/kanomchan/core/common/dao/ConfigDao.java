@@ -22,4 +22,5 @@ public interface ConfigDao {
 	public Map<String, Map<String, List<FieldValidatorBean>>> getPageFieldValidators()throws RollBackException ,NonRollBackException;
 	public Map<String, List<FieldValidatorBean>> getPageValidators()throws RollBackException ,NonRollBackException;
 	public Map<String, String> getActionInputResult()throws RollBackException ,NonRollBackException;
+	public Map<String, String> getConfigDateMap()throws RollBackException ,NonRollBackException;
 }

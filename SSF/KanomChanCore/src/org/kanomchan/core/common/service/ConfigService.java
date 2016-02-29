@@ -27,4 +27,6 @@ public interface ConfigService {
 	public boolean checkNeedleList(String name) throws RollBackException, NonRollBackException;
 
 	public boolean checkClearableList(String name) throws RollBackException, NonRollBackException;
+	
+	public String getByDate(String key);
 }
