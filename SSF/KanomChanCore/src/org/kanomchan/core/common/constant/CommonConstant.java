@@ -33,12 +33,19 @@ public interface CommonConstant {
 	
 	public static final String PERCENT_KEY = "SESSION_PERCENT_KEY";
 	
+	public static final String USER_CURRENT_MODULE = "USER_CURRENT_MODULE";
+	
 	//ACTIVE_ACCOUNT_KEY is for UserDefualt Bean
 	public static final String ACTIVE_ACCOUNT_KEY = "SESSION_ACTIVE_ACCOUNT_KEY";
 	
 	public static final String CART_ID = "SESSION_CART_ID";
 	public static final String CART_MAP_LEVEL = "SESSION_CART_MAP_LEVEL";
 	public static final String CART_RESULT = "SESSION_CART_RESULT";
+	
+	public static final String CART_ID_TEST_SET = "SESSION_CART_ID_TEST_SET";
+	public static final String CART_MAP_LEVEL_TEST_SET = "SESSION_CART_MAP_LEVEL_TEST_SET";
+	public static final String CART_RESULT_TEST_SET = "SESSION_CART_RESULT_TEST_SET";
+	
     }
     
     public static interface PARAMETER {
