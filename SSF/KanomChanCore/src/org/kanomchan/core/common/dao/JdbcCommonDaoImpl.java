@@ -396,10 +396,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(sql);
 		if(pagingBean.getOrderList()!=null&&pagingBean.getOrderList().size()>0){
 			List<String> joinlist  = new ArrayList<String>();
-			sb.append(" ORDER BY ");
 			for (Order order  : pagingBean.getOrderList()) {
 				
-				sb.append(order.getOrderBy());
 				if(order.getOrderMode().equals(ORDER_MODE.ASC)){
 					joinlist.add(order.getOrderBy()+" ASC ");
 				}else{
@@ -436,10 +434,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(sql);
 		if(pagingBean.getOrderList()!=null&&pagingBean.getOrderList().size()>0){
 			List<String> joinlist  = new ArrayList<String>();
-			sb.append(" ORDER BY ");
 			for (Order order  : pagingBean.getOrderList()) {
-				
-				sb.append(order.getOrderBy());
 				if(order.getOrderMode().equals(ORDER_MODE.ASC)){
 					joinlist.add(order.getOrderBy()+" ASC ");
 				}else{
@@ -474,10 +469,8 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		sb.append(sql);
 		if(pagingBean.getOrderList()!=null&&pagingBean.getOrderList().size()>0){
 			List<String> joinlist  = new ArrayList<String>();
-			sb.append(" ORDER BY ");
 			for (Order order  : pagingBean.getOrderList()) {
 				
-				sb.append(order.getOrderBy());
 				if(order.getOrderMode().equals(ORDER_MODE.ASC)){
 					joinlist.add(order.getOrderBy()+" ASC ");
 				}else{

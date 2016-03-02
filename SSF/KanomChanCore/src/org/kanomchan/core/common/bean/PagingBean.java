@@ -187,6 +187,11 @@ public class PagingBean implements Serializable {
 		this.orderMode = orderMode;
 		this.orderList.clear();		
 		addOrder( this.orderBy, this.orderMode );		
+	}
+	
+	public void setOrder(String orderBy, ORDER_MODE orderMode ) {
+		this.orderList.clear();		
+		addOrder( orderBy, orderMode );		
 	}	
 	
 	public void addOrder( String orderBy, ORDER_MODE orderMode ){
