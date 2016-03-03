@@ -21,196 +21,13 @@
  */
 -->
 <#setting number_format="#.#####">
-<script>
-	<#include "css/jquery.scrollbar.css">
-	<#include "js/jquery.scrollbar.js">
-</script>
+<link href="${base}/struts/simple/selectgrouplevel/css/select5r.css" rel="stylesheet">
 <style>
-
-	.select5r-wrapper{
-	    width:  100%;
-	    position: relative;
-	}
-	.select5r-input-box{
-		border: 1px solid #CCC;
-	}
-	.select5r-input-wrapper{
-	
-	}
-	.select5r-input{
-		background-color: #FFF;
-	    cursor: text;
-	    min-height: 32px;
-	    width: 100%;
-	    display: inline-block;
-	    margin-bottom: -5px;
-	    padding-right: 5px;
-	}
-	.select5r-input-item{
-	    position: relative;
-	    float: left;
-	    padding: 0px 5px;
-	    background-color: #469ED4;
-	    color: #FFF;
-	    margin: 5px 0px 5px 5px;
-	    border: 1px solid #415D8E;
-	    border-radius: 4px;
-	    cursor: default;
-	}
-	.select5r-input-box-cursor{
-	    padding: 7px;
-	    margin: 0;
-	    border: 0px;
-	    outline: none;
-	    width: 16px;
-	}
-	.select5r-input-item-label{
-	    float: left;
-	    font-size: 14px;
-	    padding-right: 20px;
-	}
-	.select5r-input-remove{
-	    padding: 0px 3px;
-	    background-color: #FFF;
-	    color: #888;
-	    margin-left: 7px;
-	    margin-top: 3px;
-	    border-radius: 4px;
-	    cursor: pointer;
-	    font-size: 9px;
-	    position: absolute;
-	    right: 5px;
-	}
-	.select5r-select-container{
-	    width: 100%;
-	    background-color: #FFF;
-	    border: 1px solid #CCC;
-	    padding: 0px;
-	    max-height: 500px;
-	    position: absolute;
-	    z-index: 100;
-	    margin-top: -1px;
-	    display: none;
-	
-	}
-	.select5r-select-item{
-	    width: 100%;
-	    padding: 10px 25px;
-	    position: relative;
-	    color: #888;
-	    cursor: pointer;
-	    transition: background-color 0.2s ease;
-	}
-	.select5r-select-item label{
-	    cursor: pointer;
-	}
-	.select5r-select-item.active, .select5r-select-item.active.selected{
-		background-color: #C9E9FF;
-	    border-left: 3px solid #FF8D57;
-	}
-	.select5r-select-item.selected:hover{
-		background-color: #DDF1FF;
-	}
-	.select5r-select-item.active:hover{
-		background-color: #C9E9FF;
-	}
-	.select5r-select-item.selected{
-		background-color: #DDF1FF;
-	}
-	.sub .select5r-select-item:hover{
-		background-color: #93D3FF;
-	}
-	.select5r-select-item:hover{
-		background-color: #E5E5E5;
-	}
-	.select5r-select-col{
-		width: 50%;
-		float: left;
-		height: 250px;
-	}
-	.select5r-select-col.sub{
-		background-color: #C9E9FF;
-	}
-	.select5r-select-col.sub.disabled{
-		background-color: #F9F9F9 !important;
-	}
-	.select5r-select-col.sub.disabled .select5r-select-item label{
-		color: #DDD !important;
-	}
-	.select5r-select-col.sub.disabled .check-box{
-		background-color: #DDD;
-	}
-	.icon-right{
-		position: absolute;
-		right: 13px;
-		top: 13px;
-	}
-	.select5r-scroll{
-	    max-height: 250px;
-	    height: 100%;
-	}
-	.select5r-scroll::-webkit-scrollbar {
-		display: none;
-	}
-	.check-box{
-	    position: absolute;
-	    left: 5px;
-	    background-color: #FFF;
-	    width: 15px;
-	    height: 15px;
-	    border-radius: 4px;
-	    border: 1px solid #BBB;
-	    cursor: pointer;
-	}
-	.check-box.isChecked{
-		font-family: FontAwesome;
-	}
-	.check-box.isChecked:before{
-		content: "\f00c";
-	    top: -1px;
-	    left: 1px;
-	    position: absolute;
-	}
-	.select5r-input-sub-item-wrapper{
-		position: absolute;
-	    min-width: calc(100% + 2px);
-	    width: 250px;
-	    background-color: #469ED4;
-	    left: -1px;
-	    bottom: -1px;
-	    border-radius: 4px;
-	    border: 1px solid #415D8E;
-	    padding: 5px;
-	    z-index: 10000;
-	    display: none;
-	}
-	.select5r-input-sub-item-label{
-	    background-color: #3577A0;
-	    margin-bottom: 5px;
-	    padding: 2px 5px;
-	    border-radius: 4px;
-	}
-	.select5r-input-sub-item-label:last-of-type{
-	    margin-bottom: 0px;
-	}
-	.select5r_${parameters.id} .radio-label{
-		color: #888;
-		font-size: 12px;
-	}
 	.item_profi_radio_${parameters.id}{
  		display:none; 
 	}
-	.select5r_${parameters.id} label em{
-		font-weight:bold;
-  		font-style:normal;
-  		 background:#ff6;
-	}
-	.select5r_${parameters.id} .spinner-div{
-		text-align: center;
-		margin: 5px;
-	}
 </style>
-<div class="select5r-wrapper multiple select5r_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
+<div class="select5r select5r-wrapper multiple select5r_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
 	<div class="select5r-input-box">
 		<div class="select5r-input-box">
 			<div class="select5r-input-wrapper">
@@ -242,6 +59,11 @@
 						</div>
 						<input type="hidden" name="item_count_${parameters.id}"/>
 						<input type="hidden" name="__pushdataonremove_${parameters.name}[{5}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
+					</div>
+					<div class="input-down-arrow">
+						<div>
+							<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -372,10 +194,24 @@
 
 	$(document).on('click',function() {
 		$('.select5r-select-container').hide();
+		$(".select5r_${parameters.id} .input-down-arrow").empty();
+		$(".select5r_${parameters.id} .input-down-arrow").append("<div><span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span></div>");
 	});
+	toggleselect5r_${parameters.id} = function(element){
+		var arrow;
+		if($(element).is(":visible")){
+			arrow = "glyphicon glyphicon-chevron-down";
+		}
+		else{
+			arrow = "glyphicon glyphicon-chevron-up";
+		}
+		$(".select5r_${parameters.id} .input-down-arrow").empty();
+		$(".select5r_${parameters.id} .input-down-arrow").append("<div><span class='"+arrow+"' aria-hidden='true'></span></div>");
+		element.toggle();
+	};
 	var openselect5r_${parameters.id} = function(event,element) {
 		$('.select5r_${parameters.id} .select5r-select-container').not(element.parent().parent().parent().children('.select5r-select-container')).hide();
-		element.parent().parent().parent().children('.select5r-select-container').toggle();
+		toggleselect5r_${parameters.id}(element.parent().parent().parent().children('.select5r-select-container'));
 		event.stopPropagation();
 	};
 	$(document).ready(function(){

@@ -1,173 +1,3 @@
-<#--
-/*
- * $Id$
- *
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
--->
-<#setting number_format="#.#####">
-<link href="${base}/struts/simple/selectgrouplevel/css/select6.css" rel="stylesheet">
-
-<div class="select6 select6-wrapper multiple select6_${parameters.id}" onclick="clickSearch_${parameters.id}(event)">
-	<div class="select6-input-box">
-		<div class="select6-input-box">
-			<div class="select6-input-wrapper">
-				<div class="select6-input" id="select6-input-${parameters.id}" onclick="openselect6_${parameters.id}(event,$(this))">
-					<#if parameters.nameList?? && !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
-						<@s.iterator value="stack.findValue(parameters.nameList)" status="status">
-							<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
-								<div class="select6-input-item-label">
-								 	${stack.findValue(parameters.nameValue)}
-								</div>
-								<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameKey}" value="${stack.findValue(parameters.nameKey)}"> 
-								<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameParentKey}" value="${stack.findValue(parameters.nameParentKey)}">
-								<input type="hidden" name="${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
-								<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
-							</div>
-							<input type="hidden" name="item_count_${parameters.id}"/>
-							<#if parameters.nameToSaveKey??>
-								<input type="hidden" class="id_${parameters.id}_toSave" name="${parameters.name}[<@s.property value="#status.index"/>].${parameters.nameToSaveKey}" value="<@s.property value=(parameters.nameToSaveKey)/>"> 
-							</#if>
-							<input type="hidden" name="__pushdataonremove_${parameters.name}[<@s.property value="#status.index"/>].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
-						</@s.iterator>
-						<#else>
-							<#if stack.findValue(parameters.nameValue_Single)?? && stack.findValue(parameters.nameKey_Single)?? && stack.findValue(parameters.nameParentKey_Single)??>
-								<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
-									<div class="select6-input-item-label">
-										${stack.findValue(parameters.nameValue_Single)}
-									</div>
-									<input type="hidden" class="id_${parameters.id}" name="${parameters.name}.${parameters.nameKey}" value="${stack.findValue(parameters.nameKey_Single)}"> 
-									<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}.${parameters.nameParentKey}" value="${stack.findValue(parameters.nameParentKey_Single)}">
-									<input type="hidden" name="${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
-									<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
-								</div>
-								<input type="hidden" name="item_count_${parameters.id}"/>
-								<#if parameters.nameToSaveKey??>
-									<input type="hidden" class="id_${parameters.id}_toSave" name="${parameters.name}.${parameters.nameToSaveKey}" value="<@s.property value=(parameters.nameToSaveKey)/>"> 
-								</#if>
-								<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}.<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">	
-								<#if parameters.minusOneOnRemove?? && stack.findValue(parameters.minusOneOnRemove)>
-									<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}.${parameters.nameKey}" value="-1">
-								</#if>
-							</#if>					
-					</#if>
-					<#if !(parameters.singleSelect?? && stack.findValue(parameters.singleSelect))>
-						<div class="clone-input-${parameters.id} clone" style="display: none;">
-							<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
-								<div class="select6-input-item-label" >
-									{0}
-								</div>
-								<input type="hidden" class="id_${parameters.id}" name="${parameters.name}[{3}].${parameters.nameKey}" value="{1}"> 
-								<input type="hidden" class="id_${parameters.id}_parent" name="${parameters.name}[{3}].${parameters.nameParentKey}" value="{2}">
-								<input type="hidden" name="${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
-								<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
-							</div>
-							<input type="hidden" name="item_count_${parameters.id}"/>
-							<input type="hidden" class="pushRemove_single_${parameters.id}" name="__pushdataonremove_${parameters.name}[{3}].<#if parameters.nameStatus??>${parameters.nameStatus}<#else>status</#if>" value="I">
-						</div>
-						<#else>
-							<div class="clone-input-${parameters.id} clone" style="display: none;">
-								<div class="select6-input-item" onclick="inputItemClick_${parameters.id}(event,$(this))">
-									<div class="select6-input-item-label" >
-										{0}
-									</div>
-									<input type="hidden" class="id_${parameters.id}" name="{5}" value="{1}"> 
-									<input type="hidden" class="id_${parameters.id}_parent" name="{6}" value="{2}">
-									<input type="hidden" name="{3}" value="<#if parameters.nameStatusInitKey??>${parameters.nameStatusInitKey}<#else>A</#if>">
-									<div class="select6-input-remove" onclick="deleteInputItem_${parameters.id}(event,$(this).parent());"><i class="fa fa-times"></i></div>
-								</div>
-								<input type="hidden" name="item_count_${parameters.id}"/>
-								<input type="hidden" class="pushRemove_single_${parameters.id}" name="{4}" value="I">
-								<#if parameters.minusOneOnRemove?? && stack.findValue(parameters.minusOneOnRemove)>
-									<input type="hidden" class="pushRemove_single_${parameters.id}" name="{7}" value="-1">
-								</#if>
-							</div>
-					</#if>
-					
-					<div class="input-down-arrow">
-						<div>
-							<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="select6-select-container" style="display: none;">
-			<div class="row">
-				<div class="col-md-12">
-					<input type="text" name="keyWord" id="keyWordSearch_${parameters.id}" class="form-control" placeholder="<@s.text name="COMMON_SEARCH"/>" onclick="clickSearch_${parameters.id}(event)">
-					<div class="spinner-search-div">
-						<i class="fa fa-spinner fa-2x fa-spin"></i>
-					</div>
-				</div> 
-			</div>
-			<div class="row title-container">
-				<div class="col-xs-6">
-					<div><label> <#if parameters.groupListLabel??> <@s.text name="${parameters.groupListLabel}"/> <#else><@s.text name="COMMON_GROUP"/> </#if></label></div>
-				</div>
-				<div class="col-xs-6">
-					<div><label><#if parameters.subNameLabel??> <@s.text name="${parameters.subNameLabel}"/> <#else><@s.text name="COMMON_SUP_GROUP"/> </#if> </label></div>
-				</div>
-			</div>
-			<div class="select6-select-col group">
-				<div class="select6-scroll mCustomScrollbar" data-mcs-theme="minimal-dark">
-					<div class="select6-select-item all-group active" id="select6-select-item-${parameters.id}-0" onclick="groupClick_${parameters.id}(event,$(this))">
-						<input type="hidden" class="item_id_${parameters.id}" value="0">
-						<label style="font-size: 12px;"><@s.text name="COMMON_ALL_GROUP"/></label> 
-						<i class="fa fa-chevron-right icon-right" style="color: #BBB"></i>
-					</div>
-					<@s.iterator value="stack.findValue(parameters.groupList)">
-						<div class="select6-select-item" id="select6-select-item-${parameters.id}-<#if parameters.groupListKey??><@s.property value="${parameters.groupListKey}"/></#if>" onclick="groupClick_${parameters.id}(event,$(this))">
-							<input type="hidden" class="item_id_${parameters.id}" value="<#if parameters.groupListKey??><@s.property value="${parameters.groupListKey}"/></#if>">
-							<input type="hidden" class="item_name_${parameters.id}" value="<#if parameters.groupListValue??><@s.property value="${parameters.groupListValue}"/></#if>">
-							<label style="font-size: 12px;"><#if parameters.groupListValue??><@s.property value="${parameters.groupListValue}"/></#if> </label> 
-							<i class="fa fa-chevron-right icon-right" style="color: #BBB"></i>
-						</div>
-					</@s.iterator>
-				</div>
-			</div>
-			<div class="select6-select-col sub">
-				<div class="select6-scroll mCustomScrollbar" data-mcs-theme="minimal-dark" >
-					<div class="clone${parameters.id} clone" style="display: none">
-						<div class="select6-select-item" id="select6-select-item-sub-${parameters.id}-{0}" onclick="click_${parameters.id}(event,$(this));">
-							<div class="check-box" onclick="
-								<#if parameters.singleSelect?? && stack.findValue(parameters.singleSelect)>
-									checkboxClickSigle_${parameters.id}(event,$(this).parent()); 
-								<#else>
-									checkboxClick_${parameters.id}(event,$(this).parent());
-								</#if>
-							">
-								<input type="hidden" class="item_id_${parameters.id}" value="{0}">
-								<input type="hidden" name="item_parent_id_${parameters.id}" value="{2}">
-								<input type="hidden" class="item_name_${parameters.id}" value="{3}">
-							</div>
-							<label style="font-size: 12px;">{1}</label>
-						</div>
-					</div>
-					<div class="spinner-div">
-						<i class="fa fa-spinner fa-2x fa-spin"></i>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<script type="text/javascript">
 	var addItemList_${parameters.id} = new Object();
 	var currentPage_${parameters.id};
 	var  isLastPage_${parameters.id} = false;
@@ -454,7 +284,11 @@
 		var id${parameters.id} = $(e).find(".id_${parameters.id}").val();
 		var idGroup = $(e).find(".id_${parameters.id}_parent").val();
 		$('#keyWordSearch_${parameters.id}').val("");
-		load_item_${parameters.id}($('#select6-select-item-${parameters.id}-'+idGroup),null,id${parameters.id});
+		load_item_${parameters.id}($('#select6-select-item-${parameters.id}-'+idGroup),autoFocus_${parameters.id},id${parameters.id});
+	}
+	
+	autoFocus_${parameters.id} = function(id){
+		$("#select6-select-item-sub-${parameters.id}-"+id).children(".item_profi_radio_${parameters.id}").show();
 	}
 	
 	function keyWordChange_${parameters.id}(){
@@ -606,5 +440,3 @@
 			$("#select6-select-item-${parameters.id}-"+idInputParent).addClass("group_has_input");
 		});
 	}
-	
-</script>
