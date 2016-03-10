@@ -77,4 +77,8 @@ public interface CommonConstant {
 	public static final String INPUT_ENCODING = "UTF-8";
 	public static final String OUTPUT_ENCODING = "UTF-8";
     }
+    
+    public static interface EXAMINE {
+    	public static final String PARAM_SELECT_TEST = "PARAM_SELECT_TEST";
+    }
 }
