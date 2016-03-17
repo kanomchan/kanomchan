@@ -46,6 +46,7 @@ public interface CommonConstant {
 	public static final String CART_MAP_LEVEL_TEST_SET = "SESSION_CART_MAP_LEVEL_TEST_SET";
 	public static final String CART_RESULT_TEST_SET = "SESSION_CART_RESULT_TEST_SET";
 	
+	public static final String BUY_APPLICANT_PROFILE_HIERARCHY_MAP = "SESSION_BUY_APPLICANT_PROFILE_HIERARCHY_MAP";
     }
     
     public static interface PARAMETER {
