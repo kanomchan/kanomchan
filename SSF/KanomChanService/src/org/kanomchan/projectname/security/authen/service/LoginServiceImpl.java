@@ -12,7 +12,7 @@ import org.kanomchan.core.common.io.LoginIOBean;
 import org.kanomchan.core.common.processhandler.ServiceResult;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.common.service.LocationService;
-import org.kanomchan.core.openid.service.OpenIdClientService;
+//import org.kanomchan.core.openid.service.OpenIdClientService;
 import org.kanomchan.core.security.authen.bean.IUserDefault;
 import org.kanomchan.core.security.authen.service.AuthenService;
 import org.kanomchan.core.security.authen.service.LoginService;
@@ -38,8 +38,8 @@ public class LoginServiceImpl implements LoginService {
 	private UserAuthorizeService userAuthorizeService;
 	@Autowired
 	private UserMenuService userMenuService;
-	@Autowired
-	private OpenIdClientService openIdClientService;
+//	@Autowired
+//	private OpenIdClientService openIdClientService;
 	@Autowired
 	private LocationService locationService;
 	@Autowired

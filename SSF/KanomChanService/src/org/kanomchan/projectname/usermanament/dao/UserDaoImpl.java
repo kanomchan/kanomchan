@@ -6,17 +6,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 
-import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonMessageCode;
 import org.kanomchan.core.common.dao.JdbcCommonDaoImpl;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
 import org.kanomchan.core.common.exception.RollBackProcessException;
-import org.kanomchan.core.openid.service.UserOpenDao;
 import org.kanomchan.projectname.usermanament.bean.User;
 import org.springframework.jdbc.core.RowMapper;
 
-public class UserDaoImpl extends JdbcCommonDaoImpl implements UserDao ,UserOpenDao {
+public class UserDaoImpl extends JdbcCommonDaoImpl implements UserDao  {
 	
 	@Override
 	public User findUserByUsername(String username) throws NonRollBackException , RollBackException {
