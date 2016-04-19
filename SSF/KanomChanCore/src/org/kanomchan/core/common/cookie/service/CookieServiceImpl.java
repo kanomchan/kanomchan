@@ -31,9 +31,11 @@ import org.springframework.stereotype.Service;
 
 @Service("cookieService")
 public class CookieServiceImpl implements CookieService {
+
+	private CookieService self;
+	
 	@Autowired(required=false)
 	@Qualifier("cookieService")
-	private CookieService self;
 	public void setCookieService(CookieService self) {
 		this.self = self;
 	}

@@ -33,7 +33,7 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 	 */
 	private static final Logger logger = Logger.getLogger(CommonJdbcDaoImpl.class);
 
-	@Autowired
+	@Autowired(required=false)
 	private CheckService checkService;
 	
 	@Override
