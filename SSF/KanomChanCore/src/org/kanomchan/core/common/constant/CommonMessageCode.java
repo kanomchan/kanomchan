@@ -5,7 +5,7 @@ public enum CommonMessageCode implements MessageCode {
 	,COM0001("Success! Insert {1} Complete.")
 	,COM0002("Success! Update {1} Complete.")
 	,COM0003("Success! Delete {1} Complete.")
-	, COM4999("Exction"), COM2001(""), COM4994(""), COM4993(""), COM4998(""), COM0004(""), COM4886("")
+	, COM4999("Exction"), COM2001(""), COM4994(""), COM4993(""), COM4998(""), COM0004("Data is not found."), COM4886("")
 	, COM4991("")
 	, COM4992("")
 	, COM4987("PK LANG NUll")

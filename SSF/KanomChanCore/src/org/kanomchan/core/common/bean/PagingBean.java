@@ -208,4 +208,12 @@ public class PagingBean implements Serializable {
 	public void setOrderList(List<Order> orderList) {
 		this.orderList = orderList;
 	}
+	
+	public boolean isOverSize(){
+		if(totalRows != 0 && totalRows < currentPage * rowsPerPage) {
+			return true;
+		}
+		return false;
+		
+	}
 }
