@@ -210,7 +210,7 @@ public class PagingBean implements Serializable {
 	}
 	
 	public boolean isOverSize(){
-		if(totalRows != 0 && totalRows < currentPage * rowsPerPage) {
+		if(totalRows != 0 && totalRows < (currentPage-1) * rowsPerPage) {
 			return true;
 		}
 		return false;
