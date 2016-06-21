@@ -24,6 +24,8 @@ import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+
 //import com.google.gson.Gson;
 //import com.google.gson.GsonBuilder;
 
@@ -157,6 +159,7 @@ public class MessageServiceImpl implements MessageService {
 
 
 	@Override
+	@Cacheable(cacheName = "messageService.getMessageMap")
 	public Map<String, Message> getMessageMap(String lang) {
 		List<Message> list;
 		list = getMessageList(lang);

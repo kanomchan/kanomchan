@@ -10,6 +10,8 @@ import org.kanomchan.core.common.exception.RollBackException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+
 public class LabelServiceImpl implements LabelService  {
 
 	private ConfigDao configDao;
@@ -23,11 +25,13 @@ public class LabelServiceImpl implements LabelService  {
 	
 	private Map<String, Map<String, String>> labelMap = new HashMap<String, Map<String,String>>();
 	@Override
+	@Cacheable(cacheName = "labelService.getLabel")
 	public Map<String, String> getLabel(String lang) {
 		return labelMap.get(lang);
 	}
 	
 	@Override
+	@Cacheable(cacheName = "labelService.getLabelByPage")
 	public Map<String, String> getLabelByPage(String lang, String page) {
 		Map<String, String> labels = new HashMap<String, String>();
 		Map<String, String> mapLang = labelMap.get(lang);
