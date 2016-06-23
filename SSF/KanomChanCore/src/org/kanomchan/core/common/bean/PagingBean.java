@@ -216,4 +216,46 @@ public class PagingBean implements Serializable {
 		return false;
 		
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (currentPage ^ (currentPage >>> 32));
+		result = prime * result + ((orderBy == null) ? 0 : orderBy.hashCode());
+		result = prime * result + ((orderList == null) ? 0 : orderList.hashCode());
+		result = prime * result + ((orderMode == null) ? 0 : orderMode.hashCode());
+		result = prime * result + rowsPerPage;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PagingBean other = (PagingBean) obj;
+		if (currentPage != other.currentPage)
+			return false;
+		if (orderBy == null) {
+			if (other.orderBy != null)
+				return false;
+		} else if (!orderBy.equals(other.orderBy))
+			return false;
+		if (orderList == null) {
+			if (other.orderList != null)
+				return false;
+		} else if (!orderList.equals(other.orderList))
+			return false;
+		if (orderMode != other.orderMode)
+			return false;
+		if (rowsPerPage != other.rowsPerPage)
+			return false;
+		return true;
+	}
+	
+	
 }
