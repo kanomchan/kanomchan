@@ -43,12 +43,27 @@ public class StringUtil {
 	}
 	
 	public static String removeStringVersion(String imagePathOriginal){
-
+		if (imagePathOriginal==null) {
+			return null;
+		}
 		Pattern p = Pattern.compile(REGEX);
 		String imagePathReal = null;
 		Matcher m = p.matcher(imagePathOriginal); // get a matcher object
 		if(m.find()){
 			imagePathReal = imagePathOriginal.substring(0, m.start());
+		}else{
+			imagePathReal = imagePathOriginal;
+		}
+		return imagePathReal; 
+	}
+	
+	public static String removeStringPath(String imagePathOriginal){
+		if (imagePathOriginal==null) {
+			return null;
+		}
+		String imagePathReal = null;
+		if(imagePathOriginal!=null&&imagePathOriginal.lastIndexOf("/")>0){
+			imagePathReal = imagePathOriginal.substring(imagePathOriginal.lastIndexOf("/"), imagePathOriginal.length());
 		}else{
 			imagePathReal = imagePathOriginal;
 		}
