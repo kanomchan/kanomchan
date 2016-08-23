@@ -1,5 +1,8 @@
 package org.kanomchan.projectname.security.authen.service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.kanomchan.core.common.bean.MenuVO;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonMessageCode;
@@ -105,6 +108,13 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public ServiceResult<UserBean> performLogin(String username, String password)
 			throws NonRollBackException, RollBackException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ServiceResult<LoginIO> attemptAuthenticationAndPutDataSession(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) throws NonRollBackException, RollBackException {
 		// TODO Auto-generated method stub
 		return null;
 	}

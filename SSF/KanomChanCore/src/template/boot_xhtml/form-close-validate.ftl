@@ -81,7 +81,7 @@ validateList :[
  			<#if validator.validatorType = "required">
 				return {errors : (fieldValue == "" || fieldValue == "0" || fieldValue == 0)};
 			<#elseif validator.validatorType = "customjs">
-				return {errors : ((continueValidation && fieldValue != null && fieldValue != "") && ${validator.call?js_string}(fieldValue) == false)};
+				return {errors : ((continueValidation) && ${validator.call?js_string}(fieldValue,'${tagName?js_string}') == false)};
             <#elseif validator.validatorType = "requiredstring">
             	return {errors : (continueValidation && fieldValue != null && (fieldValue == "" || fieldValue.replace(/^\s+|\s+$/g,"").length == 0))};
             <#elseif validator.validatorType = "stringlength">
