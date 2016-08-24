@@ -27,43 +27,6 @@
 <style>
 	<#include "css/multiSelect.css">
 </style>
-<#if parameters.color?? || parameters.fontColor??>
-	<#if parameters.id??>
-		<style>
-			.${parameters.id} .select2-container-multi .select2-choices .select2-search-choice {
-				background: ${parameters.color?default("#5F64C0")?html} !important;
-				color: ${parameters.fontColor?default("#EEE")?html} !important;
-				border-radius: 5px !important;
-			}
-		</style>
-		<#elseif parameters.name??>
-		<style>
-			.${parameters.name} .select2-container-multi .select2-choices .select2-search-choice {
-				background: ${parameters.color?default("#5F64C0")?html} !important;
-				color: ${parameters.fontColor?default("#EEE")?html} !important;
-				border-radius: 5px !important;
-			}
-		</style>
-	</#if>
-<#else>
-	<#if parameters.id??>
-		<style>
-			.${parameters.id} .select2-container-multi .select2-choices .select2-search-choice {
-				background: ${parameters.color?default("#5F64C0")?html} !important;
-				color: ${parameters.fontColor?default("#EEE")?html} !important;
-				border-radius: 5px !important;
-			}
-		</style>
-		<#elseif parameters.name??>
-		<style>
-			.${parameters.name} .select2-container-multi .select2-choices .select2-search-choice {
-				background: #5F64C0 !important;
-				color: #EEE !important;
-				border-radius: 5px !important;
-			}
-		</style>
-	</#if>
-</#if>
 <#if parameters.id??>
 <span class="${parameters.id}">
 <#elseif parameters.name??>
@@ -92,7 +55,7 @@
 	 		checked="checked"
 	 	</#if>
 	 </#if>
- 	 
+ 	 onClick="${parameters.id?html}_fadeIn($('#${parameters.id?html} + .select2.select2-container'))"
 	><label for="${parameters.id}-option1" class=""><@s.text name="MULTI_SELECT_SPECIFIC_VALUE"></@s.text></label></div></lt>
 
 	<div class="radio radio-inline"><input type="radio" 
@@ -112,6 +75,7 @@
 	 		checked="checked"
 	 	</#if>
 	 </#if>
+	 onClick="${parameters.id?html}_fadeIn($('#${parameters.id?html} + .select2.select2-container'))"
 	><label for="${parameters.id}-option2" class=""><@s.text name="MULTI_SELECT_EXCEPT_VALUE"></@s.text></label></div></lt>
 	 
 	<div class="radio radio-inline"><input type="radio"
@@ -131,9 +95,29 @@
 	 		checked="checked"
 	 	</#if>
 	 </#if>
+	 onClick="${parameters.id?html}_fadeOut($('#${parameters.id?html} + .select2.select2-container'))"
 	><label for="${parameters.id}-option3" class=""><@s.text name="MULTI_SELECT_ALL"></@s.text></label></div></lt>
 
 </#if>
+<style>
+<#if parameters.isChoice?default("false") == "true">
+		<#if checkChoiceKey == "A">
+			#${parameters.id?html} + .select2.select2-container{
+				display:none;
+			}
+		</#if>
+	</#if>
+	<#if checkChoiceKey??>
+		<#if checkChoiceKey != "">
+		 	<#else>
+		 	<#if parameters.choiceValue?default("I") == "A">
+				#${parameters.id?html} + .select2.select2-container{
+					display:none;
+				}
+			</#if>
+		</#if>
+	</#if>
+</style>
 <select<#rt/>
  name="${parameters.name?default("")?html}"<#rt/>
 <#if parameters.get("size")??>
@@ -153,9 +137,9 @@
  title="${parameters.title?html}"<#rt/>
 </#if>
 <#if parameters.cssClass??>
- class="form-control ${parameters.cssClass?html}"
+ class="form-control multiselect ${parameters.cssClass?html}"
 <#else>
- class="form-control"
+ class="form-control multiselect"
 </#if>
  multiple
 <#include "/${parameters.templateDir}/${parameters.expandTheme}/scripting-events.ftl" />
@@ -254,55 +238,51 @@
     	<#if parameters.placeholder??>
     	placeholder: "<@s.text name='${parameters.placeholder}'/>",
 		</#if>
-    })<#if parameters.itemList?? && parameters.nameKey??>.select2("val", 
-         [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]);<#else>;</#if>
+    })<#if parameters.itemList?? && parameters.nameKey??>.select2().val( [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]).trigger("change");<#else>;</#if>
 	$(".${parameters.id}-hidden").remove();
-    var split${parameters.id} = $("#${parameters.id}").select2('val');
-    for(var i=0;i<split${parameters.id}.length;i++){
-		<#if parameters.beanName??>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}'/> class='__pushdataonremove_${parameters.id}-hidden'");
-		<#else>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
-		</#if>
-	}
-    $("#${parameters.id}").change(function() {
-	    $(".${parameters.id}-hidden").remove();
-	    var split${parameters.id} = $("#${parameters.id}").select2('val');
+    var split${parameters.id} = $("#${parameters.id}").val();
+    if(split${parameters.id}!=null){
 	    for(var i=0;i<split${parameters.id}.length;i++){
-	    <#if parameters.beanName??>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
-		<#else>
-			$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
-											"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
-		</#if>
-	    }
-	});
-	$("#${parameters.id}-option3").click(function() {
-		$("#s2id_${parameters.id?html}").fadeOut(200);
-	});
-	$("#${parameters.id}-option1, #${parameters.id}-option2").click(function() {
-		$("#s2id_${parameters.id?html}").fadeIn(200);
-	});
-	<#if parameters.isChoice?default("false") == "true">
-		<#if checkChoiceKey == "A">
-			$("#s2id_${parameters.id?html}").hide();
-		</#if>
-	</#if>
-	<#if checkChoiceKey??>
-		<#if checkChoiceKey != "">
-		 	<#else>
-		 	<#if parameters.choiceValue?default("I") == "A">
-				$("#s2id_${parameters.id?html}").hide();
+			<#if parameters.beanName??>
+				$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
+			<#else>
+				$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
 			</#if>
-		</#if>
-	</#if>
+	    }
+	}
+  $('#${parameters.id}').on('change',function(evt) {
+	    $(".${parameters.id}-hidden").remove();
+	    var split${parameters.id} = $("#${parameters.id}").val();
+	    if(split${parameters.id}!=null){
+		    for(var i=0;i<split${parameters.id}.length;i++){
+		    <#if parameters.beanName??>
+				$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.beanName}["+ i +"].${parameters.nameKey}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='${parameters.beanName}["+ i +"].status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='__pushdataonremove_${parameters.beanName}["+ i +"].status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
+			<#else>
+				$("#${parameters.id}").append("<input type='hidden' value='"+ split${parameters.id}[i] +"' name='${parameters.name}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='${parameters.name}.status' value='${itemStatus}' class='${parameters.id}-hidden'/>"+
+												"<input type='hidden' name='__pushdataonremove_${parameters.name}.status' value='${parameters.setStatus?default("I")}' class='__pushdataonremove_${parameters.id}-hidden'/>");
+			</#if>
+		    }
+		}
+		$(".__pushdataonremove_Nationality-hidden").each(function(){
+       		$("[name='"+$(this).attr('name')+"']").not(':last').remove();
+        });
+	});
+	function ${parameters.id}_hide(item){
+		item.css("display", "none");
+	}
+	function ${parameters.id}_fadeIn(item){
+		item.css("display", "block");
+	}
+	function ${parameters.id}_fadeOut(item){
+		item.css("display", "none");
+	}
 	</script>
 
 <#if parameters.multiple?default(false)>
