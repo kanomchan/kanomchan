@@ -1,7 +1,14 @@
 package org.kanomchan.core.common.bean;
 
-public class CheckBox<T> {
+import java.io.Serializable;
+
+public class CheckBox<T> implements Serializable {
 	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8198897480488787027L;
 	private T value;
 	private boolean check;
 	public CheckBox(T value) {
