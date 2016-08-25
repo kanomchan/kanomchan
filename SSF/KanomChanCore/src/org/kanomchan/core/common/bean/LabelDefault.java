@@ -1,7 +1,13 @@
 package org.kanomchan.core.common.bean;
 
-public class LabelDefault implements Label {
+import java.io.Serializable;
 
+public class LabelDefault implements Label,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5598389849410431495L;
 	private String language;
 	private String page;
 	private String label;

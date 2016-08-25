@@ -1,12 +1,17 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ClassMapper {
+public class ClassMapper implements Serializable {
 	
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8390358414768409180L;
 //	private Map<String, Property> mapCol = new ConcurrentHashMap<String, Property>();
 	
 	

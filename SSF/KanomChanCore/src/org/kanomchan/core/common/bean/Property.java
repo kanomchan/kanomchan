@@ -1,10 +1,15 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import javax.persistence.EnumType;
 
-public class Property {
+public class Property implements Serializable  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4570313352444657168L;
 	private Method methodGet;
 	private Method methodSet;
 	private ColumnType columnType;

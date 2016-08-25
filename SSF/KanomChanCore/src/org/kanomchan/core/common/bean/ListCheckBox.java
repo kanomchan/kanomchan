@@ -1,11 +1,17 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class ListCheckBox<T> implements List<CheckBox<T>>{
+public class ListCheckBox<T> implements List<CheckBox<T>>,Serializable{
+
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8201881723740784766L;
 
 //	private List<CheckBox<T>> list;
 	

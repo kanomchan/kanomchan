@@ -1,8 +1,14 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
+
 import org.hibernate.bytecode.javassist.FieldHandler;
 
-public abstract class NoProxyEntityBean implements EntityBean, org.hibernate.bytecode.javassist.FieldHandled  {
+public abstract class NoProxyEntityBean implements EntityBean, org.hibernate.bytecode.javassist.FieldHandled ,Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3946788548564254878L;
 	private FieldHandler fieldHandler;
 
 //	public abstract String getStatus();

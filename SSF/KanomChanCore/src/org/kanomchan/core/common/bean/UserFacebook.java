@@ -1,8 +1,9 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserFacebook {
+public class UserFacebook implements Serializable  {
 	
 	private static final long serialVersionUID = 2275327612858235569L;
 	String id;

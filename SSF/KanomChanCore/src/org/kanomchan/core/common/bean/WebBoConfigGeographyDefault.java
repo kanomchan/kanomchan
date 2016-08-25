@@ -1,7 +1,13 @@
 package org.kanomchan.core.common.bean;
 
-public class WebBoConfigGeographyDefault implements WebBoConfigGeography {
+import java.io.Serializable;
 
+public class WebBoConfigGeographyDefault implements WebBoConfigGeography,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6286452591129248307L;
 	private Long idWebBoConfigGeography;
 	private Long idRegion;
 	private Long idCountry;

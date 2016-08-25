@@ -1,9 +1,14 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class EfficiencyBean<T extends Object> {
+public class EfficiencyBean<T extends Object> implements Serializable  {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8481671809471012389L;
 	private T bean;
 	private Date efficiencyDate;
 	private EfficiencyBean<T> nextEfficiencyBean;

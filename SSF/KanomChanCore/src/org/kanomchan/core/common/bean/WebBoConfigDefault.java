@@ -1,9 +1,14 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class WebBoConfigDefault implements WebBoConfig {
+public class WebBoConfigDefault implements WebBoConfig ,Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3319268189289575378L;
 	private Long idWebBoConfig;
 	private Long idWebBoConfigGeography;
 	private Long idWebBoConfigPageModule;

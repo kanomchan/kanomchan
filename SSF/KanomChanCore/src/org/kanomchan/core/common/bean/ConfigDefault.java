@@ -1,7 +1,13 @@
 package org.kanomchan.core.common.bean;
 
-public class ConfigDefault implements Config {
+import java.io.Serializable;
 
+public class ConfigDefault implements Config,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 119640603075044650L;
 	private String key;
 	private String value;
 	public String getKey() {

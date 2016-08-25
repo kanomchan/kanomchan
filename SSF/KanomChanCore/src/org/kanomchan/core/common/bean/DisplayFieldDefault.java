@@ -1,7 +1,13 @@
 package org.kanomchan.core.common.bean;
 
-public class DisplayFieldDefault implements DisplayField {
+import java.io.Serializable;
 
+public class DisplayFieldDefault implements DisplayField,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3826169993152618713L;
 	private Long idCountry;
 	private String page;
 	private String isDisplay;

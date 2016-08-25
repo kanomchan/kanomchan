@@ -1,7 +1,13 @@
 package org.kanomchan.core.common.bean;
 
-public class ConfigByCountry {
+import java.io.Serializable;
+
+public class ConfigByCountry  implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8433123814451017813L;
 	private String key;
 	private String value;
 	private Long idCountry;

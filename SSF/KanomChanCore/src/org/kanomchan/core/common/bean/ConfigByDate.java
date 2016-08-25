@@ -1,7 +1,13 @@
 package org.kanomchan.core.common.bean;
 
-public class ConfigByDate {
+import java.io.Serializable;
+
+public class ConfigByDate implements Serializable  {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5708878230844329013L;
 	private String key;
 	private String value;
 	private Long idRefData;

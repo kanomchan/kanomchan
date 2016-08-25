@@ -1,8 +1,13 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 
-public class FieldValidatorDefault implements FieldValidatorBean {
+public class FieldValidatorDefault implements FieldValidatorBean,Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6454159408531273037L;
 	private Long id;
 	private String page;
 	private String field;

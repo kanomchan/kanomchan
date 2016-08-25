@@ -1,7 +1,13 @@
 package org.kanomchan.core.common.bean;
 
-public class WebBoConfigPageModuleDefault implements WebBoConfigPageModule {
+import java.io.Serializable;
 
+public class WebBoConfigPageModuleDefault implements WebBoConfigPageModule ,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1314543085251828959L;
 	private Long idWebBoConfigPageModule;
 	private String page;
 	private String module;

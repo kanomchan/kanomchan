@@ -1,12 +1,13 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 
  
 
-public class UserSocialNetworkBean {
+public class UserSocialNetworkBean implements Serializable  {
 
 	private String firstName;
 	private String lastName;

@@ -1,8 +1,13 @@
 package org.kanomchan.core.common.bean;
 
+import java.io.Serializable;
 
-public class Criteria {
+public class Criteria implements Serializable  {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2801649431801686727L;
 	/**
 	 * Class name ( Table ) of Object to use as criteria
 	 * required if criteria column is ambiguous ( there are same column name in other table )
