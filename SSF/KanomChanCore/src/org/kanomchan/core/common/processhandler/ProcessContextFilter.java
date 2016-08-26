@@ -1,7 +1,8 @@
 package org.kanomchan.core.common.processhandler;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.MDC;
+//import org.apache.log4j.Logger;
+import org.jboss.logging.MDC;
+import org.jboss.logging.Logger;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -40,6 +41,7 @@ public class ProcessContextFilter  implements Filter  {
 		ProcessContext processContext = CurrentThread.getProcessContext();
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpSession httpSession = httpServletRequest.getSession(true);
+		
 		MDC.put(CommonConstant.LOG.CONTEXT_PATH, (String)((HttpServletRequest) request).getContextPath());
 		MDC.put(CommonConstant.LOG.SERVER_NAME,(String) request.getServerName());
 		MDC.put(CommonConstant.LOG.SERVER_PORT, request.getServerPort());
