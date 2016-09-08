@@ -66,12 +66,12 @@
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/log4j2/log4j-1.2-api-2.3.jar" sourcepath="C:/Users/JM/.m2/repository/org/apache/logging/log4j/log4j-1.2-api/2.3/log4j-1.2-api-2.3-sources.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/log4j2/log4j-core-2.3.jar"/>
 	<classpathentry kind="lib" path="/KanomChanLib/lib/core/log4j2/log4j-api-2.3.jar" sourcepath="C:/Users/JM/.m2/repository/org/apache/logging/log4j/log4j-api/2.3/log4j-api-2.3-sources.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/WildFly 9.x Runtime">
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/WildFly 10.0 Runtime">
 		<attributes>
 			<attribute name="owner.project.facets" value="jst.utility"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_102">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
