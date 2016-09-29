@@ -20,6 +20,7 @@ public interface CommonConstant {
 	public static final String LANG_LIST_KEY = "SESSION_LANG_LIST_KEY";
 	public static final String LOCALE_KEY = "SESSION_LOCALE_KEY";
 	public static final String USER_BEAN_KEY = "SESSION_USER_BEAN_KEY";
+	public static final String USER_BEAN_KEY_OLD = "SESSION_USER_BEAN_KEY_OLD";
 	public static final String NAVIGATION_BEAN_KEY = "SESSION_NAVIGATION_BEAN_KEY";
 	public static final String NEXT_URL_KEY = "SESSION_NEXT_URL_KEY";
 	public static final String MENU_BEAN_KEY = "SESSION_MENU_BEAN_KEY";
