@@ -73,7 +73,7 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 //	}
 	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	protected JdbcTemplate jdbcTemplate;
 	
 	@Autowired
 	protected  NamedParameterJdbcTemplate namedParameterJdbcTemplate;
