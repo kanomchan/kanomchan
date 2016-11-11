@@ -50,8 +50,13 @@ public class LanguageInterceptor  extends AbstractInterceptor{
 	//   }
 	//  }
 	  Locale nativeLocale = ActionContext.getContext().getLocale();
-	  processContext.setLang(nativeLocale.getISO3Language());
-	  sessions.put(CommonConstant.SESSION.LANG_KEY,nativeLocale.getISO3Language());
+//	  processContext.setLang(nativeLocale.getISO3Language());
+//	  sessions.put(CommonConstant.SESSION.LANG_KEY,nativeLocale.getISO3Language());
+	  
+	  processContext.setLang(nativeLocale.getISO3Language().toUpperCase());
+	  processContext.setNativeLocale((Locale) nativeLocale);
+	  sessions.put(CommonConstant.SESSION.LANG_KEY,nativeLocale.getISO3Language().toUpperCase());
+	  
 	  String s = invocation.invoke();
 	   
 	  return s;

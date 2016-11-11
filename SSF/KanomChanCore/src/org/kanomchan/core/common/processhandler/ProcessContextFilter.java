@@ -67,26 +67,26 @@ public class ProcessContextFilter  implements Filter  {
 			String shopId = String.valueOf(httpSession.getAttribute("SESSION_SHOP_ID_KEY"));
 			processContext.setString("SESSION_SHOP_ID_KEY", shopId);
 			String nativeLang = httpServletRequest.getParameter("native_lang");
-			if(nativeLang != null){
-				Object languageDao = ApplicationContextUtil.getBean("languageDao");
-				
-				Object nativeLocale=null;
-				try {
-					Method method = Class.forName("com.jobsmatcher.jm.usermanament.dao.LanguageDao").getMethod("getLocaleByCode3", String.class);
-					nativeLocale = method.invoke(languageDao, nativeLang);
-				} catch (NoSuchMethodException | SecurityException| ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
-					nativeLocale = Locale.ENGLISH;
-				}
-				
-				httpSession.setAttribute("SESSION_NATIVE_LANG_KEY", nativeLocale);
-				processContext.setNativeLocale((Locale) nativeLocale);
-			}else{
-				Object nativeLocale = (Locale)httpSession.getAttribute("SESSION_NATIVE_LANG_KEY");
-				if(nativeLocale == null)
-					nativeLocale = Locale.ENGLISH;
-				processContext.setNativeLocale((Locale) nativeLocale);
-			}
+//			if(nativeLang != null){
+//				Object languageDao = ApplicationContextUtil.getBean("languageDao");
+//				
+//				Object nativeLocale=null;
+//				try {
+//					Method method = Class.forName("com.jobsmatcher.jm.usermanament.dao.LanguageDao").getMethod("getLocaleByCode3", String.class);
+//					nativeLocale = method.invoke(languageDao, nativeLang);
+//				} catch (NoSuchMethodException | SecurityException| ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+//					logger.error("doFilter(ServletRequest, ServletResponse, FilterChain)", e); //$NON-NLS-1$
+//					nativeLocale = Locale.ENGLISH;
+//				}
+//				
+//				httpSession.setAttribute("SESSION_NATIVE_LANG_KEY", nativeLocale);
+//				processContext.setNativeLocale((Locale) nativeLocale);
+//			}else{
+//				Object nativeLocale = (Locale)httpSession.getAttribute("SESSION_NATIVE_LANG_KEY");
+//				if(nativeLocale == null)
+//					nativeLocale = Locale.ENGLISH;
+//				processContext.setNativeLocale((Locale) nativeLocale);
+//			}
 			CurrentThread.setProcessContext(processContext);
 			
 			String userId = processContext.userBean==null?"guest"+getRealIp(request):processContext.userBean.getUserId()==null?"guest"+getRealIp(request):processContext.userBean.getUserId();
