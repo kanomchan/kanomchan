@@ -1120,9 +1120,51 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	@Override
 	public <T> T get(Serializable target,  Class<T> clazz) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		
 		Property property = classMapper.getPropertyId();
-		String sql = "select * from " + classMapper.getTableName() + " where " + property.getColumnName() + " = ?";
-		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
+		String sql=null;
+		if(property!=null&&ColumnType.embeddedId.equals(property.getColumnType())){
+			try {
+				Object embeddedIdTraget = target;
+				if(embeddedIdTraget ==null){
+					return null;
+				}
+				ClassMapper classMapperEmbeddedId =JPAUtil.getClassMapper(embeddedIdTraget.getClass());
+				Map<String, List<Property>> column = classMapperEmbeddedId.getColumn();
+				List<Object> para = new LinkedList<Object>();
+				sql = "select * from " + classMapper.getTableName() + " where ";
+				StringBuilder sb =new StringBuilder();
+				for (Map.Entry<String, List<Property>> entry : column.entrySet()){
+					List<Property> properties = entry.getValue();
+					Object objectId = null;
+					for (Property property2 : properties) {
+						objectId =  property2.getMethodGet().invoke(embeddedIdTraget);
+						if(objectId !=null)
+							break;
+					}
+					if(objectId!=null){
+						if(sb.length()>0){
+							sb.append(" and ");
+						}
+						sb.append(" ");
+						sb.append(entry.getKey());
+						sb.append(" = ? ");
+						para.add(objectId);
+					}
+				}
+				sb.insert(0, sql);
+				return nativeQueryOneRow(sb.toString() , JPAUtil.getRm(clazz), para.toArray());
+				
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				return null;
+			}
+			
+		}else{
+			sql = "select * from " + classMapper.getTableName() + " where " + property.getColumnName() + " = ?";
+			return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target);
+		}
+		
+		
 	}
 	@Override
 	public <T> T get(Serializable target,String lang,  Class<T> clazz) throws RollBackException, NonRollBackException {
