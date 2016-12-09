@@ -71,9 +71,9 @@
 			</#if>
 			<#if parameters.labelposition?default("left") == 'left'>
 				<#if hasFieldErrors>
-			    class="control-label col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else> ${12-parameters.title?default("8")?number}</#if> errorLabel"<#t/>
+			    class="control-label col-xs-5 col-sm-4 col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else> ${12-parameters.title?default("8")?number}</#if> errorLabel"<#t/>
 				<#else>
-			    class="control-label col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else>${12-parameters.title?default("8")?number}</#if>"<#t/>
+			    class="control-label col-xs-5 col-sm-4 col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else>${12-parameters.title?default("8")?number}</#if>"<#t/>
 				</#if>
 			</#if>
 		    <#if parameters.id??>

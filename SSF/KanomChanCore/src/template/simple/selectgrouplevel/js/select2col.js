@@ -349,29 +349,31 @@
 		},
 		//search end
 		_makeInput : function(data){
-			var hiddenInput = "<input type='hidden' class='id' value='"+data.id+"'/>"
-				 			+ "<input type='hidden' class='idParent' value='"+data.id_parent+"'/>";
-			var leftOver = "";
-			var inputName = this.options.input_setting;
-			var arraySlot = (!this.options.isSingle)? '['+this.state.indexInput+']' : '';
-			
-			var	nameKey = inputName.name_prefix+arraySlot+"."+inputName.nameKey;
-			var	nameParentKey = inputName.name_prefix+arraySlot+"."+inputName.nameParentKey;
-			var	nameStatus = inputName.name_prefix+arraySlot+"."+inputName.nameStatus;
-			var	nameToSaveKey = inputName.name_prefix+arraySlot+"."+inputName.nameToSaveKey;
-
-			hiddenInput += "<input type='hidden' name='"+nameKey+"' value='"+data.id+"'/>" 
-						+ "<input type='hidden' name='"+nameParentKey+"' value='"+data.id_parent+"'/>"
-						+ "<input type='hidden' name='"+nameStatus+"' value='"+inputName.status+"'/>";
-			leftOver ="<input type='hidden' name='__pushdataonremove_"+nameStatus+"' value='I'/>";
-			if(this.options.isMinusOneOnRemove){
-				leftOver += "<input type='hidden' name='__pushdataonremove_"+nameKey+"' value='-1' />"
+			if("" != data.id && data.id != null){
+				var hiddenInput = "<input type='hidden' class='id' value='"+data.id+"'/>"
+	 			+ "<input type='hidden' class='idParent' value='"+data.id_parent+"'/>";
+				var leftOver = "";
+				var inputName = this.options.input_setting;
+				var arraySlot = (!this.options.isSingle)? '['+this.state.indexInput+']' : '';
+				
+				var	nameKey = inputName.name_prefix+arraySlot+"."+inputName.nameKey;
+				var	nameParentKey = inputName.name_prefix+arraySlot+"."+inputName.nameParentKey;
+				var	nameStatus = inputName.name_prefix+arraySlot+"."+inputName.nameStatus;
+				var	nameToSaveKey = inputName.name_prefix+arraySlot+"."+inputName.nameToSaveKey;
+				
+				hiddenInput += "<input type='hidden' name='"+nameKey+"' value='"+data.id+"'/>" 
+							+ "<input type='hidden' name='"+nameParentKey+"' value='"+data.id_parent+"'/>"
+							+ "<input type='hidden' name='"+nameStatus+"' value='"+inputName.status+"'/>";
+				leftOver ="<input type='hidden' name='__pushdataonremove_"+nameStatus+"' value='I'/>";
+				if(this.options.isMinusOneOnRemove){
+					leftOver += "<input type='hidden' name='__pushdataonremove_"+nameKey+"' value='-1' />"
+				}
+				if(typeof data.id_to_save  !== "undefined" && data.id_to_save != null && data.id_to_save != 0){
+					leftOver += "<input type='hidden' name='"+nameToSaveKey+"' value='"+data.id_to_save+"' />"
+				}
+				
+				return this.input_model.format(data.name, hiddenInput,leftOver);
 			}
-			if(typeof data.id_to_save  !== "undefined" && data.id_to_save != null && data.id_to_save != 0){
-				leftOver += "<input type='hidden' name='"+nameToSaveKey+"' value='"+data.id_to_save+"' />"
-			}
-
-			return this.input_model.format(data.name, hiddenInput,leftOver);
 		},
 
 		_makeParent : function(data){
