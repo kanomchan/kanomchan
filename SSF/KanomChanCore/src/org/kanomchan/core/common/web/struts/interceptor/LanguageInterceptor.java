@@ -54,6 +54,8 @@ public class LanguageInterceptor  extends AbstractInterceptor{
 //	  sessions.put(CommonConstant.SESSION.LANG_KEY,nativeLocale.getISO3Language());
 	  
 	  processContext.setLang(nativeLocale.getISO3Language().toUpperCase());
+
+	  processContext.setLocale(nativeLocale);
 	  processContext.setNativeLocale((Locale) nativeLocale);
 	  sessions.put(CommonConstant.SESSION.LANG_KEY,nativeLocale.getISO3Language().toUpperCase());
 	  
