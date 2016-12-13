@@ -17,6 +17,7 @@ public class LoginIOBean  implements LoginIO ,Serializable{
 	private MenuVO menuVO;
 
 	private String gotoPage;
+	private String myRecommenderKey;
 
 	public String getGotoPage() {
 		return gotoPage;
@@ -51,5 +52,13 @@ public class LoginIOBean  implements LoginIO ,Serializable{
 	public void setCookies(List<Cookie> cookies) {
 		this.cookies = cookies;
 	}
+	
+	public String getMyRecommenderKey() {
+		return myRecommenderKey;
+	}
+	public void setMyRecommenderKey(String myRecommenderKey) {
+		this.myRecommenderKey = myRecommenderKey;
+	}
+	
 
 }

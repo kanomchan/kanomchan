@@ -20,5 +20,7 @@ public interface LoginIO {
 	public void setCookies(List<Cookie> cookies);
 	public String getGotoPage();
 	public void setGotoPage(String gotoPage);
+	public String getMyRecommenderKey();
+	public void setMyRecommenderKey(String myRecommenderKey);
 
 }
