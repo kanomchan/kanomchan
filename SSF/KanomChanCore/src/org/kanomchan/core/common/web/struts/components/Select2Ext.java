@@ -93,6 +93,24 @@ public class Select2Ext extends ListUIBean {
     protected String headerValue;
     protected String multiple;
     protected String size;
+    protected String ajax;
+    protected String ajaxURL;
+    protected String ajaxDelay;
+    protected String ajaxTermName;
+    protected String ajaxPageName;
+    protected String ajaxParentName;
+    protected String ajaxDataResultName;
+    protected String ajaxDataResultValueName;
+    protected String ajaxDataResultLabelName;
+    protected String ajaxDataResultParentName;
+    protected String selectionShortName;
+    protected String selectionShortNameLength;
+    protected String ajaxItemNo;
+    protected String ajaxTotalCountName;
+    protected String templateResultCustom;
+    protected String templateResultCustomFncName;
+    protected String templateSelectionCustom;
+    protected String templateSelectionCustomFncName;
     protected String other;
     protected String otherName;
     protected String closeOnSelect;
@@ -102,6 +120,8 @@ public class Select2Ext extends ListUIBean {
     protected String nameOfName;
     protected String nameParentValue;
     protected String nameToSave;
+    protected String noResults;
+    protected String placeholder;
 
     public Select2Ext(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -129,6 +149,78 @@ public class Select2Ext extends ListUIBean {
         if ((headerKey != null) && (headerValue != null)) {
             addParameter("headerKey", findString(headerKey));
             addParameter("headerValue", findString(headerValue));
+        }
+        
+        if (ajax != null) {
+            addParameter("ajax", findValue(ajax, Boolean.class));
+        }
+        
+        if(ajaxURL != null){
+        	addParameter("ajaxURL", findString(ajaxURL));
+        }
+        
+        if(ajaxDelay != null){
+        	addParameter("ajaxDelay", findString(ajaxDelay));
+        }
+        
+        if(ajaxTermName != null){
+        	addParameter("ajaxTermName", findString(ajaxTermName));
+        }
+        
+        if(ajaxPageName != null){
+        	addParameter("ajaxPageName", findString(ajaxPageName));
+        }
+        
+        if(ajaxParentName != null){
+        	addParameter("ajaxParentName", findString(ajaxParentName));
+        }
+        
+        if(ajaxDataResultName != null){
+        	addParameter("ajaxDataResultName", findString(ajaxDataResultName));
+        }
+        
+        if(ajaxDataResultValueName != null){
+        	addParameter("ajaxDataResultValueName", findString(ajaxDataResultValueName));
+        }
+        
+        if(ajaxDataResultLabelName != null){
+        	addParameter("ajaxDataResultLabelName", findString(ajaxDataResultLabelName));
+        }
+        
+        if(ajaxDataResultParentName != null){
+        	addParameter("ajaxDataResultParentName", findString(ajaxDataResultParentName));
+        }
+        
+        if(selectionShortName != null){
+        	addParameter("selectionShortName", findString(selectionShortName));
+        }
+        
+        if(selectionShortNameLength != null){
+        	addParameter("selectionShortNameLength", findString(selectionShortNameLength));
+        }
+        
+        if(ajaxItemNo != null){
+        	addParameter("ajaxItemNo", findString(ajaxItemNo));
+        }
+        
+        if(ajaxTotalCountName != null){
+        	addParameter("ajaxTotalCountName", findString(ajaxTotalCountName));
+        }
+        
+        if (templateResultCustom != null) {
+            addParameter("templateResultCustom", findValue(templateResultCustom, Boolean.class));
+        }
+        
+        if(templateResultCustomFncName != null){
+        	addParameter("templateResultCustomFncName", findString(templateResultCustomFncName));
+        }
+        
+        if (templateSelectionCustom != null) {
+            addParameter("templateSelectionCustom", findValue(templateSelectionCustom, Boolean.class));
+        }
+        
+        if(templateSelectionCustomFncName != null){
+        	addParameter("templateSelectionCustomFncName", findString(templateSelectionCustomFncName));
         }
         
         if (other != null) {
@@ -165,6 +257,14 @@ public class Select2Ext extends ListUIBean {
         
         if(nameToSave != null){
         	addParameter("nameToSave", findString(nameToSave));
+        }
+        
+        if(noResults != null){
+        	addParameter("noResults", findString(noResults));
+        }
+        
+        if(placeholder != null){
+        	addParameter("placeholder", findString(placeholder));
         }
     }
 
@@ -275,5 +375,186 @@ public class Select2Ext extends ListUIBean {
     public void setNameToSave(String nameToSave) {
 		this.nameToSave = nameToSave;
 	}
+    
+    public String getNoResults() {
+		return noResults;
+	}
+    
+    @StrutsTagAttribute(description="Set noResults")
+    public void setNoResults(String noResults) {
+		this.noResults = noResults;
+	}
+    
+    public String getPlaceholder() {
+		return placeholder;
+	}
+    
+    @StrutsTagAttribute(description="Set placeholder")
+    public void setPlaceholder(String placeholder) {
+		this.placeholder = placeholder;
+	}
+    
+    public String getAjax() {
+		return ajax;
+	}
+    
+    @StrutsTagAttribute(description="Set the html ajax attribute on rendered html element", type="Boolean", defaultValue="false")
+    public void setAjax(String ajax) {
+		this.ajax = ajax;
+	}
+    
+    public String getAjaxURL() {
+		return ajaxURL;
+	}
+    
+    @StrutsTagAttribute(description="Set the name of ajaxURL")
+    public void setAjaxURL(String ajaxURL) {
+		this.ajaxURL = ajaxURL;
+	}
+    
+    public String getAjaxDelay() {
+		return ajaxDelay;
+	}
+    
+    @StrutsTagAttribute(description="Set the name of ajaxDelay")
+    public void setAjaxDelay(String ajaxDelay) {
+		this.ajaxDelay = ajaxDelay;
+	}
+
+	public String getAjaxTermName() {
+		return ajaxTermName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxTermName")
+	public void setAjaxTermName(String ajaxTermName) {
+		this.ajaxTermName = ajaxTermName;
+	}
+
+	public String getAjaxPageName() {
+		return ajaxPageName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxPageName")
+	public void setAjaxPageName(String ajaxPageName) {
+		this.ajaxPageName = ajaxPageName;
+	}
+
+	public String getAjaxItemNo() {
+		return ajaxItemNo;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxItemNo")
+	public void setAjaxItemNo(String ajaxItemNo) {
+		this.ajaxItemNo = ajaxItemNo;
+	}
+
+	public String getAjaxTotalCountName() {
+		return ajaxTotalCountName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxTotalCountName")
+	public void setAjaxTotalCountName(String ajaxTotalCountName) {
+		this.ajaxTotalCountName = ajaxTotalCountName;
+	}
+
+	public String getTemplateResultCustom() {
+		return templateResultCustom;
+	}
+
+	@StrutsTagAttribute(description="Set the name of templateResultCustom")
+	public void setTemplateResultCustom(String templateResultCustom) {
+		this.templateResultCustom = templateResultCustom;
+	}
+
+	public String getTemplateResultCustomFncName() {
+		return templateResultCustomFncName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of templateResultCustomFncName")
+	public void setTemplateResultCustomFncName(String templateResultCustomFncName) {
+		this.templateResultCustomFncName = templateResultCustomFncName;
+	}
+
+	public String getTemplateSelectionCustom() {
+		return templateSelectionCustom;
+	}
+
+	@StrutsTagAttribute(description="Set the name of templateSelectionCustom")
+	public void setTemplateSelectionCustom(String templateSelectionCustom) {
+		this.templateSelectionCustom = templateSelectionCustom;
+	}
+
+	public String getTemplateSelectionCustomFncName() {
+		return templateSelectionCustomFncName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of templateSelectionCustomFncName")
+	public void setTemplateSelectionCustomFncName(String templateSelectionCustomFncName) {
+		this.templateSelectionCustomFncName = templateSelectionCustomFncName;
+	}
+
+	public String getAjaxDataResultName() {
+		return ajaxDataResultName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxDataResultName")
+	public void setAjaxDataResultName(String ajaxDataResultName) {
+		this.ajaxDataResultName = ajaxDataResultName;
+	}
+
+	public String getAjaxDataResultValueName() {
+		return ajaxDataResultValueName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxDataResultValueName")
+	public void setAjaxDataResultValueName(String ajaxDataResultValueName) {
+		this.ajaxDataResultValueName = ajaxDataResultValueName;
+	}
+
+	public String getAjaxDataResultLabelName() {
+		return ajaxDataResultLabelName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxDataResultLabelName")
+	public void setAjaxDataResultLabelName(String ajaxDataResultLabelName) {
+		this.ajaxDataResultLabelName = ajaxDataResultLabelName;
+	}
+
+	public String getSelectionShortName() {
+		return selectionShortName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of selectionShortName")
+	public void setSelectionShortName(String selectionShortName) {
+		this.selectionShortName = selectionShortName;
+	}
+
+	public String getSelectionShortNameLength() {
+		return selectionShortNameLength;
+	}
+
+	@StrutsTagAttribute(description="Set the name of selectionShortNameLength")
+	public void setSelectionShortNameLength(String selectionShortNameLength) {
+		this.selectionShortNameLength = selectionShortNameLength;
+	}
+
+	public String getAjaxDataResultParentName() {
+		return ajaxDataResultParentName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxDataResultParentName")
+	public void setAjaxDataResultParentName(String ajaxDataResultParentName) {
+		this.ajaxDataResultParentName = ajaxDataResultParentName;
+	}
+
+	public String getAjaxParentName() {
+		return ajaxParentName;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxParentName")
+	public void setAjaxParentName(String ajaxParentName) {
+		this.ajaxParentName = ajaxParentName;
+	}
+    
     
 }

@@ -238,7 +238,7 @@
     	<#if parameters.placeholder??>
     	placeholder: "<@s.text name='${parameters.placeholder}'/>",
 		</#if>
-    })<#if parameters.itemList?? && parameters.nameKey??>.select2().val( [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]).trigger("change");<#else>;</#if>
+    })<#if parameters.itemList?? && parameters.nameKey??>.val( [<@s.iterator value="parameters.itemList" var="item" status="count">"${stack.findValue(parameters.nameKey)}"<@s.if test="#count.last == true"></@s.if><@s.else>,</@s.else></@s.iterator>]).trigger("change");<#else>;</#if>
 	$(".${parameters.id}-hidden").remove();
     var split${parameters.id} = $("#${parameters.id}").val();
     if(split${parameters.id}!=null){
