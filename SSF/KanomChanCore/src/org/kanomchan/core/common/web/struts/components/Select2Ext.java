@@ -103,6 +103,7 @@ public class Select2Ext extends ListUIBean {
     protected String ajaxDataResultValueName;
     protected String ajaxDataResultLabelName;
     protected String ajaxDataResultParentName;
+    protected String ajaxRowsPerPage;
     protected String selectionShortName;
     protected String selectionShortNameLength;
     protected String ajaxItemNo;
@@ -189,6 +190,10 @@ public class Select2Ext extends ListUIBean {
         
         if(ajaxDataResultParentName != null){
         	addParameter("ajaxDataResultParentName", findString(ajaxDataResultParentName));
+        }
+        
+        if(ajaxRowsPerPage != null){
+        	addParameter("ajaxRowsPerPage", findString(ajaxRowsPerPage));
         }
         
         if(selectionShortName != null){
@@ -554,6 +559,15 @@ public class Select2Ext extends ListUIBean {
 	@StrutsTagAttribute(description="Set the name of ajaxParentName")
 	public void setAjaxParentName(String ajaxParentName) {
 		this.ajaxParentName = ajaxParentName;
+	}
+
+	public String getAjaxRowsPerPage() {
+		return ajaxRowsPerPage;
+	}
+
+	@StrutsTagAttribute(description="Set the name of ajaxRowsPerPage")
+	public void setAjaxRowsPerPage(String ajaxRowsPerPage) {
+		this.ajaxRowsPerPage = ajaxRowsPerPage;
 	}
     
     

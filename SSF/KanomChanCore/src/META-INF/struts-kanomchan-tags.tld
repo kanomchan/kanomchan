@@ -5324,6 +5324,12 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <description><![CDATA[Set the name of ajaxRowsPerPage]]></description>
+      <name>ajaxRowsPerPage</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
       <description><![CDATA[Set the name of templateResultCustom]]></description>
       <name>templateResultCustom</name>
       <required>false</required>

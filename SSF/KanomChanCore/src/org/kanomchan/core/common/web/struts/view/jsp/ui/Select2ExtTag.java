@@ -54,6 +54,7 @@ public class Select2ExtTag extends AbstractRequiredListTag {
     protected String ajaxDataResultValueName;
     protected String ajaxDataResultLabelName;
     protected String ajaxDataResultParentName;
+    protected String ajaxRowsPerPage;
     protected String selectionShortName;
     protected String selectionShortNameLength;
     protected String ajaxItemNo;
@@ -101,6 +102,7 @@ public class Select2ExtTag extends AbstractRequiredListTag {
         select.setAjaxTermName(ajaxTermName);
         select.setAjaxItemNo(ajaxItemNo);
         select.setAjaxTotalCountName(ajaxTotalCountName);
+        select.setAjaxRowsPerPage(ajaxRowsPerPage);
         select.setTemplateResultCustom(templateResultCustom);
         select.setTemplateResultCustomFncName(templateResultCustomFncName);
         select.setTemplateSelectionCustom(templateSelectionCustom);
@@ -368,6 +370,14 @@ public class Select2ExtTag extends AbstractRequiredListTag {
 
 	public void setAjaxParentName(String ajaxParentName) {
 		this.ajaxParentName = ajaxParentName;
+	}
+
+	public String getAjaxRowsPerPage() {
+		return ajaxRowsPerPage;
+	}
+
+	public void setAjaxRowsPerPage(String ajaxRowsPerPage) {
+		this.ajaxRowsPerPage = ajaxRowsPerPage;
 	}
     
 }
