@@ -86,7 +86,7 @@ import com.opensymphony.xwork2.util.ValueStack;
     description="Render a Select2Ext element",
     allowDynamicAttributes=true)
 public class Select2Ext extends ListUIBean {
-    final public static String TEMPLATE = "Select2Ext";
+    final public static String TEMPLATE = "select2Ext";
 
     protected String emptyOption;
     protected String headerKey;
