@@ -5105,7 +5105,7 @@
       <description><![CDATA[Iterable source to populate from. If the list is a Map (key, value), the Map key will become the option 'value' parameter and the Map value will become the option body.]]></description>
       <name>list</name>
       <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
+      <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
       <description><![CDATA[Property of list objects to get css class from]]></description>
