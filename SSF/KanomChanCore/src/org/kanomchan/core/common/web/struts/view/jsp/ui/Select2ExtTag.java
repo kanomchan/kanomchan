@@ -74,6 +74,9 @@ public class Select2ExtTag extends AbstractRequiredListTag {
     protected String nameToSave;
     protected String noResults;
     protected String placeholder;
+    protected String maxSelectLength;
+    protected String showGroup;
+    protected String selectGroup;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new Select2Ext(stack, req, res);
@@ -118,6 +121,9 @@ public class Select2ExtTag extends AbstractRequiredListTag {
         select.setNameToSave(nameToSave);
         select.setNoResults(noResults);
         select.setPlaceholder(placeholder);
+        select.setMaxSelectLength(maxSelectLength);
+        select.setShowGroup(showGroup);
+        select.setSelectGroup(selectGroup);
     }
 
     public void setEmptyOption(String emptyOption) {
@@ -378,6 +384,30 @@ public class Select2ExtTag extends AbstractRequiredListTag {
 
 	public void setAjaxRowsPerPage(String ajaxRowsPerPage) {
 		this.ajaxRowsPerPage = ajaxRowsPerPage;
+	}
+
+	public String getMaxSelectLength() {
+		return maxSelectLength;
+	}
+
+	public void setMaxSelectLength(String maxSelectLength) {
+		this.maxSelectLength = maxSelectLength;
+	}
+
+	public String getShowGroup() {
+		return showGroup;
+	}
+
+	public void setShowGroup(String showGroup) {
+		this.showGroup = showGroup;
+	}
+
+	public String getSelectGroup() {
+		return selectGroup;
+	}
+
+	public void setSelectGroup(String selectGroup) {
+		this.selectGroup = selectGroup;
 	}
     
 }

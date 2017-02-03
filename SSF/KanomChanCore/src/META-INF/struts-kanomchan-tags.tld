@@ -5497,6 +5497,24 @@
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
+    <attribute>
+      <description><![CDATA[Set maxSelectLength]]></description>
+      <name>maxSelectLength</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Set showGroup]]></description>
+      <name>showGroup</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Set selectGroup]]></description>
+      <name>selectGroup</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
     <dynamic-attributes>true</dynamic-attributes>
   </tag>
 </taglib>

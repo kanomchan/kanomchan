@@ -123,6 +123,9 @@ public class Select2Ext extends ListUIBean {
     protected String nameToSave;
     protected String noResults;
     protected String placeholder;
+    protected String maxSelectLength;
+    protected String showGroup;
+    protected String selectGroup;
 
     public Select2Ext(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -270,6 +273,18 @@ public class Select2Ext extends ListUIBean {
         
         if(placeholder != null){
         	addParameter("placeholder", findString(placeholder));
+        }
+        
+        if(maxSelectLength != null){
+        	addParameter("maxSelectLength", findString(maxSelectLength));
+        }
+        
+        if(showGroup != null){
+        	addParameter("showGroup", findString(showGroup));
+        }
+        
+        if(selectGroup != null){
+        	addParameter("selectGroup", findString(selectGroup));
         }
     }
 
@@ -568,6 +583,33 @@ public class Select2Ext extends ListUIBean {
 	@StrutsTagAttribute(description="Set the name of ajaxRowsPerPage")
 	public void setAjaxRowsPerPage(String ajaxRowsPerPage) {
 		this.ajaxRowsPerPage = ajaxRowsPerPage;
+	}
+
+	public String getMaxSelectLength() {
+		return maxSelectLength;
+	}
+
+	@StrutsTagAttribute(description="Set the name of maxSelectLength")
+	public void setMaxSelectLength(String maxSelectLength) {
+		this.maxSelectLength = maxSelectLength;
+	}
+
+	public String getShowGroup() {
+		return showGroup;
+	}
+
+	@StrutsTagAttribute(description="Set the name of showGroup")
+	public void setShowGroup(String showGroup) {
+		this.showGroup = showGroup;
+	}
+
+	public String getSelectGroup() {
+		return selectGroup;
+	}
+
+	@StrutsTagAttribute(description="Set the name of selectGroup")
+	public void setSelectGroup(String selectGroup) {
+		this.selectGroup = selectGroup;
 	}
     
     
