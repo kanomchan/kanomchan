@@ -34,7 +34,7 @@
 			<#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >
-				<div class="col-md-offset-4 col-md-4">
+				<div class="col-md-offset-4 col-md-${parameters.title?default("4")}">
 					<div class="message warning" role="alert">${error?html}</div>
 				</div>
 			</div>
@@ -50,7 +50,7 @@
 			<#if parameters.id??>
 		   		for="${parameters.id}"
 			</#if> >
-				<div class="col-md-offset-4 col-md-4">
+				<div class="col-md-offset-4 col-md-${parameters.title?default("4")}">
 					<div style="display:none" class="message warning" role="alert"></div>
 				</div>
 			</div>
@@ -71,9 +71,9 @@
 			</#if>
 			<#if parameters.labelposition?default("left") == 'left'>
 				<#if hasFieldErrors>
-			    class="control-label col-xs-5 col-sm-4 col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else> ${12-parameters.title?default("8")?number}</#if> errorLabel"<#t/>
+			    class="control-label hidden-xs col-sm-4 col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else> ${12-parameters.title?default("8")?number}</#if> errorLabel"<#t/>
 				<#else>
-			    class="control-label col-xs-5 col-sm-4 col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else>${12-parameters.title?default("8")?number}</#if>"<#t/>
+			    class="control-label hidden-xs col-sm-4 col-md-<#if (parameters.title?default("6")?number < 9)>4<#elseif (parameters.title?default("6")?number == 12)>12 text-left<#else>${12-parameters.title?default("8")?number}</#if>"<#t/>
 				</#if>
 			</#if>
 		    <#if parameters.id??>
