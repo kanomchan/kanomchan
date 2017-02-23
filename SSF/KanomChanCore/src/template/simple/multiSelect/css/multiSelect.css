@@ -4,7 +4,15 @@
     background: transparent;
     height: auto;
 }
-
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+	padding: 2px 5px 2px 24px; 
+	position: relative;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    left: 5px;
+    top: 5px;
+    position: absolute;
+}
 /* .form-control .select2-choice { */
 /*   border: 1px solid #e5e5e5; */
 /*   background-color: #fff; */

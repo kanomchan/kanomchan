@@ -27,6 +27,39 @@
 <style>
 	<#include "css/multiSelect.css">
 </style>
+<#if parameters.color?? || parameters.fontColor??>
+	<#if parameters.id??>
+		<style>
+			.${parameters.id} .select2-container--default .select2-selection--multiple .select2-selection__choice {
+				background: ${parameters.color?default("#5F64C0")?html} !important;
+				color: ${parameters.fontColor?default("#EEE")?html} !important;
+			}
+		</style>
+		<#elseif parameters.name??>
+		<style>
+			.${parameters.name} .select2-container--default .select2-selection--multiple .select2-selection__choice {
+				background: ${parameters.color?default("#5F64C0")?html} !important;
+				color: ${parameters.fontColor?default("#EEE")?html} !important;
+			}
+		</style>
+	</#if>
+<#else>
+	<#if parameters.id??>
+		<style>
+			.${parameters.id} .select2-container-multi .select2-choices .select2-search-choice {
+				background: ${parameters.color?default("#5F64C0")?html} !important;
+				color: ${parameters.fontColor?default("#EEE")?html} !important;
+			}
+		</style>
+		<#elseif parameters.name??>
+		<style>
+			.${parameters.name} .select2-container-multi .select2-choices .select2-search-choice {
+				background: #5F64C0 !important;
+				color: #EEE !important;
+			}
+		</style>
+	</#if>
+</#if>
 <#if parameters.id??>
 <span class="${parameters.id}">
 <#elseif parameters.name??>

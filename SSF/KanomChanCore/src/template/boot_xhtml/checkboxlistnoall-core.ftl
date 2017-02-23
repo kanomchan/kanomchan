@@ -85,7 +85,7 @@
 <input type="hidden" class="checkbox_${parameters.id?html}" id="${parameters.id?html}-${itemCount}-check" name="_id_checkbox_${parameters.name?html}[${itemCount-1}].check"
        value="${itemKeyStr?html}"<#rt/>
         />
-</label><br class="hidden-xs hidden-sm">
+</label><br class="hidden-xs">
 </@s.iterator>
 </div>
     <#else>
