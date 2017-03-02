@@ -45,6 +45,7 @@ public class Paging extends Form {
             addParameter("totalRows", pagingBeanValue.getTotalRows());
             addParameter("orderBy", pagingBeanValue.getOrderBy());
             addParameter("orderMode", pagingBeanValue.getOrderMode());
+            addParameter("displayPage", pagingBeanValue.getDisplayPage());
             addParameter("isAjax", isAjax);
             addParameter("ajaxFunction", ajaxFunction);
             addParameter("defaultShowPerPage", defaultShowPerPage);
