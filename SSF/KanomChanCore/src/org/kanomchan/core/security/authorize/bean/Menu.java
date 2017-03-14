@@ -8,6 +8,7 @@ public class Menu {
 	private Long actionId;
 	private Long parentId;
 	private String MenuType;
+	private String status;
 	
 	public String getMenuName() {
 		return menuName;
@@ -52,6 +53,12 @@ public class Menu {
 	}
 	public void setMenuType(String menuType) {
 		MenuType = menuType;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

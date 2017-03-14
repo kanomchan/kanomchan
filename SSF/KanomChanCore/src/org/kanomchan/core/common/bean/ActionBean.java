@@ -18,6 +18,8 @@ public class ActionBean implements Serializable {
 	private String type;
 	private String url;
 	private String inputResultName;
+	private String status;
+	
 	public String getPageName() {
 		return pageName;
 	}
@@ -71,6 +73,12 @@ public class ActionBean implements Serializable {
 	}
 	public void setInputResultName(String inputResultName) {
 		this.inputResultName = inputResultName;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

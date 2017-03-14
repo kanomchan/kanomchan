@@ -12,6 +12,7 @@ public class LabelDefault implements Label,Serializable {
 	private String page;
 	private String label;
 	private String displayText;
+	private String status;
 	
 	
 	public String getLanguage() {
@@ -37,6 +38,12 @@ public class LabelDefault implements Label,Serializable {
 	}
 	public void setDisplayText(String displayText) {
 		this.displayText = displayText;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	
