@@ -5354,6 +5354,18 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <description><![CDATA[Set the function name of selectCustomFunction]]></description>
+      <name>selectCustomFunction</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description><![CDATA[Set the function name of unSelectCustomFunction]]></description>
+      <name>unSelectCustomFunction</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
       <description><![CDATA[Set the html other attribute on rendered html element]]></description>
       <name>other</name>
       <required>false</required>

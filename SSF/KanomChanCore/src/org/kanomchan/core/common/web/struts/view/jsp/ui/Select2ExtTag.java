@@ -63,6 +63,8 @@ public class Select2ExtTag extends AbstractRequiredListTag {
     protected String templateResultCustomFncName;
     protected String templateSelectionCustom;
     protected String templateSelectionCustomFncName;
+    protected String selectCustomFunction;
+    protected String unSelectCustomFunction;
     protected String other;
     protected String otherName;
     protected String closeOnSelect;
@@ -110,6 +112,8 @@ public class Select2ExtTag extends AbstractRequiredListTag {
         select.setTemplateResultCustomFncName(templateResultCustomFncName);
         select.setTemplateSelectionCustom(templateSelectionCustom);
         select.setTemplateSelectionCustomFncName(templateSelectionCustomFncName);
+        select.setSelectCustomFunction(selectCustomFunction);
+        select.setUnSelectCustomFunction(unSelectCustomFunction);
         select.setOther(other);
         select.setOtherName(otherName);
         select.setCloseOnSelect(closeOnSelect);
@@ -320,6 +324,22 @@ public class Select2ExtTag extends AbstractRequiredListTag {
 
 	public void setTemplateSelectionCustomFncName(String templateSelectionCustomFncName) {
 		this.templateSelectionCustomFncName = templateSelectionCustomFncName;
+	}
+
+	public String getSelectCustomFunction() {
+		return selectCustomFunction;
+	}
+
+	public void setSelectCustomFunction(String selectCustomFunction) {
+		this.selectCustomFunction = selectCustomFunction;
+	}
+	
+	public String getUnSelectCustomFunction() {
+		return unSelectCustomFunction;
+	}
+
+	public void setUnSelectCustomFunction(String unSelectCustomFunction) {
+		this.unSelectCustomFunction = unSelectCustomFunction;
 	}
 
 	public String getAjaxDataResultName() {

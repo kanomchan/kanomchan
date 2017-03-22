@@ -112,6 +112,8 @@ public class Select2Ext extends ListUIBean {
     protected String templateResultCustomFncName;
     protected String templateSelectionCustom;
     protected String templateSelectionCustomFncName;
+    protected String selectCustomFunction;
+    protected String unSelectCustomFunction;
     protected String other;
     protected String otherName;
     protected String closeOnSelect;
@@ -229,6 +231,14 @@ public class Select2Ext extends ListUIBean {
         
         if(templateSelectionCustomFncName != null){
         	addParameter("templateSelectionCustomFncName", findString(templateSelectionCustomFncName));
+        }
+        
+        if(selectCustomFunction != null){
+        	addParameter("selectCustomFunction", findString(selectCustomFunction));
+        }
+        
+        if(unSelectCustomFunction != null){
+        	addParameter("unSelectCustomFunction", findString(unSelectCustomFunction));
         }
         
         if (other != null) {
@@ -511,6 +521,24 @@ public class Select2Ext extends ListUIBean {
 	@StrutsTagAttribute(description="Set the name of templateSelectionCustomFncName")
 	public void setTemplateSelectionCustomFncName(String templateSelectionCustomFncName) {
 		this.templateSelectionCustomFncName = templateSelectionCustomFncName;
+	}
+
+	public String getSelectCustomFunction() {
+		return selectCustomFunction;
+	}
+
+	@StrutsTagAttribute(description="Set the function name of unSelectCustomFunction")
+	public void setUnSelectCustomFunction(String unSelectCustomFunction) {
+		this.unSelectCustomFunction = unSelectCustomFunction;
+	}
+	
+	public String getUnSelectCustomFunction() {
+		return unSelectCustomFunction;
+	}
+
+	@StrutsTagAttribute(description="Set the function name of selectCustomFunction")
+	public void setSelectCustomFunction(String selectCustomFunction) {
+		this.selectCustomFunction = selectCustomFunction;
 	}
 
 	public String getAjaxDataResultName() {
