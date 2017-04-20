@@ -167,7 +167,8 @@ public class AuthorizeInterceptor extends ServletConfigInterceptor {
 				e.setName("OK");
 				buttonList.add(e);
 				baseAction.setButtonList(buttonList);
-				return MESSAGE;
+//				return MESSAGE;
+				return "FORCE_TO_LOGIN_PAGE";
 			}else{
 				return "FORCE_TO_LOGIN_PAGE";
 			}

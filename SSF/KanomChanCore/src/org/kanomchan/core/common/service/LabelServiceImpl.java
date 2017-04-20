@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
 
 public class LabelServiceImpl implements LabelService  {
 
@@ -46,6 +47,7 @@ public class LabelServiceImpl implements LabelService  {
 	}
 	
 	@Override
+	@TriggersRemove(cacheName={"labelService.getLabel","labelService.getLabelByPage"},removeAll=true)
 	public void refresh()throws RollBackException ,NonRollBackException {
 		labelMap = configDao.getLabelStrMap();
 	}
