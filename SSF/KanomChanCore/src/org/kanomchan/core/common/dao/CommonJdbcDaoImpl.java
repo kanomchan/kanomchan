@@ -99,6 +99,10 @@ public class CommonJdbcDaoImpl extends JdbcCommonDaoImpl implements CommonDao {
 		return get(id,lang, clazz);
 	}
 	@Override
+	public <T> T findLangIdById(Class<T> clazz, Serializable id,String lang) throws RollBackException ,NonRollBackException {
+		return getLangId(id,lang, clazz);
+	}
+	@Override
 	public <T> List<T> findByProperty(Class<T> clazz, String propertyName, Object value) throws RollBackException ,NonRollBackException {
 		return findByColumn(clazz, propertyName, value);
 	}

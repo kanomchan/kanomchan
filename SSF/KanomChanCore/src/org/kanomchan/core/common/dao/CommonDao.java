@@ -301,6 +301,7 @@ public interface CommonDao {
 	
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	public <T> List<T> saveMergeList(Class<T> clazz, List<T> newList, List<T> oldList, String SubListColumnName) throws RollBackException, NonRollBackException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+	public <T> T findLangIdById(Class<T> clazz, Serializable id, String lang) throws RollBackException, NonRollBackException;
 	
 //	public <T extends Object > BeanLang<T> saveAndLang(BeanLang<T> beanLang, boolean includeMinusOne) throws RollBackException, NonRollBackException, IllegalAccessException;
 

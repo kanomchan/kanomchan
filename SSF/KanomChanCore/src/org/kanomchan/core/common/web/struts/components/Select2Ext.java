@@ -114,6 +114,7 @@ public class Select2Ext extends ListUIBean {
     protected String templateSelectionCustomFncName;
     protected String selectCustomFunction;
     protected String unSelectCustomFunction;
+    protected String isPhoneCode;
     protected String other;
     protected String otherName;
     protected String closeOnSelect;
@@ -241,6 +242,10 @@ public class Select2Ext extends ListUIBean {
         	addParameter("unSelectCustomFunction", findString(unSelectCustomFunction));
         }
         
+        if (isPhoneCode != null) {
+            addParameter("isPhoneCode", findValue(isPhoneCode, Boolean.class));
+        }
+        
         if (other != null) {
             addParameter("other", findValue(other, Boolean.class));
         }
@@ -325,7 +330,16 @@ public class Select2Ext extends ListUIBean {
         this.size = size;
     }
     
-    public String getOther() {
+    @StrutsTagAttribute(description="Set the html isPhoneCode attribute on rendered html element", type="Boolean", defaultValue="false")
+    public String getIsPhoneCode() {
+		return isPhoneCode;
+	}
+
+	public void setIsPhoneCode(String isPhoneCode) {
+		this.isPhoneCode = isPhoneCode;
+	}
+
+	public String getOther() {
 		return other;
 	}
     

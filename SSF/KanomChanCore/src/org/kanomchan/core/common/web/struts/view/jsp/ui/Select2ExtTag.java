@@ -65,6 +65,7 @@ public class Select2ExtTag extends AbstractRequiredListTag {
     protected String templateSelectionCustomFncName;
     protected String selectCustomFunction;
     protected String unSelectCustomFunction;
+    protected String isPhoneCode;
     protected String other;
     protected String otherName;
     protected String closeOnSelect;
@@ -114,6 +115,7 @@ public class Select2ExtTag extends AbstractRequiredListTag {
         select.setTemplateSelectionCustomFncName(templateSelectionCustomFncName);
         select.setSelectCustomFunction(selectCustomFunction);
         select.setUnSelectCustomFunction(unSelectCustomFunction);
+        select.setIsPhoneCode(isPhoneCode);
         select.setOther(other);
         select.setOtherName(otherName);
         select.setCloseOnSelect(closeOnSelect);
@@ -150,7 +152,15 @@ public class Select2ExtTag extends AbstractRequiredListTag {
         this.size = size;
     }
     
-    public String getAjax() {
+    public String getIsPhoneCode() {
+		return isPhoneCode;
+	}
+
+	public void setIsPhoneCode(String isPhoneCode) {
+		this.isPhoneCode = isPhoneCode;
+	}
+
+	public String getAjax() {
 		return ajax;
 	}
     

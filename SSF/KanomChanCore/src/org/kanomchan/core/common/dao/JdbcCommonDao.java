@@ -141,4 +141,6 @@ public interface JdbcCommonDao {
 
 	public Integer getCount(String sql, Object... params) throws RollBackException,NonRollBackException;
 
+	public <T> T getLangId(Serializable target, String lang, Class<T> clazz) throws RollBackException, NonRollBackException;
+
 }

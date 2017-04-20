@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1173,6 +1174,14 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 		String sql = "select * from " + classMapper.getTableName()+"_LANG " + " where " + property.getColumnName() + " = ? and STATUS = 'A' and LANG_CODE3 = ? ";
 		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target,lang);
 	}
+	@Override
+	public <T> T getLangId(Serializable target,String lang,  Class<T> clazz) throws RollBackException, NonRollBackException {
+		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
+		Property property = classMapper.getPropertyId();
+		String sql = "select * from " + classMapper.getTableName()+"_LANG " + " where " + property.getColumnName() + " = ? and STATUS = 'A' and LANG_CODE3 = ? ";
+		return nativeQueryOneRow(sql , JPAUtil.getRm(clazz), target,lang);
+	}
+	
 	@Override
 	public <T> T getByStatusAndPkValue(Class<T> clazz, String status, Serializable pkValue) throws RollBackException, NonRollBackException {
 		ClassMapper classMapper =JPAUtil.getClassMapper(clazz);
