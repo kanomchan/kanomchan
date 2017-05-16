@@ -28,7 +28,10 @@ public class LabelServiceImpl implements LabelService  {
 	@Override
 	@Cacheable(cacheName = "labelService.getLabel")
 	public Map<String, String> getLabel(String lang) {
-		return labelMap.get(lang);
+		Map<String, String> map = labelMap.get(lang);
+		if(map==null)
+			map = labelMap.get("ENG");
+		return map;
 	}
 	
 	@Override
