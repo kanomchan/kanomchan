@@ -136,20 +136,23 @@ public class ProcessContextFilter  implements Filter  {
 //		if (ipAddress == null) {
 //			ipAddress = request.getRemoteAddr();
 //		}
-
+		ProcessContext processContext = CurrentThread.getProcessContext();
 			
 				try {
 					LocationService locationService = (LocationService) ApplicationContextUtil.getBean("locationService");
-					ProcessContext processContext = CurrentThread.getProcessContext();
 					ServiceResult<LocationBean> serviceResult = locationService.getLocation(ipAddress);
 					if(serviceResult.isSuccess()){
 						processContext.setLocationBean(serviceResult.getResult());
-						((HttpServletRequest) request).getSession().setAttribute(CommonConstant.SESSION.LOCATION_BEAN_KEY,serviceResult.getResult());
+						((HttpServletRequest) request).getSession(true).setAttribute(CommonConstant.SESSION.LOCATION_BEAN_KEY,serviceResult.getResult());
 					}else{
 						processContext.setLocation("THA",0L,0L,0L,0L,0L,0L,0L,0L,0L);
 					}
 				} catch (RollBackException | NonRollBackException  e) {
+					logger.error("[getPOS:",e);
+					processContext.setLocation("THA",0L,0L,0L,0L,0L,0L,0L,0L,0L);
 				} catch (Exception e) {
+					logger.error("[getPOS2:",e);
+					processContext.setLocation("THA",0L,0L,0L,0L,0L,0L,0L,0L,0L);
 				}
 	}
 
