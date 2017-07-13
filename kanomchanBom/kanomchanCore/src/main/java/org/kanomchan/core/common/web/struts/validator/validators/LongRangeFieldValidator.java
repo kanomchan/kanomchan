@@ -1,8 +1,13 @@
 package org.kanomchan.core.common.web.struts.validator.validators;
 
 import com.opensymphony.xwork2.validator.ValidationException;
+import com.opensymphony.xwork2.validator.validators.RangeValidatorSupport;
 
-public class LongRangeFieldValidator extends com.opensymphony.xwork2.validator.validators.LongRangeFieldValidator {
+public class LongRangeFieldValidator extends RangeValidatorSupport<Long> {
+	public LongRangeFieldValidator() {
+		super(Long.class);
+	}
+
 	boolean byPassFront;
 	boolean byPassBack;
 	

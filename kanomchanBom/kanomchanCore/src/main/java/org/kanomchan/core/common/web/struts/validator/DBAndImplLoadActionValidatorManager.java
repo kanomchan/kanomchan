@@ -313,7 +313,7 @@ public class DBAndImplLoadActionValidatorManager implements ActionValidatorManag
                     if (validatorContext instanceof VisitorFieldValidator.AppendingValidatorContext) {
                         VisitorFieldValidator.AppendingValidatorContext appendingValidatorContext =
                                 (VisitorFieldValidator.AppendingValidatorContext) validatorContext;
-                        fullFieldName = appendingValidatorContext.getFullFieldNameFromParent(fValidator.getFieldName());
+                        fullFieldName = appendingValidatorContext.getFullFieldName(fValidator.getFieldName());
                     }
                     if ((shortcircuitedFields != null) && shortcircuitedFields.contains(fullFieldName)) {
                         if (LOG.isDebugEnabled()) {
@@ -388,7 +388,7 @@ public class DBAndImplLoadActionValidatorManager implements ActionValidatorManag
             if (validatorContext instanceof VisitorFieldValidator.AppendingValidatorContext) {
                 VisitorFieldValidator.AppendingValidatorContext appendingValidatorContext =
                         (VisitorFieldValidator.AppendingValidatorContext) validatorContext;
-                return appendingValidatorContext.getFullFieldNameFromParent(field);
+                return appendingValidatorContext.getFullFieldName(field);
             }
             return validatorContext.getFullFieldName(field);
         }
