@@ -1,15 +1,8 @@
 package org.kanomchan.core.common.web.struts.validator.validators;
 
-import java.util.Date;
-
 import com.opensymphony.xwork2.validator.ValidationException;
-import com.opensymphony.xwork2.validator.validators.RangeValidatorSupport;
 
-public class DateRangeFieldValidator extends RangeValidatorSupport<Date> {
-	public DateRangeFieldValidator() {
-        super(Date.class);
-    }
-
+public class DateRangeFieldValidator extends com.opensymphony.xwork2.validator.validators.DateRangeFieldValidator {
 	boolean byPassFront;
 	boolean byPassBack;
 	

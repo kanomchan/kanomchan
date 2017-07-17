@@ -74,12 +74,12 @@ public class CookieFilter  implements Filter  {
 								if(KEY_MID.equals(cookie.getName())){
 									if(cookie.getPath()==null)
 										cookie.setPath(getPathCookie(httpServletRequest));
-//									cookie.setHttpOnly(true);
+									cookie.setHttpOnly(true);
 									httpServletResponse.addCookie(cookie);
 								}else if(KEY_TID.equals(cookie.getName())){
 									if(cookie.getPath()==null)
 										cookie.setPath(getPathCookie(httpServletRequest));
-//									cookie.setHttpOnly(true);
+									cookie.setHttpOnly(true);
 									httpServletResponse.addCookie(cookie);
 								}
 								
@@ -95,7 +95,7 @@ public class CookieFilter  implements Filter  {
 						for (Cookie cookie : loginIO.getCookies()) {
 							if(cookie.getPath()==null)
 								cookie.setPath(getPathCookie(httpServletRequest));
-//							cookie.setHttpOnly(true);
+							cookie.setHttpOnly(true);
 							httpServletResponse.addCookie(cookie);
 						}
 						if(session.get(CommonConstant.SESSION.NEXT_URL_KEY)!=null){
