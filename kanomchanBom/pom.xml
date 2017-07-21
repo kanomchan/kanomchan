@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.kanomchan</groupId>
 	<artifactId>kanomchanBom</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -16,6 +16,8 @@
 
 	<modules>
 		<module>kanomchanCore</module>
+		
+		<module>kanomchanStruts</module>
 	</modules>
 	<licenses>
 		<license>
@@ -107,17 +109,17 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.3</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.sonatype.plugins</groupId> -->
+<!-- 				<artifactId>nexus-staging-maven-plugin</artifactId> -->
+<!-- 				<version>1.6.3</version> -->
+<!-- 				<extensions>true</extensions> -->
+<!-- 				<configuration> -->
+<!-- 					<serverId>ossrh</serverId> -->
+<!-- 					<nexusUrl>https://oss.sonatype.org/</nexusUrl> -->
+<!-- 					<autoReleaseAfterClose>true</autoReleaseAfterClose> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -274,6 +276,7 @@
 				</pluginManagement>
 			</build>
 		</profile>
+		
 	</profiles>
 
 		<dependencyManagement>
@@ -282,6 +285,12 @@
 					<groupId>org.kanomchan</groupId>
 					<artifactId>kanomchanCore</artifactId>
 					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.kanomchan.struts</groupId>
+					<artifactId>kanomchanStruts</artifactId>
+					<version>${project.version}</version>
+					<type>pom</type>
 				</dependency>
 			</dependencies>
 		</dependencyManagement>
