@@ -14,7 +14,7 @@
 	</modules>
 	<properties>
 		<currentVersion>${project.version}</currentVersion>
-		<tlib.version>1.0</tlib.version>
+		<tlib.version>2.3</tlib.version>
 		<minify.version>1.7.4</minify.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -31,7 +31,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-<!-- 				<version>3.3</version> -->
+				<version>3.3</version>
 				<configuration>
 					<forceJavacCompilerUse>true</forceJavacCompilerUse>
 					<source>1.8</source>
