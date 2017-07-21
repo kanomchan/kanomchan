@@ -385,10 +385,17 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	
 	@Override
 	public <T extends Object>  List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Object... params)throws RollBackException, NonRollBackException {
-//		String countQuery = "Select count(*) from ("+sql+") data";
+		String countQuery = "";
 		String[] str = sql.split(" FROM ");
-		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
-		
+		if(str.length == 2){
+			String[] str2 = str[1].split(" ORDER BY ");
+			if(str2.length == 2)
+				countQuery = "SELECT count(1) FROM (SELECT (1) FROM "+str2[0]+") a";
+			else
+				countQuery = "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a";
+		}else{
+			countQuery = "Select count(*) from ("+sql+") data";
+		}
 		Long totalRows = nativeQueryOneRowForObject(countQuery,Long.class, params);
 		pagingBean.setTotalRows(totalRows);
 		
@@ -423,9 +430,18 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 
 	@Override
 	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm, Map<String, Object> params) throws RollBackException, NonRollBackException {
-//		String countQuery = "Select count(*) from ("+sql+") data";
+		String countQuery = "";
 		String[] str = sql.split(" FROM ");
-		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
+		if(str.length == 2){
+			String[] str2 = str[1].split(" ORDER BY ");
+			if(str2.length == 2)
+				countQuery = "SELECT count(1) FROM (SELECT (1) FROM "+str2[0]+") a";
+			else
+				countQuery = "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a";
+		}else{
+			countQuery = "Select count(*) from ("+sql+") data";
+		}
+		
 		
 		Long totalRows = nativeQueryOneRowForObject(countQuery,Long.class,params);
 		pagingBean.setTotalRows(totalRows);
@@ -458,9 +474,17 @@ public class JdbcCommonDaoImpl implements JdbcCommonDao {
 	}
 	@Override
 	public <T extends Object> List<T> nativeQuery(String sql, PagingBean pagingBean, RowMapper<T> rm) throws RollBackException, NonRollBackException {
-//		String countQuery = "Select count(*) from ("+sql+") data";
+		String countQuery = "";
 		String[] str = sql.split(" FROM ");
-		String countQuery = str.length == 2 ? "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a" : "Select count(*) from ("+sql+") data";
+		if(str.length == 2){
+			String[] str2 = str[1].split(" ORDER BY ");
+			if(str2.length == 2)
+				countQuery = "SELECT count(1) FROM (SELECT (1) FROM "+str2[0]+") a";
+			else
+				countQuery = "SELECT count(1) FROM (SELECT (1) FROM "+str[1]+") a";
+		}else{
+			countQuery = "Select count(*) from ("+sql+") data";
+		}
 		
 		Long totalRows = nativeQueryOneRowForObject(countQuery,Long.class);
 		pagingBean.setTotalRows(totalRows);
