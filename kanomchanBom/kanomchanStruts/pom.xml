@@ -12,7 +12,12 @@
 	<modules>
 		<module>kanomchanStrutsTag</module>
 	</modules>
-
+	<properties>
+		<currentVersion>${project.version}</currentVersion>
+		<tlib.version>1</tlib.version>
+		<minify.version>1.7.4</minify.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
