@@ -54,7 +54,7 @@ import javax.servlet.http.HttpServletResponse;
 
  */
 @StrutsTag(
-    name="textfieldfromto",
+    name="textfieldFromTo",
     tldTagClass="org.apache.struts2.views.jsp.ui.TextFieldFromToTag",
     description="Render an HTML input field of type text",
     allowDynamicAttributes=true)

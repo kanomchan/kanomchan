@@ -10,10 +10,8 @@ import org.apache.struts2.views.annotations.StrutsTag;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.context.ApplicationContextUtil;
-import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.NonRollBackException;
 import org.kanomchan.core.common.exception.RollBackException;
-import org.kanomchan.core.common.processhandler.ProcessContext;
 import org.kanomchan.core.common.service.ConfigService;
 import org.kanomchan.core.security.authorize.dao.UserAuthorizeDao;
 

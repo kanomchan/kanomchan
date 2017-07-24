@@ -10,7 +10,7 @@ import org.apache.struts2.views.annotations.StrutsTagAttribute;
 import com.opensymphony.xwork2.util.ValueStack;
 
 @StrutsTag(
-    name="selectCountry",
+    name="selectGroupLevel",
     tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.ui.SelectGroupLevelTag",
     description="Render a select country element",
     allowDynamicAttributes=true)

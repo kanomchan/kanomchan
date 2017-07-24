@@ -81,7 +81,7 @@ import com.opensymphony.xwork2.util.ValueStack;
  *
  */
 @StrutsTag(
-    name="Select2Ext",
+    name="select2Ext",
     tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.ui.Select2ExtTag",
     description="Render a Select2Ext element",
     allowDynamicAttributes=true)

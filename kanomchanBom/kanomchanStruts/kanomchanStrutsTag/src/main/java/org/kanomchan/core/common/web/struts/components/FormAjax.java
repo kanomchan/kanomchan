@@ -5,22 +5,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.struts2.components.Form;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
+import org.apache.struts2.views.annotations.StrutsTag;
 
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.validator.FieldValidator;
 import com.opensymphony.xwork2.validator.Validator;
 import com.opensymphony.xwork2.validator.validators.VisitorFieldValidator;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.struts2.components.Form;
-import org.apache.struts2.components.If;
-import org.apache.struts2.components.Form.FieldVisitorValidatorWrapper;
-import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import org.apache.struts2.views.annotations.StrutsTag;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @StrutsTag(
     name="formajax",

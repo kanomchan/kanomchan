@@ -22,7 +22,6 @@
 package org.kanomchan.core.common.web.struts.components;
 
 import java.io.Writer;
-import java.util.Map;
 
 import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,12 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.views.annotations.StrutsTag;
 import org.apache.struts2.views.annotations.StrutsTagAttribute;
-import org.kanomchan.core.common.bean.WebBoConfig;
-import org.kanomchan.core.common.context.CurrentThread;
 import org.kanomchan.core.common.exception.NonRollBackException;
-import org.kanomchan.core.common.processhandler.ProcessContext;
-import org.kanomchan.core.common.processhandler.ServiceResult;
-import org.kanomchan.core.common.service.WebBoConfigService;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
@@ -45,7 +39,7 @@ public class Div extends org.apache.struts2.components.Div {
 	protected String displayKey;
 	private boolean keyStatus;
 //	private DisplayField displayFieldService;
-	private WebBoConfigService webBoConfigService;
+//	private WebBoConfigService webBoConfigService;
 	
 	public Div(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 	   super(stack, request, response);

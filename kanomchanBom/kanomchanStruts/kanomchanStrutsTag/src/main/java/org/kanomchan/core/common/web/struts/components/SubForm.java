@@ -1,5 +1,21 @@
 package org.kanomchan.core.common.web.struts.components;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.struts2.components.Form;
+import org.apache.struts2.components.UrlRenderer;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
+import org.apache.struts2.views.annotations.StrutsTag;
+import org.apache.struts2.views.annotations.StrutsTagAttribute;
+
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.RuntimeConfiguration;
@@ -15,23 +31,6 @@ import com.opensymphony.xwork2.validator.ValidationInterceptor;
 import com.opensymphony.xwork2.validator.Validator;
 import com.opensymphony.xwork2.validator.ValidatorContext;
 import com.opensymphony.xwork2.validator.validators.VisitorFieldValidator;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.struts2.components.ClosingUIBean;
-import org.apache.struts2.components.Form;
-import org.apache.struts2.components.UrlRenderer;
-import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import org.apache.struts2.views.annotations.StrutsTag;
-import org.apache.struts2.views.annotations.StrutsTagAttribute;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 /**
  * <!-- START SNIPPET: javadoc -->

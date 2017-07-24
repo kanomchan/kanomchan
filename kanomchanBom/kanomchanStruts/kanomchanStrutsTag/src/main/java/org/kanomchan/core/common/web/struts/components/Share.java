@@ -54,7 +54,7 @@ import javax.servlet.http.HttpServletResponse;
 
  */
 @StrutsTag(
-    name="textfieldfromto",
+    name="share",
     tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.ui.ShareTag",
     description="Render Button Social Network Share",
     allowDynamicAttributes=true)
