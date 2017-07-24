@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.kanomchan.struts</groupId>
+    <artifactId>kanomchanStruts</artifactId>
+    <version>1.1.0</version>
+  </parent>
+  <artifactId>kanomchanStrutsTag</artifactId>
+  
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgs>
+						<arg>-Auri=/struts-kanomchan-tags</arg>
+						<arg>-AtlibVersion=${tlib.version}</arg>
+						<arg>-AjspVersion=2.0</arg>
+						<arg>-AshortName=kc</arg>
+						<arg>-AdisplayName=Struts2 kanomchan Tags</arg>
+						<arg>-AoutFile=${basedir}/target/classes/META-INF/struts-kanomchan-tags.tld</arg>
+						<arg>-Adescription="Struts2 kanomchan."</arg>
+						<arg>-AoutTemplatesDir=${basedir}/src/site/docs</arg>
+					</compilerArgs>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<!-- Core -->
+
+		<!-- Core -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.1.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts-annotations</artifactId>
+			<version>1.0.6</version>
+			<optional>true</optional>
+		</dependency>
+
+
+		<!-- JSP API -->
+
+		<!-- struts-annotations must be in compile scope for maven-apt-plugin to 
+			function correctly. Marking it optional to exclude it from transitive dependency 
+			resolution -->
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>${org.apache.struts-version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.5</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.kanomchan</groupId>
+			<artifactId>kanomchanCore</artifactId>
+		</dependency>
+	</dependencies>
+</project>
