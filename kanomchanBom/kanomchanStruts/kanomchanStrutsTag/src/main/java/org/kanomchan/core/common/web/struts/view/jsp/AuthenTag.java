@@ -1,4 +1,6 @@
 /*
+ * $Id$
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -17,29 +19,35 @@
  * under the License.
  */
 
-package org.kanomchan.core.common.web.struts.views.velocity.components;
+package org.kanomchan.core.common.web.struts.view.jsp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.components.Component;
-import org.kanomchan.core.common.web.struts.components.MessageValidate;
+import org.apache.struts2.views.jsp.IfTag;
+import org.kanomchan.core.common.web.struts.components.Authen;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
-public class MessageValidateDirective extends KanomChanAbstractDirective {
-  public String getBeanName()
-  {
-    return "messageValidate";
-  }
+public class AuthenTag extends IfTag {
 
-  protected Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res)
-  {
-    return new MessageValidate(stack, req, res);
-  }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5144405943382307271L;
+	String code;
 
-  public int getType()
-  {
-    return BLOCK;
-  }
+	public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
+		return new Authen(stack);
+	}
+
+	protected void populateParams() {
+		((Authen) getComponent()).setCode(code);
+	}
+	
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 }

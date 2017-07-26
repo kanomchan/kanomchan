@@ -21,7 +21,7 @@ import com.opensymphony.xwork2.validator.validators.VisitorFieldValidator;
 
 @StrutsTag(
     name="formajax",
-    tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.ui.FormAjaxTag",
+    tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.FormAjaxTag",
     description="Renders an input formajx",
     allowDynamicAttributes=true)
 public class FormAjax extends Form {

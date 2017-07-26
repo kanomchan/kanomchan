@@ -4,13 +4,14 @@
 	<parent>
 		<groupId>org.kanomchan</groupId>
 		<artifactId>kanomchanBom</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.2-SNAPSHOT</version>
 	</parent>
 	<groupId>org.kanomchan.struts</groupId>
 	<artifactId>kanomchanStruts</artifactId>
 	<packaging>pom</packaging>
 	<modules>
 		<module>kanomchanStrutsTag</module>
+		<module>kanomchanStrutsDBI18n</module>
 	</modules>
 	<properties>
 		<currentVersion>${project.version}</currentVersion>

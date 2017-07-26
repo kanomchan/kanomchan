@@ -37,7 +37,7 @@ import com.opensymphony.xwork2.util.ValueStack;
  */
 @StrutsTag(
     name="messageValidate",
-    tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.ui.MessageValidateTag",
+    tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.MessageValidateTag",
     description="Render a Message Validate that displays information",
     allowDynamicAttributes=true)
 public class MessageValidate extends UIBean {
