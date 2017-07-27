@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.components.Component;
 //import org.apache.struts2.components.Set;
 import org.apache.struts2.views.jsp.ui.AbstractClosingTag;
+import org.apache.struts2.views.jsp.ui.FormTag;
 import org.kanomchan.core.common.web.struts.components.Paging;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
 
 /**
- * @see Set
  */
-public class PagingTag extends AbstractClosingTag {
+public class PagingTag extends FormTag {
 
     private static final long serialVersionUID = -5074213926790716974L;
 

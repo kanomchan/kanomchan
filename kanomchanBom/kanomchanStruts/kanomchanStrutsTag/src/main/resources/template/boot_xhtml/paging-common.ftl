@@ -1,8 +1,3 @@
-<#include "/${parameters.templateDir}/${parameters.expandTheme}/pagingTop-common.ftl" />
-<#if parameters.onreset??>
- onreset="${parameters.onreset?html}"<#rt/>
-</#if>
->
 
 <#if (parameters.validate?default(false) == false)><#rt/>
     <#if parameters.onsubmit??><#rt/>

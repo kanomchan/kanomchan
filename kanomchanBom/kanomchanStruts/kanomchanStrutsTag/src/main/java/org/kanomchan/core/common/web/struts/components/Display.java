@@ -14,7 +14,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 @StrutsTag(
     name="display",
-    tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.ui.DisplayTag",
+    tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.DisplayTag",
     description="Renders an input display",
     allowDynamicAttributes=true)
 public class Display extends ClosingUIBean {

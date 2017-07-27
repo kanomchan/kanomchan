@@ -18,7 +18,7 @@ import org.kanomchan.core.security.authorize.dao.UserAuthorizeDao;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
 
-@StrutsTag(name="authen", tldBodyContent="JSP", tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.ui.AuthenTag", description="Assigns a value to a variable in a specified scope")
+@StrutsTag(name="authen", tldBodyContent="JSP", tldTagClass="org.kanomchan.core.common.web.struts.view.jsp.AuthenTag", description="Assigns a value to a variable in a specified scope")
 public class Authen extends Component {
 
     Boolean answer;
