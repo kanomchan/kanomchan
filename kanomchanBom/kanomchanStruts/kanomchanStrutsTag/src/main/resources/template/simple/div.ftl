@@ -20,12 +20,13 @@
  * under the License.
  */
 -->
-<#if parameters.validate?default(false) == true>
-	<script type="text/javascript" src="${base}/struts/boot_xhtml/validation.js"></script>
-	<script type="text/javascript" src="${base}/struts/utils.js"></script>
-	<#if parameters.onsubmit??>
-		${tag.addParameter('onsubmit', "return validateForm_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}(${parameters.onsubmit});")}
-	<#else>
-		${tag.addParameter('onsubmit', "return validateForm_${parameters.id?replace('[^a-zA-Z0-9_]', '_', 'r')}();")}
-	</#if>
-</#if>
+<div<#rt/>
+<#if parameters.id??> id="${parameters.id?html}"<#rt/></#if>
+<#if parameters.name??> name="${parameters.name?html}"<#rt/></#if>
+<#if parameters.cssClass??> class="${parameters.cssClass?html}"<#rt/></#if>
+<#if parameters.cssStyle??> style="${parameters.cssStyle?html}"<#rt/></#if>
+<#if parameters.title??> title="${parameters.title?html}"<#rt/></#if>
+<#include "/${parameters.templateDir}/${parameters.expandTheme}/scripting-events.ftl" />
+<#include "/${parameters.templateDir}/${parameters.expandTheme}/common-attributes.ftl" />
+<#include "/${parameters.templateDir}/${parameters.expandTheme}/dynamic-attributes.ftl" />
+>
