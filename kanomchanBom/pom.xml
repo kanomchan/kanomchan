@@ -190,7 +190,10 @@
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<useReleaseProfile>false</useReleaseProfile>
 							<releaseProfiles>release</releaseProfiles>
-							<goals>deploy</goals>
+							<goals>
+								<goal>clean</goal>
+								<goal>deploy</goal>
+							</goals>
 						</configuration>
 					</plugin>
 				</pluginManagement>
