@@ -195,6 +195,7 @@
 								<goal>clean</goal>
 								<goal>deploy</goal>
 							</goals>
+							<preparationGoals>clean deploy</preparationGoals>
 						</configuration>
 					</plugin>
 					</plugins>
