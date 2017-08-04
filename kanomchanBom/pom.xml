@@ -30,8 +30,8 @@
 
 	<scm>
 		<url>https://github.com/kanomchan/kanomchan</url>
-		<connection>scm:git:git://github.com/kanomchan/kanomchan.git</connection>
-		<developerConnection>scm:git:git@github.com:kanomchan/kanomchan.git</developerConnection>
+		<connection>scm:git:https://github.com/kanomchan/kanomchan.git</connection>
+		<developerConnection>scm:git:https@github.com:kanomchan/kanomchan.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
