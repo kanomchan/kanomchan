@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.struts2.components.Component;
 import org.apache.struts2.views.annotations.StrutsTag;
+import org.apache.struts2.views.annotations.StrutsTagAttribute;
 import org.kanomchan.core.common.bean.UserBean;
 import org.kanomchan.core.common.constant.CommonConstant;
 import org.kanomchan.core.common.context.ApplicationContextUtil;
@@ -24,6 +25,7 @@ public class Authen extends Component {
     Boolean answer;
     String code;
 
+    @StrutsTagAttribute(description = "CODE")
     public void setCode(String code) {
 		this.code = code;
 	}

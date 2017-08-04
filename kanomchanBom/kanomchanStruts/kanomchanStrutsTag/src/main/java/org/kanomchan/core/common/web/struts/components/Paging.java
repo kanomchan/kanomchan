@@ -96,7 +96,8 @@ public class Paging extends Form {
 	public void setAjaxFunction(String ajaxFunction) {
 		this.ajaxFunction = ajaxFunction;
 	}
-
+	
+	@StrutsTagAttribute(description = "DESC")
 	public void setDefaultShowPerPage(String defaultShowPerPage) {
 		this.defaultShowPerPage = defaultShowPerPage;
 	}
