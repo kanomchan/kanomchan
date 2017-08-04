@@ -29,9 +29,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:https://github.com/kanomchan/kanomchan.git</connection>
+		<url>https://github.com/kanomchan/kanomchan</url>
+		<connection>scm:git:git://github.com/kanomchan/kanomchan.git</connection>
 		<developerConnection>scm:git:git@github.com:kanomchan/kanomchan.git</developerConnection>
-		<url>https://github.com/kanomchan/kanomchan.git</url>
 		<tag>HEAD</tag>
 	</scm>
 
