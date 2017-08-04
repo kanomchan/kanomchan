@@ -11,3 +11,5 @@ bin
 /target
 .springBeans
 *.xml.versionsBackup
+pom.xml.releaseBackup
+/release.properties
