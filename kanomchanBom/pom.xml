@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.kanomchan</groupId>
 	<artifactId>kanomchanBom</artifactId>
-	<version>1.1.3-SNAPSHOT</version>
+	<version>1.1.3</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -31,7 +31,7 @@
 		<url>https://github.com/kanomchan/kanomchan</url>
 		<connection>scm:git:https://github.com/kanomchan/kanomchan.git</connection>
 		<developerConnection>scm:git:https://github.com/kanomchan/kanomchan.git</developerConnection>
-		<tag>kanomchanBom-1.1.2</tag>
+		<tag>kanomchanBom-1.1.3</tag>
 	</scm>
 
 	<developers>
