@@ -166,25 +166,23 @@ public class DBTextProvider implements TextProvider {
     	ConfigService configService= ApplicationContextUtil.getBean(ConfigService.class);
     	MessageService messageService= ApplicationContextUtil.getBean(MessageService.class);
     	Map<String, Message> message = messageService.getMessageMap(locale.getISO3Language().toUpperCase());//  messageCache.get(locale.getISO3Language().toUpperCase());
-        if (message == null) {
-            return null;
-        }
-        String out = null;
-        if(message.get(aTextName)!=null)
-        out = message.get(aTextName).getDisplayText();
-        if(out!=null){
-        	StringBuilder sb = new StringBuilder();
-            if("true".equals(configService.get("TRANSLATE_LABEL"))){
-            	sb.append("<span>");
-            	sb.append(out);
-            	sb.append("</span>");
-            	sb.append("<translateLabel value=\"");
-            	sb.append(aTextName);
-            	sb.append("\"></translateLabel>");
-            }else{
-            	sb.append(out);
+    	String out = null;
+        if (message != null) {
+        	out = message.get(aTextName).getDisplayText();
+            if(out!=null){
+            	StringBuilder sb = new StringBuilder();
+                if("true".equals(configService.get("TRANSLATE_LABEL"))){
+                	sb.append("<span>");
+                	sb.append(out);
+                	sb.append("</span>");
+                	sb.append("<translateLabel value=\"");
+                	sb.append(aTextName);
+                	sb.append("\"></translateLabel>");
+                }else{
+                	sb.append(out);
+                }
+            	return sb.toString();
             }
-        	return sb.toString();
         }
         
     	
@@ -196,20 +194,34 @@ public class DBTextProvider implements TextProvider {
 //    	}
     	LabelService labelService= ApplicationContextUtil.getBean(LabelService.class);
     	Map<String, String> lable = labelService.getLabel(locale.getISO3Language().toUpperCase());// lableCache.get(locale.getISO3Language().toUpperCase());
-        if (lable == null) {
-            return null;
+        if (lable != null) {
+        	out = lable.get(aTextName);
+            if(out!=null){
+            	StringBuilder sb = new StringBuilder();
+                if("true".equals(configService.get("TRANSLATE_LABEL"))){
+                	sb.append("<span>");
+                	sb.append(out);
+                	sb.append("</span>");
+                	sb.append("<translateLabel value=\"");
+                	sb.append(aTextName);
+                	sb.append("\"></translateLabel>");
+                }else{
+                	sb.append(out);
+                }
+            	return sb.toString();
+            }
         }
         
         StringBuilder sb = new StringBuilder();
         if("true".equals(configService.get("TRANSLATE_LABEL"))){
         	sb.append("<span>");
-        	sb.append(lable.get(aTextName));
+        	sb.append(aTextName);
         	sb.append("</span>");
         	sb.append("<translateLabel value=\"");
         	sb.append(aTextName);
         	sb.append("\"></translateLabel>");
         }else{
-        	sb.append(lable.get(aTextName));
+        	sb.append(aTextName);
         }
     	return sb.toString();
     }
