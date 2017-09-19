@@ -20,7 +20,7 @@
  * under the License.
  */
 -->
-<#include "/${parameters.templateDir}/${parameters.expandTheme}/paging-common.ftl" />
+<#include "/${parameters.templateDir}/K/paging-common.ftl" />
 <#if parameters.onreset??>
  onreset="${parameters.onreset?html}"<#rt/>
 </#if>
